@@ -1,0 +1,11 @@
+[user]
+	name = kraftwerk28
+	email = kefirchik3@gmail.com
+[core]
+	editor = nvim
+	pager = less
+[alias]
+	nvcommit = commit --no-verify
+	poosh = push origin HEAD
+	nvpoosh = poosh --no-verify
+	loh = log --graph --oneline --all
