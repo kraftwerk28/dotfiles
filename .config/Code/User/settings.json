@@ -1,0 +1,148 @@
+{
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "editor.tabSize": 2,
+    "[python]": {
+        "editor.tabSize": 4
+    },
+    "files.eol": "\n",
+    "editor.rulers": [
+        80
+    ],
+    "editor.dragAndDrop": false,
+    "window.zoomLevel": 1,
+    "workbench.activityBar.visible": true,
+    "html.format.endWithNewline": true,
+    "html.format.contentUnformatted": "pre,code,textarea,a",
+    "window.title": "${dirty}${rootName}${separator}${appName}",
+    "html.format.wrapAttributes": "aligned-multiple",
+    "editor.multiCursorModifier": "alt",
+    "vetur.format.defaultFormatterOptions": {
+        "js-beautify-html": {
+            "wrap_attributes": "force-expand-multiline",
+            "max_preserve_newlines": 8
+        },
+        "prettyhtml": {
+            "printWidth": 100,
+            "singleQuote": true,
+            "wrapAttributes": true,
+            "sortAttributes": false,
+            "preserveNewLines": true
+        }
+    },
+    "window.restoreWindows": "none",
+    "editor.minimap.maxColumn": 60,
+    "editor.suggestSelection": "first",
+    "go.formatTool": "gofmt",
+    "C_Cpp.default.cppStandard": "c++11",
+    "C_Cpp.clang_format_fallbackStyle": "Google",
+    "workbench.editor.closeOnFileDelete": true,
+    "diffEditor.ignoreTrimWhitespace": true,
+    "window.enableMenuBarMnemonics": false,
+    "editor.find.addExtraSpaceOnTop": false,
+    "zenMode.hideLineNumbers": false,
+    "terminal.integrated.fontSize": 13,
+    "editor.trimAutoWhitespace": false,
+    "terminal.integrated.enableBell": true,
+    "color-highlight.markRuler": false,
+    "editor.wordWrap": "on",
+    "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
+    "editor.fontWeight": "500",
+    "editor.renderControlCharacters": false,
+    "git.decorations.enabled": false,
+    "prettier.jsxSingleQuote": true,
+    "prettier.singleQuote": true,
+    "prettier.semi": false,
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "window.customMenuBarAltFocus": false,
+    "tslint.packageManager": "npm",
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "window.restoreFullscreen": true,
+    "files.associations": {
+        "Dockerfile.*": "dockerfile"
+    },
+    "files.autoSave": "onWindowChange",
+    "explorer.confirmDelete": false,
+    "explorer.autoReveal": false,
+    "prettier.endOfLine": "lf",
+    "window.newWindowDimensions": "inherit",
+    "extensions.ignoreRecommendations": true,
+    "files.insertFinalNewline": true,
+    "emmet.syntaxProfiles": {
+        "jsx": {
+            "attr_quotes": "single"
+        },
+        "js": {
+            "attr_quotes": "single"
+        }
+    },
+    "terminal.integrated.cursorBlinking": true,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "editor.smoothScrolling": true,
+    "scm.diffDecorationsGutterWidth": 2,
+    "scm.diffDecorations": "gutter",
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    // "editor.fontLigatures": "'ss03'",
+    "editor.fontLigatures": false,
+    "editor.renderWhitespace": "selection",
+    "terminal.external.linuxExec": "kitty",
+    "workbench.startupEditor": "welcomePage",
+    "editor.renderFinalNewline": false,
+    "workbench.iconTheme": "material-icon-theme",
+    "python.linting.enabled": false,
+    "terminal.integrated.rendererType": "experimentalWebgl",
+    "workbench.colorTheme": "Gruvbox Dark Medium",
+    "breadcrumbs.filePath": "last",
+    "emojisense.languages": {
+        "markdown": true,
+        "javascript": true,
+        "javascriptreact": true,
+        "typescript": true,
+        "typescriptreact": true,
+        "plaintext": {
+            "markupCompletionsEnabled": false,
+            "emojiDecoratorsEnabled": false
+        },
+        "git-commit": true
+    },
+    "explorer.compactFolders": false,
+    "explorer.incrementalNaming": "smart",
+    "editor.minimap.enabled": false,
+    "todo-tree.highlights.customHighlight": {
+        "TODO": {
+            "foreground": "#0D0",
+            "fontStyle": "italic",
+            "type": "tag"
+        },
+        "FIXME": {
+            "foreground": "#F00",
+            "fontStyle": "italic",
+            "type": "tag"
+        }
+    },
+    "todo-tree.regex.regexCaseSensitive": false,
+    "todo-tree.regex.regex": "((//|#|<!--|;|/\\*|^|\\*)\\s*($TAGS)|^\\s*- \\[ \\])",
+    "editor.foldingStrategy": "indentation"
+}
