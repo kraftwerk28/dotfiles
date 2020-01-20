@@ -20,6 +20,9 @@ export GOPATH="$HOME/projects/go"
 # ruby
 export PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 
+# python path
+export PYTHONPATH="$HOME/projects/python"
+
 # npm global modules
 export NODE_PATH="$HOME/.npm-global/bin"
 export PATH="$PATH:$NODE_PATH"

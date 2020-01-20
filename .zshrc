@@ -76,6 +76,8 @@ plugins=(
   sudo
 )
 
+fpath=(~/.zfunc $fpath)
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -104,9 +106,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-fpath=(~/.zsh_completions $fpath)
-#autoload -U compinit
-#compinit
+source ~/.zsh_completions
 
 alias pls="sudo"
 alias yay="yay --nodiffmenu"
