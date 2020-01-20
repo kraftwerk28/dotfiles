@@ -32,12 +32,11 @@ set tabstop=4
 set shiftwidth=2
 set expandtab
 set autoindent
-set listchars=tab:->,trail:·
 set list
-set nu
-set rnu
+set listchars=tab:->,trail:·
+set number relativenumber
 set cursorline
-set completeopt=noinsert
+"set completeopt=noinsert
 set ignorecase
 set termguicolors
 "set omnifunc=syntaxcomplete#Complete
