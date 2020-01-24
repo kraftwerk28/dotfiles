@@ -93,6 +93,9 @@
             "attr_quotes": "single"
         }
     },
+    "emmet.excludeLanguages": [],
+    "javascript.autoClosingTags": false,
+    "typescript.autoClosingTags": false,
     "terminal.integrated.cursorBlinking": true,
     "workbench.editor.enablePreviewFromQuickOpen": false,
     "editor.smoothScrolling": true,
@@ -144,5 +147,5 @@
     },
     "todo-tree.regex.regexCaseSensitive": false,
     "todo-tree.regex.regex": "((//|#|<!--|;|/\\*|^|\\*)\\s*($TAGS)|^\\s*- \\[ \\])",
-    "editor.foldingStrategy": "indentation"
+    "editor.foldingStrategy": "indentation",
 }

@@ -117,9 +117,11 @@ alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 
-mkcd () {
+mkcd() {
   mkdir -p "$1"
   cd "$1"
 }
 
 [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+bindkey "^[OA" up-line-or-history
+bindkey "^[OB" down-line-or-history
