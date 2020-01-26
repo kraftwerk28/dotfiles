@@ -34,7 +34,7 @@ ZSH_THEME="custom"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+DISABLE_MAGIC_FUNCTIONS=true
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -123,5 +123,6 @@ mkcd() {
 }
 
 [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history

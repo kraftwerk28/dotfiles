@@ -116,7 +116,6 @@
     "workbench.iconTheme": "material-icon-theme",
     "python.linting.enabled": false,
     "terminal.integrated.rendererType": "experimentalWebgl",
-    "workbench.colorTheme": "Gruvbox Dark Medium",
     "breadcrumbs.filePath": "last",
     "emojisense.languages": {
         "markdown": true,
@@ -148,4 +147,5 @@
     "todo-tree.regex.regexCaseSensitive": false,
     "todo-tree.regex.regex": "((//|#|<!--|;|/\\*|^|\\*)\\s*($TAGS)|^\\s*- \\[ \\])",
     "editor.foldingStrategy": "indentation",
+    "workbench.colorTheme": "Gruvbox Dark Medium",
 }
