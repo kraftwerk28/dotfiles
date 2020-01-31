@@ -74,6 +74,7 @@ plugins=(
   z
   extract
   sudo
+  zsh-autosuggestions
 )
 
 fpath=(~/.zfunc $fpath)
@@ -108,16 +109,16 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.zsh_completions
 
-alias pls="sudo"
 alias yay="yay --nodiffmenu"
 alias vim="nvim"
 alias vi="nvim"
+alias vin="nvim"
 alias pacin="sudo pacman -S --needed"
 alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 
-mkcd() {
+mkcd () {
   mkdir -p "$1"
   cd "$1"
 }
@@ -126,3 +127,6 @@ mkcd() {
 
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history
+bindkey "^ " autosuggest-accept
+export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+export ZSH_AUTOSUGGEST_USE_ASYNC=1

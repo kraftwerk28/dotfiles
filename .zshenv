@@ -2,7 +2,7 @@ export QT_QPA_PLATFORMTHEME="qt5ct"
 export EDITOR=/usr/bin/nvim
 
 # custom
-export PATH="$PATH:$HOME/scripts"
+export PATH="$PATH:$HOME/.scripts"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -27,3 +27,5 @@ export PYTHONPATH="$HOME/projects/python"
 export NODE_PATH="$HOME/.npm-global/bin"
 export PATH="$PATH:$NODE_PATH"
 export NVS_HOME="$HOME/.nvs"
+
+#export VIM="$HOME/.config/nvim"
