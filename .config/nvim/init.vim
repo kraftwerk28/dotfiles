@@ -17,15 +17,17 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Language
-Plug 'rust-lang/rust.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'pangloss/vim-javascript'
-Plug 'evanleck/vim-svelte'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'davidhalter/jedi-vim'
+Plug 'rust-lang/rust.vim'
+" Plug 'leafgarland/typescript-vim'
+" Plug 'peitalin/vim-jsx-typescript'
+" Plug 'pangloss/vim-javascript'
+Plug 'evanleck/vim-svelte'
+Plug 'mattn/emmet-vim'
 " Unsub cause it doesn't work
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py --ts-completer' }
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
 
 call plug#end()
 
@@ -43,6 +45,7 @@ let g:airline#extensions#tabline#enabled=1
 syntax on
 set hidden
 set tabstop=4
+set softtabstop=4
 set shiftwidth=2
 set expandtab
 set autoindent

@@ -128,5 +128,7 @@ mkcd () {
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept
-export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+export ZSH_AUTOSUGGEST_STRATEGY=(completion match_prev_cmd)
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+source "$HOME/.config/broot/launcher/bash/br"

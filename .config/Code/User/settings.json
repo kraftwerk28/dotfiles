@@ -97,6 +97,7 @@
     }
   },
   "emmet.excludeLanguages": [],
+  "emmet.triggerExpansionOnTab": true,
   "javascript.autoClosingTags": false,
   "typescript.autoClosingTags": false,
   "terminal.integrated.cursorBlinking": true,
