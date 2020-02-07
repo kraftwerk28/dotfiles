@@ -118,10 +118,10 @@ alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 
-alias ls="exa -F"
-alias la="exa -Fah"
-alias ll="exa -Flh"
-alias l="exa -Flah"
+alias ls="lsd -F"
+alias la="lsd -Fah"
+alias ll="lsd -Flh"
+alias l="lsd -Flah"
 
 mkcd () {
   mkdir -p "$1"

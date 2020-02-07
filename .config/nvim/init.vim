@@ -12,6 +12,7 @@ Plug 'morhetz/gruvbox'
 " Useful tools
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
@@ -64,6 +65,7 @@ set termguicolors
 set colorcolumn=80
 set mouse=a
 set mousehide
+set clipboard+=unnamedplus
 
 set incsearch
 set hlsearch
