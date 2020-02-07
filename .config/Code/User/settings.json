@@ -157,7 +157,9 @@
     "<C-w>": false,
     "<C-b>": false
   },
-  "vim.disableExtension": true,
+  "vim.disableExtension": false,
+  "vim.vimrc.enable": true,
+  "vim.vimrc.path": "/home/kraftwerk28/.config/nvim/init.vim",
   "window.menuBarVisibility": "default",
   "workbench.colorCustomizations": {
     "[Ayu Mirage Bordered]": {
@@ -198,5 +200,6 @@
   "rest-client.fontFamily": "Fira Code",
   "rest-client.enableTelemetry": false,
   "rest-client.showResponseInDifferentTab": false,
-  "rest-client.requestNameAsResponseTabTitle": true
+  "rest-client.requestNameAsResponseTabTitle": true,
+  "editor.lineNumbers": "relative"
 }
