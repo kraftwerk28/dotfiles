@@ -124,6 +124,10 @@ alias ll="lsd -Flh"
 alias l="lsd -Flah"
 
 mkcd () {
+  if [ -z "$1" ]; then
+    echo "Usage: mkcd <dirname>"
+    return 1
+  fi
   mkdir -p "$1"
   cd "$1"
 }
@@ -133,7 +137,7 @@ mkcd () {
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept
-export ZSH_AUTOSUGGEST_STRATEGY=(completion match_prev_cmd)
+export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 source "$HOME/.config/broot/launcher/bash/br"

@@ -20,7 +20,8 @@ Plug 'chrisbra/csv.vim'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'zchee/deoplete-jedi'
+Plug 'davidhalter/jedi-vim'
+Plug 'zchee/deoplete-jedi'
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
@@ -65,25 +66,25 @@ set termguicolors
 set colorcolumn=80
 set mouse=a
 set mousehide
-set clipboard+=unnamedplus
+set clipboard+=unnamed
 
 set incsearch
-set hlsearch
+set nohlsearch
 set ignorecase
 set smartcase
-
-set completeopt=menu,noinsert
 set wildmenu
 " set wildmode=list:longest
+
 set number relativenumber
-autocmd winenter,focusgained * setlocal number relativenumber
-autocmd winleave,focuslost * setlocal number norelativenumber
+autocmd Winenter,FocusGained * setlocal number relativenumber
+autocmd Winleave,FocusLost * setlocal number norelativenumber
+autocmd FocusLost * :wa
+set fillchars=vert:\|
 
 let g:LanguageClient_serverCommands = {
   \ 'rust': ['rustup', 'run', 'stable', 'rls'],
   \ 'javascript': ['javascript-typescript-stdio'],
   \ 'javascript.jsx': ['javascript-typescript-stdio'],
-  \ 'python': ['pyls'],
   \ }
 
 let g:LanguageClient_rootMarkers = {
@@ -98,26 +99,36 @@ let g:deoplete#enable_smart_case=1
 let NERDTreeQuitOnOpen=1
 
 " Place cursor at the same position
-" IDK how this code works
 autocmd BufReadPost *
   \ if line("'\"") > 0 && line("'\"") <= line("$") |
   \   exe "normal! g`\"" |
   \ endif
 
+" Close vim if the only window left is NERDTree
+autocmd bufenter *
+  \ if (winnr("$") == 1 && exists("b:NERDTree") &&
+  \   b:NERDTree.isTabTree()) |
+  \   q |
+  \ endif
+
 autocmd BufNewFile,BufRead *.{ts,tsx} set filetype=typescript
 
 nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
-
 inoremap ii <Esc>
 inoremap jj <Esc>
+" Arrow movement mappings
 nnoremap <Down> <C-e>
 nnoremap <Up> <C-y>
-nnoremap <S-Up> M<C-u>
-nnoremap <S-Down> M<C-d>
+nnoremap <S-Up> <C-u>M
+nnoremap <S-Down> <C-d>M
+nnoremap <C-Up> <C-b>M
+nnoremap <C-Down> <C-f>M
 
 nnoremap <F3> :NERDTreeToggle<CR>
-nnoremap <Leader>c <plug>NERDCommenterToggle
-
+nnoremap <C-_> :Commentary<CR>
+vnoremap <C-_> :Commentary<CR> gv
+nnoremap > >>
+nnoremap < <<
 nnoremap tt :tabnew<Space>
 nnoremap <silent><C-]> :tabn<CR>
 noremap <C-s> :w<CR>
@@ -126,3 +137,6 @@ nnoremap <silent><Leader>/ :nohlsearch<CR>
 
 nnoremap <Leader>jsf :!eslint --fix %<CR>
 nnoremap <Leader>rf :RustFmt<CR>
+
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
