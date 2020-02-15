@@ -123,6 +123,9 @@ alias la="lsd -Fah"
 alias ll="lsd -Flh"
 alias l="lsd -Flah"
 
+mkcdd () {
+}
+
 mkcd () {
   if [ -z "$1" ]; then
     echo "Usage: mkcd <dirname>"

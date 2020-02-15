@@ -48,7 +48,6 @@
   "color-highlight.markRuler": false,
   "editor.wordWrap": "on",
   "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
-  "editor.fontWeight": "500",
   "editor.renderControlCharacters": false,
   "git.decorations.enabled": false,
   "prettier.jsxSingleQuote": true,
@@ -155,7 +154,8 @@
   "vim.handleKeys": {
     "<C-f>": false,
     "<C-w>": false,
-    "<C-b>": false
+    "<C-b>": false,
+    "<C-r>": false
   },
   "vim.disableExtension": false,
   "vim.vimrc.enable": true,
@@ -201,5 +201,8 @@
   "rest-client.enableTelemetry": false,
   "rest-client.showResponseInDifferentTab": false,
   "rest-client.requestNameAsResponseTabTitle": true,
-  "editor.lineNumbers": "relative"
+  "editor.lineNumbers": "relative",
+  "workbench.editor.enablePreview": false,
+  "vim.useSystemClipboard": true,
+  "editor.fontWeight": "500"
 }

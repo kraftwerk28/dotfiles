@@ -17,6 +17,7 @@ Plug 'tpope/vim-commentary'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'chrisbra/csv.vim'
+Plug 'floobits/floobits-neovim'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -25,6 +26,7 @@ Plug 'zchee/deoplete-jedi'
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
+Plug 'jparise/vim-graphql'
 Plug 'autozimu/LanguageClient-neovim', {
   \ 'branch': 'next',
   \ 'do': 'bash install.sh'
@@ -66,7 +68,7 @@ set termguicolors
 set colorcolumn=80
 set mouse=a
 set mousehide
-set clipboard+=unnamed
+set clipboard+=unnamedplus
 
 set incsearch
 set nohlsearch
@@ -125,8 +127,11 @@ nnoremap <C-Up> <C-b>M
 nnoremap <C-Down> <C-f>M
 
 nnoremap <F3> :NERDTreeToggle<CR>
+
 nnoremap <C-_> :Commentary<CR>
-vnoremap <C-_> :Commentary<CR> gv
+vnoremap <C-_> :Commentary<CR>
+inoremap <C-_> <Esc>:Commentary<CR>a
+
 nnoremap > >>
 nnoremap < <<
 nnoremap tt :tabnew<Space>
