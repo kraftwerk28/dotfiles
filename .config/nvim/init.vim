@@ -21,8 +21,8 @@ Plug 'floobits/floobits-neovim'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'davidhalter/jedi-vim'
-Plug 'zchee/deoplete-jedi'
+" Plug 'davidhalter/jedi-vim'
+" Plug 'zchee/deoplete-jedi'
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
@@ -50,6 +50,10 @@ let g:airline_theme='ayu_mirage'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled=1
 
+let NERDTreeMapOpenInTab="\<CR>"
+
+call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
+
 " Misc
 syntax on
 set hidden
@@ -69,24 +73,23 @@ set colorcolumn=80
 set mouse=a
 set mousehide
 set clipboard+=unnamedplus
+set completeopt=menuone,longest
 
 set incsearch
 set nohlsearch
 set ignorecase
 set smartcase
 set wildmenu
+set signcolumn=yes
 " set wildmode=list:longest
 
 set number relativenumber
-autocmd Winenter,FocusGained * setlocal number relativenumber
-autocmd Winleave,FocusLost * setlocal number norelativenumber
-autocmd FocusLost * :wa
-set fillchars=vert:\|
 
 let g:LanguageClient_serverCommands = {
   \ 'rust': ['rustup', 'run', 'stable', 'rls'],
   \ 'javascript': ['javascript-typescript-stdio'],
   \ 'javascript.jsx': ['javascript-typescript-stdio'],
+  \ 'python': ['/home/kraftwerk28/.local/bin/pyls'],
   \ }
 
 let g:LanguageClient_rootMarkers = {
@@ -99,20 +102,27 @@ let g:deoplete#enable_ignore_case=1
 let g:deoplete#enable_smart_case=1
 
 let NERDTreeQuitOnOpen=1
+let g:AutoPairsFlyMode=0
 
 " Place cursor at the same position
-autocmd BufReadPost *
-  \ if line("'\"") > 0 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+function RestoreCursor()
+   if line("'\"") > 0 && line("'\"") <= line("$")
+     exe "normal! g`\""
+   endif
+endfunction
+autocmd BufReadPost * call RestoreCursor()
 
 " Close vim if the only window left is NERDTree
-autocmd bufenter *
-  \ if (winnr("$") == 1 && exists("b:NERDTree") &&
-  \   b:NERDTree.isTabTree()) |
-  \   q |
-  \ endif
+function! CloseIfNERDTree()
+   if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
+     q
+   endif
+endfunction
+autocmd BufEnter * call CloseIfNERDTree()
 
+autocmd Winenter,FocusGained * setlocal number relativenumber
+autocmd Winleave,FocusLost * setlocal number norelativenumber
+autocmd FocusLost * if mode() == 'i' | call feedkeys("\<Esc>") | endif | :wa
 autocmd BufNewFile,BufRead *.{ts,tsx} set filetype=typescript
 
 nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
@@ -129,11 +139,15 @@ nnoremap <C-Down> <C-f>M
 nnoremap <F3> :NERDTreeToggle<CR>
 
 nnoremap <C-_> :Commentary<CR>
-vnoremap <C-_> :Commentary<CR>
+vnoremap <C-_> :Commentary<CR>gv
 inoremap <C-_> <Esc>:Commentary<CR>a
 
+" Indenting
 nnoremap > >>
 nnoremap < <<
+vnoremap > >gv
+vnoremap < <gv
+
 nnoremap tt :tabnew<Space>
 nnoremap <silent><C-]> :tabn<CR>
 noremap <C-s> :w<CR>
