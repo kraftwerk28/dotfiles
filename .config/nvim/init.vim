@@ -21,6 +21,7 @@ Plug 'floobits/floobits-neovim'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
 " Plug 'davidhalter/jedi-vim'
 " Plug 'zchee/deoplete-jedi'
 Plug 'rust-lang/rust.vim'
@@ -40,19 +41,14 @@ Plug 'maxmellon/vim-jsx-pretty'
 
 call plug#end()
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Options
+
 " Various theming shit
 set background=dark
 set termguicolors
 let ayucolor='mirage'
 colorscheme ayu
-" let g:gruvbox_contrast_dark='medium'
-let g:airline_theme='ayu_mirage'
-let g:airline_powerline_fonts=1
-let g:airline#extensions#tabline#enabled=1
-
-let NERDTreeMapOpenInTab="\<CR>"
-
-call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 
 " Misc
 syntax on
@@ -81,9 +77,10 @@ set ignorecase
 set smartcase
 set wildmenu
 set signcolumn=yes
-" set wildmode=list:longest
-
 set number relativenumber
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Let's
 
 let g:LanguageClient_serverCommands = {
   \ 'rust': ['rustup', 'run', 'stable', 'rls'],
@@ -97,12 +94,27 @@ let g:LanguageClient_rootMarkers = {
   \ 'typescript': ['tsconfig.json'],
   \ }
 
-let g:deoplete#enable_at_startup=1
-let g:deoplete#enable_ignore_case=1
-let g:deoplete#enable_smart_case=1
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
 
-let NERDTreeQuitOnOpen=1
-let g:AutoPairsFlyMode=0
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'floating'
+highlight link EchoDocFloat Pmenu
+
+let NERDTreeQuitOnOpen = 1
+let g:AutoPairsFlyMode = 0
+
+let g:airline_theme='ayu_mirage'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
+let NERDTreeMapOpenInTab="\<CR>"
+
+call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autocmd's
 
 " Place cursor at the same position
 function RestoreCursor()
@@ -124,6 +136,9 @@ autocmd Winenter,FocusGained * setlocal number relativenumber
 autocmd Winleave,FocusLost * setlocal number norelativenumber
 autocmd FocusLost * if mode() == 'i' | call feedkeys("\<Esc>") | endif | :wa
 autocmd BufNewFile,BufRead *.{ts,tsx} set filetype=typescript
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Maps
 
 nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
 inoremap ii <Esc>
