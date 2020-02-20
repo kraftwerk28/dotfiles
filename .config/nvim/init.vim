@@ -78,6 +78,7 @@ set smartcase
 set wildmenu
 set signcolumn=yes
 set number relativenumber
+set autoread
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Let's
@@ -117,7 +118,7 @@ call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 " Autocmd's
 
 " Place cursor at the same position
-function RestoreCursor()
+function! RestoreCursor()
    if line("'\"") > 0 && line("'\"") <= line("$")
      exe "normal! g`\""
    endif
@@ -134,28 +135,33 @@ autocmd BufEnter * call CloseIfNERDTree()
 
 autocmd Winenter,FocusGained * setlocal number relativenumber
 autocmd Winleave,FocusLost * setlocal number norelativenumber
-autocmd FocusLost * if mode() == 'i' | call feedkeys("\<Esc>") | endif | :wa
+" Exit insert mode if unfocus
+autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | :wa
 autocmd BufNewFile,BufRead *.{ts,tsx} set filetype=typescript
+" Reload file if it changed on disk
+autocmd CursorHold,FocusGained * checktime
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
 
-nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
+nnoremap j gj
+nnoremap k gk
 inoremap ii <Esc>
 inoremap jj <Esc>
+nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
+
 " Arrow movement mappings
-nnoremap <Down> <C-e>
-nnoremap <Up> <C-y>
-nnoremap <S-Up> <C-u>M
-nnoremap <S-Down> <C-d>M
-nnoremap <C-Up> <C-b>M
-nnoremap <C-Down> <C-f>M
+nnoremap <Down> <C-E>
+nnoremap <Up> <C-Y>
+nnoremap <S-Up> <C-U>M
+nnoremap <S-Down> <C-D>M
+nnoremap <C-Up> <C-B>M
+nnoremap <C-Down> <C-F>M
 
-nnoremap <F3> :NERDTreeToggle<CR>
-
-nnoremap <C-_> :Commentary<CR>
-vnoremap <C-_> :Commentary<CR>gv
-inoremap <C-_> <Esc>:Commentary<CR>a
+nnoremap <silent> <F3> :NERDTreeToggle<CR>
+nnoremap <silent> <C-_> :Commentary<CR>
+vnoremap <silent> <C-_> :Commentary<CR>gv
+inoremap <silent> <C-_> <C-O>:Commentary<CR>
 
 " Indenting
 nnoremap > >>
@@ -164,13 +170,22 @@ vnoremap > >gv
 vnoremap < <gv
 
 nnoremap tt :tabnew<Space>
-nnoremap <silent><C-]> :tabn<CR>
-noremap <C-s> :w<CR>
-nnoremap <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
-nnoremap <silent><Leader>/ :nohlsearch<CR>
+nnoremap <silent> <C-]> :tabn<CR>
+noremap <C-S> :w<CR>
+nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
-nnoremap <Leader>jsf :!eslint --fix %<CR>
+" Code format
+nnoremap <Leader>jsf :w<CR> :!eslint --fix %<CR>
 nnoremap <Leader>rf :RustFmt<CR>
+nnoremap <Leader>pf :w<CR> :!autopep8 -i %<CR>
 
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
+inoremap <C-Space> <C-X><C-O>
+inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
+inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
+
+nnoremap <silent> <M-k> :m-2<CR>
+nnoremap <silent> <M-j> :m+1<CR>
+
+nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>

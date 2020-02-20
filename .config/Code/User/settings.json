@@ -159,6 +159,8 @@
   },
   "vim.disableExtension": false,
   "vim.vimrc.enable": true,
+  "vim.enableNeovim": true,
+  "vim.neovimPath": "/usr/bin/nvim",
   "vim.vimrc.path": "/home/kraftwerk28/.config/nvim/init.vim",
   "window.menuBarVisibility": "default",
   "workbench.colorCustomizations": {
