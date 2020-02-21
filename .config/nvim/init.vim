@@ -188,10 +188,7 @@ nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>
 
 " Adds shebang to current file and makes it executable (to current user)
 let s:FiletypeExecutables = {
-  \ 'python': '/usr/bin/python',
   \ 'javascript': '/usr/bin/node',
-  \ 'sh': '/bin/sh',
-  \ 'bash': '/bin/bash',
   \ }
 
 function! Shebang()
