@@ -95,6 +95,8 @@ let g:LanguageClient_rootMarkers = {
   \ 'typescript': ['tsconfig.json'],
   \ }
 
+let g:LanguageClient_useVirtualText = 'CodeLens'
+
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 1
@@ -189,3 +191,30 @@ nnoremap <silent> <M-j> :m+1<CR>
 
 nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Misc
+
+" Adds shebang to current file and makes it executable (to current user)
+let s:FiletypeExecutables = {
+  \ 'python': '/usr/bin/python',
+  \ 'javascript': '/usr/bin/node',
+  \ }
+
+function! Shebang()
+  let ft = &filetype
+  if has_key(s:FiletypeExecutables, ft)
+    let shb = "#!" . s:FiletypeExecutables[ft]
+    normal gg0"ayy
+    if stridx(@a, "#!") == 0
+      echo "Shebang already exists."
+    else
+      call append(0, shb)
+      w
+      silent execute "!chmod u+x %"
+    endif
+  else
+    echoerr "Filename not supported."
+  endif
+endfunction
+command! Shebang call Shebang()
