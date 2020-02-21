@@ -53,28 +53,19 @@ colorscheme ayu
 " Misc
 syntax on
 set hidden
-" Width of the <Tab> character:
-set tabstop=4
-set softtabstop=2
-" Cout of spaces when pressing <Tab>:
-set shiftwidth=2
-set expandtab
+set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
-set list
-set listchars=tab:->,trail:·
+set list listchars=tab:->,trail:·
 set cursorline
 set ignorecase
 set termguicolors
 set colorcolumn=80
-set mouse=a
-set mousehide
+set mousehide mouse=a
 set clipboard+=unnamedplus
 set completeopt=menuone,longest
 
-set incsearch
-set nohlsearch
-set ignorecase
-set smartcase
+set incsearch nohlsearch
+set ignorecase smartcase
 set wildmenu
 set signcolumn=yes
 set number relativenumber
@@ -199,14 +190,15 @@ nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>
 let s:FiletypeExecutables = {
   \ 'python': '/usr/bin/python',
   \ 'javascript': '/usr/bin/node',
+  \ 'sh': '/bin/sh',
+  \ 'bash': '/bin/bash',
   \ }
 
 function! Shebang()
   let ft = &filetype
   if has_key(s:FiletypeExecutables, ft)
     let shb = "#!" . s:FiletypeExecutables[ft]
-    normal gg0"ayy
-    if stridx(@a, "#!") == 0
+    if stridx(getline(1), "#!") == 0
       echo "Shebang already exists."
     else
       call append(0, shb)
