@@ -196,17 +196,23 @@ let s:FiletypeExecutables = {
 
 function! Shebang()
   let ft = &filetype
-  if has_key(s:FiletypeExecutables, ft)
+
+  if stridx(getline(1), "#!") == 0
+    echo "Shebang already exists."
+    return
+  endif
+
+  let sys_exec = system("where " . ft)
+  if v:shell_error == 0
+    let shb = "#!" . sys_exec[:-2]
+  elseif has_key(s:FiletypeExecutables, ft)
     let shb = "#!" . s:FiletypeExecutables[ft]
-    if stridx(getline(1), "#!") == 0
-      echo "Shebang already exists."
-    else
-      call append(0, shb)
-      w
-      silent execute "!chmod u+x %"
-    endif
   else
     echoerr "Filename not supported."
+    return
   endif
+  call append(0, shb)
+  w
+  silent execute "!chmod u+x %"
 endfunction
 command! Shebang call Shebang()
