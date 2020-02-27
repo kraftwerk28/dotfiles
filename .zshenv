@@ -16,6 +16,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # GO
 export GOPATH="$HOME/projects/go"
+export PATH="$PATH:$HOME/projects/go/bin"
 
 # ruby
 export PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"

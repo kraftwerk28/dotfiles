@@ -155,7 +155,7 @@
     "<C-f>": false,
     "<C-w>": false,
     "<C-b>": false,
-    "<C-r>": false
+    // "<C-r>": false,
   },
   "vim.disableExtension": false,
   "vim.vimrc.enable": true,
@@ -206,5 +206,6 @@
   "editor.lineNumbers": "relative",
   "workbench.editor.enablePreview": false,
   "vim.useSystemClipboard": true,
-  "editor.fontWeight": "500"
+  "editor.fontWeight": "500",
+  "todo-tree.tree.showScanModeButton": false
 }

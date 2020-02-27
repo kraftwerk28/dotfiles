@@ -123,9 +123,6 @@ alias la="lsd -Fah"
 alias ll="lsd -Flh"
 alias l="lsd -Flah"
 
-mkcdd () {
-}
-
 mkcd () {
   if [ -z "$1" ]; then
     echo "Usage: mkcd <dirname>"
@@ -135,7 +132,9 @@ mkcd () {
   cd "$1"
 }
 
-[ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+if [[ -s "$NVS_HOME/nvs.sh" ]]; then
+  source "$NVS_HOME/nvs.sh"
+fi
 
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history

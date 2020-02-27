@@ -7,9 +7,10 @@ Plug 'junegunn/vim-emoji'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ayu-theme/ayu-vim'
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
 
 " Useful tools
+" Sould be replaced by some more useful
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -17,27 +18,25 @@ Plug 'tpope/vim-commentary'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'chrisbra/csv.vim'
-Plug 'floobits/floobits-neovim'
+" Git wrapper
+Plug 'tpope/vim-fugitive'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
-" Plug 'davidhalter/jedi-vim'
-" Plug 'zchee/deoplete-jedi'
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'leafgarland/typescript-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'maxmellon/vim-jsx-pretty'
+
 Plug 'autozimu/LanguageClient-neovim', {
   \ 'branch': 'next',
   \ 'do': 'bash install.sh'
   \ }
-
-" Plug 'davidhalter/jedi-vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'pangloss/vim-javascript'
-Plug 'maxmellon/vim-jsx-pretty'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
@@ -70,6 +69,9 @@ set wildmenu
 set signcolumn=yes
 set number relativenumber
 set autoread
+set foldlevel=99
+set foldcolumn=1
+set foldmethod=syntax
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Let's
@@ -79,11 +81,16 @@ let g:LanguageClient_serverCommands = {
   \ 'javascript': ['javascript-typescript-stdio'],
   \ 'javascript.jsx': ['javascript-typescript-stdio'],
   \ 'python': ['/home/kraftwerk28/.local/bin/pyls'],
+  \ 'haskell': ['hie-wrapper', '--lsp'],
+  \ 'c': ['clangd'],
+  \ 'cpp': ['clangd'],
+  \ 'go': ['go-langserver'],
   \ }
 
 let g:LanguageClient_rootMarkers = {
   \ 'javascript': ['jsconfig.json'],
   \ 'typescript': ['tsconfig.json'],
+  \ 'haskell': ['*.cabal', 'stack.yaml'],
   \ }
 
 let g:LanguageClient_useVirtualText = 'CodeLens'
@@ -102,6 +109,10 @@ let g:AutoPairsFlyMode = 0
 let g:airline_theme='ayu_mirage'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#show_buffers = 0
+" let g:airline#extensions#tabline#show_tabs = 1
+" let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 let NERDTreeMapOpenInTab="\<CR>"
 
@@ -128,11 +139,15 @@ autocmd BufEnter * call CloseIfNERDTree()
 
 autocmd Winenter,FocusGained * setlocal number relativenumber
 autocmd Winleave,FocusLost * setlocal number norelativenumber
+
 " Exit insert mode if unfocus
 autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | :wa
-autocmd BufNewFile,BufRead *.{ts,tsx} set filetype=typescript
+
 " Reload file if it changed on disk
 autocmd CursorHold,FocusGained * checktime
+
+autocmd BufNewFile,BufRead *.{ts,tsx} setlocal filetype=typescript
+autocmd FileType go setlocal shiftwidth=4 softtabstop=4 expandtab!
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
@@ -162,9 +177,8 @@ nnoremap < <<
 vnoremap > >gv
 vnoremap < <gv
 
-nnoremap tt :tabnew<Space>
-nnoremap <silent> <C-]> :tabn<CR>
-noremap <C-S> :w<CR>
+nnoremap tt :e<Space>
+nnoremap <silent> <C-]> :bnext<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
@@ -180,8 +194,9 @@ inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 
-nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+nnoremap <F2> :w<CR> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>
+nnoremap <silent> <C-LeftMouse> :call LanguageClient#textDocument_definition()<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc
@@ -213,3 +228,16 @@ function! Shebang()
   silent execute "!chmod u+x %"
 endfunction
 command! Shebang call Shebang()
+
+function! Durka()
+  let themes = map(
+    \ split(system("ls ~/.config/nvim/colors/")) +
+    \ split(system("ls /usr/share/nvim/runtime/colors/")),
+    \ "v:val[:-5]"
+    \)
+  for th in themes
+    echo th
+    execute "colorscheme " . th
+    sleep 200m
+  endfor
+endfunction
