@@ -11,7 +11,7 @@ Plug 'ayu-theme/ayu-vim'
 
 " Useful tools
 " Sould be replaced by some more useful
-Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
@@ -28,7 +28,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
@@ -45,7 +45,6 @@ call plug#end()
 
 " Various theming shit
 set background=dark
-set termguicolors
 let ayucolor='mirage'
 colorscheme ayu
 
@@ -54,7 +53,7 @@ syntax on
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
-set list listchars=tab:->,trail:·
+set list listchars=tab:>-,trail:·
 set cursorline
 set ignorecase
 set termguicolors
@@ -147,7 +146,7 @@ autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | :wa
 autocmd CursorHold,FocusGained * checktime
 
 autocmd BufNewFile,BufRead *.{ts,tsx} setlocal filetype=typescript
-autocmd FileType go setlocal shiftwidth=4 softtabstop=4 expandtab!
+autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
@@ -194,6 +193,7 @@ inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 
+nnoremap <Enter> :call LanguageClient#textDocument_hover()<CR>
 nnoremap <F2> :w<CR> :call LanguageClient#textDocument_rename()<CR>
 nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>
 nnoremap <silent> <C-LeftMouse> :call LanguageClient#textDocument_definition()<CR>
