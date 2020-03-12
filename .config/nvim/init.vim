@@ -11,7 +11,8 @@ Plug 'ayu-theme/ayu-vim'
 
 " Useful tools
 " Sould be replaced by some more useful
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
+Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
@@ -68,6 +69,7 @@ set wildmenu
 set signcolumn=yes
 set number relativenumber
 set autoread
+set autowrite
 set foldlevel=99
 set foldcolumn=1
 set foldmethod=syntax
@@ -140,7 +142,8 @@ autocmd Winenter,FocusGained * setlocal number relativenumber
 autocmd Winleave,FocusLost * setlocal number norelativenumber
 
 " Exit insert mode if unfocus
-autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | :wa
+autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
+" autocmd BufLeave * w
 
 " Reload file if it changed on disk
 autocmd CursorHold,FocusGained * checktime
@@ -181,10 +184,11 @@ nnoremap <silent> <C-]> :bnext<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
-" Code format
-nnoremap <Leader>jsf :w<CR> :!eslint --fix %<CR>
-nnoremap <Leader>rf :RustFmt<CR>
-nnoremap <Leader>pf :w<CR> :!autopep8 -i %<CR>
+" Code format (languageclient-neovim does it instead)
+" nnoremap <Leader>jsf :!eslint --fix %<CR>
+" nnoremap <Leader>rf :RustFmt<CR>
+" nnoremap <Leader>pf :!autopep8 -i %<CR>
+" nnoremap <Leader>cf :!clang-format %<CR>
 
 inoremap <C-Space> <C-X><C-O>
 inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
@@ -192,6 +196,8 @@ inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
+vnoremap <silent> <M-k> :m'<-2<CR>gv
+vnoremap <silent> <M-j> :m'>+1<CR>gv
 
 nnoremap <Enter> :call LanguageClient#textDocument_hover()<CR>
 nnoremap <F2> :w<CR> :call LanguageClient#textDocument_rename()<CR>

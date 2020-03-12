@@ -111,7 +111,8 @@
     "typescriptreact"
   ],
   // "editor.fontLigatures": "'ss03'",
-  "editor.fontLigatures": false,
+  // "editor.fontLigatures": false,
+  "editor.fontLigatures": true,
   "editor.renderWhitespace": "selection",
   "terminal.external.linuxExec": "kitty",
   "workbench.startupEditor": "welcomePage",
