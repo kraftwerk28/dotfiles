@@ -7,6 +7,8 @@
     "editor.tabSize": 4
   },
   "files.eol": "\n",
+  "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
+  "editor.fontWeight": "500",
   "editor.rulers": [
     80
   ],
@@ -47,7 +49,6 @@
   "terminal.integrated.enableBell": true,
   "color-highlight.markRuler": false,
   "editor.wordWrap": "on",
-  "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
   "editor.renderControlCharacters": false,
   "git.decorations.enabled": false,
   "prettier.jsxSingleQuote": true,
@@ -208,6 +209,5 @@
   "editor.lineNumbers": "relative",
   "workbench.editor.enablePreview": false,
   "vim.useSystemClipboard": true,
-  "editor.fontWeight": "500",
   "todo-tree.tree.showScanModeButton": false
 }

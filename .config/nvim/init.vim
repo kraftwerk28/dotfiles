@@ -21,6 +21,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'chrisbra/csv.vim'
 " Git wrapper
 Plug 'tpope/vim-fugitive'
+Plug 'editorconfig/editorconfig-vim'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -54,7 +55,7 @@ syntax on
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
-set list listchars=tab:>-,trail:·
+set list listchars=tab:➔\ ,trail:·
 set cursorline
 set ignorecase
 set termguicolors
@@ -86,6 +87,7 @@ let g:LanguageClient_serverCommands = {
   \ 'c': ['clangd'],
   \ 'cpp': ['clangd'],
   \ 'go': ['go-langserver'],
+  \ 'sh': ['bash-language-server', 'start']
   \ }
 
 let g:LanguageClient_rootMarkers = {
@@ -157,7 +159,7 @@ autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 nnoremap j gj
 nnoremap k gk
 inoremap ii <Esc>
-inoremap jj <Esc>
+vnoremap ii <Esc>
 nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
 
 " Arrow movement mappings
