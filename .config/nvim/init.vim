@@ -47,8 +47,17 @@ call plug#end()
 
 " Various theming shit
 set background=dark
-let ayucolor='mirage'
+let ayucolor='dark'
+" let ayucolor='mirage'
 colorscheme ayu
+
+let g:airline_theme='ayu_dark'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#show_buffers = 0
+" let g:airline#extensions#tabline#show_tabs = 1
+" let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " Misc
 syntax on
@@ -87,7 +96,8 @@ let g:LanguageClient_serverCommands = {
   \ 'c': ['clangd'],
   \ 'cpp': ['clangd'],
   \ 'go': ['go-langserver'],
-  \ 'sh': ['bash-language-server', 'start']
+  \ 'sh': ['bash-language-server', 'start'],
+  \ 'json': ['vscode-json-languageserver', '--stdio'],
   \ }
 
 let g:LanguageClient_rootMarkers = {
@@ -108,14 +118,6 @@ highlight link EchoDocFloat Pmenu
 
 let NERDTreeQuitOnOpen = 1
 let g:AutoPairsFlyMode = 0
-
-let g:airline_theme='ayu_mirage'
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#show_buffers = 0
-" let g:airline#extensions#tabline#show_tabs = 1
-" let g:airline#extensions#tabline#show_splits = 0
-let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 let NERDTreeMapOpenInTab="\<CR>"
 
@@ -201,9 +203,16 @@ nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
 vnoremap <silent> <M-j> :m'>+1<CR>gv
 
+function! FormatFile()
+  if &filetype == 'json'
+    %!jq
+  else
+    call LanguageClient#textDocument_formatting()
+  endif
+endfunction
 nnoremap <Enter> :call LanguageClient#textDocument_hover()<CR>
 nnoremap <F2> :w<CR> :call LanguageClient#textDocument_rename()<CR>
-nnoremap <silent> <Leader>ff :call LanguageClient#textDocument_formatting()<CR>
+nnoremap <silent> <Leader>ff :call FormatFile()<CR>
 nnoremap <silent> <C-LeftMouse> :call LanguageClient#textDocument_definition()<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
