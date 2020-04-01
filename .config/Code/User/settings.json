@@ -8,7 +8,6 @@
   },
   "files.eol": "\n",
   "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
-  "editor.fontWeight": "500",
   "editor.rulers": [
     80
   ],
@@ -168,7 +167,7 @@
   "workbench.colorCustomizations": {
     "[Ayu Mirage Bordered]": {
       "editor.wordHighlightBackground": "#4f5869"
-    }
+    },
   },
   "editor.tokenColorCustomizations": {
     "[Ayu Mirage Bordered]": {
@@ -200,7 +199,6 @@
       ]
     }
   },
-  "workbench.colorTheme": "Ayu Mirage Bordered",
   "rest-client.fontFamily": "Fira Code",
   "rest-client.enableTelemetry": false,
   "rest-client.showResponseInDifferentTab": false,
@@ -209,5 +207,8 @@
   "editor.lineNumbers": "relative",
   "workbench.editor.enablePreview": false,
   "vim.useSystemClipboard": true,
-  "todo-tree.tree.showScanModeButton": false
+  "todo-tree.tree.showScanModeButton": false,
+  "editor.fontWeight": "500",
+  "vim.highlightedyank.enable": true,
+  "workbench.colorTheme": "Ayu Mirage Bordered"
 }

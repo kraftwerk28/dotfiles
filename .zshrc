@@ -132,6 +132,14 @@ mkcd () {
   cd "$1"
 }
 
+cjq () {
+  if [ -z "$1" ]; then
+    echo "Usage: mkcd <dirname>"
+    return 1
+  fi
+  cat $1 | jq
+}
+
 if [[ -s "$NVS_HOME/nvs.sh" ]]; then
   source "$NVS_HOME/nvs.sh"
 fi

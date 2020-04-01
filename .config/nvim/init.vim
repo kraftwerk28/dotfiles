@@ -106,7 +106,7 @@ let g:LanguageClient_rootMarkers = {
   \ 'haskell': ['*.cabal', 'stack.yaml'],
   \ }
 
-let g:LanguageClient_useVirtualText = 'CodeLens'
+" let g:LanguageClient_useVirtualText = 'CodeLens'
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
@@ -206,6 +206,8 @@ vnoremap <silent> <M-j> :m'>+1<CR>gv
 function! FormatFile()
   if &filetype == 'json'
     %!jq
+  elseif &filetype == 'javascript'
+    %!prettier %
   else
     call LanguageClient#textDocument_formatting()
   endif
@@ -220,7 +222,7 @@ nnoremap <silent> <C-LeftMouse> :call LanguageClient#textDocument_definition()<C
 
 " Adds shebang to current file and makes it executable (to current user)
 let s:FiletypeExecutables = {
-  \ 'javascript': '/usr/bin/node',
+  \ 'javascript': 'node',
   \ }
 
 function! Shebang()
@@ -231,11 +233,11 @@ function! Shebang()
     return
   endif
 
-  let sys_exec = system("where " . ft)
+  let sys_exec = system("which " . ft)
   if v:shell_error == 0
-    let shb = "#!" . sys_exec[:-2]
+    let shb = "#!/usr/bin/env " . ft
   elseif has_key(s:FiletypeExecutables, ft)
-    let shb = "#!" . s:FiletypeExecutables[ft]
+    let shb = "#!/usr/bin/env " . s:FiletypeExecutables[ft]
   else
     echoerr "Filename not supported."
     return
