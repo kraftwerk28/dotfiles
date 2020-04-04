@@ -11,7 +11,7 @@ Plug 'ayu-theme/ayu-vim'
 
 " Useful tools
 " Sould be replaced by some more useful
-" Plug 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -46,8 +46,14 @@ call plug#end()
 " Options
 
 " Various theming shit
-set background=dark
-let ayucolor='dark'
+if !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
+  set background=light
+  let ayucolor='light'
+else
+  set background=dark
+  let ayucolor='dark'
+endif
+
 " let ayucolor='mirage'
 colorscheme ayu
 
@@ -89,8 +95,10 @@ set foldmethod=syntax
 
 let g:LanguageClient_serverCommands = {
   \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-  \ 'javascript': ['javascript-typescript-stdio'],
-  \ 'javascript.jsx': ['javascript-typescript-stdio'],
+  \ 'javascript': ['typescript-language-server', '--stdio'],
+  \ 'javascriptreact': ['typescript-language-server', '--stdio'],
+  \ 'typescript': ['typescript-language-server', '--stdio'],
+  \ 'typescriptreact': ['typescript-language-server', '--stdio'],
   \ 'python': ['/home/kraftwerk28/.local/bin/pyls'],
   \ 'haskell': ['hie-wrapper', '--lsp'],
   \ 'c': ['clangd'],
@@ -152,7 +160,8 @@ autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 " Reload file if it changed on disk
 autocmd CursorHold,FocusGained * checktime
 
-autocmd BufNewFile,BufRead *.{ts,tsx} setlocal filetype=typescript
+autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
+autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescriptreact
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -206,8 +215,8 @@ vnoremap <silent> <M-j> :m'>+1<CR>gv
 function! FormatFile()
   if &filetype == 'json'
     %!jq
-  elseif &filetype == 'javascript'
-    %!prettier %
+  " elseif &filetype == 'javascript'
+  "   %!prettier %
   else
     call LanguageClient#textDocument_formatting()
   endif
