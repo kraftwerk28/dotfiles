@@ -95,7 +95,7 @@
       "attr_quotes": "single"
     }
   },
-  "emmet.excludeLanguages": [],
+  "emmet.excludeLanguages": ["javascriptreact", "typescriptreact"],
   "emmet.triggerExpansionOnTab": true,
   "javascript.autoClosingTags": false,
   "typescript.autoClosingTags": false,
@@ -163,7 +163,6 @@
   "vim.enableNeovim": true,
   "vim.neovimPath": "/usr/bin/nvim",
   "vim.vimrc.path": "/home/kraftwerk28/.config/nvim/init.vim",
-  "window.menuBarVisibility": "default",
   "workbench.colorCustomizations": {
     "[Ayu Mirage Bordered]": {
       "editor.wordHighlightBackground": "#4f5869"

@@ -30,9 +30,11 @@ Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
-" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
+
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'autozimu/LanguageClient-neovim', {
@@ -96,16 +98,20 @@ set foldmethod=syntax
 let g:LanguageClient_serverCommands = {
   \ 'rust': ['rustup', 'run', 'stable', 'rls'],
   \ 'javascript': ['typescript-language-server', '--stdio'],
-  \ 'javascriptreact': ['typescript-language-server', '--stdio'],
+  \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
   \ 'typescript': ['typescript-language-server', '--stdio'],
-  \ 'typescriptreact': ['typescript-language-server', '--stdio'],
+  \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
+  \ 'svelte': ['typescript-language-server', '--stdio'],
   \ 'python': ['/home/kraftwerk28/.local/bin/pyls'],
   \ 'haskell': ['hie-wrapper', '--lsp'],
   \ 'c': ['clangd'],
   \ 'cpp': ['clangd'],
   \ 'go': ['go-langserver'],
   \ 'sh': ['bash-language-server', 'start'],
+  \ 'bash': ['bash-language-server', 'start'],
+  \ 'zsh': ['bash-language-server', 'start'],
   \ 'json': ['vscode-json-languageserver', '--stdio'],
+  \ 'html': ['html-languageserver', '--stdio'],
   \ }
 
 let g:LanguageClient_rootMarkers = {
@@ -125,9 +131,8 @@ let g:echodoc#type = 'floating'
 highlight link EchoDocFloat Pmenu
 
 let NERDTreeQuitOnOpen = 1
+let g:NERDTreeHijackNetrw = 0
 let g:AutoPairsFlyMode = 0
-
-let NERDTreeMapOpenInTab="\<CR>"
 
 call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 
@@ -161,14 +166,21 @@ autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 autocmd CursorHold,FocusGained * checktime
 
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescriptreact
+autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
+autocmd BufNewFile,BufRead *.zsh* setlocal filetype=zsh
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
 
-nnoremap j gj
-nnoremap k gk
+" This is related to vscode-vim extension (disable mapping if using it)
+if has('nvim')
+  nnoremap j gj
+  nnoremap k gk
+  nnoremap gj j
+  nnoremap gk k
+endif
+
 inoremap ii <Esc>
 vnoremap ii <Esc>
 nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
