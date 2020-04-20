@@ -7,7 +7,7 @@
     "editor.tabSize": 4
   },
   "files.eol": "\n",
-  "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
+  "editor.fontFamily": "'Hasklig', 'monospace', monospace, 'Twemoji'",
   "editor.rulers": [
     80
   ],
@@ -97,8 +97,6 @@
   },
   "emmet.excludeLanguages": ["javascriptreact", "typescriptreact"],
   "emmet.triggerExpansionOnTab": true,
-  "javascript.autoClosingTags": false,
-  "typescript.autoClosingTags": false,
   "terminal.integrated.cursorBlinking": true,
   "workbench.editor.enablePreviewFromQuickOpen": false,
   "editor.smoothScrolling": true,

@@ -10,7 +10,6 @@ Plug 'ayu-theme/ayu-vim'
 " Plug 'morhetz/gruvbox'
 
 " Useful tools
-" Sould be replaced by some more useful
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
@@ -19,9 +18,11 @@ Plug 'tpope/vim-commentary'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'chrisbra/csv.vim'
+Plug 'alvan/vim-closetag'
 " Git wrapper
 Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'machakann/vim-highlightedyank'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -53,19 +54,23 @@ if !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
   let ayucolor='light'
 else
   set background=dark
-  let ayucolor='dark'
+  let ayucolor='mirage'
+  " let ayucolor='dark'
 endif
 
 " let ayucolor='mirage'
 colorscheme ayu
 
-let g:airline_theme='ayu_dark'
+let g:airline_theme='ayu_mirage'
+" let g:airline_theme='ayu_dark'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#show_buffers = 0
 " let g:airline#extensions#tabline#show_tabs = 1
 " let g:airline#extensions#tabline#show_splits = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 
 " Misc
 syntax on
@@ -168,6 +173,7 @@ autocmd CursorHold,FocusGained * checktime
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 autocmd BufNewFile,BufRead *.zsh* setlocal filetype=zsh
+autocmd BufNewFile,BufRead .env.* setlocal filetype=sh
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

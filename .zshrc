@@ -109,7 +109,7 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.zsh_completions
 
-alias yay="yay --nodiffmenu"
+alias yay="yay --nodiffmenu --editmenu"
 alias vim="nvim"
 alias vi="nvim"
 alias vin="nvim"
