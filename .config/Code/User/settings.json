@@ -7,7 +7,8 @@
     "editor.tabSize": 4
   },
   "files.eol": "\n",
-  "editor.fontFamily": "'Hasklig', 'monospace', monospace, 'Twemoji'",
+// "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
+"editor.fontFamily": "'JetBrains Mono', 'monospace', monospace, 'Twemoji'",
   "editor.rulers": [
     80
   ],
@@ -207,5 +208,6 @@
   "todo-tree.tree.showScanModeButton": false,
   "editor.fontWeight": "500",
   "vim.highlightedyank.enable": true,
-  "workbench.colorTheme": "Ayu Mirage Bordered"
+  "workbench.colorTheme": "Ayu Mirage Bordered",
+  "oneDarkPro.vivid": true
 }
