@@ -7,8 +7,7 @@
     "editor.tabSize": 4
   },
   "files.eol": "\n",
-// "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
-"editor.fontFamily": "'JetBrains Mono', 'monospace', monospace, 'Twemoji'",
+  "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
   "editor.rulers": [
     80
   ],
@@ -96,7 +95,10 @@
       "attr_quotes": "single"
     }
   },
-  "emmet.excludeLanguages": ["javascriptreact", "typescriptreact"],
+  "emmet.excludeLanguages": [
+    "javascriptreact",
+    "typescriptreact"
+  ],
   "emmet.triggerExpansionOnTab": true,
   "terminal.integrated.cursorBlinking": true,
   "workbench.editor.enablePreviewFromQuickOpen": false,

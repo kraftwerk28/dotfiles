@@ -31,6 +31,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
+Plug 'cespare/vim-toml'
 
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
@@ -48,7 +49,7 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Options
 
-" Various theming shit
+" Various theming shi~
 if !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
   set background=light
   let ayucolor='light'
@@ -58,7 +59,6 @@ else
   " let ayucolor='dark'
 endif
 
-" let ayucolor='mirage'
 colorscheme ayu
 
 let g:airline_theme='ayu_mirage'
@@ -71,6 +71,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
+let g:surround_{char2nr('r')} = "{'\r'}"
 
 " Misc
 syntax on
