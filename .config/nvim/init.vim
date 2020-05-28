@@ -19,6 +19,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'chrisbra/csv.vim'
 Plug 'alvan/vim-closetag'
+Plug 'wellle/targets.vim'
 " Git wrapper
 Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
@@ -32,10 +33,9 @@ Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
 Plug 'cespare/vim-toml'
-
+Plug 'ollykel/v-vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
-
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
@@ -63,7 +63,7 @@ colorscheme ayu
 
 let g:airline_theme='ayu_mirage'
 " let g:airline_theme='ayu_dark'
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#show_buffers = 0
 " let g:airline#extensions#tabline#show_tabs = 1
@@ -88,7 +88,8 @@ set clipboard+=unnamedplus
 set completeopt=menuone,longest
 
 set incsearch nohlsearch
-set ignorecase smartcase
+set ignorecase
+" set smartcase
 set wildmenu
 set signcolumn=yes
 set number relativenumber
@@ -126,11 +127,11 @@ let g:LanguageClient_rootMarkers = {
   \ 'haskell': ['*.cabal', 'stack.yaml'],
   \ }
 
-" let g:LanguageClient_useVirtualText = 'CodeLens'
+let g:LanguageClient_useVirtualText = 'CodeLens'
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
+call deoplete#custom#option('smart_case', v:true)
 
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'floating'
@@ -175,6 +176,8 @@ autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 autocmd BufNewFile,BufRead *.zsh* setlocal filetype=zsh
 autocmd BufNewFile,BufRead .env.* setlocal filetype=sh
+autocmd BufNewFile,BufRead *.bnf setlocal filetype=bnf
+" autocmd BufNewFile,BufRead .*rc setlocal filetype=json
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

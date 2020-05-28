@@ -7,7 +7,13 @@
     "editor.tabSize": 4
   },
   "files.eol": "\n",
-  "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
+  "editor.fontFamily": "'JetBrains Mono', 'monospace', monospace, 'Twemoji'",
+  // "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
+  // "editor.fontFamily": "'IBM Plex Mono', 'monospace', monospace, 'Twemoji'",
+  "editor.fontWeight": "500",
+  // "editor.fontLigatures": "'ss03'",
+  // "editor.fontLigatures": true,
+  "editor.fontLigatures": false,
   "editor.rulers": [
     80
   ],
@@ -111,14 +117,10 @@
     "typescript",
     "typescriptreact"
   ],
-  // "editor.fontLigatures": "'ss03'",
-  // "editor.fontLigatures": false,
-  "editor.fontLigatures": true,
   "editor.renderWhitespace": "selection",
   "terminal.external.linuxExec": "kitty",
   "workbench.startupEditor": "welcomePage",
   "editor.renderFinalNewline": false,
-  "workbench.iconTheme": "material-icon-theme",
   "python.linting.enabled": false,
   "terminal.integrated.rendererType": "experimentalWebgl",
   "breadcrumbs.filePath": "last",
@@ -204,12 +206,19 @@
   "rest-client.showResponseInDifferentTab": false,
   "rest-client.requestNameAsResponseTabTitle": true,
   "rest-client.rememberCookiesForSubsequentRequests": false,
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "cisco_lab4_password": "Assize!2000",
+      "cisco_access_token": "584eded3-985b-39f4-827f-235d0f291096",
+      "cisco_refresh_token": "58c33b6f-3620-3101-8d03-f8d2e77c5dfc"
+    }
+  },
   "editor.lineNumbers": "relative",
   "workbench.editor.enablePreview": false,
   "vim.useSystemClipboard": true,
   "todo-tree.tree.showScanModeButton": false,
-  "editor.fontWeight": "500",
   "vim.highlightedyank.enable": true,
   "workbench.colorTheme": "Ayu Mirage Bordered",
-  "oneDarkPro.vivid": true
+  "oneDarkPro.vivid": true,
+  "workbench.iconTheme": "material-icon-theme"
 }
