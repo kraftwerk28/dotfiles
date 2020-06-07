@@ -27,7 +27,7 @@ Plug 'machakann/vim-highlightedyank'
 
 " Language
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/echodoc.vim'
+" Plug 'Shougo/echodoc.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
@@ -39,10 +39,12 @@ Plug 'pangloss/vim-javascript'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
-Plug 'autozimu/LanguageClient-neovim', {
-  \ 'branch': 'next',
-  \ 'do': 'bash install.sh'
-  \ }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-emmet'
+" Plug 'autozimu/LanguageClient-neovim', {
+"   \ 'branch': 'next',
+"   \ 'do': 'bash install.sh'
+"   \ }
 
 call plug#end()
 
@@ -63,15 +65,15 @@ colorscheme ayu
 
 let g:airline_theme='ayu_mirage'
 " let g:airline_theme='ayu_dark'
-" let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#show_buffers = 0
-" let g:airline#extensions#tabline#show_tabs = 1
-" let g:airline#extensions#tabline#show_splits = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 let g:surround_{char2nr('r')} = "{'\r'}"
+
+let mapleader = " "
+
+let g:user_emmet_leader_key='<Leader>e'
 
 " Misc
 syntax on
@@ -102,46 +104,21 @@ set foldmethod=syntax
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Let's
 
-let g:LanguageClient_serverCommands = {
-  \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-  \ 'javascript': ['typescript-language-server', '--stdio'],
-  \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
-  \ 'typescript': ['typescript-language-server', '--stdio'],
-  \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
-  \ 'svelte': ['typescript-language-server', '--stdio'],
-  \ 'python': ['/home/kraftwerk28/.local/bin/pyls'],
-  \ 'haskell': ['hie-wrapper', '--lsp'],
-  \ 'c': ['clangd'],
-  \ 'cpp': ['clangd'],
-  \ 'go': ['go-langserver'],
-  \ 'sh': ['bash-language-server', 'start'],
-  \ 'bash': ['bash-language-server', 'start'],
-  \ 'zsh': ['bash-language-server', 'start'],
-  \ 'json': ['vscode-json-languageserver', '--stdio'],
-  \ 'html': ['html-languageserver', '--stdio'],
-  \ }
+" let g:LanguageClient_useVirtualText = 'CodeLens'
 
-let g:LanguageClient_rootMarkers = {
-  \ 'javascript': ['jsconfig.json'],
-  \ 'typescript': ['tsconfig.json'],
-  \ 'haskell': ['*.cabal', 'stack.yaml'],
-  \ }
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_ignore_case = 1
+" call deoplete#custom#option('smart_case', v:true)
 
-let g:LanguageClient_useVirtualText = 'CodeLens'
+" let g:echodoc#enable_at_startup = 1
+" let g:echodoc#type = 'floating'
+" highlight link EchoDocFloat Pmenu
 
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-call deoplete#custom#option('smart_case', v:true)
-
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'floating'
-highlight link EchoDocFloat Pmenu
+highlight link CocWarningHighlight None
 
 let NERDTreeQuitOnOpen = 1
 let g:NERDTreeHijackNetrw = 0
 let g:AutoPairsFlyMode = 0
-
-call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmd's
@@ -166,24 +143,31 @@ autocmd Winenter,FocusGained * setlocal number relativenumber
 autocmd Winleave,FocusLost * setlocal number norelativenumber
 
 " Exit insert mode if unfocus
-autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
-" autocmd BufLeave * w
+autocmd FocusLost * wa
+" The thing above also goes into normal mode if window lost focus
+" autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 
 " Reload file if it changed on disk
 autocmd CursorHold,FocusGained * checktime
 
+" Helping nvim detect filetype
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 autocmd BufNewFile,BufRead *.zsh* setlocal filetype=zsh
 autocmd BufNewFile,BufRead .env.* setlocal filetype=sh
 autocmd BufNewFile,BufRead *.bnf setlocal filetype=bnf
-" autocmd BufNewFile,BufRead .*rc setlocal filetype=json
+
+" Tab configuration for different languages
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
+
+" JSON5's comment
+autocmd FileType json syntax match Comment +\/\/.\+$+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
 
-" This is related to vscode-vim extension (disable mapping if using it)
+" The block above WON'T execute in vscode-vim extension,
+" so thath's why I use it
 if has('nvim')
   nnoremap j gj
   nnoremap k gk
@@ -193,7 +177,6 @@ endif
 
 inoremap ii <Esc>
 vnoremap ii <Esc>
-nnoremap <Leader>cfg :tabnew $HOME/.config/nvim/init.vim<CR>
 
 " Arrow movement mappings
 nnoremap <Down> <C-E>
@@ -217,36 +200,50 @@ vnoremap < <gv
 nnoremap tt :e<Space>
 nnoremap <silent> <C-]> :bnext<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
-" Code format (languageclient-neovim does it instead)
-" nnoremap <Leader>jsf :!eslint --fix %<CR>
-" nnoremap <Leader>rf :RustFmt<CR>
-" nnoremap <Leader>pf :!autopep8 -i %<CR>
-" nnoremap <Leader>cf :!clang-format %<CR>
+nnoremap <Leader>/ :set hlsearch!<CR>
 
-inoremap <C-Space> <C-X><C-O>
-inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
+inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
 vnoremap <silent> <M-j> :m'>+1<CR>gv
 
-function! FormatFile()
-  if &filetype == 'json'
-    %!jq
-  " elseif &filetype == 'javascript'
-  "   %!prettier %
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~ '\s'
+endfunction
+
+function! ExpandCompletion() abort
+  if pumvisible()
+    return "\<C-N>"
   else
-    call LanguageClient#textDocument_formatting()
+    if s:check_back_space()
+      return "\<Tab>"
+    else
+      return coc#refresh()
+    endif
   endif
 endfunction
-nnoremap <Enter> :call LanguageClient#textDocument_hover()<CR>
-nnoremap <F2> :w<CR> :call LanguageClient#textDocument_rename()<CR>
-nnoremap <silent> <Leader>ff :call FormatFile()<CR>
-nnoremap <silent> <C-LeftMouse> :call LanguageClient#textDocument_definition()<CR>
+
+function! SelectCompletion() abort
+  if pumvisible()
+    return coc#_select_confirm()
+  else
+    return "\<C-G>u\<CR>"
+  endif
+endfunction
+
+" COC actions & completion helpers
+inoremap <silent><expr> <C-Space> ExpandCompletion()
+inoremap <silent><expr> <CR> SelectCompletion()
+nnoremap <Enter> :call CocAction('doHover')<CR>
+nnoremap <F2> :w<CR> :call CocAction('rename')<CR>
+nnoremap <silent> <Leader>f :call CocAction('format')<CR>
+nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc

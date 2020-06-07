@@ -144,6 +144,7 @@ if [[ -s "$NVS_HOME/nvs.sh" ]]; then
   source "$NVS_HOME/nvs.sh"
 fi
 
+bindkey -e
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept
