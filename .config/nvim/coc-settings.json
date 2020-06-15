@@ -1,0 +1,53 @@
+{
+  "languageserver": {
+    "rust": {
+      "command": "rustup",
+      "args": ["run", "stable", "rls"],
+      "filetypes": ["rust"]
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh", "bash", "zsh"]
+    },
+    "python": {
+      "command": "pyls",
+      "filetypes": ["python"]
+    },
+    "clangd": {
+      "command": "clangd",
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
+      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+    },
+    "js/ts": {
+      "command": "typescript-language-server",
+      "args": ["--stdio"],
+      "filetypes": [
+        "javascript",
+        "javascript.jsx",
+        "typescript",
+        "typescript.jsx",
+        "svelte"
+      ]
+    },
+    "json": {
+      "command": "vscode-json-languageserver",
+      "args": ["--stdio"],
+      "filetypes": ["json"]
+    },
+    "haskell": {
+      "command": "hie-wrapper",
+      "args": ["--lsp"],
+      "rootPatterns": [
+        "stack.yaml",
+        "cabal.config",
+        "package.yaml"
+      ],
+      "filetypes": ["haskell", "hs", "lhs"]
+    },
+    "go": {
+      "command": "go-langserver",
+      "filetypes": ["go"]
+    }
+  }
+}
