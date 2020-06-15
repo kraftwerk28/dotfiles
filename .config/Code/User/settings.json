@@ -201,7 +201,7 @@
       ]
     }
   },
-  "rest-client.fontFamily": "Fira Code",
+  "rest-client.fontFamily": "JetBrains Mono",
   "rest-client.enableTelemetry": false,
   "rest-client.showResponseInDifferentTab": false,
   "rest-client.requestNameAsResponseTabTitle": true,
@@ -220,5 +220,6 @@
   "vim.highlightedyank.enable": true,
   "workbench.colorTheme": "Ayu Mirage Bordered",
   "oneDarkPro.vivid": true,
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.list.smoothScrolling": true
 }

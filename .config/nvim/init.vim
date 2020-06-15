@@ -40,7 +40,8 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-emmet'
+Plug 'neoclide/coc-emmet', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 " Plug 'autozimu/LanguageClient-neovim', {
 "   \ 'branch': 'next',
 "   \ 'do': 'bash install.sh'
@@ -70,8 +71,6 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 let g:surround_{char2nr('r')} = "{'\r'}"
-
-let mapleader = " "
 
 let g:user_emmet_leader_key='<Leader>e'
 
@@ -203,9 +202,6 @@ nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
 nnoremap <Leader>/ :set hlsearch!<CR>
 
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
-
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
@@ -221,6 +217,7 @@ function! ExpandCompletion() abort
   if pumvisible()
     return "\<C-N>"
   else
+    " return coc#refresh()
     if s:check_back_space()
       return "\<Tab>"
     else
@@ -238,10 +235,12 @@ function! SelectCompletion() abort
 endfunction
 
 " COC actions & completion helpers
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
+inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
 inoremap <silent><expr> <C-Space> ExpandCompletion()
 inoremap <silent><expr> <CR> SelectCompletion()
-nnoremap <Enter> :call CocAction('doHover')<CR>
-nnoremap <F2> :w<CR> :call CocAction('rename')<CR>
+nnoremap <silent> <Enter> :call CocAction('doHover')<CR>
+nnoremap <silent> <F2> :w<CR> :call CocAction('rename')<CR>
 nnoremap <silent> <Leader>f :call CocAction('format')<CR>
 nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 
