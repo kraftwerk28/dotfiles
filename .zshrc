@@ -117,11 +117,11 @@ alias pacin="sudo pacman -S --needed"
 alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
-
 alias ls="lsd -F"
 alias la="lsd -Fah"
 alias ll="lsd -Flh"
 alias l="lsd -Flah"
+alias icat="kitty +kitten icat"
 
 mkcd () {
   if [ -z "$1" ]; then

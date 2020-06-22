@@ -55,7 +55,7 @@
   "color-highlight.markRuler": false,
   "editor.wordWrap": "on",
   "editor.renderControlCharacters": false,
-  "git.decorations.enabled": false,
+  // "git.decorations.enabled": false,
   "prettier.jsxSingleQuote": true,
   "prettier.singleQuote": true,
   "prettier.semi": false,

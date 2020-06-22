@@ -7,7 +7,7 @@ Plug 'junegunn/vim-emoji'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ayu-theme/ayu-vim'
-" Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 
 " Useful tools
 Plug 'tpope/vim-surround'
@@ -40,8 +40,6 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-emmet', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
 " Plug 'autozimu/LanguageClient-neovim', {
 "   \ 'branch': 'next',
 "   \ 'do': 'bash install.sh'
@@ -112,6 +110,11 @@ set foldmethod=syntax
 " let g:echodoc#enable_at_startup = 1
 " let g:echodoc#type = 'floating'
 " highlight link EchoDocFloat Pmenu
+
+let g:coc_global_extensions = [
+      \ 'coc-emmet',
+      \ 'coc-snippets',
+      \ ]
 
 highlight link CocWarningHighlight None
 
@@ -200,13 +203,12 @@ nnoremap tt :e<Space>
 nnoremap <silent> <C-]> :bnext<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
-nnoremap <Leader>/ :set hlsearch!<CR>
+nnoremap <silent> <Leader>/ :set hlsearch!<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
 vnoremap <silent> <M-j> :m'>+1<CR>gv
-
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -217,12 +219,12 @@ function! ExpandCompletion() abort
   if pumvisible()
     return "\<C-N>"
   else
-    " return coc#refresh()
-    if s:check_back_space()
-      return "\<Tab>"
-    else
-      return coc#refresh()
-    endif
+    return coc#refresh()
+    " if s:check_back_space()
+    "   return "\<Tab>"
+    " else
+    "   return coc#refresh()
+    " endif
   endif
 endfunction
 
