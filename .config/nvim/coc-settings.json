@@ -30,9 +30,9 @@
       "args": ["--stdio"],
       "filetypes": [
         "javascript",
-        "javascript.jsx",
+        "javascriptreact",
         "typescript",
-        "typescript.tsx",
+        "typescriptreact",
         "svelte"
       ]
     },
