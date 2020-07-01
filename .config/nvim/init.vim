@@ -8,6 +8,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ayu-theme/ayu-vim'
 Plug 'morhetz/gruvbox'
+Plug 'joshdick/onedark.vim'
 
 " Useful tools
 Plug 'tpope/vim-surround'
@@ -20,6 +21,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'chrisbra/csv.vim'
 Plug 'alvan/vim-closetag'
 Plug 'wellle/targets.vim'
+Plug 'honza/vim-snippets'
+
 " Git wrapper
 Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
@@ -62,10 +65,10 @@ endif
 
 colorscheme ayu
 
-let g:airline_theme='ayu_mirage'
-" let g:airline_theme='ayu_dark'
+let g:airline_theme = 'ayu_mirage'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#coc#enabled = 1
 
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 let g:surround_{char2nr('r')} = "{'\r'}"
@@ -88,7 +91,7 @@ set completeopt=menuone,longest
 
 set incsearch nohlsearch
 set ignorecase
-" set smartcase
+set smartcase
 set wildmenu
 set signcolumn=yes
 set number relativenumber
@@ -99,22 +102,11 @@ set foldcolumn=1
 set foldmethod=syntax
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Let's
-
-" let g:LanguageClient_useVirtualText = 'CodeLens'
-
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_ignore_case = 1
-" call deoplete#custom#option('smart_case', v:true)
-
-" let g:echodoc#enable_at_startup = 1
-" let g:echodoc#type = 'floating'
-" highlight link EchoDocFloat Pmenu
 
 let g:coc_global_extensions = [
-      \ 'coc-emmet',
-      \ 'coc-snippets',
-      \ ]
+  \ 'coc-emmet',
+  \ 'coc-snippets',
+  \ ]
 
 highlight link CocWarningHighlight None
 
@@ -153,8 +145,8 @@ autocmd FocusLost * wa
 autocmd CursorHold,FocusGained * checktime
 
 " Helping nvim detect filetype
-autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
+" autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
+" autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 autocmd BufNewFile,BufRead *.zsh* setlocal filetype=zsh
 autocmd BufNewFile,BufRead .env.* setlocal filetype=sh
 autocmd BufNewFile,BufRead *.bnf setlocal filetype=bnf
@@ -164,6 +156,9 @@ autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 " JSON5's comment
 autocmd FileType json syntax match Comment +\/\/.\+$+
+
+" Close help window w/ `q`
+autocmd FileType help noremap <silent><buffer> q :q<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
@@ -203,7 +198,7 @@ nnoremap tt :e<Space>
 nnoremap <silent> <C-]> :bnext<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
-nnoremap <silent> <Leader>/ :set hlsearch!<CR>
+nnoremap <silent> <Leader>h :set hlsearch!<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>

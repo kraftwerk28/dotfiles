@@ -150,5 +150,3 @@ bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
-
-source "$HOME/.config/broot/launcher/bash/br"

@@ -9,3 +9,5 @@
 	poosh = push origin HEAD
 	nvpoosh = poosh --no-verify
 	loh = log --graph --oneline --all
+[pull]
+	rebase = false

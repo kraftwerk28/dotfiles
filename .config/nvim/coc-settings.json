@@ -1,4 +1,10 @@
 {
+  "diagnostic": {
+    "warningSign": "⚠️",
+    "errorSign": "🚫",
+    "infoSign": "ℹ️",
+    "hintSign": "💡"
+  },
   "languageserver": {
     "rust": {
       "command": "rustup",
@@ -26,7 +32,7 @@
         "javascript",
         "javascript.jsx",
         "typescript",
-        "typescript.jsx",
+        "typescript.tsx",
         "svelte"
       ]
     },
