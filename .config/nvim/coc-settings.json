@@ -1,9 +1,10 @@
 {
   "diagnostic": {
-    "warningSign": "⚠️",
-    "errorSign": "🚫",
-    "infoSign": "ℹ️",
-    "hintSign": "💡"
+    "warningSign": "🔥",
+    "errorSign": "❌",
+    "infoSign": "🔷",
+    "hintSign": "💡",
+    "enableHighlightLineNumber": false
   },
   "languageserver": {
     "rust": {
@@ -32,8 +33,7 @@
         "javascript",
         "javascriptreact",
         "typescript",
-        "typescriptreact",
-        "svelte"
+        "typescriptreact"
       ]
     },
     "json": {

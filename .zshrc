@@ -109,14 +109,21 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.zsh_completions
 
-alias yay="yay --nodiffmenu --editmenu"
 alias vim="nvim"
 alias vi="nvim"
 alias vin="nvim"
 alias pacin="sudo pacman -S --needed"
 alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
+
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
+dotfupd () {
+  dotfiles add -u
+  dotfiles commit -m "chore: update dotfiles"
+  dotfiles push origin HEAD
+}
+alias dotfilesupd=dotfupd
+
 alias ls="lsd -F"
 alias la="lsd -Fah"
 alias ll="lsd -Flh"

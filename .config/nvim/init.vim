@@ -3,34 +3,29 @@ set encoding=utf-8
 call plug#begin('~/.config/nvim/plugged')
 
 " Themes
-Plug 'junegunn/vim-emoji'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'ayu-theme/ayu-vim'
 Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
+Plug 'vim-airline/vim-airline-themes'
 
-" Useful tools
+Plug 'vim-airline/vim-airline'
+Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
+" File tree explorer:
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'chrisbra/csv.vim'
-Plug 'alvan/vim-closetag'
 Plug 'wellle/targets.vim'
 Plug 'honza/vim-snippets'
-
-" Git wrapper
-Plug 'tpope/vim-fugitive'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'machakann/vim-highlightedyank'
+Plug 'tpope/vim-fugitive'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 
-" Language
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'Shougo/echodoc.vim'
+" Languages
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
 Plug 'mattn/emmet-vim'
@@ -41,19 +36,16 @@ Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'chrisbra/csv.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'autozimu/LanguageClient-neovim', {
-"   \ 'branch': 'next',
-"   \ 'do': 'bash install.sh'
-"   \ }
 
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Options
 
-" Various theming shi~
+" Set color according to gnome-shell theme
 if !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
   set background=light
   let ayucolor='light'
@@ -65,12 +57,14 @@ endif
 
 colorscheme ayu
 
+" Airline
 let g:airline_theme = 'ayu_mirage'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#coc#enabled = 1
 
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
+
 let g:surround_{char2nr('r')} = "{'\r'}"
 
 let g:user_emmet_leader_key='<Leader>e'
@@ -106,12 +100,15 @@ set foldmethod=syntax
 let g:coc_global_extensions = [
   \ 'coc-emmet',
   \ 'coc-snippets',
+  \ 'coc-svelte',
   \ ]
 
 highlight link CocWarningHighlight None
 
-let NERDTreeQuitOnOpen = 1
+" let NERDTreeQuitOnOpen = 1
 let g:NERDTreeHijackNetrw = 0
+let NERDTreeMapActivateNode = 'go'
+let NERDTreeMapPreview = 'o'
 let g:AutoPairsFlyMode = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -125,12 +122,25 @@ function! RestoreCursor()
 endfunction
 autocmd BufReadPost * call RestoreCursor()
 
-" Close vim if the only window left is NERDTree
+" NerdTree au tweaks
 function! CloseIfNERDTree()
    if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
      q
    endif
 endfunction
+
+function! AutoOpenNerdTree()
+  if argc() == 0 && !exists("s:std_in")
+    NERDTree
+  elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
+    wincmd p
+    ene
+    exe 'NERDTree' argv()[0]
+  endif
+endfunction
+
+autocmd StdinReadPre * let s:std_in = 1
+autocmd VimEnter * call AutoOpenNerdTree()
 autocmd BufEnter * call CloseIfNERDTree()
 
 autocmd Winenter,FocusGained * setlocal number relativenumber
@@ -138,7 +148,7 @@ autocmd Winleave,FocusLost * setlocal number norelativenumber
 
 " Exit insert mode if unfocus
 autocmd FocusLost * wa
-" The thing above also goes into normal mode if window lost focus
+" The thing below also goes into normal mode if window lost focus
 " autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 
 " Reload file if it changed on disk
@@ -163,7 +173,7 @@ autocmd FileType help noremap <silent><buffer> q :q<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
 
-" The block above WON'T execute in vscode-vim extension,
+" The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
 if has('nvim')
   nnoremap j gj
@@ -196,6 +206,7 @@ vnoremap < <gv
 
 nnoremap tt :e<Space>
 nnoremap <silent> <C-]> :bnext<CR>
+" nnoremap <silent> <C-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
@@ -250,6 +261,7 @@ let s:FiletypeExecutables = {
   \ }
 
 function! Shebang()
+  silent execute "!chmod u+x %"
   let ft = &filetype
 
   if stridx(getline(1), "#!") == 0
@@ -268,7 +280,6 @@ function! Shebang()
   endif
   call append(0, shb)
   w
-  silent execute "!chmod u+x %"
 endfunction
 command! Shebang call Shebang()
 
