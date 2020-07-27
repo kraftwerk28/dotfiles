@@ -147,7 +147,7 @@ autocmd Winenter,FocusGained * setlocal number relativenumber
 autocmd Winleave,FocusLost * setlocal number norelativenumber
 
 " Exit insert mode if unfocus
-autocmd FocusLost * wa
+autocmd FocusLost * silent! w
 " The thing below also goes into normal mode if window lost focus
 " autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 
@@ -261,7 +261,7 @@ let s:FiletypeExecutables = {
   \ }
 
 function! Shebang()
-  silent execute "!chmod u+x %"
+  call system("chmod u+x " . expand('%'))
   let ft = &filetype
 
   if stridx(getline(1), "#!") == 0

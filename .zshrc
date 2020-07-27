@@ -129,6 +129,8 @@ alias la="lsd -Fah"
 alias ll="lsd -Flh"
 alias l="lsd -Flah"
 alias icat="kitty +kitten icat"
+alias less="bat"
+alias cat="bat -p --color never --paging never"
 
 mkcd () {
   if [ -z "$1" ]; then
