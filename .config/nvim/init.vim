@@ -37,6 +37,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'chrisbra/csv.vim'
+Plug 'vim-python/python-syntax'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -68,6 +69,8 @@ let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 let g:surround_{char2nr('r')} = "{'\r'}"
 
 let g:user_emmet_leader_key='<Leader>e'
+
+let g:python_highlight_all = 1
 
 " Misc
 syntax on
@@ -105,10 +108,11 @@ let g:coc_global_extensions = [
 
 highlight link CocWarningHighlight None
 
-" let NERDTreeQuitOnOpen = 1
-let g:NERDTreeHijackNetrw = 0
-let NERDTreeMapActivateNode = 'go'
-let NERDTreeMapPreview = 'o'
+let NERDTreeCascadeSingleChildDir = 0
+let NERDTreeQuitOnOpen = 0
+" let g:NERDTreeHijackNetrw = 0
+" let NERDTreeMapActivateNode = 'go'
+" let NERDTreeMapPreview = 'o'
 let g:AutoPairsFlyMode = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -193,7 +197,16 @@ nnoremap <S-Down> <C-D>M
 nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
-nnoremap <silent> <F3> :NERDTreeToggle<CR>
+function NERDTreeOpen()
+  if exists("b:NERDTree")
+    NERDTreeClose
+  else
+    NERDTreeFocus
+  endif
+endfunction
+nnoremap <silent> <F3> :call NERDTreeOpen()<CR>
+noremap <C-P> :Files<CR>
+
 nnoremap <silent> <C-_> :Commentary<CR>
 vnoremap <silent> <C-_> :Commentary<CR>gv
 inoremap <silent> <C-_> <C-O>:Commentary<CR>
@@ -295,3 +308,6 @@ function! Durka()
     sleep 200m
   endfor
 endfunction
+
+" Doesn't work because of passwd prompt (need workaround)
+" command W :execute "w !sudo tee %" | :e!
