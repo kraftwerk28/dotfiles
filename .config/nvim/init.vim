@@ -109,8 +109,7 @@ let g:coc_global_extensions = [
 highlight link CocWarningHighlight None
 
 let NERDTreeCascadeSingleChildDir = 0
-let NERDTreeQuitOnOpen = 0
-" let g:NERDTreeHijackNetrw = 0
+let NERDTreeMouseMode = 2
 " let NERDTreeMapActivateNode = 'go'
 " let NERDTreeMapPreview = 'o'
 let g:AutoPairsFlyMode = 0
