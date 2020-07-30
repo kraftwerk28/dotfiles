@@ -146,8 +146,18 @@ autocmd StdinReadPre * let s:std_in = 1
 autocmd VimEnter * call AutoOpenNerdTree()
 autocmd BufEnter * call CloseIfNERDTree()
 
-autocmd Winenter,FocusGained * setlocal number relativenumber
-autocmd Winleave,FocusLost * setlocal number norelativenumber
+function SetNumber(set)
+  if !exists("b:NERDTree")
+    setlocal number
+    if a:set
+      setlocal relativenumber
+    else
+      setlocal norelativenumber
+    endif
+  endif
+endfunction
+autocmd Winenter,FocusGained * :call SetNumber(1)
+autocmd Winleave,FocusLost * :call SetNumber(0)
 
 " Exit insert mode if unfocus
 autocmd FocusLost * silent! w
@@ -170,8 +180,12 @@ autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 " JSON5's comment
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
+" List of buf names where q does :q<CR>
+let qCloseWindows = ['help']
 " Close help window w/ `q`
-autocmd FileType help noremap <silent><buffer> q :q<CR>
+for wname in qCloseWindows
+  execute "autocmd FileType " . wname . " noremap <silent><buffer> q :q<CR>"
+endfor
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
@@ -196,14 +210,14 @@ nnoremap <S-Down> <C-D>M
 nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
-function NERDTreeOpen()
+function OpenNERDTree()
   if exists("b:NERDTree")
     NERDTreeClose
   else
-    NERDTreeFocus
+    NERDTreeCWD
   endif
 endfunction
-nnoremap <silent> <F3> :call NERDTreeOpen()<CR>
+nnoremap <silent> <F3> :call OpenNERDTree()<CR>
 noremap <C-P> :Files<CR>
 
 nnoremap <silent> <C-_> :Commentary<CR>
