@@ -24,6 +24,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-fugitive'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'lyokha/vim-xkbswitch'
 
 " Languages
 Plug 'rust-lang/rust.vim'
@@ -38,6 +39,7 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'chrisbra/csv.vim'
 Plug 'vim-python/python-syntax'
+" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -113,6 +115,11 @@ let NERDTreeMouseMode = 2
 " let NERDTreeMapActivateNode = 'go'
 " let NERDTreeMapPreview = 'o'
 let g:AutoPairsFlyMode = 0
+
+let g:XkbSwitchEnabled = 1
+if $XDG_CURRENT_DESKTOP == "GNOME"
+  let g:XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmd's
@@ -232,7 +239,7 @@ vnoremap < <gv
 
 nnoremap tt :e<Space>
 nnoremap <silent> <C-]> :bnext<CR>
-" nnoremap <silent> <C-[> :bprevious<CR>
+nnoremap <silent> <C-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
 nnoremap <silent> <Leader>h :set hlsearch!<CR>

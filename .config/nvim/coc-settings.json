@@ -6,26 +6,86 @@
     "hintSign": "💡",
     "enableHighlightLineNumber": false
   },
+
   "languageserver": {
+
     "rust": {
       "command": "rustup",
       "args": ["run", "stable", "rls"],
       "filetypes": ["rust"]
     },
+
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
       "filetypes": ["sh", "bash", "zsh"]
     },
+
     "python": {
       "command": "pyls",
-      "filetypes": ["python"]
+      "filetypes": ["python"],
+      "settings": {
+        "pyls": {
+          "enable": true,
+          "trace": {
+            "server": "verbose"
+          },
+          "commandPath": "",
+          "configurationSources": [
+            "pycodestyle"
+          ],
+          "plugins": {
+            "jedi_completion": {
+              "enabled": true
+            },
+            "jedi_hover": {
+              "enabled": true
+            },
+            "jedi_references": {
+              "enabled": true
+            },
+            "jedi_signature_help": {
+              "enabled": true
+            },
+            "jedi_symbols": {
+              "enabled": true,
+              "all_scopes": true
+            },
+            "mccabe": {
+              "enabled": true,
+              "threshold": 15
+            },
+            "preload": {
+              "enabled": true
+            },
+            "pycodestyle": {
+              "enabled": true
+            },
+            "pydocstyle": {
+              "enabled": false,
+              "match": "(?!test_).*\\.py",
+              "matchDir": "[^\\.].*"
+            },
+            "pyflakes": {
+              "enabled": true
+            },
+            "rope_completion": {
+              "enabled": true
+            },
+            "yapf": {
+              "enabled": true
+            }
+          }
+        }
+      }
     },
+
     "clangd": {
       "command": "clangd",
       "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
       "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
     },
+
     "js/ts": {
       "command": "typescript-language-server",
       "args": ["--stdio"],
@@ -36,11 +96,13 @@
         "typescriptreact"
       ]
     },
+
     "json": {
       "command": "vscode-json-languageserver",
       "args": ["--stdio"],
       "filetypes": ["json"]
     },
+
     "haskell": {
       "command": "hie-wrapper",
       "args": ["--lsp"],
@@ -51,9 +113,11 @@
       ],
       "filetypes": ["haskell", "hs", "lhs"]
     },
+
     "go": {
       "command": "go-langserver",
       "filetypes": ["go"]
     }
+
   }
 }

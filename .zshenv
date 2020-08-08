@@ -25,8 +25,8 @@ export PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 export PYTHONPATH="$HOME/projects/python"
 
 # npm global modules
-export NODE_PATH="$HOME/.npm-global/bin"
-export PATH="$PATH:$NODE_PATH"
+export NODE_PATH="$HOME/.npm-global/lib/node_modules/"
+export PATH="$PATH:$HOME/.npm-global/bin/"
 export NVS_HOME="$HOME/.nvs"
 
 #export VIM="$HOME/.config/nvim"
