@@ -131,6 +131,7 @@ alias l="lsd -Flah"
 alias icat="kitty +kitten icat"
 alias less="bat"
 alias cat="bat -p --color never --paging never"
+alias serves="serve --ssl-cert ~/ca-tmp/localhost.crt --ssl-key ~/ca-tmp/localhost.key"
 
 mkcd () {
   if [ -z "$1" ]; then
