@@ -329,5 +329,7 @@ function! Durka()
   endfor
 endfunction
 
+command! Cfg :execute ":e $HOME/.config/nvim/init.vim"
+
 " Doesn't work because of passwd prompt (need workaround)
 " command W :execute "w !sudo tee %" | :e!
