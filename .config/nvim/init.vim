@@ -14,7 +14,6 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 " File tree explorer:
 Plug 'scrooloose/nerdtree'
-Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
@@ -39,9 +38,11 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'chrisbra/csv.vim'
 Plug 'vim-python/python-syntax'
-" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'plasticboy/vim-markdown'
+
+" It is required to load devicons as last
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -59,9 +60,11 @@ else
 endif
 
 colorscheme ayu
+" colorscheme gruvbox
 
 " Airline
 let g:airline_theme = 'ayu_mirage'
+" let g:airline_theme = 'gruvbox'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#coc#enabled = 1
@@ -194,6 +197,13 @@ for wname in qCloseWindows
   execute "autocmd FileType " . wname . " noremap <silent><buffer> q :q<CR>"
 endfor
 
+function! RefreshNERDTree()
+  NERDTreeFocus
+  normal R
+  wincmd p
+endfunction
+autocmd BufWritePost * :call RefreshNERDTree()
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
 
@@ -220,8 +230,10 @@ nnoremap <C-Down> <C-F>M
 function OpenNERDTree()
   if exists("b:NERDTree")
     NERDTreeClose
+    set updatetime&
   else
     NERDTreeCWD
+    set updatetime=200
   endif
 endfunction
 nnoremap <silent> <F3> :call OpenNERDTree()<CR>

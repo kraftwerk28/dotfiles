@@ -218,8 +218,8 @@
   "vim.useSystemClipboard": true,
   "todo-tree.tree.showScanModeButton": false,
   "vim.highlightedyank.enable": true,
-  "workbench.colorTheme": "Ayu Mirage",
   "oneDarkPro.vivid": true,
   "workbench.iconTheme": "material-icon-theme",
-  "workbench.list.smoothScrolling": true
+  "workbench.list.smoothScrolling": true,
+  "workbench.colorTheme": "Ayu Mirage"
 }
