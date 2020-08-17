@@ -109,6 +109,7 @@ let g:coc_global_extensions = [
   \ 'coc-emmet',
   \ 'coc-snippets',
   \ 'coc-svelte',
+  \ 'coc-explorer',
   \ ]
 
 highlight link CocWarningHighlight None
@@ -128,35 +129,46 @@ endif
 " Autocmd's
 
 " Place cursor at the same position
-function! RestoreCursor()
+function! s:restore_cursor()
    if line("'\"") > 0 && line("'\"") <= line("$")
      exe "normal! g`\""
    endif
 endfunction
-autocmd BufReadPost * call RestoreCursor()
+autocmd BufReadPost * :call s:restore_cursor()
 
 " NerdTree au tweaks
-function! CloseIfNERDTree()
-   if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
-     q
-   endif
-endfunction
+" function! s:close_if_NERDTree()
+"    if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
+"      q
+"    endif
+" endfunction
 
-function! AutoOpenNerdTree()
+" NERDTree auto open if no file specified
+" function! AutoOpenNerdTree()
+"   if argc() == 0 && !exists("s:std_in")
+"     NERDTree
+"   elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
+"     wincmd p
+"     ene
+"     exe 'NERDTree' argv()[0]
+"   endif
+" endfunction
+
+function! s:auto_open_cocexplorer()
   if argc() == 0 && !exists("s:std_in")
-    NERDTree
+    CocAction explorer
   elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
     wincmd p
     ene
-    exe 'NERDTree' argv()[0]
+    exe 'CocAction explorer' argv()[0]
   endif
 endfunction
 
 autocmd StdinReadPre * let s:std_in = 1
-autocmd VimEnter * call AutoOpenNerdTree()
-autocmd BufEnter * call CloseIfNERDTree()
+autocmd VimEnter * call s:open_coc_explorer()
+" autocmd BufEnter * call CloseIfNERDTree()
 
-function SetNumber(set)
+function s:set_number(set)
   if !exists("b:NERDTree")
     setlocal number
     if a:set
@@ -166,8 +178,8 @@ function SetNumber(set)
     endif
   endif
 endfunction
-autocmd Winenter,FocusGained * :call SetNumber(1)
-autocmd Winleave,FocusLost * :call SetNumber(0)
+autocmd Winenter,FocusGained * :call s:set_number(1)
+autocmd Winleave,FocusLost * :call s:set_number(0)
 
 " Exit insert mode if unfocus
 autocmd FocusLost * silent! w
@@ -188,7 +200,9 @@ autocmd BufNewFile,BufRead *.bnf setlocal filetype=bnf
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
 " JSON5's comment
-autocmd FileType json syntax match Comment +\/\/.\+$+
+autocmd FileType json syntax region Comment start="//" end="$"
+autocmd FileType json syntax region Comment start="/\*" end="\*/"
+autocmd FileType json setlocal commentstring=//\ %s
 
 " List of buf names where q does :q<CR>
 let qCloseWindows = ['help']
@@ -197,12 +211,12 @@ for wname in qCloseWindows
   execute "autocmd FileType " . wname . " noremap <silent><buffer> q :q<CR>"
 endfor
 
-function! RefreshNERDTree()
-  NERDTreeFocus
-  normal R
-  wincmd p
-endfunction
-autocmd BufWritePost * :call RefreshNERDTree()
+" function! RefreshNERDTree()
+"   NERDTreeFocus
+"   normal R
+"   wincmd p
+" endfunction
+" autocmd BufWritePost * :call RefreshNERDTree()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maps
@@ -227,16 +241,24 @@ nnoremap <S-Down> <C-D>M
 nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
-function OpenNERDTree()
-  if exists("b:NERDTree")
-    NERDTreeClose
-    set updatetime&
+function! s:open_coc_explorer()
+  if &filetype == 'coc-explorer'
+    CocCommand explorer
   else
-    NERDTreeCWD
-    set updatetime=200
+    CocCommand explorer --no-toggle
   endif
 endfunction
-nnoremap <silent> <F3> :call OpenNERDTree()<CR>
+" function OpenNERDTree()
+"   if exists("b:NERDTree")
+"     NERDTreeClose
+"     set updatetime&
+"   else
+"     NERDTreeCWD
+"     set updatetime=200
+"   endif
+" endfunction
+" nnoremap <silent> <F3> :call OpenNERDTree()<CR>
+noremap <silent> <F3> :call <SID>open_coc_explorer()<CR>
 noremap <C-P> :Files<CR>
 
 nnoremap <silent> <C-_> :Commentary<CR>
@@ -266,7 +288,7 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1] =~ '\s'
 endfunction
 
-function! ExpandCompletion() abort
+function! s:expand_completion() abort
   if pumvisible()
     return "\<C-N>"
   else
@@ -279,7 +301,7 @@ function! ExpandCompletion() abort
   endif
 endfunction
 
-function! SelectCompletion() abort
+function! s:select_completion() abort
   if pumvisible()
     return coc#_select_confirm()
   else
@@ -290,8 +312,8 @@ endfunction
 " COC actions & completion helpers
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
 inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
-inoremap <silent><expr> <C-Space> ExpandCompletion()
-inoremap <silent><expr> <CR> SelectCompletion()
+inoremap <silent><expr> <C-Space> <SID>expand_completion()
+inoremap <silent><expr> <CR> <SID>select_completion()
 nnoremap <silent> <Enter> :call CocAction('doHover')<CR>
 nnoremap <silent> <F2> :w<CR> :call CocAction('rename')<CR>
 nnoremap <silent> <Leader>f :call CocAction('format')<CR>
@@ -305,7 +327,7 @@ let s:FiletypeExecutables = {
   \ 'javascript': 'node',
   \ }
 
-function! Shebang()
+function! s:shebang()
   call system("chmod u+x " . expand('%'))
   let ft = &filetype
 
@@ -326,7 +348,7 @@ function! Shebang()
   call append(0, shb)
   w
 endfunction
-command! Shebang call Shebang()
+command! Shebang call s:shebang()
 
 function! Durka()
   let themes = map(
