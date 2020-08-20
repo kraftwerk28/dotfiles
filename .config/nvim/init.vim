@@ -8,20 +8,19 @@ Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline-themes'
 
+" Tools
 Plug 'vim-airline/vim-airline'
 Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
-" File tree explorer:
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree' " File explorer
 Plug 'tpope/vim-commentary'
-Plug '/usr/local/opt/fzf'
+Plug '/usr/local/opt/fzf' " Fuzzy search
 Plug 'junegunn/fzf.vim'
-Plug 'wellle/targets.vim'
+Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'honza/vim-snippets'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'machakann/vim-highlightedyank'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive' " Git helper
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
 
@@ -40,6 +39,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'vim-python/python-syntax'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'plasticboy/vim-markdown'
+Plug 'editorconfig/editorconfig-vim'
 
 " It is required to load devicons as last
 Plug 'ryanoasis/vim-devicons'
@@ -50,7 +50,8 @@ call plug#end()
 " Options
 
 " Set color according to gnome-shell theme
-if !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
+if $XDG_CURRENT_DESKTOP == "GNOME" &&
+  \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
   set background=light
   let ayucolor='light'
 else
@@ -384,9 +385,9 @@ function! s:auto_open_NERDTree()
 endfunction
 
 function! s:close_NERDTree_alone()
- if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
-   q
- endif
+  if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
+    q
+  endif
 endfunction
 
 noremap <silent> <F3> :call <SID>toggle_NERDTree()<CR>
