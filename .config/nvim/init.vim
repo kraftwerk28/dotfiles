@@ -62,12 +62,20 @@ endif
 colorscheme ayu
 " colorscheme gruvbox
 
+
 " Airline
 let g:airline_theme = 'ayu_mirage'
 " let g:airline_theme = 'gruvbox'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#coc#enabled = 1
+
+
+" Devicons
+let g:webdevicons_enable_nerdtree = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:DevIconsEnableFolderExtensionPatternMatching = 1
+
 
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 
@@ -77,7 +85,6 @@ let g:user_emmet_leader_key='<Leader>e'
 
 let g:python_highlight_all = 1
 
-" Misc
 syntax on
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
@@ -114,10 +121,6 @@ let g:coc_global_extensions = [
 
 highlight link CocWarningHighlight None
 
-let NERDTreeCascadeSingleChildDir = 0
-let NERDTreeMouseMode = 2
-" let NERDTreeMapActivateNode = 'go'
-" let NERDTreeMapPreview = 'o'
 let g:AutoPairsFlyMode = 0
 
 let g:XkbSwitchEnabled = 1
@@ -126,60 +129,31 @@ if $XDG_CURRENT_DESKTOP == "GNOME"
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Autocmd's
+" Autocmd
 
-" Place cursor at the same position
 function! s:restore_cursor()
    if line("'\"") > 0 && line("'\"") <= line("$")
      exe "normal! g`\""
    endif
 endfunction
-autocmd BufReadPost * :call s:restore_cursor()
+autocmd BufReadPost * call s:restore_cursor()
 
-" NerdTree au tweaks
-" function! s:close_if_NERDTree()
-"    if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
-"      q
-"    endif
-" endfunction
-
-" NERDTree auto open if no file specified
-" function! AutoOpenNerdTree()
-"   if argc() == 0 && !exists("s:std_in")
-"     NERDTree
-"   elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
-"     wincmd p
-"     ene
-"     exe 'NERDTree' argv()[0]
-"   endif
-" endfunction
-
-function! s:auto_open_cocexplorer()
-  if argc() == 0 && !exists("s:std_in")
-    CocAction explorer
-  elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
-    wincmd p
-    ene
-    exe 'CocAction explorer' argv()[0]
-  endif
-endfunction
-
-autocmd StdinReadPre * let s:std_in = 1
-autocmd VimEnter * call s:open_coc_explorer()
-" autocmd BufEnter * call CloseIfNERDTree()
 
 function s:set_number(set)
-  if !exists("b:NERDTree")
-    setlocal number
-    if a:set
-      setlocal relativenumber
-    else
-      setlocal norelativenumber
-    endif
+  " if &filetype == 'coc-explorer'
+  if &filetype == 'nerdtree'
+    return
+  endif
+  setlocal number
+  if a:set
+    setlocal relativenumber
+  else
+    setlocal norelativenumber
   endif
 endfunction
-autocmd Winenter,FocusGained * :call s:set_number(1)
-autocmd Winleave,FocusLost * :call s:set_number(0)
+
+autocmd Winenter,FocusGained * call s:set_number(1)
+autocmd Winleave,FocusLost * call s:set_number(0)
 
 " Exit insert mode if unfocus
 autocmd FocusLost * silent! w
@@ -190,11 +164,16 @@ autocmd FocusLost * silent! w
 autocmd CursorHold,FocusGained * checktime
 
 " Helping nvim detect filetype
-" autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-" autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
-autocmd BufNewFile,BufRead *.zsh* setlocal filetype=zsh
-autocmd BufNewFile,BufRead .env.* setlocal filetype=sh
-autocmd BufNewFile,BufRead *.bnf setlocal filetype=bnf
+let s:additional_ftypes = {
+  \ '*.zsh*': 'zsh',
+  \ '.env.*': 'sh',
+  \ '*.bnf': 'bnf',
+  \ '*.webmanifest': 'json'
+  \ }
+
+for kv in items(s:additional_ftypes)
+  execute "autocmd BufNewFile,BufRead" kv[0] "setlocal filetype=" . kv[1]
+endfor
 
 " Tab configuration for different languages
 autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
@@ -205,21 +184,16 @@ autocmd FileType json syntax region Comment start="/\*" end="\*/"
 autocmd FileType json setlocal commentstring=//\ %s
 
 " List of buf names where q does :q<CR>
-let qCloseWindows = ['help']
-" Close help window w/ `q`
-for wname in qCloseWindows
-  execute "autocmd FileType " . wname . " noremap <silent><buffer> q :q<CR>"
+let s:q_closes_windows = ['help', 'list']
+
+for wname in s:q_closes_windows
+  execute "autocmd FileType" wname "noremap <silent><buffer> q :q<CR>"
 endfor
 
-" function! RefreshNERDTree()
-"   NERDTreeFocus
-"   normal R
-"   wincmd p
-" endfunction
-" autocmd BufWritePost * :call RefreshNERDTree()
+autocmd FileType nerdtree setlocal nonumber norelativenumber
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Maps
+" Mappings
 
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
@@ -241,24 +215,7 @@ nnoremap <S-Down> <C-D>M
 nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
-function! s:open_coc_explorer()
-  if &filetype == 'coc-explorer'
-    CocCommand explorer
-  else
-    CocCommand explorer --no-toggle
-  endif
-endfunction
-" function OpenNERDTree()
-"   if exists("b:NERDTree")
-"     NERDTreeClose
-"     set updatetime&
-"   else
-"     NERDTreeCWD
-"     set updatetime=200
-"   endif
-" endfunction
-" nnoremap <silent> <F3> :call OpenNERDTree()<CR>
-noremap <silent> <F3> :call <SID>open_coc_explorer()<CR>
+
 noremap <C-P> :Files<CR>
 
 nnoremap <silent> <C-_> :Commentary<CR>
@@ -273,7 +230,7 @@ vnoremap < <gv
 
 nnoremap tt :e<Space>
 nnoremap <silent> <C-]> :bnext<CR>
-nnoremap <silent> <C-[> :bprevious<CR>
+" nnoremap <silent> <C-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
@@ -320,7 +277,7 @@ nnoremap <silent> <Leader>f :call CocAction('format')<CR>
 nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Misc
+" Misc commands & functions
 
 " Adds shebang to current file and makes it executable (to current user)
 let s:FiletypeExecutables = {
@@ -358,12 +315,83 @@ function! Durka()
     \)
   for th in themes
     echo th
-    execute "colorscheme " . th
+    execute "colorscheme" th
     sleep 200m
   endfor
 endfunction
 
 command! Cfg :execute ":e $HOME/.config/nvim/init.vim"
 
-" Doesn't work because of passwd prompt (need workaround)
-" command W :execute "w !sudo tee %" | :e!
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" coc-explorer configuration
+
+" function! s:open_coc_explorer()
+"   if &filetype == 'coc-explorer'
+"     CocCommand explorer
+"   else
+"     CocCommand explorer --no-toggle
+"   endif
+" endfunction
+" noremap <silent> <F3> :call <SID>open_coc_explorer()<CR>
+" noremap <silent> <S-F3> :call <SID>open_coc_explorer()<CR>
+
+" function! s:auto_open_explorer()
+"   if exists("s:std_in")
+"     return
+"   endif
+
+"   if argc() == 0
+"     CocCommand explorer
+"   elseif argc() == 1 && isdirectory(argv()[0])
+"     execute "CocCommand explorer" argv()[0]
+"   endif
+" endfunction
+
+" function s:close_cocexplorer_alone()
+"   if winnr("$") == 1 && &filetype == 'coc-explorer'
+"     q
+"   endif
+" endfunction
+
+" autocmd StdinReadPre * let s:std_in = 1
+" autocmd VimEnter * call s:auto_open_explorer()
+" autocmd BufEnter * call s:close_cocexplorer_alone()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree configuration
+
+let NERDTreeCascadeSingleChildDir = 0
+let NERDTreeMouseMode = 2
+let NERDTreeShowLineNumbers = 0
+let NERDTreeMinimalUI = 1
+
+function! s:toggle_NERDTree()
+  if &filetype == "nerdtree"
+    NERDTreeClose
+  else
+    NERDTreeFind
+  endif
+endfunction
+
+function! s:auto_open_NERDTree()
+  if argc() == 0 && !exists("s:std_in")
+    NERDTree
+  elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
+    wincmd p
+    ene
+    exe "NERDTree" argv()[0]
+  endif
+endfunction
+
+function! s:close_NERDTree_alone()
+ if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
+   q
+ endif
+endfunction
+
+noremap <silent> <F3> :call <SID>toggle_NERDTree()<CR>
+noremap <silent> <C-F3> :NERDTreeClose<CR>
+
+autocmd StdinReadPre * let s:std_in = 1
+autocmd VimEnter * call s:auto_open_NERDTree()
+autocmd BufEnter * call s:close_NERDTree_alone()

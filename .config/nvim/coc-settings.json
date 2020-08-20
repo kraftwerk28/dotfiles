@@ -123,8 +123,9 @@
   "explorer.keyMappings": {
     "o": ["expandable?", ["expanded?", "collapse", "expand"], "open"]
   },
-  "explorer.icon.enableVimDevicons": true,
-  "explorer.icon.enableNerdfont": true,
-  "explorer.icon.collapsed": "▸",
-  "explorer.icon.expanded": "▾"
+  "explorer.icon": {
+    "enableVimDevicons": true,
+    "collapsed": "▸",
+    "expanded": "▾"
+  }
 }
