@@ -63,6 +63,7 @@ endif
 colorscheme ayu
 " colorscheme gruvbox
 
+let g:mapleader = " "
 
 " Airline
 let g:airline_theme = 'ayu_mirage'
@@ -81,8 +82,6 @@ let g:DevIconsEnableFolderExtensionPatternMatching = 1
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 
 let g:surround_{char2nr('r')} = "{'\r'}"
-
-let g:user_emmet_leader_key='<Leader>e'
 
 let g:python_highlight_all = 1
 
@@ -139,25 +138,8 @@ function! s:restore_cursor()
 endfunction
 autocmd BufReadPost * call s:restore_cursor()
 
-
-function s:set_number(set)
-  " if &filetype == 'coc-explorer'
-  if &filetype == 'nerdtree'
-    return
-  endif
-  setlocal number
-  if a:set
-    setlocal relativenumber
-  else
-    setlocal norelativenumber
-  endif
-endfunction
-
-autocmd Winenter,FocusGained * call s:set_number(1)
-autocmd Winleave,FocusLost * call s:set_number(0)
-
 " Exit insert mode if unfocus
-autocmd FocusLost * silent! w
+autocmd FocusLost * silent! write
 " The thing below also goes into normal mode if window lost focus
 " autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 
@@ -191,7 +173,26 @@ for wname in s:q_closes_windows
   execute "autocmd FileType" wname "noremap <silent><buffer> q :q<CR>"
 endfor
 
-autocmd FileType nerdtree setlocal nonumber norelativenumber
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Line numbers configuration
+
+" In filetypes below, the line numbers will be disabled
+let s:disable_line_numbers = ['nerdtree', 'help', 'list']
+
+function s:set_number(set)
+  if index(s:disable_line_numbers, &filetype) > -1
+    return
+  endif
+  setlocal number
+  if a:set
+    setlocal relativenumber
+  else
+    setlocal norelativenumber
+  endif
+endfunction
+
+autocmd Winenter,FocusGained * call s:set_number(1)
+autocmd Winleave,FocusLost * call s:set_number(0)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings
@@ -230,8 +231,10 @@ vnoremap > >gv
 vnoremap < <gv
 
 nnoremap tt :e<Space>
-nnoremap <silent> <C-]> :bnext<CR>
+" nnoremap <silent> <C-]> :bnext<CR>
 " nnoremap <silent> <C-[> :bprevious<CR>
+nnoremap <silent> <M-]> :bnext<CR>
+nnoremap <silent> <M-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
 
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
@@ -281,7 +284,7 @@ nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 " Misc commands & functions
 
 " Adds shebang to current file and makes it executable (to current user)
-let s:FiletypeExecutables = {
+let s:filetype_executables = {
   \ 'javascript': 'node',
   \ }
 
@@ -298,13 +301,13 @@ function! s:shebang()
   if v:shell_error == 0
     let shb = "#!/usr/bin/env " . ft
   elseif has_key(s:FiletypeExecutables, ft)
-    let shb = "#!/usr/bin/env " . s:FiletypeExecutables[ft]
+    let shb = "#!/usr/bin/env " . s:filetype_executables[ft]
   else
     echoerr "Filename not supported."
     return
   endif
   call append(0, shb)
-  w
+  write
 endfunction
 command! Shebang call s:shebang()
 
@@ -321,7 +324,7 @@ function! Durka()
   endfor
 endfunction
 
-command! Cfg :execute ":e $HOME/.config/nvim/init.vim"
+command! -nargs=0 Cfg :execute ":e $HOME/.config/nvim/init.vim"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " coc-explorer configuration
@@ -369,6 +372,8 @@ let NERDTreeMinimalUI = 1
 function! s:toggle_NERDTree()
   if &filetype == "nerdtree"
     NERDTreeClose
+  elseif len(@%) == 0
+    NERDTreeCWD
   else
     NERDTreeFind
   endif
@@ -379,19 +384,19 @@ function! s:auto_open_NERDTree()
     NERDTree
   elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
     wincmd p
-    ene
+    enew
     exe "NERDTree" argv()[0]
   endif
 endfunction
 
 function! s:close_NERDTree_alone()
   if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
-    q
+    quit
   endif
 endfunction
 
-noremap <silent> <F3> :call <SID>toggle_NERDTree()<CR>
-noremap <silent> <C-F3> :NERDTreeClose<CR>
+nnoremap <silent> <F3> :call <SID>toggle_NERDTree()<CR>
+nnoremap <silent> <Leader><F3> :NERDTreeClose<CR>
 
 autocmd StdinReadPre * let s:std_in = 1
 autocmd VimEnter * call s:auto_open_NERDTree()
