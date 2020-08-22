@@ -99,16 +99,13 @@ set clipboard+=unnamedplus
 set completeopt=menuone,longest
 
 set incsearch nohlsearch
-set ignorecase
-set smartcase
+set ignorecase smartcase
 set wildmenu
 set signcolumn=yes
 set number relativenumber
-set autoread
-set autowrite
-set foldlevel=99
-set foldcolumn=1
-set foldmethod=syntax
+set autoread autowrite
+set foldlevel=99 foldcolumn=1 foldmethod=syntax
+set exrc secure
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -139,7 +136,7 @@ endfunction
 autocmd BufReadPost * call s:restore_cursor()
 
 " Exit insert mode if unfocus
-autocmd FocusLost * silent! write
+autocmd FocusLost * silent! update
 " The thing below also goes into normal mode if window lost focus
 " autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 
@@ -179,7 +176,7 @@ endfor
 " In filetypes below, the line numbers will be disabled
 let s:disable_line_numbers = ['nerdtree', 'help', 'list']
 
-function s:set_number(set)
+function! s:set_number(set)
   if index(s:disable_line_numbers, &filetype) > -1
     return
   endif
@@ -250,16 +247,14 @@ function! s:check_back_space() abort
 endfunction
 
 function! s:expand_completion() abort
-  if pumvisible()
-    return "\<C-N>"
-  else
+  if !pumvisible()
     return coc#refresh()
-    " if s:check_back_space()
-    "   return "\<Tab>"
-    " else
-    "   return coc#refresh()
-    " endif
   endif
+  " if s:check_back_space()
+  "   return "\<Tab>"
+  " else
+  "   return coc#refresh()
+  " endif
 endfunction
 
 function! s:select_completion() abort
@@ -270,23 +265,29 @@ function! s:select_completion() abort
   endif
 endfunction
 
+function! s:coc_tab()
+  return pumvisible() ? "\<C-N>" : "\<Tab>"
+endfunction
+
+function! s:coc_shift_tab()
+  return pumvisible() ? "\<C-P>" : "\<Tab>"
+endfunction
+
 " COC actions & completion helpers
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<Tab>"
+inoremap <silent><expr> <Tab> <SID>coc_tab()
+inoremap <silent><expr> <S-Tab> <SID>coc_shift_tab()
 inoremap <silent><expr> <C-Space> <SID>expand_completion()
 inoremap <silent><expr> <CR> <SID>select_completion()
-nnoremap <silent> <Enter> :call CocAction('doHover')<CR>
-nnoremap <silent> <F2> :w<CR> :call CocAction('rename')<CR>
-nnoremap <silent> <Leader>f :call CocAction('format')<CR>
-nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
+nnoremap <silent> <CR> :call CocAction("doHover")<CR>
+nnoremap <silent> <F2> :call CocAction("rename")<CR>
+nnoremap <silent> <Leader>f :call CocAction("format")<CR>
+nnoremap <silent> <C-LeftMouse> :call CocAction("jumpDefinition")<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc commands & functions
 
 " Adds shebang to current file and makes it executable (to current user)
-let s:filetype_executables = {
-  \ 'javascript': 'node',
-  \ }
+let s:filetype_executables = { 'javascript': 'node' }
 
 function! s:shebang()
   call system("chmod u+x " . expand('%'))
@@ -307,7 +308,7 @@ function! s:shebang()
     return
   endif
   call append(0, shb)
-  write
+  update
 endfunction
 command! Shebang call s:shebang()
 
@@ -351,7 +352,7 @@ command! -nargs=0 Cfg :execute ":e $HOME/.config/nvim/init.vim"
 "   endif
 " endfunction
 
-" function s:close_cocexplorer_alone()
+" function! s:close_cocexplorer_alone()
 "   if winnr("$") == 1 && &filetype == 'coc-explorer'
 "     q
 "   endif
@@ -400,4 +401,4 @@ nnoremap <silent> <Leader><F3> :NERDTreeClose<CR>
 
 autocmd StdinReadPre * let s:std_in = 1
 autocmd VimEnter * call s:auto_open_NERDTree()
-autocmd BufEnter * call s:close_NERDTree_alone()
+" autocmd BufEnter * call s:close_NERDTree_alone()
