@@ -117,12 +117,12 @@ alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
-dotfupd () {
+dotfilesupd () {
+  commit_message=${1:-"chore: update dotfiles"}
   dotfiles add -u
-  dotfiles commit -m "chore: update dotfiles"
+  dotfiles commit -m $commit_message
   dotfiles push origin HEAD
 }
-alias dotfilesupd=dotfupd
 
 alias ls="lsd -F"
 alias la="lsd -Fah"

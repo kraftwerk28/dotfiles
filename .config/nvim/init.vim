@@ -65,6 +65,7 @@ colorscheme ayu
 
 let g:mapleader = " "
 
+
 " Airline
 let g:airline_theme = 'ayu_mirage'
 " let g:airline_theme = 'gruvbox'
@@ -90,11 +91,10 @@ set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
 set list listchars=tab:➔\ ,trail:·
-set cursorline
 set ignorecase
 set termguicolors
-set colorcolumn=80
-set mousehide mouse=a
+set cursorline colorcolumn=80,120
+set mouse=a
 set clipboard+=unnamedplus
 set completeopt=menuone,longest
 
@@ -105,18 +105,9 @@ set signcolumn=yes
 set number relativenumber
 set autoread autowrite
 set foldlevel=99 foldcolumn=1 foldmethod=syntax
-set exrc secure
+set exrc secure " Project-local .nvimrc/.exrc configuration
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:coc_global_extensions = [
-  \ 'coc-emmet',
-  \ 'coc-snippets',
-  \ 'coc-svelte',
-  \ 'coc-explorer',
-  \ ]
-
-highlight link CocWarningHighlight None
 
 let g:AutoPairsFlyMode = 0
 
@@ -136,7 +127,16 @@ endfunction
 autocmd BufReadPost * call s:restore_cursor()
 
 " Exit insert mode if unfocus
-autocmd FocusLost * silent! update
+function! s:autosave()
+  if &filetype != "nerdtree"
+    bufdo update
+  endif
+endfunction
+
+augroup AutoSave
+  autocmd FocusLost * call s:autosave()
+augroup END
+
 " The thing below also goes into normal mode if window lost focus
 " autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
 
@@ -214,7 +214,6 @@ nnoremap <S-Down> <C-D>M
 nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
-
 noremap <C-P> :Files<CR>
 
 nnoremap <silent> <C-_> :Commentary<CR>
@@ -227,19 +226,37 @@ nnoremap < <<
 vnoremap > >gv
 vnoremap < <gv
 
-nnoremap tt :e<Space>
-" nnoremap <silent> <C-]> :bnext<CR>
-" nnoremap <silent> <C-[> :bprevious<CR>
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
-
+nnoremap <silent> <Leader>cfg :e $HOME/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
+
+" Delete buffer without closing the window (:bd doesn't do it smh)
+function! s:del_buf()
+  bprevious
+  split
+  bnext
+  bdelete
+endfunction
+nnoremap <silent> <Leader>d :call <SID>del_buf()<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
 vnoremap <silent> <M-j> :m'>+1<CR>gv
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" coc configuration
+
+let g:coc_global_extensions = [
+  \ 'coc-emmet',
+  \ 'coc-snippets',
+  \ 'coc-svelte',
+  \ 'coc-explorer',
+  \ ]
+
+highlight link CocWarningHighlight None
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -325,10 +342,8 @@ function! Durka()
   endfor
 endfunction
 
-command! -nargs=0 Cfg :execute ":e $HOME/.config/nvim/init.vim"
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" coc-explorer configuration
+" coc-explorer configuration (obsolette for now)
 
 " function! s:open_coc_explorer()
 "   if &filetype == 'coc-explorer'
@@ -401,4 +416,4 @@ nnoremap <silent> <Leader><F3> :NERDTreeClose<CR>
 
 autocmd StdinReadPre * let s:std_in = 1
 autocmd VimEnter * call s:auto_open_NERDTree()
-" autocmd BufEnter * call s:close_NERDTree_alone()
+autocmd BufEnter * call s:close_NERDTree_alone()
