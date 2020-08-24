@@ -63,6 +63,13 @@ endif
 colorscheme ayu
 " colorscheme gruvbox
 
+if colors_name == 'ayu'
+  augroup AlterColorScheme
+    autocmd!
+    autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
+  augroup END
+endif
+
 let g:mapleader = " "
 
 
@@ -100,10 +107,10 @@ set completeopt=menuone,longest
 
 set incsearch nohlsearch
 set ignorecase smartcase
-set wildmenu
-set signcolumn=yes
+set wildmenu wildmode=full
+set signcolumn=yes " Additional column on left for emoji signs
 set number relativenumber
-set autoread autowrite
+set autoread autowrite autowriteall
 set foldlevel=99 foldcolumn=1 foldmethod=syntax
 set exrc secure " Project-local .nvimrc/.exrc configuration
 
@@ -126,22 +133,13 @@ function! s:restore_cursor()
 endfunction
 autocmd BufReadPost * call s:restore_cursor()
 
-" Exit insert mode if unfocus
-function! s:autosave()
-  if &filetype != "nerdtree"
-    bufdo update
-  endif
-endfunction
-
 augroup AutoSave
-  autocmd FocusLost * call s:autosave()
+  autocmd!
+  autocmd FocusLost * wa
 augroup END
 
-" The thing below also goes into normal mode if window lost focus
-" autocmd FocusLost * if mode() == "i" | call feedkeys("\<Esc>") | endif | wa
-
 " Reload file if it changed on disk
-autocmd CursorHold,FocusGained * checktime
+autocmd BufEnter,FocusGained * checktime
 
 " Helping nvim detect filetype
 let s:additional_ftypes = {
@@ -318,7 +316,7 @@ function! s:shebang()
   let sys_exec = system("which " . ft)
   if v:shell_error == 0
     let shb = "#!/usr/bin/env " . ft
-  elseif has_key(s:FiletypeExecutables, ft)
+  elseif has_key(s:filetype_executables, ft)
     let shb = "#!/usr/bin/env " . s:filetype_executables[ft]
   else
     echoerr "Filename not supported."
@@ -393,6 +391,11 @@ function! s:toggle_NERDTree()
   else
     NERDTreeFind
   endif
+endfunction
+
+function! s:NERDTree_cwd()
+  if &filetype == "nerdtree"
+
 endfunction
 
 function! s:auto_open_NERDTree()
