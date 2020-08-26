@@ -64,7 +64,7 @@ colorscheme ayu
 " colorscheme gruvbox
 
 if colors_name == 'ayu'
-  augroup AlterColorScheme
+  augroup alter_ayu_colorscheme
     autocmd!
     autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
   augroup END
@@ -93,6 +93,13 @@ let g:surround_{char2nr('r')} = "{'\r'}"
 
 let g:python_highlight_all = 1
 
+let g:AutoPairsFlyMode = 0
+
+let g:XkbSwitchEnabled = 1
+if $XDG_CURRENT_DESKTOP == "GNOME"
+  let g:XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
+endif
+
 syntax on
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
@@ -104,7 +111,6 @@ set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
 set completeopt=menuone,longest
-
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
@@ -113,27 +119,18 @@ set number relativenumber
 set autoread autowrite autowriteall
 set foldlevel=99 foldcolumn=1 foldmethod=syntax
 set exrc secure " Project-local .nvimrc/.exrc configuration
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:AutoPairsFlyMode = 0
-
-let g:XkbSwitchEnabled = 1
-if $XDG_CURRENT_DESKTOP == "GNOME"
-  let g:XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
-endif
+set scrolloff=2
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmd
-
-function! s:restore_cursor()
+function! s:RestoreCursor()
    if line("'\"") > 0 && line("'\"") <= line("$")
      exe "normal! g`\""
    endif
 endfunction
-autocmd BufReadPost * call s:restore_cursor()
+autocmd BufReadPost * call s:RestoreCursor()
 
-augroup AutoSave
+augroup auto_save
   autocmd!
   autocmd FocusLost * wa
 augroup END
@@ -149,24 +146,29 @@ let s:additional_ftypes = {
   \ '*.webmanifest': 'json'
   \ }
 
-for kv in items(s:additional_ftypes)
-  execute "autocmd BufNewFile,BufRead" kv[0] "setlocal filetype=" . kv[1]
-endfor
+augroup file_types
+  autocmd!
+  for kv in items(s:additional_ftypes)
+    execute "autocmd BufNewFile,BufRead" kv[0] "setlocal filetype=" . kv[1]
+  endfor
 
-" Tab configuration for different languages
-autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
+  " Tab configuration for different languages
+  autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
 
-" JSON5's comment
-autocmd FileType json syntax region Comment start="//" end="$"
-autocmd FileType json syntax region Comment start="/\*" end="\*/"
-autocmd FileType json setlocal commentstring=//\ %s
+  " JSON5's comment
+  autocmd FileType json syntax region Comment start="//" end="$"
+  autocmd FileType json syntax region Comment start="/\*" end="\*/"
+  autocmd FileType json setlocal commentstring=//\ %s
+augroup END
 
 " List of buf names where q does :q<CR>
 let s:q_closes_windows = ['help', 'list']
 
-for wname in s:q_closes_windows
-  execute "autocmd FileType" wname "noremap <silent><buffer> q :q<CR>"
-endfor
+augroup q_close
+  for wname in s:q_closes_windows
+    execute "autocmd FileType" wname "noremap <silent><buffer> q :q<CR>"
+  endfor
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Line numbers configuration
@@ -174,7 +176,7 @@ endfor
 " In filetypes below, the line numbers will be disabled
 let s:disable_line_numbers = ['nerdtree', 'help', 'list']
 
-function! s:set_number(set)
+function! s:SetNumber(set)
   if index(s:disable_line_numbers, &filetype) > -1
     return
   endif
@@ -186,8 +188,8 @@ function! s:set_number(set)
   endif
 endfunction
 
-autocmd Winenter,FocusGained * call s:set_number(1)
-autocmd Winleave,FocusLost * call s:set_number(0)
+autocmd Winenter,FocusGained * call s:SetNumber(1)
+autocmd Winleave,FocusLost * call s:SetNumber(0)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings
@@ -226,27 +228,36 @@ vnoremap < <gv
 
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
-nnoremap <silent> <Leader>src :w<CR> :source $HOME/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>cfg :e $HOME/.config/nvim/init.vim<CR>
+nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
+nnoremap <silent> <Leader>cfg :e ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
 
-" Delete buffer without closing the window (:bd doesn't do it smh)
-function! s:del_buf()
-  bprevious
-  split
-  bnext
-  bdelete
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Buffer operations
+function! s:DelBuf(del_all)
+  if (a:del_all)
+    bprevious | split | bnext | bufdo bdelete
+  else
+    bprevious | split | bnext | bdelete
+  endif
 endfunction
-nnoremap <silent> <Leader>d :call <SID>del_buf()<CR>
+nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
+nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
 vnoremap <silent> <M-j> :m'>+1<CR>gv
 
+" Prettier bindings
+function! s:RunPrettier()
+  execute "silent !prettier --write %"
+  edit
+endfunction
+nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " coc configuration
-
 let g:coc_global_extensions = [
   \ 'coc-emmet',
   \ 'coc-snippets',
@@ -256,12 +267,12 @@ let g:coc_global_extensions = [
 
 highlight link CocWarningHighlight None
 
-function! s:check_back_space() abort
+function! s:CheckBackSpace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1] =~ '\s'
 endfunction
 
-function! s:expand_completion() abort
+function! s:ExpandCompletion() abort
   if !pumvisible()
     return coc#refresh()
   endif
@@ -272,7 +283,7 @@ function! s:expand_completion() abort
   " endif
 endfunction
 
-function! s:select_completion() abort
+function! s:SelectCompletion() abort
   if pumvisible()
     return coc#_select_confirm()
   else
@@ -280,19 +291,19 @@ function! s:select_completion() abort
   endif
 endfunction
 
-function! s:coc_tab()
+function! s:CocTab()
   return pumvisible() ? "\<C-N>" : "\<Tab>"
 endfunction
 
-function! s:coc_shift_tab()
+function! s:CocShiftTab()
   return pumvisible() ? "\<C-P>" : "\<Tab>"
 endfunction
 
 " COC actions & completion helpers
-inoremap <silent><expr> <Tab> <SID>coc_tab()
-inoremap <silent><expr> <S-Tab> <SID>coc_shift_tab()
-inoremap <silent><expr> <C-Space> <SID>expand_completion()
-inoremap <silent><expr> <CR> <SID>select_completion()
+inoremap <silent><expr> <Tab> <SID>CocTab()
+inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
+inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
+inoremap <silent><expr> <CR> <SID>SelectCompletion()
 nnoremap <silent> <CR> :call CocAction("doHover")<CR>
 nnoremap <silent> <F2> :call CocAction("rename")<CR>
 nnoremap <silent> <Leader>f :call CocAction("format")<CR>
@@ -304,28 +315,27 @@ nnoremap <silent> <C-LeftMouse> :call CocAction("jumpDefinition")<CR>
 " Adds shebang to current file and makes it executable (to current user)
 let s:filetype_executables = { 'javascript': 'node' }
 
-function! s:shebang()
-  call system("chmod u+x " . expand('%'))
-  let ft = &filetype
+function! s:Shebang()
+  update
+  execute "silent !chmod u+x %"
 
   if stridx(getline(1), "#!") == 0
     echo "Shebang already exists."
     return
   endif
-
-  let sys_exec = system("which " . ft)
+  execute "silent !which" &filetype
   if v:shell_error == 0
-    let shb = "#!/usr/bin/env " . ft
-  elseif has_key(s:filetype_executables, ft)
-    let shb = "#!/usr/bin/env " . s:filetype_executables[ft]
+    let shb = "#!/usr/bin/env " . &filetype
+  elseif has_key(s:filetype_executables, &filetype)
+    let shb = "#!/usr/bin/env " . s:filetype_executables[&filetype]
   else
     echoerr "Filename not supported."
     return
   endif
   call append(0, shb)
-  update
+  edit
 endfunction
-command! Shebang call s:shebang()
+command! -nargs=0 Shebang call s:Shebang()
 
 function! Durka()
   let themes = map(
@@ -341,8 +351,25 @@ function! Durka()
 endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" coc-explorer configuration (obsolette for now)
+" Case-tools
 
+" shake_case -> camelCase
+nmap <silent> <Leader>cc viw<Leader>cc
+vnoremap <silent> <Leader>cc :s/\%V_\(.\)/\U\1/g<CR>
+
+" snake_case -> PascalCase
+nmap <silent> <Leader>pc viw<Leader>pc
+vmap <silent> <Leader>pc <Leader>cc`<vU
+
+" camelCase/PascalCase -> snake_case
+nmap <silent> <Leader>sc viw<Leader>sc
+vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
+
+" snake_case -> kebab-case
+" TODO: implement
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" coc-explorer configuration (obsolette for now)
 " function! s:open_coc_explorer()
 "   if &filetype == 'coc-explorer'
 "     CocCommand explorer
@@ -377,13 +404,12 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree configuration
-
 let NERDTreeCascadeSingleChildDir = 0
 let NERDTreeMouseMode = 2
 let NERDTreeShowLineNumbers = 0
 let NERDTreeMinimalUI = 1
 
-function! s:toggle_NERDTree()
+function! s:ToggleNERDTree()
   if &filetype == "nerdtree"
     NERDTreeClose
   elseif len(@%) == 0
@@ -393,12 +419,12 @@ function! s:toggle_NERDTree()
   endif
 endfunction
 
-function! s:NERDTree_cwd()
-  if &filetype == "nerdtree"
+" function! s:NERDTreeCwd()
+"   if &filetype == "nerdtree"
 
-endfunction
+" endfunction
 
-function! s:auto_open_NERDTree()
+function! s:AutoOpenNERDTree()
   if argc() == 0 && !exists("s:std_in")
     NERDTree
   elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
@@ -408,15 +434,15 @@ function! s:auto_open_NERDTree()
   endif
 endfunction
 
-function! s:close_NERDTree_alone()
+function! s:CloseNERDTreeAlone()
   if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
     quit
   endif
 endfunction
 
-nnoremap <silent> <F3> :call <SID>toggle_NERDTree()<CR>
+nnoremap <silent> <F3> :call <SID>ToggleNERDTree()<CR>
 nnoremap <silent> <Leader><F3> :NERDTreeClose<CR>
 
 autocmd StdinReadPre * let s:std_in = 1
-autocmd VimEnter * call s:auto_open_NERDTree()
-autocmd BufEnter * call s:close_NERDTree_alone()
+" autocmd VimEnter * call s:AutoOpenNERDTree()
+autocmd BufEnter * call s:CloseNERDTreeAlone()
