@@ -409,13 +409,13 @@ let NERDTreeMouseMode = 2
 let NERDTreeShowLineNumbers = 0
 let NERDTreeMinimalUI = 1
 
-function! s:ToggleNERDTree()
-  if &filetype == "nerdtree"
+function! s:ToggleNERDTree(shift)
+  if (a:shift && g:NERDTree.IsOpen()) || &filetype == 'nerdtree'
     NERDTreeClose
-  elseif len(@%) == 0
-    NERDTreeCWD
-  else
+  elseif a:shift
     NERDTreeFind
+  else
+    NERDTreeCWD
   endif
 endfunction
 
@@ -440,8 +440,8 @@ function! s:CloseNERDTreeAlone()
   endif
 endfunction
 
-nnoremap <silent> <F3> :call <SID>ToggleNERDTree()<CR>
-nnoremap <silent> <Leader><F3> :NERDTreeClose<CR>
+nnoremap <silent> <F3> :call <SID>ToggleNERDTree(0)<CR>
+nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTree(1)<CR>
 
 autocmd StdinReadPre * let s:std_in = 1
 " autocmd VimEnter * call s:AutoOpenNERDTree()
