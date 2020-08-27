@@ -21,13 +21,14 @@ Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'honza/vim-snippets'
 Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-fugitive' " Git helper
+Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
 
 " Languages
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
 Plug 'cespare/vim-toml'
 Plug 'ollykel/v-vim'
@@ -50,8 +51,8 @@ call plug#end()
 " Options
 
 " Set color according to gnome-shell theme
-if $XDG_CURRENT_DESKTOP == "GNOME" &&
-  \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# "dark")
+if $XDG_CURRENT_DESKTOP == 'GNOME' &&
+  \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
   set background=light
   let ayucolor='light'
 else
@@ -70,7 +71,7 @@ if colors_name == 'ayu'
   augroup END
 endif
 
-let g:mapleader = " "
+let g:mapleader = ' '
 
 
 " Airline
@@ -96,7 +97,7 @@ let g:python_highlight_all = 1
 let g:AutoPairsFlyMode = 0
 
 let g:XkbSwitchEnabled = 1
-if $XDG_CURRENT_DESKTOP == "GNOME"
+if $XDG_CURRENT_DESKTOP == 'GNOME'
   let g:XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
 endif
 
@@ -117,14 +118,15 @@ set wildmenu wildmode=full
 set signcolumn=yes " Additional column on left for emoji signs
 set number relativenumber
 set autoread autowrite autowriteall
-set foldlevel=99 foldcolumn=1 foldmethod=syntax
+set foldlevel=99 foldmethod=syntax
+" set foldcolumn=1 " Enable additional column w/ visual folds
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmd
 function! s:RestoreCursor()
-   if line("'\"") > 0 && line("'\"") <= line("$")
+   if line("'\"") > 0 && line("'\"") <= line('$')
      exe "normal! g`\""
    endif
 endfunction
@@ -149,7 +151,7 @@ let s:additional_ftypes = {
 augroup file_types
   autocmd!
   for kv in items(s:additional_ftypes)
-    execute "autocmd BufNewFile,BufRead" kv[0] "setlocal filetype=" . kv[1]
+    execute 'autocmd BufNewFile,BufRead' kv[0] 'setlocal filetype=' . kv[1]
   endfor
 
   " Tab configuration for different languages
@@ -166,7 +168,7 @@ let s:q_closes_windows = ['help', 'list']
 
 augroup q_close
   for wname in s:q_closes_windows
-    execute "autocmd FileType" wname "noremap <silent><buffer> q :q<CR>"
+    execute 'autocmd FileType' wname 'noremap <silent><buffer> q :q<CR>'
   endfor
 augroup END
 
@@ -251,7 +253,7 @@ vnoremap <silent> <M-j> :m'>+1<CR>gv
 
 " Prettier bindings
 function! s:RunPrettier()
-  execute "silent !prettier --write %"
+  execute 'silent !prettier --write %'
   edit
 endfunction
 nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
@@ -316,24 +318,24 @@ nnoremap <silent> <C-LeftMouse> :call CocAction("jumpDefinition")<CR>
 let s:filetype_executables = { 'javascript': 'node' }
 
 function! s:Shebang()
-  update
-  execute "silent !chmod u+x %"
+  write
+  execute 'silent !chmod u+x %'
 
   if stridx(getline(1), "#!") == 0
-    echo "Shebang already exists."
+    echo 'Shebang already exists.'
     return
   endif
-  execute "silent !which" &filetype
+  execute 'silent !which' &filetype
   if v:shell_error == 0
-    let shb = "#!/usr/bin/env " . &filetype
+    let shb = '#!/usr/bin/env ' . &filetype
   elseif has_key(s:filetype_executables, &filetype)
-    let shb = "#!/usr/bin/env " . s:filetype_executables[&filetype]
+    let shb = '#!/usr/bin/env ' . s:filetype_executables[&filetype]
   else
-    echoerr "Filename not supported."
+    echoerr 'Filename not supported.'
     return
   endif
   call append(0, shb)
-  edit
+  update
 endfunction
 command! -nargs=0 Shebang call s:Shebang()
 
@@ -345,7 +347,7 @@ function! Durka()
     \)
   for th in themes
     echo th
-    execute "colorscheme" th
+    execute 'colorscheme' th
     sleep 200m
   endfor
 endfunction
@@ -408,34 +410,38 @@ let NERDTreeCascadeSingleChildDir = 0
 let NERDTreeMouseMode = 2
 let NERDTreeShowLineNumbers = 0
 let NERDTreeMinimalUI = 1
+let NERDTreeShowHidden = 1
 
 function! s:ToggleNERDTree(shift)
-  if (a:shift && g:NERDTree.IsOpen()) || &filetype == 'nerdtree'
-    NERDTreeClose
-  elseif a:shift
-    NERDTreeFind
+  if a:shift
+    if &filetype == 'nerdtree'
+      NERDTreeClose
+    else
+      NERDTreeFind
+      execute 'vertical resize' g:NERDTreeWinSize
+    endif
   else
-    NERDTreeCWD
+    if &filetype == 'nerdtree'
+      NERDTreeClose
+    else
+      NERDTreeCWD
+      execute 'vertical resize' g:NERDTreeWinSize
+    endif
   endif
 endfunction
 
-" function! s:NERDTreeCwd()
-"   if &filetype == "nerdtree"
-
-" endfunction
-
 function! s:AutoOpenNERDTree()
-  if argc() == 0 && !exists("s:std_in")
+  if argc() == 0 && !exists('s:std_in')
     NERDTree
-  elseif argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in")
+  elseif argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in')
     wincmd p
     enew
-    exe "NERDTree" argv()[0]
+    exe 'NERDTree' argv()[0]
   endif
 endfunction
 
 function! s:CloseNERDTreeAlone()
-  if winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()
+  if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
     quit
   endif
 endfunction
@@ -446,3 +452,12 @@ nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTree(1)<CR>
 autocmd StdinReadPre * let s:std_in = 1
 " autocmd VimEnter * call s:AutoOpenNERDTree()
 autocmd BufEnter * call s:CloseNERDTreeAlone()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Emmet configuration
+
+" let g:user_emmet_install_global = 0
+" augroup emmet_install
+"   autocmd!
+"   autocmd FileType html,css EmmetInstall
+" augroup END
