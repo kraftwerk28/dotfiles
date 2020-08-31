@@ -14,7 +14,7 @@ Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
-Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
 Plug '/usr/local/opt/fzf' " Fuzzy search
 Plug 'junegunn/fzf.vim'
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
@@ -28,7 +28,6 @@ Plug 'lyokha/vim-xkbswitch'
 " Languages
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
-" Plug 'mattn/emmet-vim'
 Plug 'jparise/vim-graphql'
 Plug 'cespare/vim-toml'
 Plug 'ollykel/v-vim'
@@ -39,8 +38,9 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'chrisbra/csv.vim'
 Plug 'vim-python/python-syntax'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'plasticboy/vim-markdown'
+" Plug 'plasticboy/vim-markdown'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'ekalinin/Dockerfile.vim'
 
 " It is required to load devicons as last
 Plug 'ryanoasis/vim-devicons'
@@ -64,12 +64,12 @@ endif
 colorscheme ayu
 " colorscheme gruvbox
 
-if colors_name == 'ayu'
-  augroup alter_ayu_colorscheme
-    autocmd!
+augroup alter_ayu_colorscheme
+  autocmd!
+  if colors_name == 'ayu'
     autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
-  augroup END
-endif
+  endif
+augroup END
 
 let g:mapleader = ' '
 
@@ -130,7 +130,10 @@ function! s:RestoreCursor()
      exe "normal! g`\""
    endif
 endfunction
-autocmd BufReadPost * call s:RestoreCursor()
+augroup restore_cursor
+  autocmd!
+  autocmd BufReadPost * call s:RestoreCursor()
+augroup END
 
 augroup auto_save
   autocmd!
@@ -138,7 +141,10 @@ augroup auto_save
 augroup END
 
 " Reload file if it changed on disk
-autocmd BufEnter,FocusGained * checktime
+augroup auchecktime
+  autocmd!
+  autocmd BufEnter,FocusGained * checktime
+augroup END
 
 " Helping nvim detect filetype
 let s:additional_ftypes = {
@@ -190,8 +196,11 @@ function! s:SetNumber(set)
   endif
 endfunction
 
-autocmd Winenter,FocusGained * call s:SetNumber(1)
-autocmd Winleave,FocusLost * call s:SetNumber(0)
+augroup line_numbers
+  autocmd!
+  autocmd Winenter,FocusGained * call s:SetNumber(1)
+  autocmd Winleave,FocusLost * call s:SetNumber(0)
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings
@@ -218,10 +227,6 @@ nnoremap <C-Down> <C-F>M
 
 noremap <C-P> :Files<CR>
 
-nnoremap <silent> <C-_> :Commentary<CR>
-vnoremap <silent> <C-_> :Commentary<CR>gv
-inoremap <silent> <C-_> <C-O>:Commentary<CR>
-
 " Indenting
 nnoremap > >>
 nnoremap < <<
@@ -238,13 +243,28 @@ nnoremap <silent> <Leader>h :set hlsearch!<CR>
 " Buffer operations
 function! s:DelBuf(del_all)
   if (a:del_all)
-    bprevious | split | bnext | bufdo bdelete
+    wincmd s
+    bufdo bdelete
   else
-    bprevious | split | bnext | bdelete
+    bprevious
+    wincmd s
+    bnext
+    bdelete
   endif
 endfunction
+
+function! s:DelAllExcept()
+  let l:bn = buffer_name()
+  bnext
+  while buffer_name() != l:bn
+    bdelete
+    bnext
+  endwhile
+endfunction
+
 nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
 nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
+nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
@@ -306,10 +326,21 @@ inoremap <silent><expr> <Tab> <SID>CocTab()
 inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
 inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
 inoremap <silent><expr> <CR> <SID>SelectCompletion()
-nnoremap <silent> <CR> :call CocAction("doHover")<CR>
-nnoremap <silent> <F2> :call CocAction("rename")<CR>
-nnoremap <silent> <Leader>f :call CocAction("format")<CR>
-nnoremap <silent> <C-LeftMouse> :call CocAction("jumpDefinition")<CR>
+nnoremap <silent> <CR> :call CocAction('doHover')<CR>
+nnoremap <silent> <F2> :call CocAction('rename')<CR>
+nnoremap <silent> <Leader>f :call CocAction('format')<CR>
+nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
+
+function! s:terminal()
+  rightbelow 10split
+  terminal
+endfunction
+nnoremap <Leader>` :call <SID>terminal()<CR>
+
+augroup terminal_insert
+  autocmd!
+  autocmd TermOpen * startinsert
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc commands & functions
@@ -411,24 +442,8 @@ let NERDTreeMouseMode = 2
 let NERDTreeShowLineNumbers = 0
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
-
-function! s:ToggleNERDTree(shift)
-  if a:shift
-    if &filetype == 'nerdtree'
-      NERDTreeClose
-    else
-      NERDTreeFind
-      execute 'vertical resize' g:NERDTreeWinSize
-    endif
-  else
-    if &filetype == 'nerdtree'
-      NERDTreeClose
-    else
-      NERDTreeCWD
-      execute 'vertical resize' g:NERDTreeWinSize
-    endif
-  endif
-endfunction
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
 
 function! s:AutoOpenNERDTree()
   if argc() == 0 && !exists('s:std_in')
@@ -441,17 +456,62 @@ function! s:AutoOpenNERDTree()
 endfunction
 
 function! s:CloseNERDTreeAlone()
-  if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
+  if winnr('$') == 1 && &filetype == 'nerdtree'
     quit
+  endif
+endfunction
+
+function! s:closeNERDTreeEsc()
+  if &filetype == 'nerdtree'
+    NERDTreeClose
+  endif
+endfunction
+
+function! s:ToggleNERDTree(is_leader)
+  if a:is_leader
+    if g:NERDTree.IsOpen()
+      NERDTreeClose
+    else
+      NERDTreeFind
+      execute 'vertical resize' g:NERDTreeWinSize
+    endif
+  else
+    if &filetype == 'nerdtree'
+    " if g:NERDTree.IsOpen()
+      NERDTreeClose
+    else
+      NERDTreeCWD
+      execute 'vertical resize' g:NERDTreeWinSize
+    endif
   endif
 endfunction
 
 nnoremap <silent> <F3> :call <SID>ToggleNERDTree(0)<CR>
 nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTree(1)<CR>
 
-autocmd StdinReadPre * let s:std_in = 1
-" autocmd VimEnter * call s:AutoOpenNERDTree()
-autocmd BufEnter * call s:CloseNERDTreeAlone()
+augroup nerdtree
+  autocmd!
+  autocmd FileType nerdtree
+    \ nnoremap <buffer><silent> <Esc> :call <SID>closeNERDTreeEsc()<CR>
+  autocmd StdinReadPre * let s:std_in = 1
+  " autocmd VimEnter * call s:AutoOpenNERDTree()
+  autocmd BufEnter * call s:CloseNERDTreeAlone()
+augroup END
+
+augroup nerdtree_mouse
+  autocmd!
+  autocmd BufEnter NERD_tree_* set mouse=n
+  autocmd BufLeave NERD_tree_* set mouse=a
+augroup END
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDCommenter configuration
+
+let NERDSpaceDelims = 1
+let NERDDefaultAlign = 'start'
+nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
+vnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
+inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Emmet configuration
