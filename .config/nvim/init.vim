@@ -137,7 +137,7 @@ augroup END
 
 augroup auto_save
   autocmd!
-  autocmd FocusLost * wa
+  autocmd FocusLost * wall
 augroup END
 
 " Reload file if it changed on disk
@@ -241,25 +241,32 @@ nnoremap <silent> <Leader>h :set hlsearch!<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Buffer operations
+
+function! s:buf_filt(inc_cur)
+  function! s:f(include_current, idx, val)
+    if !bufexists(a:val) || buffer_name(a:val) =~? 'NERD_tree_*'
+      return v:false
+    endif
+    if a:include_current && bufnr() == a:val
+      return v:false
+    endif
+    return v:true
+  endfunction
+  return filter(range(1, bufnr('$')), function('s:f', [a:inc_cur]))
+endfunction
+
 function! s:DelBuf(del_all)
+  wall
   if (a:del_all)
-    wincmd s
-    bufdo bdelete
+    execute 'bdelete' join(s:buf_filt(0))
   else
-    bprevious
-    wincmd s
-    bnext
-    bdelete
+    bnext | split | bprevious | bdelete
   endif
 endfunction
 
 function! s:DelAllExcept()
-  let l:bn = buffer_name()
-  bnext
-  while buffer_name() != l:bn
-    bdelete
-    bnext
-  endwhile
+  wall
+  execute 'bdelete' join(s:buf_filt(1))
 endfunction
 
 nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
@@ -375,7 +382,7 @@ function! Durka()
     \ split(system("ls ~/.config/nvim/colors/")) +
     \ split(system("ls /usr/share/nvim/runtime/colors/")),
     \ "v:val[:-5]"
-    \)
+    \ )
   for th in themes
     echo th
     execute 'colorscheme' th
@@ -437,6 +444,9 @@ vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree configuration
+" Preserve netrw to load
+let g:loaded_netrwPlugin = 1
+
 let NERDTreeCascadeSingleChildDir = 0
 let NERDTreeMouseMode = 2
 let NERDTreeShowLineNumbers = 0
@@ -444,6 +454,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
+let NERDTreeHijackNetrw = 0
 
 function! s:AutoOpenNERDTree()
   if argc() == 0 && !exists('s:std_in')
@@ -456,8 +467,8 @@ function! s:AutoOpenNERDTree()
 endfunction
 
 function! s:CloseNERDTreeAlone()
-  if winnr('$') == 1 && &filetype == 'nerdtree'
-    quit
+  if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
+    qall
   endif
 endfunction
 
@@ -477,7 +488,6 @@ function! s:ToggleNERDTree(is_leader)
     endif
   else
     if &filetype == 'nerdtree'
-    " if g:NERDTree.IsOpen()
       NERDTreeClose
     else
       NERDTreeCWD
@@ -512,12 +522,3 @@ let NERDDefaultAlign = 'start'
 nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
 vnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
 inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Emmet configuration
-
-" let g:user_emmet_install_global = 0
-" augroup emmet_install
-"   autocmd!
-"   autocmd FileType html,css EmmetInstall
-" augroup END
