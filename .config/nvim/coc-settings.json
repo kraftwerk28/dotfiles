@@ -31,50 +31,24 @@
             "server": "verbose"
           },
           "commandPath": "",
-          "configurationSources": [
-            "pycodestyle"
-          ],
+          "configurationSources": ["pycodestyle"],
           "plugins": {
-            "jedi_completion": {
-              "enabled": true
-            },
-            "jedi_hover": {
-              "enabled": true
-            },
-            "jedi_references": {
-              "enabled": true
-            },
-            "jedi_signature_help": {
-              "enabled": true
-            },
-            "jedi_symbols": {
-              "enabled": true,
-              "all_scopes": true
-            },
-            "mccabe": {
-              "enabled": true,
-              "threshold": 15
-            },
-            "preload": {
-              "enabled": true
-            },
-            "pycodestyle": {
-              "enabled": true
-            },
+            "jedi_completion": { "enabled": true },
+            "jedi_hover": { "enabled": true },
+            "jedi_references": { "enabled": true },
+            "jedi_signature_help": { "enabled": true },
+            "jedi_symbols": { "enabled": true, "all_scopes": true },
+            "mccabe": { "enabled": true, "threshold": 15 },
+            "preload": { "enabled": true },
+            "pycodestyle": { "enabled": true },
             "pydocstyle": {
               "enabled": false,
               "match": "(?!test_).*\\.py",
               "matchDir": "[^\\.].*"
             },
-            "pyflakes": {
-              "enabled": true
-            },
-            "rope_completion": {
-              "enabled": true
-            },
-            "yapf": {
-              "enabled": true
-            }
+            "pyflakes": { "enabled": true },
+            "rope_completion": { "enabled": true },
+            "yapf": { "enabled": true }
           }
         }
       }
@@ -82,6 +56,7 @@
 
     "clangd": {
       "command": "clangd",
+      "args": ["--fallback-style", "Chromium"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
       "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
     },
@@ -104,7 +79,7 @@
     },
 
     "haskell": {
-      "command": "hie-wrapper",
+      "command": "haskell-language-server-wrapper",
       "args": ["--lsp"],
       "rootPatterns": [
         "stack.yaml",

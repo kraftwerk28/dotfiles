@@ -15,7 +15,6 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
 Plug 'preservim/nerdcommenter'
-Plug '/usr/local/opt/fzf' " Fuzzy search
 Plug 'junegunn/fzf.vim'
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'honza/vim-snippets'
@@ -38,7 +37,7 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'chrisbra/csv.vim'
 Plug 'vim-python/python-syntax'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'ekalinin/Dockerfile.vim'
 
@@ -122,6 +121,8 @@ set foldlevel=99 foldmethod=syntax
 " set foldcolumn=1 " Enable additional column w/ visual folds
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
+set diffopt+=vertical
+set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmd
@@ -167,13 +168,15 @@ augroup file_types
   autocmd FileType json syntax region Comment start="//" end="$"
   autocmd FileType json syntax region Comment start="/\*" end="\*/"
   autocmd FileType json setlocal commentstring=//\ %s
+
+  autocmd FileType markdown setlocal conceallevel=2
 augroup END
 
 " List of buf names where q does :q<CR>
-let s:q_closes_windows = ['help', 'list']
+let s:q_closes_windows = 'help list'
 
 augroup q_close
-  for wname in s:q_closes_windows
+  for wname in split(s:q_closes_windows)
     execute 'autocmd FileType' wname 'noremap <silent><buffer> q :q<CR>'
   endfor
 augroup END
@@ -182,10 +185,10 @@ augroup END
 " Line numbers configuration
 
 " In filetypes below, the line numbers will be disabled
-let s:disable_line_numbers = ['nerdtree', 'help', 'list']
+let s:disable_line_numbers = 'nerdtree help list'
 
 function! s:SetNumber(set)
-  if index(s:disable_line_numbers, &filetype) > -1
+  if index(split(s:disable_line_numbers), &filetype) > -1
     return
   endif
   setlocal number
@@ -201,6 +204,11 @@ augroup line_numbers
   autocmd Winenter,FocusGained * call s:SetNumber(1)
   autocmd Winleave,FocusLost * call s:SetNumber(0)
 augroup END
+
+" augroup highlight_yank
+  " autocmd!
+  " autocmd TextYankPost * lua vim.highlight.on_yank()
+" augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings
@@ -238,6 +246,7 @@ nnoremap <silent> <M-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>cfg :e ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
+nnoremap <silent> <Leader>w :wall<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Buffer operations
@@ -256,10 +265,11 @@ function! s:buf_filt(inc_cur)
 endfunction
 
 function! s:DelBuf(del_all)
-  wall
   if (a:del_all)
+    wall
     execute 'bdelete' join(s:buf_filt(0))
   else
+    update
     bnext | split | bprevious | bdelete
   endif
 endfunction
@@ -338,6 +348,9 @@ nnoremap <silent> <F2> :call CocAction('rename')<CR>
 nnoremap <silent> <Leader>f :call CocAction('format')<CR>
 nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Embedded terminal
+
 function! s:terminal()
   rightbelow 10split
   terminal
@@ -409,46 +422,14 @@ vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 " TODO: implement
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" coc-explorer configuration (obsolette for now)
-" function! s:open_coc_explorer()
-"   if &filetype == 'coc-explorer'
-"     CocCommand explorer
-"   else
-"     CocCommand explorer --no-toggle
-"   endif
-" endfunction
-" noremap <silent> <F3> :call <SID>open_coc_explorer()<CR>
-" noremap <silent> <S-F3> :call <SID>open_coc_explorer()<CR>
-
-" function! s:auto_open_explorer()
-"   if exists("s:std_in")
-"     return
-"   endif
-
-"   if argc() == 0
-"     CocCommand explorer
-"   elseif argc() == 1 && isdirectory(argv()[0])
-"     execute "CocCommand explorer" argv()[0]
-"   endif
-" endfunction
-
-" function! s:close_cocexplorer_alone()
-"   if winnr("$") == 1 && &filetype == 'coc-explorer'
-"     q
-"   endif
-" endfunction
-
-" autocmd StdinReadPre * let s:std_in = 1
-" autocmd VimEnter * call s:auto_open_explorer()
-" autocmd BufEnter * call s:close_cocexplorer_alone()
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree configuration
+
 " Preserve netrw to load
 let g:loaded_netrwPlugin = 1
 
 let NERDTreeCascadeSingleChildDir = 0
 let NERDTreeMouseMode = 2
+let NERDTreeQuitOnOpen = 1
 let NERDTreeShowLineNumbers = 0
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden = 1
@@ -469,12 +450,6 @@ endfunction
 function! s:CloseNERDTreeAlone()
   if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
     qall
-  endif
-endfunction
-
-function! s:closeNERDTreeEsc()
-  if &filetype == 'nerdtree'
-    NERDTreeClose
   endif
 endfunction
 
@@ -501,24 +476,26 @@ nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTree(1)<CR>
 
 augroup nerdtree
   autocmd!
-  autocmd FileType nerdtree
-    \ nnoremap <buffer><silent> <Esc> :call <SID>closeNERDTreeEsc()<CR>
+
+  autocmd FileType nerdtree nnoremap <buffer><silent> <Esc> :NERDTreeClose<CR>
+  autocmd FileType nerdtree nnoremap <buffer><silent> q :NERDTreeClose<CR>
+
   autocmd StdinReadPre * let s:std_in = 1
   " autocmd VimEnter * call s:AutoOpenNERDTree()
   autocmd BufEnter * call s:CloseNERDTreeAlone()
 augroup END
 
-augroup nerdtree_mouse
-  autocmd!
-  autocmd BufEnter NERD_tree_* set mouse=n
-  autocmd BufLeave NERD_tree_* set mouse=a
-augroup END
+" augroup nerdtree_mouse
+"   autocmd!
+"   autocmd WinEnter NERD_tree_* set mouse=n
+"   autocmd WinLeave NERD_tree_* set mouse=a
+" augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDCommenter configuration
 
 let NERDSpaceDelims = 1
-let NERDDefaultAlign = 'start'
+" let NERDDefaultAlign = 'start'
 nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
 vnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
 inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
