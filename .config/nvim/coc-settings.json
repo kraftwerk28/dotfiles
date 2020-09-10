@@ -82,11 +82,13 @@
       "command": "haskell-language-server-wrapper",
       "args": ["--lsp"],
       "rootPatterns": [
+        "*.cabal",
         "stack.yaml",
-        "cabal.config",
-        "package.yaml"
+        "cabal.project",
+        "package.yaml",
+        "hie.yaml"
       ],
-      "filetypes": ["haskell", "hs", "lhs"]
+      "filetypes": ["haskell", "lhaskell", "hs", "lhs"]
     },
 
     "go": {
@@ -94,13 +96,5 @@
       "filetypes": ["go"]
     }
 
-  },
-  "explorer.keyMappings": {
-    "o": ["expandable?", ["expanded?", "collapse", "expand"], "open"]
-  },
-  "explorer.icon": {
-    "enableVimDevicons": true,
-    "collapsed": "▸",
-    "expanded": "▾"
   }
 }

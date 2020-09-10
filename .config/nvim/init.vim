@@ -23,7 +23,7 @@ Plug 'tpope/vim-fugitive' " Git helper
 Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
-
+Plug 'diepm/vim-rest-console'
 " Languages
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
@@ -233,8 +233,6 @@ nnoremap <S-Down> <C-D>M
 nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
-noremap <C-P> :Files<CR>
-
 " Indenting
 nnoremap > >>
 nnoremap < <<
@@ -301,7 +299,6 @@ let g:coc_global_extensions = [
   \ 'coc-emmet',
   \ 'coc-snippets',
   \ 'coc-svelte',
-  \ 'coc-explorer',
   \ ]
 
 highlight link CocWarningHighlight None
@@ -343,16 +340,18 @@ inoremap <silent><expr> <Tab> <SID>CocTab()
 inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
 inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
 inoremap <silent><expr> <CR> <SID>SelectCompletion()
-nnoremap <silent> <CR> :call CocAction('doHover')<CR>
+
+nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
+nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
+nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 nnoremap <silent> <F2> :call CocAction('rename')<CR>
 nnoremap <silent> <Leader>f :call CocAction('format')<CR>
-nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Embedded terminal
 
 function! s:terminal()
-  rightbelow 10split
+  botright 10split
   terminal
 endfunction
 nnoremap <Leader>` :call <SID>terminal()<CR>
@@ -499,3 +498,15 @@ let NERDSpaceDelims = 1
 nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
 vnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
 inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" FZF configuration
+
+let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
+nnoremap <C-P> :Files<CR>
+nnoremap <Leader>rg :Rg<CR>
+" augroup fzf
+  " autocmd!
+  " autocmd FileType fzf tnoremap <S-J> <Down>
+  " autocmd FileType fzf tnoremap <S-K> <Up>
+" augroup END
