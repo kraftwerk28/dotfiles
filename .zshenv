@@ -28,3 +28,7 @@ export PYTHONPATH="$HOME/projects/python"
 export NODE_PATH="$HOME/.npm-global/lib/node_modules/"
 export PATH="$PATH:$HOME/.npm-global/bin/"
 export NVS_HOME="$HOME/.nvs"
+
+# Haskell stuff
+export PATH="$PATH:$HOME/.cabal/bin/"
+export PATH="$PATH:$HOME/.ghcup/bin/"

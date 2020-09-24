@@ -6,6 +6,9 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'ayu-theme/ayu-vim'
 Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
+Plug 'dracula/vim', {'as': 'dracula'}
+Plug 'tomasr/molokai' 
+
 Plug 'vim-airline/vim-airline-themes'
 
 " Tools
@@ -24,6 +27,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
 Plug 'diepm/vim-rest-console'
+
 " Languages
 Plug 'rust-lang/rust.vim'
 Plug 'evanleck/vim-svelte'
@@ -51,39 +55,48 @@ call plug#end()
 
 " Set color according to gnome-shell theme
 if $XDG_CURRENT_DESKTOP == 'GNOME' &&
-  \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
+\  !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
   set background=light
   let ayucolor='light'
 else
   set background=dark
   let ayucolor='mirage'
-  " let ayucolor='dark'
 endif
 
 colorscheme ayu
-" colorscheme gruvbox
+
+if exists('colors_name') && colors_name == 'onedark'
+  let g:onedark_terminal_italics = 1
+endif
 
 augroup alter_ayu_colorscheme
   autocmd!
-  if colors_name == 'ayu'
+  if exists('colors_name ') && colors_name == 'ayu'
     autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
   endif
 augroup END
+" Must be AFTER augroup above
+syntax on
 
 let g:mapleader = ' '
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Airline configuration
 
-" Airline
 let g:airline_theme = 'ayu_mirage'
-" let g:airline_theme = 'gruvbox'
+" let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#coc#enabled = 1
-
+let g:airline#extensions#fugitiveline#enabled = 1
+let g:airline#extensions#fzf#enabled = 1
+let g:airline#extensions#coc#enabled = 1
 
 " Devicons
 let g:webdevicons_enable_nerdtree = 1
 let g:DevIconsEnableFoldersOpenClose = 1
+let g:DevIconsDefaultFolderOpenSymbol = ''
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
 
@@ -100,7 +113,8 @@ if $XDG_CURRENT_DESKTOP == 'GNOME'
   let g:XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
 endif
 
-syntax on
+let g:vim_indent_cont = 0
+
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
@@ -123,6 +137,7 @@ set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
 set diffopt+=vertical
 set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+set splitbelow splitright
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmd
@@ -173,7 +188,8 @@ augroup file_types
 augroup END
 
 " List of buf names where q does :q<CR>
-let s:q_closes_windows = 'help list'
+let s:q_closes_windows = 'help list git'
+let s:disable_line_numbers = 'nerdtree help list'
 
 augroup q_close
   for wname in split(s:q_closes_windows)
@@ -183,9 +199,6 @@ augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Line numbers configuration
-
-" In filetypes below, the line numbers will be disabled
-let s:disable_line_numbers = 'nerdtree help list'
 
 function! s:SetNumber(set)
   if index(split(s:disable_line_numbers), &filetype) > -1
@@ -201,8 +214,8 @@ endfunction
 
 augroup line_numbers
   autocmd!
-  autocmd Winenter,FocusGained * call s:SetNumber(1)
-  autocmd Winleave,FocusLost * call s:SetNumber(0)
+  autocmd BufEnter,Winenter,FocusGained * call s:SetNumber(1)
+  autocmd BufLeave,Winleave,FocusLost * call s:SetNumber(0)
 augroup END
 
 " augroup highlight_yank
@@ -265,16 +278,16 @@ endfunction
 function! s:DelBuf(del_all)
   if (a:del_all)
     wall
-    execute 'bdelete' join(s:buf_filt(0))
+    silent execute 'bdelete' join(s:buf_filt(0))
   else
     update
-    bnext | split | bprevious | bdelete
+    bprevious | split | bnext | bdelete
   endif
 endfunction
 
 function! s:DelAllExcept()
   wall
-  execute 'bdelete' join(s:buf_filt(1))
+  silent execute 'bdelete' join(s:buf_filt(1))
 endfunction
 
 nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
@@ -292,6 +305,7 @@ function! s:RunPrettier()
   edit
 endfunction
 nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
+vnoremap <Leader>rv :s/\%V
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " coc configuration
@@ -335,6 +349,22 @@ function! s:CocShiftTab()
   return pumvisible() ? "\<C-P>" : "\<Tab>"
 endfunction
 
+let s:manual_format = {
+\   'haskell': 'brittany',
+\ }
+
+function! s:FormatCode()
+  let l:k = keys(s:manual_format)
+  if index(l:k, &filetype) != -1
+    update
+    normal m"
+    execute '%!' . s:manual_format[&filetype] '%'
+    normal `"
+  else
+    call CocAction('format')
+  endif
+endfunction
+
 " COC actions & completion helpers
 inoremap <silent><expr> <Tab> <SID>CocTab()
 inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
@@ -345,20 +375,17 @@ nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
 nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
 nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 nnoremap <silent> <F2> :call CocAction('rename')<CR>
-nnoremap <silent> <Leader>f :call CocAction('format')<CR>
+nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Embedded terminal
 
-function! s:terminal()
-  botright 10split
-  terminal
-endfunction
-nnoremap <Leader>` :call <SID>terminal()<CR>
+nnoremap <Leader>` :10split terminal<CR>
 
 augroup terminal_insert
   autocmd!
   autocmd TermOpen * startinsert
+"   autocmd TermClose * wincmd c
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -435,6 +462,10 @@ let NERDTreeShowHidden = 1
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
 let NERDTreeHijackNetrw = 0
+let NERDTreeDirArrowCollapsible = ''
+" let NERDTreeDirArrowCollapsible = ''
+let NERDTreeDirArrowExpandable = ''
+" let NERDTreeDirArrowExpandable = ''
 
 function! s:AutoOpenNERDTree()
   if argc() == 0 && !exists('s:std_in')
@@ -484,20 +515,27 @@ augroup nerdtree
   autocmd BufEnter * call s:CloseNERDTreeAlone()
 augroup END
 
-" augroup nerdtree_mouse
-"   autocmd!
-"   autocmd WinEnter NERD_tree_* set mouse=n
-"   autocmd WinLeave NERD_tree_* set mouse=a
-" augroup END
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDCommenter configuration
 
 let NERDSpaceDelims = 1
-" let NERDDefaultAlign = 'start'
+let NERDDefaultAlign = 'start'
 nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
 vnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
 inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
+
+let g:NERDCustomDelimiters = {
+\   'javascriptreact': {
+\     'leftAlt': '{/*',
+\     'rightAlt': '*/}',
+\   },
+\   'typescript.tsx': {
+\     'left': '//',
+\     'right': '',
+\     'leftAlt': '{/*',
+\     'rightAlt': '*/}',
+\   },
+\ }
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FZF configuration
@@ -505,8 +543,13 @@ inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
 nnoremap <C-P> :Files<CR>
 nnoremap <Leader>rg :Rg<CR>
-" augroup fzf
-  " autocmd!
-  " autocmd FileType fzf tnoremap <S-J> <Down>
-  " autocmd FileType fzf tnoremap <S-K> <Up>
-" augroup END
+nnoremap <Leader>b :Buffers<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Git bindings
+
+nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
+nnoremap <silent> <Leader>gs :Git<CR>
+nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
+nnoremap <silent> <Leader>m[ :diffget //2<CR>
+nnoremap <silent> <Leader>m] :diffget //3<CR>

@@ -10,9 +10,9 @@
   "languageserver": {
 
     "rust": {
-      "command": "rustup",
-      "args": ["run", "stable", "rls"],
-      "filetypes": ["rust"]
+      "command": "rust-analyzer",
+      "filetypes": ["rust"],
+      "rootPatterns": ["Cargo.toml"]
     },
 
     "bash": {
@@ -27,9 +27,7 @@
       "settings": {
         "pyls": {
           "enable": true,
-          "trace": {
-            "server": "verbose"
-          },
+          "trace": { "server": "verbose" },
           "commandPath": "",
           "configurationSources": ["pycodestyle"],
           "plugins": {
@@ -46,9 +44,9 @@
               "match": "(?!test_).*\\.py",
               "matchDir": "[^\\.].*"
             },
-            "pyflakes": { "enabled": true },
+            // "pyflakes": { "enabled": true },
             "rope_completion": { "enabled": true },
-            "yapf": { "enabled": true }
+            // "yapf": { "enabled": true }
           }
         }
       }

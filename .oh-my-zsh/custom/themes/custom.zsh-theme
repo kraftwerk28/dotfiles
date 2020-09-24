@@ -1,5 +1,5 @@
 node_ver () {
-  echo ${$(node -v)/v/⬢}
+  echo ${$(node -v)/v/}
 }
 
 PROMPT_END_OK="$"
