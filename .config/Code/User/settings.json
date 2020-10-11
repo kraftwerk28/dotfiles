@@ -11,6 +11,7 @@
   // "editor.fontFamily": "'Fira Code', 'monospace', monospace, 'Twemoji'",
   // "editor.fontFamily": "'IBM Plex Mono', 'monospace', monospace, 'Twemoji'",
   "editor.fontWeight": "500",
+  "editor.semanticHighlighting.enabled": false,
   // "editor.fontLigatures": "'ss03'",
   // "editor.fontLigatures": true,
   "editor.fontLigatures": false,
@@ -221,5 +222,5 @@
   "oneDarkPro.vivid": true,
   "workbench.iconTheme": "material-icon-theme",
   "workbench.list.smoothScrolling": true,
-  "workbench.colorTheme": "Ayu Mirage"
+  "workbench.colorTheme": "Ayu Mirage Bordered"
 }

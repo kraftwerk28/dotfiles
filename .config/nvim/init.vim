@@ -17,7 +17,8 @@ Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
-Plug 'preservim/nerdcommenter'
+" Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf.vim'
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'honza/vim-snippets'
@@ -27,35 +28,36 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
 Plug 'diepm/vim-rest-console'
+Plug 'chrisbra/Colorizer'
 
 " Languages
-Plug 'rust-lang/rust.vim'
-Plug 'evanleck/vim-svelte'
-Plug 'jparise/vim-graphql'
-Plug 'cespare/vim-toml'
-Plug 'ollykel/v-vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'pangloss/vim-javascript'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'chrisbra/csv.vim'
-Plug 'vim-python/python-syntax'
+"----------- This is obsolette as had been replaced by vim-polyglot -----------"
+" Plug 'rust-lang/rust.vim'
+" Plug 'evanleck/vim-svelte'
+" Plug 'jparise/vim-graphql'
+" Plug 'cespare/vim-toml'
+" Plug 'ollykel/v-vim'
+" Plug 'pangloss/vim-javascript'
+" Plug 'HerringtonDarkholme/yats.vim'
+" Plug 'maxmellon/vim-jsx-pretty'
+" Plug 'chrisbra/csv.vim'
+" Plug 'vim-python/python-syntax'
+" Plug 'plasticboy/vim-markdown'
+" Plug 'ekalinin/Dockerfile.vim'
+" Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'plasticboy/vim-markdown'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'ekalinin/Dockerfile.vim'
+Plug 'sheerun/vim-polyglot'
 
 " It is required to load devicons as last
 Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Options
-
+"---------------------------------- Options -----------------------------------"
 " Set color according to gnome-shell theme
 if $XDG_CURRENT_DESKTOP == 'GNOME' &&
-\  !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
+  \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
   set background=light
   let ayucolor='light'
 else
@@ -80,9 +82,7 @@ syntax on
 
 let g:mapleader = ' '
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Airline configuration
-
+"--------------------------- Airline configuration ----------------------------"
 let g:airline_theme = 'ayu_mirage'
 " let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -99,10 +99,11 @@ let g:DevIconsDefaultFolderOpenSymbol = ''
 let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
-
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 
 let g:surround_{char2nr('r')} = "{'\r'}"
+let g:surround_{char2nr('j')} = "{/* \r */}"
+let g:surround_{char2nr('c')} = "/* \r */"
 
 let g:python_highlight_all = 1
 
@@ -114,6 +115,8 @@ if $XDG_CURRENT_DESKTOP == 'GNOME'
 endif
 
 let g:vim_indent_cont = 0
+
+let g:javascript_plugin_jsdoc = 1
 
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
@@ -136,11 +139,10 @@ set foldlevel=99 foldmethod=syntax
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
 set diffopt+=vertical
-set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Autocmd
+"---------------------------------- Autocmd -----------------------------------"
 function! s:RestoreCursor()
    if line("'\"") > 0 && line("'\"") <= line('$')
      exe "normal! g`\""
@@ -164,11 +166,11 @@ augroup END
 
 " Helping nvim detect filetype
 let s:additional_ftypes = {
-  \ '*.zsh*': 'zsh',
-  \ '.env.*': 'sh',
-  \ '*.bnf': 'bnf',
-  \ '*.webmanifest': 'json'
-  \ }
+                        \   '*.zsh*': 'zsh',
+                        \   '.env.*': 'sh',
+                        \   '*.bnf': 'bnf',
+                        \   '*.webmanifest': 'json',
+                        \ }
 
 augroup file_types
   autocmd!
@@ -177,7 +179,8 @@ augroup file_types
   endfor
 
   " Tab configuration for different languages
-  autocmd FileType go setlocal shiftwidth=4 softtabstop=4 noexpandtab
+  autocmd FileType go setlocal shiftwidth=4 tabstop=4 noexpandtab
+  autocmd FileType java setlocal shiftwidth=4 tabstop=4 expandtab
 
   " JSON5's comment
   autocmd FileType json syntax region Comment start="//" end="$"
@@ -185,6 +188,8 @@ augroup file_types
   autocmd FileType json setlocal commentstring=//\ %s
 
   autocmd FileType markdown setlocal conceallevel=2
+
+  autocmd FileType *.tsx setlocal filetype=typescript.tsx
 augroup END
 
 " List of buf names where q does :q<CR>
@@ -197,9 +202,7 @@ augroup q_close
   endfor
 augroup END
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Line numbers configuration
-
+"------------------------- Line numbers configuration -------------------------"
 function! s:SetNumber(set)
   if index(split(s:disable_line_numbers), &filetype) > -1
     return
@@ -223,9 +226,7 @@ augroup END
   " autocmd TextYankPost * lua vim.highlight.on_yank()
 " augroup END
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Mappings
-
+"---------------------------------- Mappings ----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
 if has('nvim')
@@ -259,9 +260,7 @@ nnoremap <silent> <Leader>cfg :e ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Buffer operations
-
+"----------------------------- Buffer operations ------------------------------"
 function! s:buf_filt(inc_cur)
   function! s:f(include_current, idx, val)
     if !bufexists(a:val) || buffer_name(a:val) =~? 'NERD_tree_*'
@@ -307,13 +306,19 @@ endfunction
 nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
 vnoremap <Leader>rv :s/\%V
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" coc configuration
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader><S-O> O<Esc>
+" iabbrev </ 
+
+"----------------------------- coc configuration ------------------------------"
 let g:coc_global_extensions = [
-  \ 'coc-emmet',
-  \ 'coc-snippets',
-  \ 'coc-svelte',
-  \ ]
+                            \   'coc-emmet',
+                            \   'coc-snippets',
+                            \   'coc-svelte',
+                            \   'coc-rust-analyzer',
+                            \   'coc-json',
+                            \   'coc-highlight',
+                            \ ]
 
 highlight link CocWarningHighlight None
 
@@ -350,8 +355,8 @@ function! s:CocShiftTab()
 endfunction
 
 let s:manual_format = {
-\   'haskell': 'brittany',
-\ }
+                    \   'haskell': 'brittany',
+                    \ }
 
 function! s:FormatCode()
   let l:k = keys(s:manual_format)
@@ -365,7 +370,7 @@ function! s:FormatCode()
   endif
 endfunction
 
-" COC actions & completion helpers
+"---------------------- COC actions & completion helpers ----------------------"
 inoremap <silent><expr> <Tab> <SID>CocTab()
 inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
 inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
@@ -377,10 +382,8 @@ nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
 nnoremap <silent> <F2> :call CocAction('rename')<CR>
 nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Embedded terminal
-
-nnoremap <Leader>` :10split terminal<CR>
+"----------------------------- Embedded terminal ------------------------------"
+nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
 augroup terminal_insert
   autocmd!
@@ -388,9 +391,7 @@ augroup terminal_insert
 "   autocmd TermClose * wincmd c
 augroup END
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Misc commands & functions
-
+"------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
 let s:filetype_executables = { 'javascript': 'node' }
 
@@ -418,10 +419,10 @@ command! -nargs=0 Shebang call s:Shebang()
 
 function! Durka()
   let themes = map(
-    \ split(system("ls ~/.config/nvim/colors/")) +
-    \ split(system("ls /usr/share/nvim/runtime/colors/")),
-    \ "v:val[:-5]"
-    \ )
+             \   split(system("ls ~/.config/nvim/colors/")) +
+             \   split(system("ls /usr/share/nvim/runtime/colors/")),
+             \   "v:val[:-5]"
+             \ )
   for th in themes
     echo th
     execute 'colorscheme' th
@@ -429,9 +430,24 @@ function! Durka()
   endfor
 endfunction
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Case-tools
+function! PrettyComment(comment, fill_char) abort
+  let l:text_len = strlen(getline('.'))
+  let l:remain_len = 80 - l:text_len
 
+  let l:l_size = l:remain_len / 2
+  let l:r_size = l:remain_len - l:l_size
+
+  let l:result = a:comment .
+               \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
+               \ ' ' .
+               \ getline('.') .
+               \ ' ' .
+               \ repeat(a:fill_char, l:r_size - 1)
+
+  call setline('.', l:result)
+endfunction
+
+"--------------------------------- Case-tools ---------------------------------"
 " shake_case -> camelCase
 nmap <silent> <Leader>cc viw<Leader>cc
 vnoremap <silent> <Leader>cc :s/\%V_\(.\)/\U\1/g<CR>
@@ -447,9 +463,7 @@ vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 " snake_case -> kebab-case
 " TODO: implement
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTree configuration
-
+"--------------------------- NERDTree configuration ---------------------------"
 " Preserve netrw to load
 let g:loaded_netrwPlugin = 1
 
@@ -515,41 +529,58 @@ augroup nerdtree
   autocmd BufEnter * call s:CloseNERDTreeAlone()
 augroup END
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDCommenter configuration
 
-let NERDSpaceDelims = 1
-let NERDDefaultAlign = 'start'
-nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
-vnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
-inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
+let s:comment_tool = 'vim-commentary'
 
-let g:NERDCustomDelimiters = {
-\   'javascriptreact': {
-\     'leftAlt': '{/*',
-\     'rightAlt': '*/}',
-\   },
-\   'typescript.tsx': {
-\     'left': '//',
-\     'right': '',
-\     'leftAlt': '{/*',
-\     'rightAlt': '*/}',
-\   },
-\ }
+if s:comment_tool == 'nerdcommenter'
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " NERDCommenter configuration
+  " let NERDSpaceDelims = 1
+  " let NERDDefaultAlign = 'start'
+  " nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
+  " xnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
+  " inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
+  let g:NERDCustomDelimiters = {
+                             \   'javascriptreact': {
+                             \     'leftAlt': '{/*',
+                             \     'rightAlt': '*/}',
+                             \   },
+                             \   'typescript.tsx': {
+                             \     'left': '//',
+                             \     'right': '',
+                             \     'leftAlt': '{/*',
+                             \     'rightAlt': '*/}',
+                             \   },
+                             \ }
+elseif s:comment_tool == 'vim-commentary'
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" FZF configuration
+"------------------------ vim-commentary configuration ------------------------"
+  function! s:VComment()
+    return mode() ==# 'v' ? 'Scgv' : ":Commentary\<CR>gv"
+  endfunction
 
+  autocmd FileType typescriptreact setlocal commentstring=//\ %s
+
+  nnoremap <silent> <C-_> :Commentary<CR>
+  inoremap <silent> <C-_> <C-O>:Commentary<CR>
+  xmap <expr><silent> <C-_> <SID>VComment()
+endif
+
+
+"----------------------------- FZF configuration ------------------------------"
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
 nnoremap <C-P> :Files<CR>
 nnoremap <Leader>rg :Rg<CR>
 nnoremap <Leader>b :Buffers<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Git bindings
-
+"-------------------------------- Git bindings --------------------------------"
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
 nnoremap <silent> <Leader>gs :Git<CR>
 nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
+
+augroup coc_highlight
+  autocmd!
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup END

@@ -6,30 +6,25 @@
     "hintSign": "💡",
     "enableHighlightLineNumber": false
   },
-
   "languageserver": {
-
-    "rust": {
-      "command": "rust-analyzer",
-      "filetypes": ["rust"],
-      "rootPatterns": ["Cargo.toml"]
-    },
-
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
       "filetypes": ["sh", "bash", "zsh"]
     },
-
     "python": {
       "command": "pyls",
       "filetypes": ["python"],
       "settings": {
         "pyls": {
           "enable": true,
-          "trace": { "server": "verbose" },
+          "trace": {
+            "server": "verbose"
+          },
           "commandPath": "",
-          "configurationSources": ["pycodestyle"],
+          "configurationSources": [
+            "pycodestyle"
+          ],
           "plugins": {
             "jedi_completion": { "enabled": true },
             "jedi_hover": { "enabled": true },
@@ -51,14 +46,24 @@
         }
       }
     },
-
     "clangd": {
       "command": "clangd",
-      "args": ["--fallback-style", "Chromium"],
+      "args": [
+        "--fallback-style",
+        "Chromium",
+        "--compile-commands-dir",
+        "build/"
+      ],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
-      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+      "filetypes": [
+        "c",
+        "cc",
+        "cpp",
+        "c++",
+        "objc",
+        "objcpp"
+      ]
     },
-
     "js/ts": {
       "command": "typescript-language-server",
       "args": ["--stdio"],
@@ -69,13 +74,6 @@
         "typescriptreact"
       ]
     },
-
-    "json": {
-      "command": "vscode-json-languageserver",
-      "args": ["--stdio"],
-      "filetypes": ["json"]
-    },
-
     "haskell": {
       "command": "haskell-language-server-wrapper",
       "args": ["--lsp"],
@@ -88,11 +86,16 @@
       ],
       "filetypes": ["haskell", "lhaskell", "hs", "lhs"]
     },
-
     "go": {
       "command": "go-langserver",
       "filetypes": ["go"]
+    },
+    "java": {
+      "command": "jdtls",
+      "filetypes": ["java"]
     }
-
-  }
+  },
+  "rust-analyzer.serverPath": "/usr/bin/rust-analyzer",
+  "rust-analyzer.inlayHints.chainingHints": false,
+  "coc.preferences.colorSupport": true
 }
