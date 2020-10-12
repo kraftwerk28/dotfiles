@@ -139,7 +139,7 @@ set foldlevel=99 foldmethod=syntax
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
 set diffopt+=vertical
-" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
 
 "---------------------------------- Autocmd -----------------------------------"
@@ -447,6 +447,16 @@ function! PrettyComment(comment, fill_char) abort
   call setline('.', l:result)
 endfunction
 
+function! Emoji2Unicode() abort
+  let l:c = execute('ascii')
+  let l:u = substitute(l:c, '[^x]*Hex\s*\([a-f0-9]*\),[^H]*', '\1', 'g')
+  let l:u = repeat('0', strlen(l:u) % 4) . l:u
+  let @m = substitute(l:u, '\(.\{4\}\)', '\\u\1', 'g')
+  execute "normal xi\<C-R>m\<Esc>"
+endfunction
+
+nnoremap eu :call Emoji2Unicode()<CR>
+
 "--------------------------------- Case-tools ---------------------------------"
 " shake_case -> camelCase
 nmap <silent> <Leader>cc viw<Leader>cc
@@ -529,7 +539,6 @@ augroup nerdtree
   autocmd BufEnter * call s:CloseNERDTreeAlone()
 augroup END
 
-
 let s:comment_tool = 'vim-commentary'
 
 if s:comment_tool == 'nerdcommenter'
@@ -552,6 +561,7 @@ if s:comment_tool == 'nerdcommenter'
                              \     'rightAlt': '*/}',
                              \   },
                              \ }
+
 elseif s:comment_tool == 'vim-commentary'
 
 "------------------------ vim-commentary configuration ------------------------"
@@ -565,7 +575,6 @@ elseif s:comment_tool == 'vim-commentary'
   inoremap <silent> <C-_> <C-O>:Commentary<CR>
   xmap <expr><silent> <C-_> <SID>VComment()
 endif
-
 
 "----------------------------- FZF configuration ------------------------------"
 let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
