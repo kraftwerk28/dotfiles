@@ -89,10 +89,6 @@
     "go": {
       "command": "go-langserver",
       "filetypes": ["go"]
-    },
-    "java": {
-      "command": "jdtls",
-      "filetypes": ["java"]
     }
   },
   "rust-analyzer.serverPath": "/usr/bin/rust-analyzer",

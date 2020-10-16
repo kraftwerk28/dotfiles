@@ -4,11 +4,9 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Themes
 Plug 'ayu-theme/ayu-vim'
-Plug 'morhetz/gruvbox'
-Plug 'joshdick/onedark.vim'
-Plug 'dracula/vim', {'as': 'dracula'}
-Plug 'tomasr/molokai' 
-
+" Plug 'joshdick/onedark.vim'
+" Plug 'dracula/vim', {'as': 'dracula'}
+" Plug 'tomasr/molokai' 
 Plug 'vim-airline/vim-airline-themes'
 
 " Tools
@@ -54,18 +52,20 @@ Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
-"---------------------------------- Options -----------------------------------"
-" Set color according to gnome-shell theme
+"---------------------------------- Theme -------------------------------------"
+" 
+set termguicolors
 if $XDG_CURRENT_DESKTOP == 'GNOME' &&
   \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
   set background=light
-  let ayucolor='light'
+  let ayucolor = 'light'
 else
   set background=dark
-  let ayucolor='mirage'
+  let ayucolor = 'mirage'
 endif
 
 colorscheme ayu
+let g:airline_theme = 'ayu_mirage'
 
 if exists('colors_name') && colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
@@ -73,7 +73,7 @@ endif
 
 augroup alter_ayu_colorscheme
   autocmd!
-  if exists('colors_name ') && colors_name == 'ayu'
+  if exists('colors_name') && colors_name == 'ayu'
     autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
   endif
 augroup END
@@ -83,7 +83,6 @@ syntax on
 let g:mapleader = ' '
 
 "--------------------------- Airline configuration ----------------------------"
-let g:airline_theme = 'ayu_mirage'
 " let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
@@ -123,7 +122,6 @@ set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
 set list listchars=tab:➔\ ,trail:·
 set ignorecase
-set termguicolors
 set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
@@ -170,6 +168,7 @@ let s:additional_ftypes = {
                         \   '.env.*': 'sh',
                         \   '*.bnf': 'bnf',
                         \   '*.webmanifest': 'json',
+                        \   '*.http': 'rest',
                         \ }
 
 augroup file_types
@@ -182,14 +181,16 @@ augroup file_types
   autocmd FileType go setlocal shiftwidth=4 tabstop=4 noexpandtab
   autocmd FileType java setlocal shiftwidth=4 tabstop=4 expandtab
 
-  " JSON5's comment
-  autocmd FileType json syntax region Comment start="//" end="$"
-  autocmd FileType json syntax region Comment start="/\*" end="\*/"
-  autocmd FileType json setlocal commentstring=//\ %s
-
   autocmd FileType markdown setlocal conceallevel=2
-
   autocmd FileType *.tsx setlocal filetype=typescript.tsx
+  autocmd FileType python setlocal foldmethod=indent
+
+  " JSON5's comment
+  autocmd FileType json
+                   \ syntax region Comment start="//" end="$"
+                   \ syntax region Comment start="/\*" end="\*/"
+                   \ setlocal commentstring=//\ %s
+
 augroup END
 
 " List of buf names where q does :q<CR>
@@ -455,7 +456,7 @@ function! Emoji2Unicode() abort
   execute "normal xi\<C-R>m\<Esc>"
 endfunction
 
-nnoremap eu :call Emoji2Unicode()<CR>
+nnoremap <Leader>eu :call Emoji2Unicode()<CR>
 
 "--------------------------------- Case-tools ---------------------------------"
 " shake_case -> camelCase
