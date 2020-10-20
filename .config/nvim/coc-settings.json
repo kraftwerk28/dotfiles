@@ -1,11 +1,10 @@
 {
-  "diagnostic": {
-    "warningSign": "🔥",
-    "errorSign": "❌",
-    "infoSign": "🔷",
-    "hintSign": "💡",
-    "enableHighlightLineNumber": false
-  },
+  "diagnostic.warningSign": "🔥",
+  "diagnostic.errorSign": "❌",
+  "diagnostic.infoSign": "🔷",
+  "diagnostic.hintSign": "💡",
+  "diagnostic.enableHighlightLineNumber": false,
+
   "languageserver": {
     "bash": {
       "command": "bash-language-server",

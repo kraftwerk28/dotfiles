@@ -64,6 +64,8 @@ else
   let ayucolor = 'mirage'
 endif
 
+" colorscheme dracula
+" let g:airline_theme = 'dracula'
 colorscheme ayu
 let g:airline_theme = 'ayu_mirage'
 
@@ -107,6 +109,7 @@ let g:surround_{char2nr('c')} = "/* \r */"
 let g:python_highlight_all = 1
 
 let g:AutoPairsFlyMode = 0
+let g:AutoPairsMultilineClose = 0
 
 let g:XkbSwitchEnabled = 1
 if $XDG_CURRENT_DESKTOP == 'GNOME'
@@ -187,8 +190,8 @@ augroup file_types
 
   " JSON5's comment
   autocmd FileType json
-                   \ syntax region Comment start="//" end="$"
-                   \ syntax region Comment start="/\*" end="\*/"
+                   \ syntax region Comment start="//" end="$" |
+                   \ syntax region Comment start="/\*" end="\*/" |
                    \ setlocal commentstring=//\ %s
 
 augroup END
@@ -290,9 +293,15 @@ function! s:DelAllExcept()
   silent execute 'bdelete' join(s:buf_filt(1))
 endfunction
 
+function! s:DelToLeft()
+  silent execute 'bdelete' join(range(1, bufnr() - 1))
+endfunction
+
 nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
 nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
 nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
+nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
+" nnoremap <silent> <Leader>rd :call <SID>DelAllExcept()<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
@@ -477,20 +486,17 @@ vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 "--------------------------- NERDTree configuration ---------------------------"
 " Preserve netrw to load
 let g:loaded_netrwPlugin = 1
-
-let NERDTreeCascadeSingleChildDir = 0
-let NERDTreeMouseMode = 2
-let NERDTreeQuitOnOpen = 1
-let NERDTreeShowLineNumbers = 0
-let NERDTreeMinimalUI = 1
-let NERDTreeShowHidden = 1
-let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
-let NERDTreeHijackNetrw = 0
-let NERDTreeDirArrowCollapsible = ''
-" let NERDTreeDirArrowCollapsible = ''
-let NERDTreeDirArrowExpandable = ''
-" let NERDTreeDirArrowExpandable = ''
+let g:NERDTreeCascadeSingleChildDir = 0
+let g:NERDTreeMouseMode = 2
+let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeShowLineNumbers = 0
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
+let g:NERDTreeHijackNetrw = 0
+let g:NERDTreeDirArrowCollapsible = ''
+let g:NERDTreeDirArrowExpandable = ''
 
 function! s:AutoOpenNERDTree()
   if argc() == 0 && !exists('s:std_in')
