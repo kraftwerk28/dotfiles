@@ -8,6 +8,7 @@ Plug 'ayu-theme/ayu-vim'
 " Plug 'dracula/vim', {'as': 'dracula'}
 " Plug 'tomasr/molokai' 
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'rakr/vim-one'
 
 " Tools
 Plug 'vim-airline/vim-airline'
@@ -15,7 +16,6 @@ Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
-" Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf.vim'
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
@@ -23,7 +23,7 @@ Plug 'honza/vim-snippets'
 Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-fugitive' " Git helper
 Plug 'airblade/vim-gitgutter'
-Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+" Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
 Plug 'diepm/vim-rest-console'
 Plug 'chrisbra/Colorizer'
@@ -43,8 +43,12 @@ Plug 'chrisbra/Colorizer'
 " Plug 'plasticboy/vim-markdown'
 " Plug 'ekalinin/Dockerfile.vim'
 " Plug 'octol/vim-cpp-enhanced-highlight'
+" Plug 'leafgarland/typescript-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
+
+"----------------------------- Polyglot config --------------------------------"
+" let g:polyglot_disabled = ['typescript']
 Plug 'sheerun/vim-polyglot'
 
 " It is required to load devicons as last
@@ -61,13 +65,12 @@ if $XDG_CURRENT_DESKTOP == 'GNOME' &&
   let ayucolor = 'light'
 else
   set background=dark
-  let ayucolor = 'mirage'
+  let ayucolor = 'dark'
 endif
 
-" colorscheme dracula
-" let g:airline_theme = 'dracula'
 colorscheme ayu
-let g:airline_theme = 'ayu_mirage'
+let g:airline_theme = 'ayu_dark'
+let g:airline#extensions#xkblayout#enabled = 0
 
 if exists('colors_name') && colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
@@ -79,6 +82,7 @@ augroup alter_ayu_colorscheme
     autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
   endif
 augroup END
+
 " Must be AFTER augroup above
 syntax on
 
@@ -100,7 +104,7 @@ let g:DevIconsDefaultFolderOpenSymbol = ''
 let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
-let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
+" let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 
 let g:surround_{char2nr('r')} = "{'\r'}"
 let g:surround_{char2nr('j')} = "{/* \r */}"
@@ -140,8 +144,10 @@ set foldlevel=99 foldmethod=syntax
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
 set diffopt+=vertical
-set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
+set regexpengine=0
+set lazyredraw
 
 "---------------------------------- Autocmd -----------------------------------"
 function! s:RestoreCursor()
@@ -330,6 +336,9 @@ let g:coc_global_extensions = [
                             \   'coc-highlight',
                             \ ]
 
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
+
 highlight link CocWarningHighlight None
 
 function! s:CheckBackSpace() abort
@@ -376,7 +385,7 @@ function! s:FormatCode()
     execute '%!' . s:manual_format[&filetype] '%'
     normal `"
   else
-    call CocAction('format')
+    call CocActionAsync('format')
   endif
 endfunction
 
@@ -389,7 +398,7 @@ inoremap <silent><expr> <CR> <SID>SelectCompletion()
 nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
 nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
 nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
-nnoremap <silent> <F2> :call CocAction('rename')<CR>
+nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
 nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
 
 "----------------------------- Embedded terminal ------------------------------"
@@ -596,7 +605,14 @@ nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
-augroup coc_highlight
-  autocmd!
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup END
+" augroup coc_highlight
+"   autocmd!
+"   autocmd CursorHold * if exists('g:did_coc_loaded') |
+"                      \   silent call CocActionAsync('highlight') |
+"                      \ endif
+" augroup END
+
+"-------------------------------- Git gutter ----------------------------------"
+let g:gitgutter_sign_added = '▕'
+let g:gitgutter_sign_modified = '▕'
+let g:gitgutter_sign_removed = '▕'

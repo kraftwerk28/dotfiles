@@ -32,3 +32,5 @@ export NVS_HOME="$HOME/.nvs"
 # Haskell stuff
 export PATH="$PATH:$HOME/.cabal/bin/"
 export PATH="$PATH:$HOME/.ghcup/bin/"
+
+export MPJ_HOME="$HOME/projects/mpj-v0_44/"

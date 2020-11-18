@@ -47,12 +47,7 @@
     },
     "clangd": {
       "command": "clangd",
-      "args": [
-        "--fallback-style",
-        "Chromium",
-        "--compile-commands-dir",
-        "build/"
-      ],
+      "args": ["--fallback-style", "Chromium"],
       "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
       "filetypes": [
         "c",

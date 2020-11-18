@@ -118,7 +118,7 @@ alias ndoe="node"
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 dotfilesupd () {
-  commit_message=${1:-"chore: update dotfiles"}
+  commit_message=${1:-"Update dotfiles"}
   dotfiles add -u
   dotfiles commit -m $commit_message
   dotfiles push origin HEAD
