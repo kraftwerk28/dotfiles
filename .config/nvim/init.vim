@@ -1,4 +1,4 @@
-" let $CI = 'bruh'
+let $CI = 'bruh'
 set encoding=utf-8
 
 call plug#begin('~/.config/nvim/plugged')
@@ -51,14 +51,20 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
 
 " Plug 'leafgarland/typescript-vim'
-let g:polyglot_disabled = ['typescript']
+" let g:polyglot_disabled = ['typescript']
 " Plug 'sheerun/vim-polyglot'
+
+" Nightly 0.5.x stuff
 Plug 'nvim-treesitter/nvim-treesitter'
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'nvim-lua/completion-nvim'
 
 " It is required to load devicons as last
 Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
+
+lua require('init')
 
 "---------------------------------- Theme -------------------------------------"
 " 
@@ -144,7 +150,7 @@ let g:javascript_plugin_jsdoc = 1
 "---------------------------------- Options -----------------------------------"
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
-set autoindent
+set autoindent smartindent
 set list listchars=tab:➔\ ,trail:·
 set ignorecase
 set cursorline colorcolumn=80,120
@@ -359,7 +365,6 @@ let g:coc_global_extensions = [
                             \   'coc-emmet',
                             \   'coc-snippets',
                             \   'coc-svelte',
-                            \   'coc-rust-analyzer',
                             \   'coc-json',
                             \   'coc-highlight',
                             \ ]
@@ -425,6 +430,10 @@ inoremap <silent><expr> <Tab> <SID>CocTab()
 inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
 inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
 inoremap <silent><expr> <CR> <SID>SelectCompletion()
+
+" imap <silent> <C-Space> <Plug>(completion_trigger)
+" imap <expr> <Tab> pumvisible() ? "\<Plug>(completion_smart_tab)" : "\<Tab>"
+" imap <expr> <S-Tab> pumvisible() ? "\<Plug>(completion_smart_s_tab)" : "\<Tab>"
 
 nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
 nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
@@ -650,5 +659,3 @@ let g:gitgutter_sign_removed = '▕'
 
 "------------------------------- Neovide stuff --------------------------------"
 let g:neovide_fullscreen=v:true
-
-lua require('init')
