@@ -1,3 +1,4 @@
+" let $CI = 'bruh'
 set encoding=utf-8
 
 call plug#begin('~/.config/nvim/plugged')
@@ -12,6 +13,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Tools
 Plug 'vim-airline/vim-airline'
+" Plug 'itchyny/lightline.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
@@ -44,12 +46,14 @@ Plug 'chrisbra/Colorizer'
 " Plug 'ekalinin/Dockerfile.vim'
 " Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'leafgarland/typescript-vim'
+" Plug 'HerringtonDarkholme/yats.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
 
-"----------------------------- Polyglot config --------------------------------"
-" let g:polyglot_disabled = ['typescript']
-Plug 'sheerun/vim-polyglot'
+" Plug 'leafgarland/typescript-vim'
+let g:polyglot_disabled = ['typescript']
+" Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter'
 
 " It is required to load devicons as last
 Plug 'ryanoasis/vim-devicons'
@@ -69,8 +73,11 @@ else
 endif
 
 colorscheme ayu
-let g:airline_theme = 'ayu_dark'
-let g:airline#extensions#xkblayout#enabled = 0
+let g:lightline = {
+                \   'colorscheme': 'ayu_dark',
+                \   'separator': { 'left': '', 'right': '' },
+                \   'subseparator': { 'left': '', 'right': '' },
+                \ }
 
 if exists('colors_name') && colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
@@ -89,15 +96,25 @@ syntax on
 let g:mapleader = ' '
 
 "--------------------------- Airline configuration ----------------------------"
-" let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_highlighting_cache = 1
+let g:airline_theme = 'ayu_dark'
+let g:airline_extensions = ['tabline', 'coc']
+let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#coc#enabled = 1
-let g:airline#extensions#fugitiveline#enabled = 1
-let g:airline#extensions#fzf#enabled = 1
-let g:airline#extensions#coc#enabled = 1
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+" let g:airline#extensions#tabline#left_sep = ''
+" let g:airline#extensions#tabline#left_alt_sep = ''
+" let g:airline#extensions#tabline#right_sep = ''
+" let g:airline#extensions#tabline#right_alt_sep = ''
 
-" Devicons
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tabline#right_alt_sep = ''
+
+"--------------------------- Devicos configuration ----------------------------"
 let g:webdevicons_enable_nerdtree = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsDefaultFolderOpenSymbol = ''
@@ -124,6 +141,7 @@ let g:vim_indent_cont = 0
 
 let g:javascript_plugin_jsdoc = 1
 
+"---------------------------------- Options -----------------------------------"
 set hidden
 set expandtab tabstop=4 softtabstop=2 shiftwidth=2
 set autoindent
@@ -140,7 +158,9 @@ set signcolumn=yes " Additional column on left for emoji signs
 set number relativenumber
 set autoread autowrite autowriteall
 set foldlevel=99 foldmethod=syntax
+" set foldexpr=nvim_treesitter#foldexpr()
 " set foldcolumn=1 " Enable additional column w/ visual folds
+
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=2
 set diffopt+=vertical
@@ -148,6 +168,9 @@ set diffopt+=vertical
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
+set guifont=JetBrains\ Mono\ Nerd\ Font:h18
+" set showtabline=1
+" set shada='1000,%
 
 "---------------------------------- Autocmd -----------------------------------"
 function! s:RestoreCursor()
@@ -162,7 +185,7 @@ augroup END
 
 augroup auto_save
   autocmd!
-  autocmd FocusLost * wall
+  autocmd FocusLost * silent! wa
 augroup END
 
 " Reload file if it changed on disk
@@ -270,6 +293,12 @@ nnoremap <silent> <Leader>cfg :e ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>h :set hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
+function RevStr(str)
+  let l:chars = split(submatch(0), '\zs')
+  return join(reverse(l:chars), '')
+endfunction
+vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
+
 "----------------------------- Buffer operations ------------------------------"
 function! s:buf_filt(inc_cur)
   function! s:f(include_current, idx, val)
@@ -307,7 +336,6 @@ nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
 nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
 nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
 nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
-" nnoremap <silent> <Leader>rd :call <SID>DelAllExcept()<CR>
 
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
@@ -373,19 +401,22 @@ function! s:CocShiftTab()
   return pumvisible() ? "\<C-P>" : "\<Tab>"
 endfunction
 
-let s:manual_format = {
-                    \   'haskell': 'brittany',
-                    \ }
+augroup formatprgs
+  autocmd!
+  autocmd FileType haskell setlocal formatprg=brittany
+  autocmd FileType typescript,typescriptreact
+                 \ setlocal formatprg=prettier\ --parser\ typescript
+  autocmd FileType javascript,javascriptreact
+                 \ setlocal formatprg=prettier\ --parser\ babel
+augroup END
 
 function! s:FormatCode()
-  let l:k = keys(s:manual_format)
-  if index(l:k, &filetype) != -1
-    update
-    normal m"
-    execute '%!' . s:manual_format[&filetype] '%'
-    normal `"
-  else
+  if empty(&formatprg)
     call CocActionAsync('format')
+  else
+    let l:v = winsaveview()
+    normal gggqG
+    call winrestview(l:v)
   endif
 endfunction
 
@@ -616,3 +647,8 @@ nnoremap <silent> <Leader>m] :diffget //3<CR>
 let g:gitgutter_sign_added = '▕'
 let g:gitgutter_sign_modified = '▕'
 let g:gitgutter_sign_removed = '▕'
+
+"------------------------------- Neovide stuff --------------------------------"
+let g:neovide_fullscreen=v:true
+
+lua require('init')

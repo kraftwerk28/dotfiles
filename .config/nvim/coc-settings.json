@@ -81,7 +81,9 @@
       "filetypes": ["haskell", "lhaskell", "hs", "lhs"]
     },
     "go": {
-      "command": "go-langserver",
+      "command": "gopls",
+      "rootPatterns": ["go.mod"],
+      "disableWorkspaceFolders": true,
       "filetypes": ["go"]
     }
   },
