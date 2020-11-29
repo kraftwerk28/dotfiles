@@ -1,4 +1,4 @@
-let $CI = 'bruh'
+let $CI = 1
 set encoding=utf-8
 
 call plug#begin('~/.config/nvim/plugged')
@@ -163,8 +163,8 @@ set wildmenu wildmode=full
 set signcolumn=yes " Additional column on left for emoji signs
 set number relativenumber
 set autoread autowrite autowriteall
-set foldlevel=99 foldmethod=syntax
-" set foldexpr=nvim_treesitter#foldexpr()
+set foldlevel=99 foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 " set foldcolumn=1 " Enable additional column w/ visual folds
 
 set exrc secure " Project-local .nvimrc/.exrc configuration
@@ -295,8 +295,10 @@ vnoremap < <gv
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>cfg :e ~/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>h :set hlsearch!<CR>
+nnoremap <silent> <Leader>cfg 
+                  \ :e ~/.config/nvim/init.vim <Bar>
+                  \ :e ~/.config/nvim/lua/init.lua<CR>
+nnoremap <silent> <Leader>h :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
 function RevStr(str)

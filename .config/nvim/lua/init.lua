@@ -5,11 +5,9 @@ function setup_treesitter()
     ensure_installed = 'maintained',
     highlight = {
       enable = true, -- false will disable the whole extension
-      disable = {}, -- list of language that will be disabled
+      disable = { "dart", "ocaml", "java", "clojure" }, -- list of language that will be disabled
     },
-    indent = {
-      enable = true
-    },
+    indent = { enable = true },
   }
 end
 
@@ -38,4 +36,4 @@ function setup_lsp()
 end
 
 pcall(setup_treesitter)
-pcall(setup_lsp)
+-- pcall(setup_lsp)
