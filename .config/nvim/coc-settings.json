@@ -38,9 +38,7 @@
               "match": "(?!test_).*\\.py",
               "matchDir": "[^\\.].*"
             },
-            // "pyflakes": { "enabled": true },
-            "rope_completion": { "enabled": true },
-            // "yapf": { "enabled": true }
+            "rope_completion": { "enabled": true }
           }
         }
       }
@@ -86,6 +84,18 @@
       "disableWorkspaceFolders": true,
       "filetypes": ["go"]
     }
+    // "lua": {
+    //   "command": "lua-language-server",
+    //   "filetypes": ["lua"],
+    //   "rootPatterns": [".git/"],
+    //   // "cwd": "full path of lua-language-server directory", (not sure this one is really necessary)
+    //   "args": [
+    //     "-E",
+    //     "-e",
+    //     "LANG=en",
+    //     "/usr/share/lua-languageserver/main.lua"
+    //   ]
+    // }
   },
   "rust-analyzer.serverPath": "/usr/bin/rust-analyzer",
   "rust-analyzer.inlayHints.chainingHints": false,

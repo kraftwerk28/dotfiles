@@ -1,5 +1,6 @@
 export QT_QPA_PLATFORMTHEME="qt5ct"
-export EDITOR=/usr/bin/nvim
+export EDITOR="/usr/bin/nvim"
+export PAGER="less -i"
 
 # custom
 export PATH="$PATH:$HOME/.scripts"

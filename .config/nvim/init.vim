@@ -1,10 +1,10 @@
-let $CI = 1
 set encoding=utf-8
 
 call plug#begin('~/.config/nvim/plugged')
 
 " Themes
 Plug 'ayu-theme/ayu-vim'
+" Plug 'morhetz/gruvbox'
 " Plug 'joshdick/onedark.vim'
 " Plug 'dracula/vim', {'as': 'dracula'}
 " Plug 'tomasr/molokai' 
@@ -19,10 +19,10 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
 Plug 'tpope/vim-commentary'
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf.vim'
+Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'honza/vim-snippets'
-Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-fugitive' " Git helper
 Plug 'airblade/vim-gitgutter'
 " Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
@@ -47,24 +47,33 @@ Plug 'chrisbra/Colorizer'
 " Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'leafgarland/typescript-vim'
 " Plug 'HerringtonDarkholme/yats.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pangloss/vim-javascript' 
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
+Plug 'cespare/vim-toml'
 Plug 'editorconfig/editorconfig-vim'
 
-" Plug 'leafgarland/typescript-vim'
-" let g:polyglot_disabled = ['typescript']
-" Plug 'sheerun/vim-polyglot'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" let g:coc_enabled = v:true
 
-" Nightly 0.5.x stuff
-Plug 'nvim-treesitter/nvim-treesitter'
-" Plug 'neovim/nvim-lspconfig'
-" Plug 'nvim-lua/completion-nvim'
+if has('nvim-0.5')
+  Plug 'nvim-treesitter/nvim-treesitter'
+  " To be enabled...
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'nvim-lua/completion-nvim'
+else
+  " Plug 'leafgarland/typescript-vim'
+  " let g:polyglot_disabled = ['typescript']
+  Plug 'sheerun/vim-polyglot'
+endif
 
 " It is required to load devicons as last
 Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
-lua require('init')
+if has('nvim-0.5')
+  lua require('init')
+endif
 
 "---------------------------------- Theme -------------------------------------"
 " 
@@ -110,6 +119,7 @@ let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
+
 " let g:airline#extensions#tabline#left_sep = ''
 " let g:airline#extensions#tabline#left_alt_sep = ''
 " let g:airline#extensions#tabline#right_sep = ''
@@ -149,28 +159,29 @@ let g:javascript_plugin_jsdoc = 1
 
 "---------------------------------- Options -----------------------------------"
 set hidden
-set expandtab tabstop=4 softtabstop=2 shiftwidth=2
+set expandtab softtabstop=4 tabstop=4 shiftwidth=2
 set autoindent smartindent
-set list listchars=tab:➔\ ,trail:·
+set list listchars=tab:➔\ ,trail:·,space:·
 set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
-set completeopt=menuone,longest
+set completeopt=menuone,noinsert,noselect
+" set completeopt=menuone,longest
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
 set signcolumn=yes " Additional column on left for emoji signs
-set number relativenumber
+" set number relativenumber
 set autoread autowrite autowriteall
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 " set foldcolumn=1 " Enable additional column w/ visual folds
 
 set exrc secure " Project-local .nvimrc/.exrc configuration
-set scrolloff=2
+set scrolloff=8
 set diffopt+=vertical
-" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
@@ -179,6 +190,14 @@ set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 " set shada='1000,%
 
 "---------------------------------- Autocmd -----------------------------------"
+augroup ft_indent
+  autocmd!
+  autocmd FileType go,make setlocal shiftwidth=4 softtabstop=4 noexpandtab
+  autocmd FileType python,java,lua setlocal shiftwidth=4 softtabstop=4 expandtab
+  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,vim
+                 \ setlocal shiftwidth=2 softtabstop=2
+augroup END
+
 function! s:RestoreCursor()
    if line("'\"") > 0 && line("'\"") <= line('$')
      exe "normal! g`\""
@@ -197,7 +216,7 @@ augroup END
 " Reload file if it changed on disk
 augroup auchecktime
   autocmd!
-  autocmd BufEnter,FocusGained * checktime
+  autocmd BufEnter,FocusGained * silent! checktime
 augroup END
 
 " Helping nvim detect filetype
@@ -215,35 +234,38 @@ augroup file_types
     execute 'autocmd BufNewFile,BufRead' kv[0] 'setlocal filetype=' . kv[1]
   endfor
 
-  " Tab configuration for different languages
-  autocmd FileType go setlocal shiftwidth=4 tabstop=4 noexpandtab
-  autocmd FileType java setlocal shiftwidth=4 tabstop=4 expandtab
-
   autocmd FileType markdown setlocal conceallevel=2
-  autocmd FileType *.tsx setlocal filetype=typescript.tsx
-  autocmd FileType python setlocal foldmethod=indent
 
-  " JSON5's comment
+  " json 5 comment
   autocmd FileType json
                    \ syntax region Comment start="//" end="$" |
                    \ syntax region Comment start="/\*" end="\*/" |
                    \ setlocal commentstring=//\ %s
-
 augroup END
 
 " List of buf names where q does :q<CR>
-let s:q_closes_windows = 'help list git'
-let s:disable_line_numbers = 'nerdtree help list'
+let g:esc_close = ['help', 'list']
+let g:disable_line_numbers = ['nerdtree', 'help', 'list', 'clap_input']
 
-augroup q_close
-  for wname in split(s:q_closes_windows)
-    execute 'autocmd FileType' wname 'noremap <silent><buffer> q :q<CR>'
+augroup aux_win_close
+  autocmd!
+
+  autocmd FileType fugitive map <buffer> <Esc> gq
+
+  for wname in g:esc_close
+    execute 'autocmd FileType' wname 'noremap <silent><buffer> <Esc> :q<CR>'
   endfor
+augroup END
+
+augroup highlight_yank
+  autocmd!
+  autocmd TextYankPost *
+          \ silent! lua require'vim.highlight'.on_yank{timeout=1000}
 augroup END
 
 "------------------------- Line numbers configuration -------------------------"
 function! s:SetNumber(set)
-  if index(split(s:disable_line_numbers), &filetype) > -1
+  if empty(&filetype) || index(g:disable_line_numbers, &filetype) > -1
     return
   endif
   setlocal number
@@ -259,11 +281,6 @@ augroup line_numbers
   autocmd BufEnter,Winenter,FocusGained * call s:SetNumber(1)
   autocmd BufLeave,Winleave,FocusLost * call s:SetNumber(0)
 augroup END
-
-" augroup highlight_yank
-  " autocmd!
-  " autocmd TextYankPost * lua vim.highlight.on_yank()
-" augroup END
 
 "---------------------------------- Mappings ----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
@@ -296,8 +313,8 @@ nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>cfg 
-                  \ :e ~/.config/nvim/init.vim <Bar>
-                  \ :e ~/.config/nvim/lua/init.lua<CR>
+                  \ :e ~/.config/nvim/lua/init.lua <Bar>
+                  \ :e ~/.config/nvim/init.vim <CR>
 nnoremap <silent> <Leader>h :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
@@ -368,7 +385,6 @@ let g:coc_global_extensions = [
                             \   'coc-snippets',
                             \   'coc-svelte',
                             \   'coc-json',
-                            \   'coc-highlight',
                             \ ]
 
 let g:coc_snippet_next = '<Tab>'
@@ -400,11 +416,11 @@ function! s:SelectCompletion() abort
   endif
 endfunction
 
-function! s:CocTab()
+function! s:CompletionTab()
   return pumvisible() ? "\<C-N>" : "\<Tab>"
 endfunction
 
-function! s:CocShiftTab()
+function! s:CompletionShiftTab()
   return pumvisible() ? "\<C-P>" : "\<Tab>"
 endfunction
 
@@ -427,21 +443,67 @@ function! s:FormatCode()
   endif
 endfunction
 
+augroup completion_nvim
+  autocmd!
+  function! s:OnAttachLSP()
+    if index(['clap_input'], &filetype) == -1
+      lua require'completion'.on_attach()
+    endif
+  endfunction
+  autocmd BufEnter * call s:OnAttachLSP()
+augroup END
+
 "---------------------- COC actions & completion helpers ----------------------"
-inoremap <silent><expr> <Tab> <SID>CocTab()
-inoremap <silent><expr> <S-Tab> <SID>CocShiftTab()
-inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
-inoremap <silent><expr> <CR> <SID>SelectCompletion()
+if exists('g:coc_enabled')
+  inoremap <silent><expr> <Tab> <SID>CompletionTab()
+  inoremap <silent><expr> <S-Tab> <SID>CompletionShiftTab()
+  inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
+  inoremap <silent><expr> <CR> <SID>SelectCompletion()
+else
+  imap <Tab> <Plug>(completion_smart_tab)
+  imap <S-Tab> <Plug>(completion_smart_s_tab)
+  imap <silent> <C-Space> <Plug>(completion_trigger)
+endif
 
 " imap <silent> <C-Space> <Plug>(completion_trigger)
 " imap <expr> <Tab> pumvisible() ? "\<Plug>(completion_smart_tab)" : "\<Tab>"
 " imap <expr> <S-Tab> pumvisible() ? "\<Plug>(completion_smart_s_tab)" : "\<Tab>"
 
-nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
-nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
-nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
-nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
-nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
+if exists('g:coc_enabled')
+  nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
+  nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
+  nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
+  nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
+  nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
+else
+  nnoremap <silent> <Leader>f :lua vim.lsp.buf.formatting()<CR>
+  nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
+  nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
+  nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
+endif
+
+"--------------------------------- Nvim-LSP -----------------------------------"
+" sign define LspDiagnosticsSignHint text=H texthl=LspDiagnosticsSignHint linehl= numhl=
+let g:warning_sign = '🔥'
+let g:error_sign = '❌'
+let g:info_sign = '🔷'
+let g:hint_sign = '💡'
+
+execute 'sign define LspDiagnosticsSignHint text=' .
+      \ g:hint_sign .
+      \ ' texthl=LspDiagnosticsSignHint'
+
+execute 'sign define LspDiagnosticsSignInformation text=' .
+      \ g:info_sign .
+      \ ' texthl=LspDiagnosticsSignInformation'
+
+execute 'sign define LspDiagnosticsSignWarning text=' .
+      \ g:warning_sign .
+      \ ' texthl=LspDiagnosticsSignWarning'
+
+execute 'sign define LspDiagnosticsSignError text=' .
+      \ g:error_sign .
+      \ ' texthl=LspDiagnosticsSignError'
 
 "----------------------------- Embedded terminal ------------------------------"
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
@@ -565,26 +627,42 @@ function! s:CloseNERDTreeAlone()
   endif
 endfunction
 
-function! s:ToggleNERDTree(is_leader)
-  if a:is_leader
-    if g:NERDTree.IsOpen()
-      NERDTreeClose
-    else
-      NERDTreeFind
-      execute 'vertical resize' g:NERDTreeWinSize
-    endif
+function! s:ToggleNERDTree()
+  if g:NERDTree.IsOpen()
+    NERDTreeClose
   else
-    if &filetype == 'nerdtree'
-      NERDTreeClose
-    else
-      NERDTreeCWD
-      execute 'vertical resize' g:NERDTreeWinSize
-    endif
+    NERDTreeCWD
   endif
 endfunction
 
-nnoremap <silent> <F3> :call <SID>ToggleNERDTree(0)<CR>
-nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTree(1)<CR>
+function! s:ToggleNERDTreeCurLocation()
+  if g:NERDTree.IsOpen()
+    NERDTreeClose
+  else
+    NERDTreeFind
+  endif
+endfunction
+
+" function! s:ToggleNERDTree(is_leader)
+"   if a:is_leader
+"     if g:NERDTree.IsOpen()
+"       NERDTreeClose
+"     else
+"       NERDTreeFind
+"       " execute 'vertical resize' g:NERDTreeWinSize
+"     endif
+"   else
+"     if &filetype == 'nerdtree'
+"       NERDTreeClose
+"     else
+"       NERDTreeCWD
+"       " execute 'vertical resize' g:NERDTreeWinSize
+"     endif
+"   endif
+" endfunction
+
+nnoremap <silent> <F3> :call <SID>ToggleNERDTree()<CR>
+nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTreeCurLocation()<CR>
 
 augroup nerdtree
   autocmd!
@@ -634,11 +712,27 @@ elseif s:comment_tool == 'vim-commentary'
   xmap <expr><silent> <C-_> <SID>VComment()
 endif
 
+"-------------------------- Vim-clap configuration ----------------------------"
+
+let g:clap_insert_mode_only = v:true
+let g:clap_search_box_border_style = 'nil'
+
+nnoremap <C-P> :Clap files ++finder=rg --files --ignore<CR>
+nnoremap <Leader>rg :Clap grep2<CR>
+nnoremap <Leader>b :Clap buffers<CR>
+
 "----------------------------- FZF configuration ------------------------------"
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
-nnoremap <C-P> :Files<CR>
-nnoremap <Leader>rg :Rg<CR>
-nnoremap <Leader>b :Buffers<CR>
+" let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
+" let g:fzf_layout = {
+"                  \   'window': {
+"                  \     'width': 0.9,
+"                  \     'height': 0.6,
+"                  \     'yoffset': 0,
+"                  \   }
+"                  \ }
+" nnoremap <C-P> :Files<CR>
+" nnoremap <Leader>rg :Rg<CR>
+" nnoremap <Leader>b :Buffers<CR>
 
 "-------------------------------- Git bindings --------------------------------"
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
@@ -647,12 +741,15 @@ nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
-" augroup coc_highlight
-"   autocmd!
-"   autocmd CursorHold * if exists('g:did_coc_loaded') |
-"                      \   silent call CocActionAsync('highlight') |
-"                      \ endif
-" augroup END
+augroup LSP_highlight
+  autocmd!
+  autocmd CursorHold * silent! lua vim.lsp.buf.document_highlight()
+augroup END
+
+function! PasteBlock()
+  execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
+  normal! p
+endfunction
 
 "-------------------------------- Git gutter ----------------------------------"
 let g:gitgutter_sign_added = '▕'
