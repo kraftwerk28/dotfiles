@@ -134,6 +134,7 @@ alias cat="bat -p --color never --paging never"
 alias serves="serve \
   --ssl-cert ~/ca-tmp/localhost.crt \
   --ssl-key ~/ca-tmp/localhost.key"
+alias ssh="kitty +kitten ssh"
 
 mkcd() {
   if [ -z "$1" ]; then

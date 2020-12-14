@@ -1,3 +1,4 @@
+lua init = require'init'
 set encoding=utf-8
 
 call plug#begin('~/.config/nvim/plugged')
@@ -13,22 +14,20 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Tools
 Plug 'vim-airline/vim-airline'
-" Plug 'itchyny/lightline.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
 Plug 'tpope/vim-commentary'
-" Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive' " Git helper
 Plug 'airblade/vim-gitgutter'
-" Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'lyokha/vim-xkbswitch'
 Plug 'diepm/vim-rest-console'
 Plug 'chrisbra/Colorizer'
+Plug 'steelsojka/completion-buffers' " For completion-nvim
 
 " Languages
 "----------- This is obsolette as had been replaced by vim-polyglot -----------"
@@ -57,7 +56,6 @@ Plug 'editorconfig/editorconfig-vim'
 
 if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter'
-  " To be enabled...
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/completion-nvim'
 else
@@ -72,7 +70,7 @@ Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 if has('nvim-0.5')
-  lua require('init')
+  lua init.setup()
 endif
 
 "---------------------------------- Theme -------------------------------------"
@@ -114,7 +112,7 @@ let g:mapleader = ' '
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_theme = 'ayu_dark'
-let g:airline_extensions = ['tabline', 'coc']
+let g:airline_extensions = ['tabline', 'nvimlsp']
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_left_sep=''
@@ -193,9 +191,11 @@ set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 augroup ft_indent
   autocmd!
   autocmd FileType go,make setlocal shiftwidth=4 softtabstop=4 noexpandtab
-  autocmd FileType python,java,lua setlocal shiftwidth=4 softtabstop=4 expandtab
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,vim
-                 \ setlocal shiftwidth=2 softtabstop=2
+  autocmd FileType python,java,csharp
+                 \ setlocal sw=4 sts=4 et
+  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,svelte,vim
+                 \ setlocal sw=2 sts=2 et
+  autocmd FileType lua setlocal sw=3 sts=3 et
 augroup END
 
 function! s:RestoreCursor()
@@ -244,7 +244,7 @@ augroup file_types
 augroup END
 
 " List of buf names where q does :q<CR>
-let g:esc_close = ['help', 'list']
+let g:q_close_ft = ['help', 'list']
 let g:disable_line_numbers = ['nerdtree', 'help', 'list', 'clap_input']
 
 augroup aux_win_close
@@ -252,8 +252,8 @@ augroup aux_win_close
 
   autocmd FileType fugitive map <buffer> <Esc> gq
 
-  for wname in g:esc_close
-    execute 'autocmd FileType' wname 'noremap <silent><buffer> <Esc> :q<CR>'
+  for _ft in g:q_close_ft
+    execute 'autocmd FileType' _ft 'noremap <silent><buffer> q :q<CR>'
   endfor
 augroup END
 
@@ -382,9 +382,7 @@ nnoremap <Leader><S-O> O<Esc>
 "----------------------------- coc configuration ------------------------------"
 let g:coc_global_extensions = [
                             \   'coc-emmet',
-                            \   'coc-snippets',
                             \   'coc-svelte',
-                            \   'coc-json',
                             \ ]
 
 let g:coc_snippet_next = '<Tab>'
@@ -453,6 +451,12 @@ augroup completion_nvim
   autocmd BufEnter * call s:OnAttachLSP()
 augroup END
 
+augroup lsp_diagnostics
+  autocmd!
+  autocmd CursorMoved * lua init.show_LSP_diagnostics()
+  " autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics()
+augroup END
+
 "---------------------- COC actions & completion helpers ----------------------"
 if exists('g:coc_enabled')
   inoremap <silent><expr> <Tab> <SID>CompletionTab()
@@ -482,28 +486,41 @@ else
   nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 endif
 
-"--------------------------------- Nvim-LSP -----------------------------------"
+"-------------------------- Nvim-LSP & completion -----------------------------"
 " sign define LspDiagnosticsSignHint text=H texthl=LspDiagnosticsSignHint linehl= numhl=
+
+highlight LSPCurlyUnderline gui=undercurl
+highlight LSPUnderline gui=underline
+highlight! link LspDiagnosticsUnderlineHint LSPCurlyUnderline
+highlight! link LspDiagnosticsUnderlineInformation LSPCurlyUnderline
+highlight! link LspDiagnosticsUnderlineWarning LSPCurlyUnderline
+highlight! link LspDiagnosticsUnderlineError LSPUnderline
+
+let g:hint_sign = '💡'
+let g:info_sign = '🔷'
 let g:warning_sign = '🔥'
 let g:error_sign = '❌'
-let g:info_sign = '🔷'
-let g:hint_sign = '💡'
 
-execute 'sign define LspDiagnosticsSignHint text=' .
-      \ g:hint_sign .
-      \ ' texthl=LspDiagnosticsSignHint'
+call sign_define('LspDiagnosticsSignHint', {
+               \   'text': g:hint_sign,
+               \   'texthl': 'LspDiagnosticsUnderlineHint',
+               \ })
+call sign_define('LspDiagnosticsSignInformation', {
+               \   'text': g:info_sign,
+               \   'texthl': 'LspDiagnosticsUnderlineInformation',
+               \ })
+call sign_define('LspDiagnosticsSignWarning', {
+               \   'text': g:warning_sign,
+               \   'texthl': 'LspDiagnosticsUnderlineWarning',
+               \ })
+call sign_define('LspDiagnosticsSignError', {
+               \   'text': g:error_sign,
+               \   'texthl': 'LspDiagnosticsUnderlineError',
+               \ })
 
-execute 'sign define LspDiagnosticsSignInformation text=' .
-      \ g:info_sign .
-      \ ' texthl=LspDiagnosticsSignInformation'
-
-execute 'sign define LspDiagnosticsSignWarning text=' .
-      \ g:warning_sign .
-      \ ' texthl=LspDiagnosticsSignWarning'
-
-execute 'sign define LspDiagnosticsSignError text=' .
-      \ g:error_sign .
-      \ ' texthl=LspDiagnosticsSignError'
+" let g:completion_enable_snippet = 'UltiSnips'
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+let g:completion_timer_cycle = 500
 
 "----------------------------- Embedded terminal ------------------------------"
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
