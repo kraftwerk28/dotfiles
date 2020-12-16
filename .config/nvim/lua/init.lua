@@ -2,7 +2,6 @@ local M = {}
 
 local function debounce(func, timeout)
    local timer_id = nil
-
    return function(...)
       if timer_id ~= nil then
          vim.fn.timer_stop(timer_id)
@@ -85,12 +84,12 @@ local function setup_lsp()
 
    local lua_cfg = {cmd = {'lua-language-server'}}
 
-   lsp.tsserver.setup{ts_cfg}
-   lsp.pyls.setup{pyls_config}
+   lsp.tsserver.setup(ts_cfg)
+   lsp.pyls.setup(pyls_cfg)
    lsp.rust_analyzer.setup{}
    lsp.gopls.setup{}
    lsp.hls.setup{}
-   lsp.sumneko_lua.setup{lua_cfg}
+   lsp.sumneko_lua.setup(lua_cfg)
    lsp.clangd.setup{}
 
    local on_publish_cfg = {

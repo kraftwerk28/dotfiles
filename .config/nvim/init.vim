@@ -11,6 +11,7 @@ Plug 'ayu-theme/ayu-vim'
 " Plug 'tomasr/molokai' 
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'rakr/vim-one'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Tools
 Plug 'vim-airline/vim-airline'
@@ -88,8 +89,8 @@ endif
 colorscheme ayu
 let g:lightline = {
                 \   'colorscheme': 'ayu_dark',
-                \   'separator': { 'left': '', 'right': '' },
-                \   'subseparator': { 'left': '', 'right': '' },
+                \   'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+                \   'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
                 \ }
 
 if exists('colors_name') && colors_name == 'onedark'
@@ -115,8 +116,8 @@ let g:airline_theme = 'ayu_dark'
 let g:airline_extensions = ['tabline', 'nvimlsp']
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline_left_sep=''
-let g:airline_right_sep=''
+let g:airline_left_sep = "\ue0b8"
+let g:airline_right_sep = "\ue0ba"
 
 " let g:airline#extensions#tabline#left_sep = ''
 " let g:airline#extensions#tabline#left_alt_sep = ''
@@ -131,8 +132,8 @@ let g:airline#extensions#tabline#right_alt_sep = ''
 "--------------------------- Devicos configuration ----------------------------"
 let g:webdevicons_enable_nerdtree = 1
 let g:DevIconsEnableFoldersOpenClose = 1
-let g:DevIconsDefaultFolderOpenSymbol = ''
-let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
+let g:DevIconsDefaultFolderOpenSymbol = "\uf07c"
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol="\uf07b"
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 
 " let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
@@ -179,7 +180,7 @@ set foldexpr=nvim_treesitter#foldexpr()
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=8
 set diffopt+=vertical
-set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
@@ -243,8 +244,8 @@ augroup file_types
                    \ setlocal commentstring=//\ %s
 augroup END
 
-" List of buf names where q does :q<CR>
-let g:q_close_ft = ['help', 'list']
+" Filetypes names where q does :q<CR>
+let g:q_close_ft = ['help', 'list', 'fugitive']
 let g:disable_line_numbers = ['nerdtree', 'help', 'list', 'clap_input']
 
 augroup aux_win_close
@@ -282,47 +283,11 @@ augroup line_numbers
   autocmd BufLeave,Winleave,FocusLost * call s:SetNumber(0)
 augroup END
 
-"---------------------------------- Mappings ----------------------------------"
-" The block below WON'T execute in vscode-vim extension,
-" so thath's why I use it
-if has('nvim')
-  nnoremap j gj
-  nnoremap k gk
-  nnoremap gj j
-  nnoremap gk k
-endif
-
-inoremap ii <Esc>
-vnoremap ii <Esc>
-
-" Arrow movement mappings
-nnoremap <Down> <C-E>
-nnoremap <Up> <C-Y>
-nnoremap <S-Up> <C-U>M
-nnoremap <S-Down> <C-D>M
-nnoremap <C-Up> <C-B>M
-nnoremap <C-Down> <C-F>M
-
-" Indenting
-nnoremap > >>
-nnoremap < <<
-vnoremap > >gv
-vnoremap < <gv
-
-nnoremap <silent> <M-]> :bnext<CR>
-nnoremap <silent> <M-[> :bprevious<CR>
-nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>cfg 
-                  \ :e ~/.config/nvim/lua/init.lua <Bar>
-                  \ :e ~/.config/nvim/init.vim <CR>
-nnoremap <silent> <Leader>h :setlocal hlsearch!<CR>
-nnoremap <silent> <Leader>w :wall<CR>
-
+"----------------------------- Mapping functions ------------------------------"
 function RevStr(str)
   let l:chars = split(submatch(0), '\zs')
   return join(reverse(l:chars), '')
 endfunction
-vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
 
 "----------------------------- Buffer operations ------------------------------"
 function! s:buf_filt(inc_cur)
@@ -357,29 +322,13 @@ function! s:DelToLeft()
   silent execute 'bdelete' join(range(1, bufnr() - 1))
 endfunction
 
-nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
-nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
-nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
-nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
-
-nnoremap <silent> <M-k> :m-2<CR>
-nnoremap <silent> <M-j> :m+1<CR>
-vnoremap <silent> <M-k> :m'<-2<CR>gv
-vnoremap <silent> <M-j> :m'>+1<CR>gv
-
 " Prettier bindings
 function! s:RunPrettier()
   execute 'silent !prettier --write %'
   edit
 endfunction
-nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
-vnoremap <Leader>rv :s/\%V
 
-nnoremap <Leader>o o<Esc>
-nnoremap <Leader><S-O> O<Esc>
-" iabbrev </ 
-
-"----------------------------- coc configuration ------------------------------"
+"----------------------------- CoC configuration ------------------------------"
 let g:coc_global_extensions = [
                             \   'coc-emmet',
                             \   'coc-svelte',
@@ -454,41 +403,9 @@ augroup END
 augroup lsp_diagnostics
   autocmd!
   autocmd CursorMoved * lua init.show_LSP_diagnostics()
-  " autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics()
 augroup END
 
-"---------------------- COC actions & completion helpers ----------------------"
-if exists('g:coc_enabled')
-  inoremap <silent><expr> <Tab> <SID>CompletionTab()
-  inoremap <silent><expr> <S-Tab> <SID>CompletionShiftTab()
-  inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
-  inoremap <silent><expr> <CR> <SID>SelectCompletion()
-else
-  imap <Tab> <Plug>(completion_smart_tab)
-  imap <S-Tab> <Plug>(completion_smart_s_tab)
-  imap <silent> <C-Space> <Plug>(completion_trigger)
-endif
-
-" imap <silent> <C-Space> <Plug>(completion_trigger)
-" imap <expr> <Tab> pumvisible() ? "\<Plug>(completion_smart_tab)" : "\<Tab>"
-" imap <expr> <S-Tab> pumvisible() ? "\<Plug>(completion_smart_s_tab)" : "\<Tab>"
-
-if exists('g:coc_enabled')
-  nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
-  nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
-  nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
-  nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
-  nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
-else
-  nnoremap <silent> <Leader>f :lua vim.lsp.buf.formatting()<CR>
-  nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
-  nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
-  nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
-endif
-
-"-------------------------- Nvim-LSP & completion -----------------------------"
-" sign define LspDiagnosticsSignHint text=H texthl=LspDiagnosticsSignHint linehl= numhl=
-
+"------------------------------- builtin LSP ----------------------------------"
 highlight LSPCurlyUnderline gui=undercurl
 highlight LSPUnderline gui=underline
 highlight! link LspDiagnosticsUnderlineHint LSPCurlyUnderline
@@ -518,23 +435,18 @@ call sign_define('LspDiagnosticsSignError', {
                \   'texthl': 'LspDiagnosticsUnderlineError',
                \ })
 
-" let g:completion_enable_snippet = 'UltiSnips'
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_timer_cycle = 500
 
 "----------------------------- Embedded terminal ------------------------------"
-nnoremap <Leader>` :10split <Bar> :terminal<CR>
-
 augroup terminal_insert
   autocmd!
   autocmd TermOpen * startinsert
-"   autocmd TermClose * wincmd c
 augroup END
 
 "------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
 let s:filetype_executables = { 'javascript': 'node' }
-
 function! s:Shebang()
   write
   execute 'silent !chmod u+x %'
@@ -595,24 +507,6 @@ function! Emoji2Unicode() abort
   execute "normal xi\<C-R>m\<Esc>"
 endfunction
 
-nnoremap <Leader>eu :call Emoji2Unicode()<CR>
-
-"--------------------------------- Case-tools ---------------------------------"
-" shake_case -> camelCase
-nmap <silent> <Leader>cc viw<Leader>cc
-vnoremap <silent> <Leader>cc :s/\%V_\(.\)/\U\1/g<CR>
-
-" snake_case -> PascalCase
-nmap <silent> <Leader>pc viw<Leader>pc
-vmap <silent> <Leader>pc <Leader>cc`<vU
-
-" camelCase/PascalCase -> snake_case
-nmap <silent> <Leader>sc viw<Leader>sc
-vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
-
-" snake_case -> kebab-case
-" TODO: implement
-
 "--------------------------- NERDTree configuration ---------------------------"
 " Preserve netrw to load
 let g:loaded_netrwPlugin = 1
@@ -625,8 +519,8 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
 let g:NERDTreeHijackNetrw = 0
-let g:NERDTreeDirArrowCollapsible = ''
-let g:NERDTreeDirArrowExpandable = ''
+let g:NERDTreeDirArrowCollapsible = "\uf47c"
+let g:NERDTreeDirArrowExpandable = "\uf460"
 
 function! s:AutoOpenNERDTree()
   if argc() == 0 && !exists('s:std_in')
@@ -660,27 +554,6 @@ function! s:ToggleNERDTreeCurLocation()
   endif
 endfunction
 
-" function! s:ToggleNERDTree(is_leader)
-"   if a:is_leader
-"     if g:NERDTree.IsOpen()
-"       NERDTreeClose
-"     else
-"       NERDTreeFind
-"       " execute 'vertical resize' g:NERDTreeWinSize
-"     endif
-"   else
-"     if &filetype == 'nerdtree'
-"       NERDTreeClose
-"     else
-"       NERDTreeCWD
-"       " execute 'vertical resize' g:NERDTreeWinSize
-"     endif
-"   endif
-" endfunction
-
-nnoremap <silent> <F3> :call <SID>ToggleNERDTree()<CR>
-nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTreeCurLocation()<CR>
-
 augroup nerdtree
   autocmd!
 
@@ -695,7 +568,7 @@ augroup END
 let s:comment_tool = 'vim-commentary'
 
 if s:comment_tool == 'nerdcommenter'
-  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   " NERDCommenter configuration
   " let NERDSpaceDelims = 1
   " let NERDDefaultAlign = 'start'
@@ -716,17 +589,10 @@ if s:comment_tool == 'nerdcommenter'
                              \ }
 
 elseif s:comment_tool == 'vim-commentary'
-
-"------------------------ vim-commentary configuration ------------------------"
   function! s:VComment()
     return mode() ==# 'v' ? 'Scgv' : ":Commentary\<CR>gv"
   endfunction
-
   autocmd FileType typescriptreact setlocal commentstring=//\ %s
-
-  nnoremap <silent> <C-_> :Commentary<CR>
-  inoremap <silent> <C-_> <C-O>:Commentary<CR>
-  xmap <expr><silent> <C-_> <SID>VComment()
 endif
 
 "-------------------------- Vim-clap configuration ----------------------------"
@@ -734,9 +600,18 @@ endif
 let g:clap_insert_mode_only = v:true
 let g:clap_search_box_border_style = 'nil'
 
-nnoremap <C-P> :Clap files ++finder=rg --files --ignore<CR>
-nnoremap <Leader>rg :Clap grep2<CR>
-nnoremap <Leader>b :Clap buffers<CR>
+let g:clap_selected_sign = {
+                         \   'text': "\uf00c",
+                         \   'texthl': 'ClapSelectedSign',
+                         \   'linehl': 'ClapSelected',
+                         \ }
+let g:clap_current_selection_sign = {
+                                  \   'text': "\uf061",
+                                  \   'texthl': 'ClapCurrentSelectionSign',
+                                  \   'linehl': 'ClapCurrentSelection',
+                                  \ }
+let g:clap_no_matches_msg = 'BRUH...'
+
 
 "----------------------------- FZF configuration ------------------------------"
 " let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
@@ -752,12 +627,6 @@ nnoremap <Leader>b :Clap buffers<CR>
 " nnoremap <Leader>b :Buffers<CR>
 
 "-------------------------------- Git bindings --------------------------------"
-nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
-nnoremap <silent> <Leader>gs :Git<CR>
-nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
-nnoremap <silent> <Leader>m[ :diffget //2<CR>
-nnoremap <silent> <Leader>m] :diffget //3<CR>
-
 augroup LSP_highlight
   autocmd!
   autocmd CursorHold * silent! lua vim.lsp.buf.document_highlight()
@@ -775,3 +644,125 @@ let g:gitgutter_sign_removed = '▕'
 
 "------------------------------- Neovide stuff --------------------------------"
 let g:neovide_fullscreen=v:true
+
+
+"--------------------------------- Mappings -----------------------------------"
+" The block below WON'T execute in vscode-vim extension,
+" so thath's why I use it
+if has('nvim')
+  nnoremap j gj
+  nnoremap k gk
+  nnoremap gj j
+  nnoremap gk k
+endif
+
+inoremap ii <Esc>
+vnoremap ii <Esc>
+
+" Arrow movement mappings
+nnoremap <Down> <C-E>
+nnoremap <Up> <C-Y>
+nnoremap <S-Up> <C-U>M
+nnoremap <S-Down> <C-D>M
+nnoremap <C-Up> <C-B>M
+nnoremap <C-Down> <C-F>M
+
+" Indenting
+nnoremap > >>
+nnoremap < <<
+vnoremap > >gv
+vnoremap < <gv
+
+nnoremap <silent> <M-]> :bnext<CR>
+nnoremap <silent> <M-[> :bprevious<CR>
+nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
+nnoremap <silent> <Leader>cfg 
+                  \ :e ~/.config/nvim/lua/init.lua <Bar>
+                  \ :e ~/.config/nvim/init.vim <CR>
+nnoremap <silent> <Leader>h :setlocal hlsearch!<CR>
+nnoremap <silent> <Leader>w :wall<CR>
+
+" LSP mappings:
+if exists('g:coc_enabled')
+  inoremap <silent><expr> <Tab> <SID>CompletionTab()
+  inoremap <silent><expr> <S-Tab> <SID>CompletionShiftTab()
+  inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
+  inoremap <silent><expr> <CR> <SID>SelectCompletion()
+  nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
+  nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
+  nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
+  nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
+  nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
+else
+  imap <Tab> <Plug>(completion_smart_tab)
+  imap <S-Tab> <Plug>(completion_smart_s_tab)
+  imap <silent> <C-Space> <Plug>(completion_trigger)
+  nnoremap <silent> <Leader>f :lua vim.lsp.buf.formatting()<CR>
+  nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
+  nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
+  nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
+endif
+
+vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
+
+nnoremap <Leader>eu :call Emoji2Unicode()<CR>
+
+" Case-conversion tools
+" shake_case -> camelCase
+nmap <silent> <Leader>cc viw<Leader>cc
+vnoremap <silent> <Leader>cc :s/\%V_\(.\)/\U\1/g<CR>
+
+" snake_case -> PascalCase
+nmap <silent> <Leader>pc viw<Leader>pc
+vmap <silent> <Leader>pc <Leader>cc`<vU
+
+" camelCase/PascalCase -> snake_case
+nmap <silent> <Leader>sc viw<Leader>sc
+vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
+
+" snake_case -> kebab-case
+" TODO: implement
+
+nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
+nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
+nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
+nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
+
+nnoremap <silent> <M-k> :m-2<CR>
+nnoremap <silent> <M-j> :m+1<CR>
+vnoremap <silent> <M-k> :m'<-2<CR>gv
+vnoremap <silent> <M-j> :m'>+1<CR>gv
+
+nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
+vnoremap <Leader>rv :s/\%V
+
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader><S-O> O<Esc>
+
+nnoremap <Leader>` :10split <Bar> :terminal<CR>
+
+" Commenting
+if s:comment_tool == 'nerdcommenter'
+  " pass
+elseif s:comment_tool == 'vim-commentary'
+  nnoremap <silent> <C-_> :Commentary<CR>
+  inoremap <silent> <C-_> <C-O>:Commentary<CR>
+  xmap <expr><silent> <C-_> <SID>VComment()
+endif
+
+" NERDTree
+nnoremap <silent> <F3> :call <SID>ToggleNERDTree()<CR>
+nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTreeCurLocation()<CR>
+
+" Vim-clap
+nnoremap <C-P> :Clap files ++finder=rg --files --ignore<CR>
+nnoremap <Leader>rg :Clap grep2<CR>
+nnoremap <Leader>b :Clap buffers<CR>
+nnoremap <C-B> :Clap buffers<CR>
+
+" Fugitive
+nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
+nnoremap <silent> <Leader>gs :Git<CR>
+nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
+nnoremap <silent> <Leader>m[ :diffget //2<CR>
+nnoremap <silent> <Leader>m] :diffget //3<CR>
