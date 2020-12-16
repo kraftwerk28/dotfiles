@@ -22,6 +22,7 @@ Plug 'scrooloose/nerdtree' " File explorer
 Plug 'tpope/vim-commentary'
 Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive' " Git helper
 Plug 'airblade/vim-gitgutter'
@@ -437,6 +438,17 @@ call sign_define('LspDiagnosticsSignError', {
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_timer_cycle = 500
+
+" Disable expand key
+let g:UltiSnipsExpandTrigger = v:null
+let g:completion_enable_snippet = 'UltiSnips'
+let g:completion_chain_complete_list = {
+\  'default' : [
+\      {'complete_items': ['lsp', 'snippet', 'path']},
+\      {'mode': '<c-p>'},
+\      {'mode': '<c-n>'}
+\    ]
+\  }
 
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
