@@ -27,6 +27,11 @@ local function throttle(func, timeout)
    end
 end
 
+M.show_LSP_diagnostics = debounce(
+   vim.lsp.diagnostic.show_line_diagnostics,
+   300
+)
+
 local function setup_treesitter()
    local ts = require'nvim-treesitter.configs'
    ts.setup {
@@ -104,25 +109,20 @@ local function setup_lsp()
    )
 end
 
-local function setup_telescope()
-   local actions = require('telescope.actions')
-   local telescope = require('telescope')
-   local mappings = {
-      i = {
-         ['<C-P>'] = false,
-         ['<C-N>'] = false,
-         ['<C-J>'] = actions.move_selection_next,
-         ['<C-K>'] = actions.move_selection_previous,
-         ['<Esc>'] = actions.close,
-      },
-   },
-   telescope.setup{defaults = {mappings = mappings}}
-end
-
-M.show_LSP_diagnostics = debounce(
-   vim.lsp.diagnostic.show_line_diagnostics,
-   300
-)
+-- local function setup_telescope()
+--    local actions = require('telescope.actions')
+--    local telescope = require('telescope')
+--    local mappings = {
+--       i = {
+--          ['<C-P>'] = false,
+--          ['<C-N>'] = false,
+--          ['<C-J>'] = actions.move_selection_next,
+--          ['<C-K>'] = actions.move_selection_previous,
+--          ['<Esc>'] = actions.close,
+--       },
+--    },
+--    telescope.setup{defaults = {mappings = mappings}}
+-- end
 
 function M.setup()
    setup_treesitter()

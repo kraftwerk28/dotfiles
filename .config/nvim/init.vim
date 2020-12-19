@@ -432,7 +432,7 @@ augroup END
 
 augroup lsp_diagnostics
   autocmd!
-  " autocmd CursorMoved * lua init.show_LSP_diagnostics()
+  autocmd CursorMoved * lua init.show_LSP_diagnostics()
 augroup END
 
 "------------------------------- builtin LSP ----------------------------------"
