@@ -1,5 +1,9 @@
 local M = {}
 
+local function get_cursor_pos()
+   return {vim.fn.line('.'), vim.fn.col('.')}
+end
+
 local function debounce(func, timeout)
    local timer_id = nil
    return function(...)
@@ -27,10 +31,19 @@ local function throttle(func, timeout)
    end
 end
 
-M.show_LSP_diagnostics = debounce(
-   vim.lsp.diagnostic.show_line_diagnostics,
-   300
-)
+local function lsp_diagnostics_helper()
+   local debounced = debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
+   local cursorpos = get_cursor_pos()
+   return function()
+      local new_cursor = get_cursor_pos()
+      if new_cursor[1] ~= cursorpos[1] or new_cursor[2] ~= cursorpos[2] then
+         cursorpos = new_cursor
+         debounced()
+      end
+   end
+end
+
+M.show_lsp_diagnostics = lsp_diagnostics_helper()
 
 local function setup_treesitter()
    local ts = require'nvim-treesitter.configs'
