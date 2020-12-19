@@ -33,7 +33,7 @@ local function setup_treesitter()
       ensure_installed = 'maintained',
       highlight = {
          enable = true,
-         disable = { "dart", "ocaml", "java", "clojure" },
+         disable = {'dart', 'ocaml', 'java', 'clojure'},
       },
       -- indent = { enable = true },
    }
@@ -102,6 +102,21 @@ local function setup_lsp()
       vim.lsp.diagnostic.on_publish_diagnostics,
       on_publish_cfg
    )
+end
+
+local function setup_telescope()
+   local actions = require('telescope.actions')
+   local telescope = require('telescope')
+   local mappings = {
+      i = {
+         ['<C-P>'] = false,
+         ['<C-N>'] = false,
+         ['<C-J>'] = actions.move_selection_next,
+         ['<C-K>'] = actions.move_selection_previous,
+         ['<Esc>'] = actions.close,
+      },
+   },
+   telescope.setup{defaults = {mappings = mappings}}
 end
 
 M.show_LSP_diagnostics = debounce(

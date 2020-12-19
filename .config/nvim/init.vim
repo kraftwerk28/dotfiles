@@ -9,18 +9,20 @@ Plug 'ayu-theme/ayu-vim'
 " Plug 'joshdick/onedark.vim'
 " Plug 'dracula/vim', {'as': 'dracula'}
 " Plug 'tomasr/molokai' 
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'vim-airline/vim-airline-themes'
 " Plug 'rakr/vim-one'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Tools
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
 Plug 'tpope/vim-commentary'
 Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
+
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -88,10 +90,37 @@ else
 endif
 
 colorscheme ayu
+function! GetFtText()
+  if winwidth(0) > 70
+    if strlen(&filetype)
+      return &filetype . ' ' . WebDevIconsGetFileTypeSymbol()
+    else
+      return 'no ft'
+    endif
+  else
+    return ''
+  endif
+endfunction
+
+function! GetFtFormat()
+  if winwidth(0) > 70
+    return &fileformat . ' ' . WebDevIconsGetFileFormatSymbol()
+  else
+    return ''
+  endif
+endfunction
+
+let g:left_triangle_filled = "\ue0b8"
+let g:left_triangle_sep = "\ue0b9"
+let g:right_triangle_filled = "\ue0ba"
+let g:right_triangle_sep = "\ue0bb"
+
 let g:lightline = {
                 \   'colorscheme': 'ayu_dark',
-                \   'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
-                \   'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" },
+                \   'component_function': {
+                \     'filetype': 'GetFtText',
+                \     'fileformat': 'GetFtFormat',
+                \   },
                 \ }
 
 if exists('colors_name') && colors_name == 'onedark'
@@ -119,11 +148,6 @@ let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_left_sep = "\ue0b8"
 let g:airline_right_sep = "\ue0ba"
-
-" let g:airline#extensions#tabline#left_sep = ''
-" let g:airline#extensions#tabline#left_alt_sep = ''
-" let g:airline#extensions#tabline#right_sep = ''
-" let g:airline#extensions#tabline#right_alt_sep = ''
 
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
@@ -172,14 +196,12 @@ set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
 set signcolumn=yes " Additional column on left for emoji signs
-" set number relativenumber
 set autoread autowrite autowriteall
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 " set foldcolumn=1 " Enable additional column w/ visual folds
-
 set exrc secure " Project-local .nvimrc/.exrc configuration
-set scrolloff=8
+set scrolloff=3
 set diffopt+=vertical
 " set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
@@ -188,6 +210,7 @@ set lazyredraw
 set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 " set showtabline=1
 " set shada='1000,%
+set noshowmode
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup ft_indent
@@ -212,7 +235,7 @@ augroup END
 
 augroup auto_save
   autocmd!
-  autocmd FocusLost * silent! wa
+  autocmd FocusLost * silent! wall
 augroup END
 
 " Reload file if it changed on disk
@@ -292,8 +315,10 @@ endfunction
 
 "----------------------------- Buffer operations ------------------------------"
 function! s:buf_filt(inc_cur)
-  function! s:f(include_current, idx, val)
-    if !bufexists(a:val) || buffer_name(a:val) =~? 'NERD_tree_*'
+
+  function! s:filter_callback(include_current, idx, val)
+    if !bufexists(a:val) || !buflisted(a:val) ||
+     \ buffer_name(a:val) =~? 'NERD_tree_*'
       return v:false
     endif
     if a:include_current && bufnr() == a:val
@@ -301,7 +326,9 @@ function! s:buf_filt(inc_cur)
     endif
     return v:true
   endfunction
-  return filter(range(1, bufnr('$')), function('s:f', [a:inc_cur]))
+
+  return filter(range(1, bufnr('$')),
+              \ function('s:filter_callback', [a:inc_cur]))
 endfunction
 
 function! s:DelBuf(del_all)
@@ -314,11 +341,13 @@ function! s:DelBuf(del_all)
   endif
 endfunction
 
+" Delete buffers except current
 function! s:DelAllExcept()
   wall
   silent execute 'bdelete' join(s:buf_filt(1))
 endfunction
 
+" TODO
 function! s:DelToLeft()
   silent execute 'bdelete' join(range(1, bufnr() - 1))
 endfunction
@@ -403,7 +432,7 @@ augroup END
 
 augroup lsp_diagnostics
   autocmd!
-  autocmd CursorMoved * lua init.show_LSP_diagnostics()
+  " autocmd CursorMoved * lua init.show_LSP_diagnostics()
 augroup END
 
 "------------------------------- builtin LSP ----------------------------------"
@@ -439,16 +468,17 @@ call sign_define('LspDiagnosticsSignError', {
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_timer_cycle = 500
 
-" Disable expand key
-let g:UltiSnipsExpandTrigger = v:null
+let g:UltiSnipsExpandTrigger = "<Nop>"
 let g:completion_enable_snippet = 'UltiSnips'
+" let g:completion_auto_change_source = 1
 let g:completion_chain_complete_list = {
-\  'default' : [
-\      {'complete_items': ['lsp', 'snippet', 'path']},
-\      {'mode': '<c-p>'},
-\      {'mode': '<c-n>'}
-\    ]
-\  }
+\   'default' : [
+\     {'complete_items': ['lsp', 'path']},
+\     {'complete_items': ['snippet', 'buffers']},
+\     {'mode': '<c-p>'},
+\     {'mode': '<c-n>'},
+\   ]
+\ }
 
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
@@ -712,6 +742,9 @@ else
   nnoremap <silent> <Leader>f :lua vim.lsp.buf.formatting()<CR>
   nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
   nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
+  nnoremap <silent> <Leader>ae
+                  \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+  nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
   nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 endif
 
@@ -771,6 +804,10 @@ nnoremap <C-P> :Clap files ++finder=rg --files --ignore<CR>
 nnoremap <Leader>rg :Clap grep2<CR>
 nnoremap <Leader>b :Clap buffers<CR>
 nnoremap <C-B> :Clap buffers<CR>
+" nnoremap <C-P> :Telescope find_files<CR>
+" nnoremap <Leader>rg :Telescope live_grep<CR>
+" nnoremap <Leader>b :Telescope buffers<CR>
+" nnoremap <C-B> :Telescope buffers<CR>
 
 " Fugitive
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
