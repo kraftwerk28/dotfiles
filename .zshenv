@@ -22,8 +22,11 @@ export PATH="$PATH:$HOME/projects/go/bin"
 # ruby
 export PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 
-# python path
+# python
 export PYTHONPATH="$HOME/projects/python"
+
+# Lua: luarocks
+export PATH="$PATH:$HOME/.luarocks/bin/"
 
 # npm global modules
 export NODE_PATH="$HOME/.npm-global/lib/node_modules/"
@@ -34,4 +37,5 @@ export NVS_HOME="$HOME/.nvs"
 export PATH="$PATH:$HOME/.cabal/bin/"
 export PATH="$PATH:$HOME/.ghcup/bin/"
 
+# Java MPI
 export MPJ_HOME="$HOME/projects/mpj-v0_44/"

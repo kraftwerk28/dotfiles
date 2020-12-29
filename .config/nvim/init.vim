@@ -110,18 +110,49 @@ function! GetFtFormat()
   endif
 endfunction
 
+function! GetLSPWarnings()
+  let nwarns = luaeval('init.get_nwarnings()')
+  return nwarns > 0 ? nwarns : ''
+endfunction
+
+function! GetLSPErrors()
+  let nerrors = luaeval('init.get_nerrors()')
+  return nerrors > 0 ? nerrors : ''
+endfunction
+
+" augroup lsp_on_publish_diagnostics
+"   autocmd!
+"   autocmd User LSPOnDiagnostics call lightline#update()
+" augroup END
+
 let g:left_triangle_filled = "\ue0b8"
 let g:left_triangle_sep = "\ue0b9"
 let g:right_triangle_filled = "\ue0ba"
 let g:right_triangle_sep = "\ue0bb"
 
 let g:lightline = {
-                \   'colorscheme': 'ayu_dark',
-                \   'component_function': {
-                \     'filetype': 'GetFtText',
-                \     'fileformat': 'GetFtFormat',
-                \   },
-                \ }
+                  \   'active': {
+                  \     'right': [
+                  \       ['lineinfo'],
+                  \       ['percent'],
+                  \       ['fileformat', 'fileencoding', 'filetype'],
+                  \     ],
+                  \   },
+                  \   'colorscheme': 'ayu_dark',
+                  \   'component_function': {
+                  \     'filetype': 'GetFtText',
+                  \     'fileformat': 'GetFtFormat',
+                  \   },
+                  \ }
+                  " \       ['lsp_warnings', 'lsp_errors'],
+                  " \   'component_type': {
+                  " \     'lsp_warnings': 'warning',
+                  " \     'lsp_errors': 'error',
+                  " \   },
+                  " \   'component_expand': {
+                  " \     'lsp_warnings': 'GetLSPWarnings',
+                  " \     'lsp_errors': 'GetLSPErrors',
+                  " \   },
 
 if exists('colors_name') && colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
@@ -211,6 +242,7 @@ set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 " set showtabline=1
 " set shada='1000,%
 set noshowmode
+set shortmess+=c
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup ft_indent
@@ -408,6 +440,8 @@ augroup formatprgs
                  \ setlocal formatprg=prettier\ --parser\ typescript
   autocmd FileType javascript,javascriptreact
                  \ setlocal formatprg=prettier\ --parser\ babel
+  autocmd FileType cabal setlocal formatprg=cabal-fmt
+  autocmd FileType lua setlocal formatprg=lua-format
 augroup END
 
 function! s:FormatCode()
@@ -468,15 +502,13 @@ call sign_define('LspDiagnosticsSignError', {
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_timer_cycle = 500
 
-let g:UltiSnipsExpandTrigger = "<Nop>"
+let g:UltiSnipsExpandTrigger = "<nop>"
 let g:completion_enable_snippet = 'UltiSnips'
-" let g:completion_auto_change_source = 1
+let g:completion_auto_change_source = 1
 let g:completion_chain_complete_list = {
 \   'default' : [
 \     {'complete_items': ['lsp', 'path']},
 \     {'complete_items': ['snippet', 'buffers']},
-\     {'mode': '<c-p>'},
-\     {'mode': '<c-n>'},
 \   ]
 \ }
 
@@ -642,18 +674,14 @@ endif
 let g:clap_insert_mode_only = v:true
 let g:clap_search_box_border_style = 'nil'
 
-let g:clap_selected_sign = {
-                         \   'text': "\uf00c",
-                         \   'texthl': 'ClapSelectedSign',
-                         \   'linehl': 'ClapSelected',
-                         \ }
-let g:clap_current_selection_sign = {
-                                  \   'text': "\uf061",
-                                  \   'texthl': 'ClapCurrentSelectionSign',
-                                  \   'linehl': 'ClapCurrentSelection',
-                                  \ }
-let g:clap_no_matches_msg = 'BRUH...'
-
+let g:clap_selected_sign = { 'text': "\uf00c",
+                           \ 'texthl': 'ClapSelectedSign',
+                           \ 'linehl': 'ClapSelected' }
+let g:clap_current_selection_sign = { 'text': "\uf061",
+                                    \ 'texthl': 'ClapCurrentSelectionSign',
+                                    \ 'linehl': 'ClapCurrentSelection' }
+let g:clap_no_matches_msg = 'Bruh...'
+let g:clap_layout = { 'relative': 'editor', 'row': 4 }
 
 "----------------------------- FZF configuration ------------------------------"
 " let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
@@ -671,7 +699,9 @@ let g:clap_no_matches_msg = 'BRUH...'
 "-------------------------------- Git bindings --------------------------------"
 augroup LSP_highlight
   autocmd!
-  autocmd CursorHold * silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+  " autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 augroup END
 
 function! PasteBlock()
@@ -738,6 +768,8 @@ if exists('g:coc_enabled')
 else
   imap <Tab> <Plug>(completion_smart_tab)
   imap <S-Tab> <Plug>(completion_smart_s_tab)
+  imap <M-J> <Plug>(completion_next_source)
+  imap <M-K> <Plug>(completion_prev_source)
   imap <silent> <C-Space> <Plug>(completion_trigger)
   nnoremap <silent> <Leader>f :lua vim.lsp.buf.formatting()<CR>
   nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
@@ -815,3 +847,4 @@ nnoremap <silent> <Leader>gs :Git<CR>
 nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
+map Q <Nop>
