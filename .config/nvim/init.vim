@@ -1,4 +1,3 @@
-lua init = require'init'
 set encoding=utf-8
 
 call plug#begin('~/.config/nvim/plugged')
@@ -6,12 +5,12 @@ call plug#begin('~/.config/nvim/plugged')
 " Themes
 Plug 'ayu-theme/ayu-vim'
 " Plug 'morhetz/gruvbox'
-" Plug 'joshdick/onedark.vim'
+Plug 'joshdick/onedark.vim'
 " Plug 'dracula/vim', {'as': 'dracula'}
 " Plug 'tomasr/molokai' 
 " Plug 'vim-airline/vim-airline-themes'
 " Plug 'rakr/vim-one'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Tools
 " Plug 'vim-airline/vim-airline'
@@ -20,6 +19,9 @@ Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'kyazdani42/nvim-tree.lua'
+
 Plug 'tpope/vim-commentary'
 Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
 " Plug 'nvim-lua/popup.nvim'
@@ -78,12 +80,14 @@ Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
+lua init = require'init'
+lua lightline_util = require'lightline'
+
 if has('nvim-0.5')
   lua init.setup()
 endif
 
 "---------------------------------- Theme -------------------------------------"
-" 
 " if $XDG_CURRENT_DESKTOP == 'GNOME' &&
 " \  !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
 "   set background=light
@@ -98,43 +102,11 @@ set background=dark
 let g:ayucolor = 'dark'
 colorscheme ayu
 
-" function! GetFtText()
-"   if winwidth(0) > 70
-"     if strlen(&filetype)
-"       return &filetype . ' ' . WebDevIconsGetFileTypeSymbol()
-"     else
-"       return 'no ft'
-"     endif
-"   else
-"     return ''
-"   endif
-" endfunction
-
-" function! GetFtFormat()
-"   if winwidth(0) > 70
-"     return &fileformat . ' ' . WebDevIconsGetFileFormatSymbol()
-"   else
-"     return ''
-"   endif
-" endfunction
-
-function! GetFileInfo()
-  if winwidth(0) > 70
-    return WebDevIconsGetFileFormatSymbol() . ' ' . &filetype
-  else
-    return ''
-  endif
-endfunction
-
-function! GetLSPWarnings()
-  let nwarns = luaeval('init.get_nwarnings()')
-  return nwarns > 0 ? nwarns : ''
-endfunction
-
-function! GetLSPErrors()
-  let nerrors = luaeval('init.get_nerrors()')
-  return nerrors > 0 ? nerrors : ''
-endfunction
+"-------------------------------- Lightline -----------------------------------"
+let FilenameLabel = {-> luaeval('lightline_util.filename_label()')}
+let FiletypeLabel = {-> luaeval('lightline_util.filetype_label()')}
+let LSPWarnings = {-> luaeval('lightline_utils.lspwarnings()')}
+let LSPErrors = {-> luaeval('lightline_utils.lsperrors()')}
 
 augroup lsp_on_publish_diagnostics
   autocmd!
@@ -156,7 +128,7 @@ let g:lightline = {
 \     'right': [
 \       ['lineinfo'],
 \       ['percent'],
-\       ['fileencoding', 'fileinfo'],
+\       ['fileencoding', 'filetype'],
 \     ],
 \   },
 \   'component': {
@@ -168,7 +140,8 @@ let g:lightline = {
 \    'modified': '&modified',
 \   },
 \   'component_function': {
-\     'fileinfo': 'GetFileInfo',
+\     'filename': 'FilenameLabel',
+\     'filetype': 'FiletypeLabel',
 \   },
 \ }
 let g:lightline.colorscheme = 'ayu_dark_custom'
@@ -321,7 +294,7 @@ augroup END
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'fugitive']
-let g:disable_line_numbers = ['nerdtree', 'help', 'list', 'clap_input']
+let g:disable_line_numbers = ['nerdtree', 'NvimTree', 'help', 'list', 'clap_input']
 
 augroup aux_win_close
   autocmd!
@@ -606,96 +579,27 @@ function! Emoji2Unicode() abort
   execute "normal xi\<C-R>m\<Esc>"
 endfunction
 
-"--------------------------- NERDTree configuration ---------------------------"
-" Preserve netrw to load
-let g:loaded_netrwPlugin = 1
-let g:NERDTreeCascadeSingleChildDir = 0
-let g:NERDTreeMouseMode = 2
-let g:NERDTreeQuitOnOpen = 1
-let g:NERDTreeShowLineNumbers = 0
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeIgnore = ['__pycache__$', '\.git$', '\~$']
-let g:NERDTreeHijackNetrw = 0
-let g:NERDTreeDirArrowCollapsible = "\uf47c"
-let g:NERDTreeDirArrowExpandable = "\uf460"
+"--------------------------- NvimTree configuration ---------------------------"
+highlight NvimTreeFolderName guifg=#FFB454
 
-function! s:AutoOpenNERDTree()
-  if argc() == 0 && !exists('s:std_in')
-    NERDTree
-  elseif argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in')
-    wincmd p
-    enew
-    exe 'NERDTree' argv()[0]
-  endif
+let g:nvim_tree_icons = {
+\   'folder': {
+\     'default': "\uf07b",
+\     'open': "\uf07c",
+\     'symlink': "\uf0c1",
+\   },
+\ }
+let g:nvim_tree_auto_close = 1
+let g:nvim_tree_quit_on_open = 1
+let g:nvim_tree_indent_markers = 1
+
+"------------------------- Comment tool configuration -------------------------"
+function! s:VComment()
+  return mode() ==# 'v' ? 'Scgv' : ":Commentary\<CR>gv"
 endfunction
-
-function! s:CloseNERDTreeAlone()
-  if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()
-    qall
-  endif
-endfunction
-
-function! s:ToggleNERDTree()
-  if g:NERDTree.IsOpen()
-    NERDTreeClose
-  else
-    NERDTreeCWD
-  endif
-endfunction
-
-function! s:ToggleNERDTreeCurLocation()
-  if g:NERDTree.IsOpen()
-    NERDTreeClose
-  else
-    NERDTreeFind
-  endif
-endfunction
-
-augroup nerdtree
-  autocmd!
-
-  autocmd FileType nerdtree nnoremap <buffer><silent> <Esc> :NERDTreeClose<CR>
-  autocmd FileType nerdtree nnoremap <buffer><silent> q :NERDTreeClose<CR>
-
-  autocmd StdinReadPre * let s:std_in = 1
-  " autocmd VimEnter * call s:AutoOpenNERDTree()
-  autocmd BufEnter * call s:CloseNERDTreeAlone()
-augroup END
-
-let s:comment_tool = 'vim-commentary'
-
-if s:comment_tool == 'nerdcommenter'
-  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  " NERDCommenter configuration
-  " let NERDSpaceDelims = 1
-  " let NERDDefaultAlign = 'start'
-  " nnoremap <silent> <C-_> :call NERDComment('n', 'Toggle')<CR>
-  " xnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
-  " inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
-  let g:NERDCustomDelimiters = {
-  \   'javascriptreact': {
-  \     'leftAlt': '{/*',
-  \     'rightAlt': '*/}',
-  \   },
-  \   'typescript.tsx': {
-  \     'left': '//',
-  \     'right': '',
-  \     'leftAlt': '{/*',
-  \     'rightAlt': '*/}',
-  \   },
-  \ }
-
-elseif s:comment_tool == 'vim-commentary'
-  function! s:VComment()
-    return mode() ==# 'v' ? 'Scgv' : ":Commentary\<CR>gv"
-  endfunction
-  autocmd FileType typescriptreact setlocal commentstring=//\ %s
-endif
+autocmd FileType typescriptreact setlocal commentstring=//\ %s
 
 "-------------------------- Vim-clap configuration ----------------------------"
-
 let g:clap_insert_mode_only = v:true
 let g:clap_search_box_border_style = 'nil'
 
@@ -835,17 +739,13 @@ nnoremap <Leader><S-O> O<Esc>
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
 " Commenting
-if s:comment_tool == 'nerdcommenter'
-  " pass
-elseif s:comment_tool == 'vim-commentary'
-  nnoremap <silent> <C-_> :Commentary<CR>
-  inoremap <silent> <C-_> <C-O>:Commentary<CR>
-  xmap <expr><silent> <C-_> <SID>VComment()
-endif
+nnoremap <silent> <C-_> :Commentary<CR>
+inoremap <silent> <C-_> <C-O>:Commentary<CR>
+xmap <expr><silent> <C-_> <SID>VComment()
 
 " NERDTree
-nnoremap <silent> <F3> :call <SID>ToggleNERDTree()<CR>
-nnoremap <silent> <Leader><F3> :call <SID>ToggleNERDTreeCurLocation()<CR>
+nnoremap <silent> <F3> :NvimTreeToggle<CR>
+nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
 
 " Vim-clap
 nnoremap <C-P> :Clap files ++finder=rg --files --ignore<CR>

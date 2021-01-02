@@ -121,17 +121,20 @@ local function setup_lsp()
       virtual_text = true,
       update_in_insert = false
    }
+   local function on_formatting(err, method, result, client_id, bufnr, config)
+      local formatprg = vim.bo.formatprg
+      if err ~= nil and formatprg ~= nil then
+         local view = vim.fn.winsaveview()
+         vim.api.nvim_command('normal gggqG')
+         vim.fn.winrestview(view)
+      end
+   end
 
    local on_publish_handler = vim.lsp.with(
                                   vim.lsp.diagnostic.on_publish_diagnostics,
                                   on_publish_cfg)
 
-   -- vim.lsp.handlers['textDocument/codeAction'] =
-   --     function(err, method, result, client_id, bufnr, config)
-   --         print('textDocument/codeAction', err, method, result, client_id,
-   --               bufnr, config)
-   --     end
-
+   vim.lsp.handlers['textDocument/formatting'] = on_formatting
    vim.lsp.handlers['textDocument/publishDiagnostics'] =
        function(...)
           vim.api.nvim_command('doautocmd User LSPOnDiagnostics')
