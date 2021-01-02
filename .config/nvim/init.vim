@@ -22,6 +22,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree' " File explorer
 Plug 'tpope/vim-commentary'
 Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
+" Plug 'nvim-lua/popup.nvim'
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'SirVer/ultisnips'
@@ -50,6 +53,8 @@ Plug 'steelsojka/completion-buffers' " For completion-nvim
 " Plug 'octol/vim-cpp-enhanced-highlight'
 " Plug 'leafgarland/typescript-vim'
 " Plug 'HerringtonDarkholme/yats.vim'
+
+Plug 'neovimhaskell/haskell-vim' " Will be here until treesitter'll have Haskell
 Plug 'pangloss/vim-javascript' 
 Plug 'evanleck/vim-svelte', {'branch': 'main'}
 Plug 'cespare/vim-toml'
@@ -59,13 +64,13 @@ Plug 'editorconfig/editorconfig-vim'
 " let g:coc_enabled = v:true
 
 if has('nvim-0.5')
-  Plug 'nvim-treesitter/nvim-treesitter'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/completion-nvim'
 else
   " Plug 'leafgarland/typescript-vim'
   " let g:polyglot_disabled = ['typescript']
-  Plug 'sheerun/vim-polyglot'
+  " Plug 'sheerun/vim-polyglot'
 endif
 
 " It is required to load devicons as last
@@ -79,32 +84,43 @@ endif
 
 "---------------------------------- Theme -------------------------------------"
 " 
+" if $XDG_CURRENT_DESKTOP == 'GNOME' &&
+" \  !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
+"   set background=light
+"   let ayucolor = 'light'
+" else
+"   set background=dark
+"   let ayucolor = 'mirage'
+" endif
+
 set termguicolors
-if $XDG_CURRENT_DESKTOP == 'GNOME' &&
-  \ !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
-  set background=light
-  let ayucolor = 'light'
-else
-  set background=dark
-  let ayucolor = 'dark'
-endif
-
+set background=dark
+let g:ayucolor = 'dark'
 colorscheme ayu
-function! GetFtText()
-  if winwidth(0) > 70
-    if strlen(&filetype)
-      return &filetype . ' ' . WebDevIconsGetFileTypeSymbol()
-    else
-      return 'no ft'
-    endif
-  else
-    return ''
-  endif
-endfunction
 
-function! GetFtFormat()
+" function! GetFtText()
+"   if winwidth(0) > 70
+"     if strlen(&filetype)
+"       return &filetype . ' ' . WebDevIconsGetFileTypeSymbol()
+"     else
+"       return 'no ft'
+"     endif
+"   else
+"     return ''
+"   endif
+" endfunction
+
+" function! GetFtFormat()
+"   if winwidth(0) > 70
+"     return &fileformat . ' ' . WebDevIconsGetFileFormatSymbol()
+"   else
+"     return ''
+"   endif
+" endfunction
+
+function! GetFileInfo()
   if winwidth(0) > 70
-    return &fileformat . ' ' . WebDevIconsGetFileFormatSymbol()
+    return WebDevIconsGetFileFormatSymbol() . ' ' . &filetype
   else
     return ''
   endif
@@ -120,39 +136,42 @@ function! GetLSPErrors()
   return nerrors > 0 ? nerrors : ''
 endfunction
 
-" augroup lsp_on_publish_diagnostics
-"   autocmd!
-"   autocmd User LSPOnDiagnostics call lightline#update()
-" augroup END
+augroup lsp_on_publish_diagnostics
+  autocmd!
+  autocmd User LSPOnDiagnostics call lightline#update()
+augroup END
 
 let g:left_triangle_filled = "\ue0b8"
 let g:left_triangle_sep = "\ue0b9"
 let g:right_triangle_filled = "\ue0ba"
 let g:right_triangle_sep = "\ue0bb"
 
+source ~/.config/nvim/lightline_ayu_dark.vim
 let g:lightline = {
-                  \   'active': {
-                  \     'right': [
-                  \       ['lineinfo'],
-                  \       ['percent'],
-                  \       ['fileformat', 'fileencoding', 'filetype'],
-                  \     ],
-                  \   },
-                  \   'colorscheme': 'ayu_dark',
-                  \   'component_function': {
-                  \     'filetype': 'GetFtText',
-                  \     'fileformat': 'GetFtFormat',
-                  \   },
-                  \ }
-                  " \       ['lsp_warnings', 'lsp_errors'],
-                  " \   'component_type': {
-                  " \     'lsp_warnings': 'warning',
-                  " \     'lsp_errors': 'error',
-                  " \   },
-                  " \   'component_expand': {
-                  " \     'lsp_warnings': 'GetLSPWarnings',
-                  " \     'lsp_errors': 'GetLSPErrors',
-                  " \   },
+\   'active': {
+\     'left': [
+\       ['mode', 'paste'],
+\       ['filename', 'readonly', 'modified'],
+\     ],
+\     'right': [
+\       ['lineinfo'],
+\       ['percent'],
+\       ['fileencoding', 'fileinfo'],
+\     ],
+\   },
+\   'component': {
+\     'readonly': '%{&readonly ? "\uf023" : ""}',
+\     'modified': '%{&modified ? "\uf693" : ""}',
+\   },
+\   'component_visible_condition': {
+\    'readonly': '&readonly',
+\    'modified': '&modified',
+\   },
+\   'component_function': {
+\     'fileinfo': 'GetFileInfo',
+\   },
+\ }
+let g:lightline.colorscheme = 'ayu_dark_custom'
 
 if exists('colors_name') && colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
@@ -278,12 +297,12 @@ augroup END
 
 " Helping nvim detect filetype
 let s:additional_ftypes = {
-                        \   '*.zsh*': 'zsh',
-                        \   '.env.*': 'sh',
-                        \   '*.bnf': 'bnf',
-                        \   '*.webmanifest': 'json',
-                        \   '*.http': 'rest',
-                        \ }
+\   '*.zsh*': 'zsh',
+\   '.env.*': 'sh',
+\   '*.bnf': 'bnf',
+\   '*.webmanifest': 'json',
+\   '*.http': 'rest',
+\ }
 
 augroup file_types
   autocmd!
@@ -295,9 +314,9 @@ augroup file_types
 
   " json 5 comment
   autocmd FileType json
-                   \ syntax region Comment start="//" end="$" |
-                   \ syntax region Comment start="/\*" end="\*/" |
-                   \ setlocal commentstring=//\ %s
+                 \ syntax region Comment start="//" end="$" |
+                 \ syntax region Comment start="/\*" end="\*/" |
+                 \ setlocal commentstring=//\ %s
 augroup END
 
 " Filetypes names where q does :q<CR>
@@ -317,7 +336,7 @@ augroup END
 augroup highlight_yank
   autocmd!
   autocmd TextYankPost *
-          \ silent! lua require'vim.highlight'.on_yank{timeout=1000}
+        \ silent! lua require'vim.highlight'.on_yank{timeout=1000}
 augroup END
 
 "------------------------- Line numbers configuration -------------------------"
@@ -392,9 +411,9 @@ endfunction
 
 "----------------------------- CoC configuration ------------------------------"
 let g:coc_global_extensions = [
-                            \   'coc-emmet',
-                            \   'coc-svelte',
-                            \ ]
+\   'coc-emmet',
+\   'coc-svelte',
+\ ]
 
 let g:coc_snippet_next = '<Tab>'
 let g:coc_snippet_prev = '<S-Tab>'
@@ -441,7 +460,7 @@ augroup formatprgs
   autocmd FileType javascript,javascriptreact
                  \ setlocal formatprg=prettier\ --parser\ babel
   autocmd FileType cabal setlocal formatprg=cabal-fmt
-  autocmd FileType lua setlocal formatprg=lua-format
+  autocmd FileType lua setlocal formatprg=lua-format\ --indent-width=3
 augroup END
 
 function! s:FormatCode()
@@ -478,26 +497,32 @@ highlight! link LspDiagnosticsUnderlineWarning LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineError LSPUnderline
 
 let g:hint_sign = '💡'
-let g:info_sign = '🔷'
-let g:warning_sign = '🔥'
-let g:error_sign = '❌'
+let g:info_sign = '🔨'
+" let g:warning_sign = '🔥'
+let g:warning_sign = '🔶'
+" let g:error_sign = '❌'
+let g:error_sign = '⛔'
+" ♦️
+" 🟥
+" 🔴
+" 🚫
 
 call sign_define('LspDiagnosticsSignHint', {
-               \   'text': g:hint_sign,
-               \   'texthl': 'LspDiagnosticsUnderlineHint',
-               \ })
+\   'text': g:hint_sign,
+\   'texthl': 'LspDiagnosticsUnderlineHint',
+\ })
 call sign_define('LspDiagnosticsSignInformation', {
-               \   'text': g:info_sign,
-               \   'texthl': 'LspDiagnosticsUnderlineInformation',
-               \ })
+\   'text': g:info_sign,
+\   'texthl': 'LspDiagnosticsUnderlineInformation',
+\ })
 call sign_define('LspDiagnosticsSignWarning', {
-               \   'text': g:warning_sign,
-               \   'texthl': 'LspDiagnosticsUnderlineWarning',
-               \ })
+\   'text': g:warning_sign,
+\   'texthl': 'LspDiagnosticsUnderlineWarning',
+\ })
 call sign_define('LspDiagnosticsSignError', {
-               \   'text': g:error_sign,
-               \   'texthl': 'LspDiagnosticsUnderlineError',
-               \ })
+\   'text': g:error_sign,
+\   'texthl': 'LspDiagnosticsUnderlineError',
+\ })
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_timer_cycle = 500
@@ -545,10 +570,10 @@ command! -nargs=0 Shebang call s:Shebang()
 
 function! Durka()
   let themes = map(
-             \   split(system("ls ~/.config/nvim/colors/")) +
-             \   split(system("ls /usr/share/nvim/runtime/colors/")),
-             \   "v:val[:-5]"
-             \ )
+  \   split(system("ls ~/.config/nvim/colors/")) +
+  \   split(system("ls /usr/share/nvim/runtime/colors/")),
+  \   "v:val[:-5]"
+  \ )
   for th in themes
     echo th
     execute 'colorscheme' th
@@ -564,11 +589,11 @@ function! PrettyComment(comment, fill_char) abort
   let l:r_size = l:remain_len - l:l_size
 
   let l:result = a:comment .
-               \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
-               \ ' ' .
-               \ getline('.') .
-               \ ' ' .
-               \ repeat(a:fill_char, l:r_size - 1)
+    \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
+    \ ' ' .
+    \ getline('.') .
+    \ ' ' .
+    \ repeat(a:fill_char, l:r_size - 1)
 
   call setline('.', l:result)
 endfunction
@@ -650,17 +675,17 @@ if s:comment_tool == 'nerdcommenter'
   " xnoremap <silent> <C-_> :call NERDComment('v', 'Toggle')<CR>gv
   " inoremap <silent> <C-_> <C-O>:call NERDComment('i', 'Toggle')<CR>
   let g:NERDCustomDelimiters = {
-                             \   'javascriptreact': {
-                             \     'leftAlt': '{/*',
-                             \     'rightAlt': '*/}',
-                             \   },
-                             \   'typescript.tsx': {
-                             \     'left': '//',
-                             \     'right': '',
-                             \     'leftAlt': '{/*',
-                             \     'rightAlt': '*/}',
-                             \   },
-                             \ }
+  \   'javascriptreact': {
+  \     'leftAlt': '{/*',
+  \     'rightAlt': '*/}',
+  \   },
+  \   'typescript.tsx': {
+  \     'left': '//',
+  \     'right': '',
+  \     'leftAlt': '{/*',
+  \     'rightAlt': '*/}',
+  \   },
+  \ }
 
 elseif s:comment_tool == 'vim-commentary'
   function! s:VComment()
@@ -674,33 +699,24 @@ endif
 let g:clap_insert_mode_only = v:true
 let g:clap_search_box_border_style = 'nil'
 
-let g:clap_selected_sign = { 'text': "\uf00c",
-                           \ 'texthl': 'ClapSelectedSign',
-                           \ 'linehl': 'ClapSelected' }
-let g:clap_current_selection_sign = { 'text': "\uf061",
-                                    \ 'texthl': 'ClapCurrentSelectionSign',
-                                    \ 'linehl': 'ClapCurrentSelection' }
+let g:clap_selected_sign = {
+\   'text': "\uf00c",
+\   'texthl': 'ClapSelectedSign',
+\   'linehl': 'ClapSelected',
+\ }
+let g:clap_current_selection_sign = {
+\   'text': "\uf061",
+\   'texthl': 'ClapCurrentSelectionSign',
+\   'linehl': 'ClapCurrentSelection',
+\ }
 let g:clap_no_matches_msg = 'Bruh...'
 let g:clap_layout = { 'relative': 'editor', 'row': 4 }
-
-"----------------------------- FZF configuration ------------------------------"
-" let $FZF_DEFAULT_COMMAND = "rg --files --hidden --ignore"
-" let g:fzf_layout = {
-"                  \   'window': {
-"                  \     'width': 0.9,
-"                  \     'height': 0.6,
-"                  \     'yoffset': 0,
-"                  \   }
-"                  \ }
-" nnoremap <C-P> :Files<CR>
-" nnoremap <Leader>rg :Rg<CR>
-" nnoremap <Leader>b :Buffers<CR>
 
 "-------------------------------- Git bindings --------------------------------"
 augroup LSP_highlight
   autocmd!
-  autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-  autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+  autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
   " autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 augroup END
 
