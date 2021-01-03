@@ -244,7 +244,7 @@ augroup ft_indent
                  \ setlocal sw=4 sts=4 et
   autocmd FileType javascript,typescript,javascriptreact,typescriptreact,svelte,vim
                  \ setlocal sw=2 sts=2 et
-  autocmd FileType lua setlocal sw=3 sts=3 et
+  autocmd FileType lua setlocal sw=2 sts=2 et
 augroup END
 
 function! s:RestoreCursor()
@@ -433,7 +433,7 @@ augroup formatprgs
   autocmd FileType javascript,javascriptreact
                  \ setlocal formatprg=prettier\ --parser\ babel
   autocmd FileType cabal setlocal formatprg=cabal-fmt
-  autocmd FileType lua setlocal formatprg=lua-format\ --indent-width=3
+  autocmd FileType lua setlocal formatprg=lua-format\ --indent-width=2
 augroup END
 
 function! s:FormatCode()
