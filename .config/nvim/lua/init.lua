@@ -130,7 +130,6 @@ local function setup_lsp()
   -- Handle `formatting` error and try to format with 'formatprg'
   -- { err, method, result, client_id, bufnr, config }
   local function on_formatting(err, method, res, ...)
-    print('result', res)
     if err == nil and (res == nil or #res > 0) then
       stock_formatting(err, method, res, ...)
       return
