@@ -1,5 +1,7 @@
 local M = {}
 
+M.lightline = require('lightline_setup')
+
 local function get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
 
 local function debounce(func, timeout)
@@ -62,61 +64,60 @@ local function setup_lsp()
     root_dir = lsp.util.root_pattern('package.json', 'tsconfig.json', '.git')
   }
 
-  local pyls_cfg = {
+  local python_cfg = {
     cmd = {'pyls'},
     filetypes = {'python'},
-
     jedi_completion = {enabled = true},
     jedi_hover = {enabled = true},
     jedi_references = {enabled = true},
     jedi_signature_help = {enabled = true},
     jedi_symbols = {enabled = true, all_scopes = true},
-
     mccabe = {enabled = true, threshold = 15},
     preload = {enabled = true},
-
     pycodestyle = {enabled = true},
     pydocstyle = {
       enabled = false,
       match = '(?!test_).*\\.py',
       matchDir = '[^\\.].*'
     },
-
     rope_completion = {enabled = true},
     yapf = {enabled = true}
   }
+
   local emmet_cfg = {
     cmd = {'emmet-ls', '--stdio'},
-    filetypes = {'html', 'css', 'javascriptreact', 'typescriptreact'},
-    root_dir = function() return vim.loop.cwd() end
+    filetypes = {'html', 'css', 'typescriptreact', 'javascriptreact'},
+    root_dir = function() return vim.loop.cwd() end,
+    settings = {}
+  }
+
+  local svelte_cfg = {
+    cmd = {'svelteserver', '--stdio'},
+    filetypes = {'svelte'},
+    root_dir = function() return vim.loop.cwd() end,
+    settings = {}
   }
 
   local lua_cfg = {cmd = {'lua-language-server'}}
 
-  configs.emmet_ls = {
-    default_config = {
-      cmd = {'emmet-ls', '--stdio'},
-      filetypes = {'html', 'css', 'typescriptreact', 'javascriptreact'},
-      root_dir = function() return vim.loop.cwd() end,
-      settings = {}
-    }
-  }
+  configs.emmet_ls = {default_config = emmet_cfg}
+  configs.svelte = {default_config = svelte_cfg}
 
   lsp.tsserver.setup(ts_cfg)
-  lsp.pyls.setup(pyls_cfg)
+  lsp.pyls.setup(python_cfg)
+  lsp.sumneko_lua.setup(lua_cfg)
   lsp.rust_analyzer.setup {}
   lsp.gopls.setup {}
   lsp.hls.setup {}
-  lsp.sumneko_lua.setup(lua_cfg)
   lsp.clangd.setup {}
   lsp.emmet_ls.setup {}
+  lsp.svelte.setup {}
 
   local on_publish_cfg = {
     underline = true,
     virtual_text = true,
     update_in_insert = false
   }
-
   local on_publish_handler = vim.lsp.with(
                                  vim.lsp.diagnostic.on_publish_diagnostics,
                                  on_publish_cfg)
@@ -168,7 +169,7 @@ end
 
 function M.setup()
   pcall(setup_treesitter)
-  pcall(setup_lsp)
+  setup_lsp()
   pcall(setup_telescope)
 end
 

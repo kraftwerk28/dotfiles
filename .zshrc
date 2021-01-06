@@ -111,6 +111,7 @@ source ~/.zsh_completions
 
 alias vim="nvim"
 alias vi="nvim"
+alias im="nvim"
 alias vin="nvim"
 alias pacin="sudo pacman -S --needed"
 alias pacrm="sudo pacman -Rs"

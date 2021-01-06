@@ -13,14 +13,10 @@ Plug 'joshdick/onedark.vim'
 " Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Tools
-" Plug 'vim-airline/vim-airline'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/vim-emoji'
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
-Plug 'scrooloose/nerdtree' " File explorer
-Plug 'kyazdani42/nvim-web-devicons' " for file icons
-Plug 'kyazdani42/nvim-tree.lua'
 
 Plug 'tpope/vim-commentary'
 Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
@@ -36,7 +32,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'lyokha/vim-xkbswitch'
 Plug 'diepm/vim-rest-console'
 Plug 'chrisbra/Colorizer'
-Plug 'steelsojka/completion-buffers' " For completion-nvim
 
 " Languages
 "----------- This is obsolette as had been replaced by vim-polyglot -----------"
@@ -56,7 +51,7 @@ Plug 'steelsojka/completion-buffers' " For completion-nvim
 " Plug 'leafgarland/typescript-vim'
 " Plug 'HerringtonDarkholme/yats.vim'
 
-Plug 'neovimhaskell/haskell-vim' " Will be here until treesitter'll have Haskell
+Plug 'neovimhaskell/haskell-vim'
 Plug 'pangloss/vim-javascript' 
 Plug 'evanleck/vim-svelte', {'branch': 'main'}
 Plug 'cespare/vim-toml'
@@ -69,23 +64,22 @@ if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/completion-nvim'
+  Plug 'steelsojka/completion-buffers' " Source for completion-nvim
+  " Plug 'glepnir/galaxyline.nvim'
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'kyazdani42/nvim-tree.lua'
 else
   " Plug 'leafgarland/typescript-vim'
   " let g:polyglot_disabled = ['typescript']
   " Plug 'sheerun/vim-polyglot'
 endif
 
-" It is required to load devicons as last
-Plug 'ryanoasis/vim-devicons'
-
 call plug#end()
 
-lua init = require'init'
-lua lightline_util = require'lightline'
-
-if has('nvim-0.5')
-  lua init.setup()
-endif
+lua << EOF
+  init = require'init'
+  init.setup()
+EOF
 
 "---------------------------------- Theme -------------------------------------"
 " if $XDG_CURRENT_DESKTOP == 'GNOME' &&
@@ -103,14 +97,14 @@ let g:ayucolor = 'dark'
 colorscheme ayu
 
 "-------------------------------- Lightline -----------------------------------"
-let FilenameLabel = {-> luaeval('lightline_util.filename_label()')}
-let FiletypeLabel = {-> luaeval('lightline_util.filetype_label()')}
-let LSPWarnings = {-> luaeval('lightline_utils.lspwarnings()')}
-let LSPErrors = {-> luaeval('lightline_utils.lsperrors()')}
+let FilenameLabel = {-> luaeval('init.lightline.filename_label()')}
+let FiletypeLabel = {-> luaeval('init.lightline.filetype_label()')}
+" let LSPWarnings = {-> luaeval('init.lightline.lspwarnings()')}
+" let LSPErrors = {-> luaeval('init.lightline.lsperrors()')}
 
 augroup lsp_on_publish_diagnostics
   autocmd!
-  autocmd User LSPOnDiagnostics call lightline#update()
+  " autocmd User LSPOnDiagnostics call lightline#update()
 augroup END
 
 let g:left_triangle_filled = "\ue0b8"
