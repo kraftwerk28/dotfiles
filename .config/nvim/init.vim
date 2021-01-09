@@ -19,10 +19,10 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'tpope/vim-commentary'
-Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
-" Plug 'nvim-lua/popup.nvim'
-" Plug 'nvim-lua/plenary.nvim'
-" Plug 'nvim-telescope/telescope.nvim'
+" Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
 Plug 'SirVer/ultisnips'
@@ -242,9 +242,11 @@ augroup ft_indent
 augroup END
 
 function! s:RestoreCursor()
-   if line("'\"") > 0 && line("'\"") <= line('$')
-     exe "normal! g`\""
-   endif
+  echom 'Restoring cursor'
+  let l:last_pos = line("'\"")
+  if l:last_pos > 0 && l:last_pos <= line('$')
+    exe 'normal! g`"'
+  endif
 endfunction
 augroup restore_cursor
   autocmd!
@@ -669,7 +671,7 @@ nnoremap <silent> <Leader>h :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
 " LSP mappings:
-if exists('g:coc_enabled')
+if exists('g:coc_enabled') && g:coc_enabled
   inoremap <silent><expr> <Tab> <SID>CompletionTab()
   inoremap <silent><expr> <S-Tab> <SID>CompletionShiftTab()
   inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
@@ -685,7 +687,7 @@ else
   imap <M-J> <Plug>(completion_next_source)
   imap <M-K> <Plug>(completion_prev_source)
   imap <silent> <C-Space> <Plug>(completion_trigger)
-  nnoremap <silent> <Leader>f :lua vim.lsp.buf.formatting()<CR>
+  nnoremap <silent> <Leader>f :lua init.format_code()<CR>
   nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
   nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
   nnoremap <silent> <Leader>ae
@@ -742,14 +744,14 @@ nnoremap <silent> <F3> :NvimTreeToggle<CR>
 nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
 
 " Vim-clap
-nnoremap <C-P> :Clap files ++finder=rg --files --ignore<CR>
-nnoremap <Leader>rg :Clap grep2<CR>
-nnoremap <Leader>b :Clap buffers<CR>
-nnoremap <C-B> :Clap buffers<CR>
-" nnoremap <C-P> :Telescope find_files<CR>
-" nnoremap <Leader>rg :Telescope live_grep<CR>
-" nnoremap <Leader>b :Telescope buffers<CR>
-" nnoremap <C-B> :Telescope buffers<CR>
+" nnoremap <C-P> :Clap files<CR>
+" nnoremap <Leader>rg :Clap grep2<CR>
+" nnoremap <Leader>b :Clap buffers<CR>
+" nnoremap <C-B> :Clap buffers<CR>
+nnoremap <C-P> :lua init.telescope_files()<CR>
+nnoremap <Leader>rg :Telescope live_grep<CR>
+nnoremap <Leader>b :Telescope buffers<CR>
+nnoremap <C-B> :Telescope buffers<CR>
 
 " Fugitive
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>

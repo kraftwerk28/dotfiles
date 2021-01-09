@@ -1,6 +1,7 @@
 local M = {}
 
 M.lightline = require('lightline_setup')
+local aids = require('aids')
 
 local function get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
 
@@ -40,13 +41,30 @@ local function lsp_diagnostics_helper()
   end
 end
 
+local function format_formatprg()
+  local opt_exists, formatprg = pcall(function() return vim.bo.formatprg end)
+  if opt_exists and #formatprg > 0 then
+    local view = vim.fn.winsaveview()
+    vim.api.nvim_command('normal gggqG')
+    vim.fn.winrestview(view)
+    print('Formatted using \'formatprg\': `' .. formatprg .. '`')
+    return true
+  else
+    return false
+  end
+end
+
 M.show_lsp_diagnostics = lsp_diagnostics_helper()
 
 local function setup_treesitter()
   local ts = require 'nvim-treesitter.configs'
+  local disabled = {
+    'dart', 'ocaml', 'java', 'clojure', 'gdscript', 'ocamllex', 'fennel',
+    'verilog', 'sparql', 'turtle', 'teal'
+  }
   ts.setup {
     ensure_installed = 'maintained',
-    highlight = {enable = true, disable = {'dart', 'ocaml', 'java', 'clojure'}}
+    highlight = {enable = true, disable = disabled}
     -- indent = { enable = true },
   }
 end
@@ -131,15 +149,14 @@ local function setup_lsp()
   -- Handle `formatting` error and try to format with 'formatprg'
   -- { err, method, result, client_id, bufnr, config }
   local function on_formatting(err, method, res, ...)
-    if err == nil and (res == nil or #res > 0) then
+    -- print(aids.inspect_value({err = err, method = method, res = res}))
+    -- Doesn't work with typescript but does with haskell
+    -- if err == nil and (res == nil or #res > 0) then
+    if err == nil then
       stock_formatting(err, method, res, ...)
-      return
-    end
-    local opt_exists, formatprg = pcall(function() return vim.bo.formatprg end)
-    if opt_exists and #formatprg > 0 then
-      local view = vim.fn.winsaveview()
-      vim.api.nvim_command('normal gggqG')
-      vim.fn.winrestview(view)
+    else
+      print('Error formatting w/ LSP, falling back to \'formatprg\'...')
+      format_formatprg()
     end
   end
 
@@ -148,29 +165,41 @@ local function setup_lsp()
 end
 
 local function setup_telescope()
-  local actions = require 'telescope.actions'
-  local telescope = require 'telescope'
+  local actions = require('telescope.actions')
 
-  telescope.setup {
-    defaults = {
-      prompt_position = 'top',
-      color_devicons = true,
-      mappings = {
-        i = {
-          ['<C-K>'] = actions.move_selection_previous,
-          ['<C-J>'] = actions.move_selection_next,
-          ['<Esc>'] = actions.close
-        }
-      },
-      file_previewer = nil
-    }
+  local cfg = {
+    sorting_strategy = 'ascending',
+    prompt_position = 'top',
+    color_devicons = true,
+    mappings = {
+      i = {
+        ['<C-K>'] = actions.move_selection_previous,
+        ['<C-J>'] = actions.move_selection_next,
+        ['<Esc>'] = actions.close
+      }
+    },
+    file_previewer = nil
   }
+
+  require('telescope').setup {defaults = cfg}
+end
+
+function M.format_code()
+  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+    format_formatprg()
+  else
+    vim.lsp.buf.formatting()
+  end
 end
 
 function M.setup()
-  pcall(setup_treesitter)
+  setup_treesitter()
   setup_lsp()
   pcall(setup_telescope)
+end
+
+function M.telescope_files()
+  require('telescope.builtin').find_files({previewer = false})
 end
 
 return M

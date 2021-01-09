@@ -25,8 +25,9 @@ export PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 # python
 export PYTHONPATH="$HOME/projects/python"
 
-# Lua: luarocks
+# Lua
 export PATH="$PATH:$HOME/.luarocks/bin/"
+export LUA_PATH="$HOME/projects/lua/?.lua;;"
 
 # npm global modules
 export NODE_PATH="$HOME/.npm-global/lib/node_modules/"
