@@ -1,7 +1,7 @@
 local M = {}
 
-M.lightline = require('lightline_setup')
-local aids = require('aids')
+M.lightline = require 'lightline_setup'
+M.telescope = require 'telescope.builtin'
 
 local function get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
 
@@ -149,7 +149,6 @@ local function setup_lsp()
   -- Handle `formatting` error and try to format with 'formatprg'
   -- { err, method, result, client_id, bufnr, config }
   local function on_formatting(err, method, res, ...)
-    -- print(aids.inspect_value({err = err, method = method, res = res}))
     -- Doesn't work with typescript but does with haskell
     -- if err == nil and (res == nil or #res > 0) then
     if err == nil then
@@ -165,12 +164,18 @@ local function setup_lsp()
 end
 
 local function setup_telescope()
-  local actions = require('telescope.actions')
+  local telescope = require 'telescope'
+  local actions = require 'telescope.actions'
+  local previewers = require 'telescope.previewers'
 
   local cfg = {
     sorting_strategy = 'ascending',
+    prompt_prefix = '',
     prompt_position = 'top',
     color_devicons = true,
+    scroll_strategy = 'cycle',
+    winblend = 20,
+    file_previewer = previewers.vim_buffer_cat.new,
     mappings = {
       i = {
         ['<C-K>'] = actions.move_selection_previous,
@@ -178,10 +183,9 @@ local function setup_telescope()
         ['<Esc>'] = actions.close
       }
     },
-    file_previewer = nil
   }
 
-  require('telescope').setup {defaults = cfg}
+  telescope.setup {defaults = cfg}
 end
 
 function M.format_code()
@@ -195,11 +199,7 @@ end
 function M.setup()
   setup_treesitter()
   setup_lsp()
-  pcall(setup_telescope)
-end
-
-function M.telescope_files()
-  require('telescope.builtin').find_files({previewer = false})
+  setup_telescope()
 end
 
 return M

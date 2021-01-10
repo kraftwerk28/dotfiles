@@ -290,7 +290,10 @@ augroup END
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'fugitive']
-let g:disable_line_numbers = ['nerdtree', 'NvimTree', 'help', 'list', 'clap_input']
+let g:disable_line_numbers = [
+\   'nerdtree', 'NvimTree', 'help',
+\   'list', 'clap_input', 'TelescopePrompt',
+\ ]
 
 augroup aux_win_close
   autocmd!
@@ -335,30 +338,26 @@ endfunction
 
 "----------------------------- Buffer operations ------------------------------"
 function! s:buf_filt(inc_cur)
-
-  function! s:filter_callback(include_current, idx, val)
-    if !bufexists(a:val) || !buflisted(a:val) ||
-     \ buffer_name(a:val) =~? 'NERD_tree_*'
-      return v:false
-    endif
-    if a:include_current && bufnr() == a:val
+  function! s:filt_fn(include_current, idx, val)
+    if !bufexists(a:val) ||
+     \ !buflisted(a:val) ||
+     \ buffer_name(a:val) =~? 'NERD_tree_*' ||
+     \ (a:include_current && bufnr() == a:val)
       return v:false
     endif
     return v:true
   endfunction
-
-  return filter(range(1, bufnr('$')),
-              \ function('s:filter_callback', [a:inc_cur]))
+  return filter(range(1, bufnr('$')), function('s:filt_fn', [a:inc_cur]))
 endfunction
 
-function! s:DelBuf(del_all)
-  if (a:del_all)
-    wall
-    silent execute 'bdelete' join(s:buf_filt(0))
-  else
-    update
-    bprevious | split | bnext | bdelete
-  endif
+function! s:DellAllBuf()
+  wall
+  silent execute 'bdelete ' . join(s:buf_filt(0))
+endfunction
+
+function! s:DellThisBuf()
+  update
+  bprevious | split | bnext | bdelete
 endfunction
 
 " Delete buffers except current
@@ -716,8 +715,8 @@ vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 " snake_case -> kebab-case
 " TODO: implement
 
-nnoremap <silent> <Leader>d :call <SID>DelBuf(0)<CR>
-nnoremap <silent> <Leader>ad :call <SID>DelBuf(1)<CR>
+nnoremap <silent> <Leader>d :call <SID>DellThisBuf()<CR>
+nnoremap <silent> <Leader>ad :call <SID>DellAllBuf()<CR>
 nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
 nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
 
@@ -726,7 +725,6 @@ nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
 vnoremap <silent> <M-j> :m'>+1<CR>gv
 
-nnoremap <silent> <Leader>pretty :call <SID>RunPrettier()<CR>
 vnoremap <Leader>rv :s/\%V
 
 nnoremap <Leader>o o<Esc>
@@ -739,24 +737,21 @@ nnoremap <silent> <C-_> :Commentary<CR>
 inoremap <silent> <C-_> <C-O>:Commentary<CR>
 xmap <expr><silent> <C-_> <SID>VComment()
 
-" NERDTree
+" File explorer
 nnoremap <silent> <F3> :NvimTreeToggle<CR>
 nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
 
-" Vim-clap
-" nnoremap <C-P> :Clap files<CR>
-" nnoremap <Leader>rg :Clap grep2<CR>
-" nnoremap <Leader>b :Clap buffers<CR>
-" nnoremap <C-B> :Clap buffers<CR>
-nnoremap <C-P> :lua init.telescope_files()<CR>
+" Search tool
+nnoremap <C-P> :Telescope find_files<CR>
 nnoremap <Leader>rg :Telescope live_grep<CR>
 nnoremap <Leader>b :Telescope buffers<CR>
 nnoremap <C-B> :Telescope buffers<CR>
 
-" Fugitive
+" Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
 nnoremap <silent> <Leader>gs :Git<CR>
 nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
+
 map Q <Nop>
