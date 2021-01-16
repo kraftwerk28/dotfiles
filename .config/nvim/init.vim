@@ -1,83 +1,7 @@
 set encoding=utf-8
 
-call plug#begin('~/.config/nvim/plugged')
-
-" Themes
-Plug 'ayu-theme/ayu-vim'
-" Plug 'morhetz/gruvbox'
-Plug 'joshdick/onedark.vim'
-" Plug 'dracula/vim', {'as': 'dracula'}
-" Plug 'tomasr/molokai' 
-" Plug 'vim-airline/vim-airline-themes'
-" Plug 'rakr/vim-one'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-" Tools
-Plug 'itchyny/lightline.vim'
-Plug 'junegunn/vim-emoji'
-Plug 'tpope/vim-surround'
-Plug 'jiangmiao/auto-pairs'
-
-Plug 'tpope/vim-commentary'
-" Plug 'liuchengxu/vim-clap', {'do': ':Clap install-binary'}
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-
-Plug 'wellle/targets.vim' " More useful text objects (e.g. function arguments)
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'tpope/vim-fugitive' " Git helper
-Plug 'airblade/vim-gitgutter'
-Plug 'lyokha/vim-xkbswitch'
-Plug 'diepm/vim-rest-console'
-Plug 'chrisbra/Colorizer'
-
-" Languages
-"----------- This is obsolette as had been replaced by vim-polyglot -----------"
-" Plug 'rust-lang/rust.vim'
-" Plug 'evanleck/vim-svelte'
-" Plug 'jparise/vim-graphql'
-" Plug 'cespare/vim-toml'
-" Plug 'ollykel/v-vim'
-" Plug 'pangloss/vim-javascript'
-" Plug 'HerringtonDarkholme/yats.vim'
-" Plug 'maxmellon/vim-jsx-pretty'
-" Plug 'chrisbra/csv.vim'
-" Plug 'vim-python/python-syntax'
-" Plug 'plasticboy/vim-markdown'
-" Plug 'ekalinin/Dockerfile.vim'
-" Plug 'octol/vim-cpp-enhanced-highlight'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'HerringtonDarkholme/yats.vim'
-
-Plug 'neovimhaskell/haskell-vim'
-Plug 'pangloss/vim-javascript' 
-Plug 'evanleck/vim-svelte', {'branch': 'main'}
-Plug 'cespare/vim-toml'
-Plug 'editorconfig/editorconfig-vim'
-
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" let g:coc_enabled = v:true
-
-if has('nvim-0.5')
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'nvim-lua/completion-nvim'
-  Plug 'steelsojka/completion-buffers' " Source for completion-nvim
-  " Plug 'glepnir/galaxyline.nvim'
-  Plug 'kyazdani42/nvim-web-devicons'
-  Plug 'kyazdani42/nvim-tree.lua'
-else
-  " Plug 'leafgarland/typescript-vim'
-  " let g:polyglot_disabled = ['typescript']
-  " Plug 'sheerun/vim-polyglot'
-endif
-
-call plug#end()
-
 lua << EOF
-  init = require'init'
+  init = require 'init'
   init.setup()
 EOF
 
@@ -104,7 +28,7 @@ let FiletypeLabel = {-> luaeval('init.lightline.filetype_label()')}
 
 augroup lsp_on_publish_diagnostics
   autocmd!
-  " autocmd User LSPOnDiagnostics call lightline#update()
+  autocmd User LSPOnDiagnostics call lightline#update()
 augroup END
 
 let g:left_triangle_filled = "\ue0b8"
@@ -208,7 +132,6 @@ set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
 set completeopt=menuone,noinsert,noselect
-" set completeopt=menuone,longest
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
@@ -307,8 +230,7 @@ augroup END
 
 augroup highlight_yank
   autocmd!
-  autocmd TextYankPost *
-        \ silent! lua require'vim.highlight'.on_yank{timeout=1000}
+  autocmd TextYankPost * silent! lua init.yank_highlight()
 augroup END
 
 "------------------------- Line numbers configuration -------------------------"
@@ -448,7 +370,7 @@ augroup completion_nvim
       lua require'completion'.on_attach()
     endif
   endfunction
-  autocmd BufEnter * call s:OnAttachLSP()
+  " autocmd BufEnter * call s:OnAttachLSP()
 augroup END
 
 augroup lsp_diagnostics
@@ -742,6 +664,7 @@ nnoremap <silent> <F3> :NvimTreeToggle<CR>
 nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
 
 " Search tool
+" nnoremap <C-P> :Telescope find_files<CR>
 nnoremap <C-P> :Telescope find_files<CR>
 nnoremap <Leader>rg :Telescope live_grep<CR>
 nnoremap <Leader>b :Telescope buffers<CR>

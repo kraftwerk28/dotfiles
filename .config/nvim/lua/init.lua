@@ -1,60 +1,24 @@
 local M = {}
 
-M.lightline = require 'lightline_setup'
+local load_plugins = require 'plugins'
+local utils = require 'utils'
+local highlight = require 'vim.highlight'
+
+M.lightline = require 'lightline_cfg'
 M.telescope = require 'telescope.builtin'
-
-local function get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
-
-local function debounce(func, timeout)
-  local timer_id = nil
-  return function(...)
-    if timer_id ~= nil then vim.fn.timer_stop(timer_id) end
-    local args = {...}
-
-    timer_id = vim.fn.timer_start(timeout, function()
-      func(args)
-      timer_id = nil
-    end)
-  end
-end
-
-local function throttle(func, timeout)
-  local timer_id = nil
-  return function(...)
-    if timer_id == nil then
-      func {...}
-      timer_id = vim.fn.timer_start(timeout, function() timer_id = nil end)
-    end
-  end
-end
-
-local function lsp_diagnostics_helper()
-  local debounced = debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
-  local cursorpos = get_cursor_pos()
+M.show_lsp_diagnostics = (function()
+  local debounced =
+      utils.debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
+  local cursorpos = utils.get_cursor_pos()
   return function()
-    local new_cursor = get_cursor_pos()
+    local new_cursor = utils.get_cursor_pos()
     if (new_cursor[1] ~= 1 and new_cursor[2] ~= 1) and
         (new_cursor[1] ~= cursorpos[1] or new_cursor[2] ~= cursorpos[2]) then
       cursorpos = new_cursor
       debounced()
     end
   end
-end
-
-local function format_formatprg()
-  local opt_exists, formatprg = pcall(function() return vim.bo.formatprg end)
-  if opt_exists and #formatprg > 0 then
-    local view = vim.fn.winsaveview()
-    vim.api.nvim_command('normal gggqG')
-    vim.fn.winrestview(view)
-    print('Formatted using \'formatprg\': `' .. formatprg .. '`')
-    return true
-  else
-    return false
-  end
-end
-
-M.show_lsp_diagnostics = lsp_diagnostics_helper()
+end)()
 
 local function setup_treesitter()
   local ts = require 'nvim-treesitter.configs'
@@ -109,19 +73,11 @@ local function setup_lsp()
     settings = {}
   }
 
-  local svelte_cfg = {
-    cmd = {'svelteserver', '--stdio'},
-    filetypes = {'svelte'},
-    root_dir = function() return vim.loop.cwd() end,
-    settings = {}
-  }
-
   local lua_cfg = {cmd = {'lua-language-server'}}
 
   configs.emmet_ls = {default_config = emmet_cfg}
-  configs.svelte = {default_config = svelte_cfg}
 
-  lsp.tsserver.setup(ts_cfg)
+  lsp.tsserver.setup {}
   lsp.pyls.setup(python_cfg)
   lsp.sumneko_lua.setup(lua_cfg)
   lsp.rust_analyzer.setup {}
@@ -130,6 +86,7 @@ local function setup_lsp()
   lsp.clangd.setup {}
   lsp.emmet_ls.setup {}
   lsp.svelte.setup {}
+  lsp.jsonls.setup {}
 
   local on_publish_cfg = {
     underline = true,
@@ -155,7 +112,7 @@ local function setup_lsp()
       stock_formatting(err, method, res, ...)
     else
       print('Error formatting w/ LSP, falling back to \'formatprg\'...')
-      format_formatprg()
+      utils.format_formatprg()
     end
   end
 
@@ -174,15 +131,15 @@ local function setup_telescope()
     prompt_position = 'top',
     color_devicons = true,
     scroll_strategy = 'cycle',
-    winblend = 20,
-    file_previewer = previewers.vim_buffer_cat.new,
+    -- winblend = 20,
+    -- file_previewer = previewers.vim_buffer_cat.new,
     mappings = {
       i = {
         ['<C-K>'] = actions.move_selection_previous,
         ['<C-J>'] = actions.move_selection_next,
         ['<Esc>'] = actions.close
       }
-    },
+    }
   }
 
   telescope.setup {defaults = cfg}
@@ -190,16 +147,19 @@ end
 
 function M.format_code()
   if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-    format_formatprg()
+    utils.format_formatprg()
   else
     vim.lsp.buf.formatting()
   end
 end
 
 function M.setup()
+  load_plugins()
   setup_treesitter()
   setup_lsp()
   setup_telescope()
 end
+
+function M.yank_highlight() highlight.on_yank {timeout = 1000} end
 
 return M
