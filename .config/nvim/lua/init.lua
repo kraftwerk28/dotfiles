@@ -119,11 +119,11 @@ local function setup_lsp()
   local stock_formatting = vim.lsp.handlers['textDocument/formatting']
   -- Handle `formatting` error and try to format with 'formatprg'
   -- { err, method, result, client_id, bufnr, config }
-  local function on_formatting(err, method, res, ...)
+  local function on_formatting(err, ...)
     -- Doesn't work with typescript but does with haskell
     -- if err == nil and (res == nil or #res > 0) then
     if err == nil then
-      stock_formatting(err, method, res, ...)
+      stock_formatting(err, ...)
     else
       print('Error formatting w/ LSP, falling back to \'formatprg\'...')
       utils.format_formatprg()

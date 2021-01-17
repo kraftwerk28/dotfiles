@@ -1,4 +1,6 @@
 local function load()
+  use {'wbthomason/packer.nvim', opt = true}
+
   -- Themes
   use {'ayu-theme/ayu-vim'}
   use {'joshdick/onedark.vim'}
@@ -14,7 +16,15 @@ local function load()
   use {'nvim-lua/plenary.nvim'}
   use {
     'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+    requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'}
+  }
+  use {
+    'akinsho/nvim-bufferline.lua',
+    requires = {'kyazdani42/nvim-web-devicons'},
+    config = function()
+      print('Loading bufferline')
+      require'bufferline'.setup()
+    end
   }
 
   -- More useful text objects (e.g. function arguments)
@@ -31,7 +41,6 @@ local function load()
   use {'neovimhaskell/haskell-vim'}
   use {'pangloss/vim-javascript'}
   use {'evanleck/vim-svelte', branch = 'main'}
-  use {'cespare/vim-toml'}
   use {'editorconfig/editorconfig-vim'}
 
   -- use {'neoclide/coc.nvim', 'branch' = 'release'}
@@ -42,18 +51,13 @@ local function load()
   }
   use {'neovim/nvim-lspconfig'}
   use {'nvim-lua/completion-nvim'}
-  -- Source for completion-nvim
   use {'steelsojka/completion-buffers'}
-  use {'kyazdani42/nvim-web-devicons'}
-  use {'kyazdani42/nvim-tree.lua'}
-  -- use 'leafgarland/typescript-vim'
-  -- let g:polyglot_disabled = ['typescript']
-  -- use 'sheerun/vim-polyglot'
+  use {'kyazdani42/nvim-tree.lua', requires = {'kyazdani42/nvim-web-devicons'}}
 end
 
 return function()
   vim.cmd 'packadd packer.nvim'
   local packer = require 'packer'
-  packer.init {git = {clone_timeout = 240}}
+  packer.init()
   packer.startup(load)
 end

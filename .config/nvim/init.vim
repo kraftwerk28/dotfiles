@@ -1,9 +1,11 @@
 set encoding=utf-8
+set termguicolors
+set background=dark
 
-lua << EOF
-  init = require 'init'
-  init.setup()
-EOF
+echom 'Before lua init'
+lua init = require 'init'
+lua init.setup()
+echom 'After lua init'
 
 "---------------------------------- Theme -------------------------------------"
 " if $XDG_CURRENT_DESKTOP == 'GNOME' &&
@@ -15,8 +17,6 @@ EOF
 "   let ayucolor = 'mirage'
 " endif
 
-set termguicolors
-set background=dark
 let g:ayucolor = 'dark'
 colorscheme ayu
 
