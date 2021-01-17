@@ -350,7 +350,7 @@ augroup formatprgs
   autocmd FileType javascript,javascriptreact
                  \ setlocal formatprg=prettier\ --parser\ babel
   autocmd FileType cabal setlocal formatprg=cabal-fmt
-  autocmd FileType lua setlocal formatprg=lua-format\ --indent-width=2
+  autocmd FileType lua setlocal formatprg=lua-format\ -c\ ~/.lua-format
 augroup END
 
 function! s:FormatCode()

@@ -8,12 +8,12 @@ M.lightline = require 'lightline_cfg'
 M.telescope = require 'telescope.builtin'
 M.show_lsp_diagnostics = (function()
   local debounced =
-      utils.debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
+    utils.debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
   local cursorpos = utils.get_cursor_pos()
   return function()
     local new_cursor = utils.get_cursor_pos()
     if (new_cursor[1] ~= 1 and new_cursor[2] ~= 1) and
-        (new_cursor[1] ~= cursorpos[1] or new_cursor[2] ~= cursorpos[2]) then
+      (new_cursor[1] ~= cursorpos[1] or new_cursor[2] ~= cursorpos[2]) then
       cursorpos = new_cursor
       debounced()
     end
@@ -73,7 +73,21 @@ local function setup_lsp()
     settings = {}
   }
 
-  local lua_cfg = {cmd = {'lua-language-server'}}
+  local lua_cfg = {
+    cmd = {'lua-language-server'},
+    settings = {
+      Lua = {
+        runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
+        diagnostics = {globals = {'vim'}},
+        workspace = {
+          library = {
+            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
+          }
+        }
+      }
+    }
+  }
 
   configs.emmet_ls = {default_config = emmet_cfg}
 
@@ -93,9 +107,9 @@ local function setup_lsp()
     virtual_text = true,
     update_in_insert = false
   }
+
   local on_publish_handler = vim.lsp.with(
-                                 vim.lsp.diagnostic.on_publish_diagnostics,
-                                 on_publish_cfg)
+    vim.lsp.diagnostic.on_publish_diagnostics, on_publish_cfg)
 
   local function on_publish_diagnostics(...)
     vim.api.nvim_command('doautocmd User LSPOnDiagnostics')
