@@ -2,10 +2,8 @@ set encoding=utf-8
 set termguicolors
 set background=dark
 
-echom 'Before lua init'
 lua init = require 'init'
 lua init.setup()
-echom 'After lua init'
 
 "---------------------------------- Theme -------------------------------------"
 " if $XDG_CURRENT_DESKTOP == 'GNOME' &&
@@ -38,6 +36,7 @@ let g:right_triangle_sep = "\ue0bb"
 
 source ~/.config/nvim/lightline_ayu_dark.vim
 let g:lightline = {
+\   'enable': {'statusline': 1, 'tabline': 0},
 \   'active': {
 \     'left': [
 \       ['mode', 'paste'],
@@ -148,7 +147,6 @@ set splitbelow splitright
 set regexpengine=0
 set lazyredraw
 set guifont=JetBrains\ Mono\ Nerd\ Font:h18
-" set showtabline=1
 " set shada='1000,%
 set noshowmode
 set shortmess+=c
@@ -664,7 +662,6 @@ nnoremap <silent> <F3> :NvimTreeToggle<CR>
 nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
 
 " Search tool
-" nnoremap <C-P> :Telescope find_files<CR>
 nnoremap <C-P> :Telescope find_files<CR>
 nnoremap <Leader>rg :Telescope live_grep<CR>
 nnoremap <Leader>b :Telescope buffers<CR>

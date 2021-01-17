@@ -5,7 +5,7 @@ local utils = require 'utils'
 local highlight = require 'vim.highlight'
 
 M.lightline = require 'lightline_cfg'
-M.telescope = require 'telescope.builtin'
+
 M.show_lsp_diagnostics = (function()
   local debounced =
     utils.debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
@@ -73,8 +73,10 @@ local function setup_lsp()
     settings = {}
   }
 
+  local luals_root_path = vim.fn.stdpath('cache') ..
+                            '/lspconfig/sumneko_lua/lua-language-server'
   local lua_cfg = {
-    cmd = {'lua-language-server'},
+    cmd = {'lua-language-server', '-E', luals_root_path .. '/main.lua'},
     settings = {
       Lua = {
         runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
