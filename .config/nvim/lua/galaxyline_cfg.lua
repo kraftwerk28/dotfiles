@@ -2,9 +2,11 @@ local gl = require 'galaxyline'
 local gls = gl.section
 local fileinfo = require 'galaxyline.provider_fileinfo'
 local u = require'utils'.u
+local devicons = require 'nvim-web-devicons'
 
 gl.short_line_list = {'NvimTree', 'vista', 'dbui'}
 
+-- Shamelessly stolen from Gruvbox repo
 local cl = {
   dark0_hard = '#1d2021',
   dark0 = '#282828',
@@ -53,8 +55,9 @@ local cl = {
 
   none = 'NONE',
 }
-cl.bg = cl.dark1
-cl.fg = cl.light0
+
+cl.bg = vim.fn.synIDattr(vim.fn.hlID('StatusLine'), 'fg') -- Default background
+cl.fg = cl.light0 -- Default foreground
 
 local mode_map = {
   ['n'] = {'NORMAL', cl.bright_green},
@@ -99,107 +102,110 @@ local function diagnostic_exists()
   return vim.tbl_isempty(vim.lsp.buf_get_clients(0))
 end
 
-local function checkwidth()
+local function wide_enough()
   local squeeze_width = vim.fn.winwidth(0) / 2
   if squeeze_width > 40 then return true end
   return false
 end
 
-local function space() return ' ' end
-
-gls.left[1] = {
-  ViMode = {
-    provider = function()
-      vim.cmd(
-        'highlight GalaxyViMode guifg=' .. cl.bg .. ' guibg=' .. mode_hl() ..
-          ' gui=bold')
-      vim.cmd('highlight GalaxyViModeInv guifg=' .. mode_hl() .. ' guibg=' ..
-                cl.bg .. ' gui=bold')
-      return string.format('  %s ', mode_label())
-    end,
-    separator = sep.left_filled,
-    separator_highlight = 'GalaxyViModeInv',
-  },
-}
-
-gls.left[2] = {
-  FileIconLeft = {
-    provider = {space, 'FileIcon'},
-    highlight = {fileinfo.get_file_icon_color, cl.bg},
-    condition = buffer_not_empty,
-  },
-}
-
-gls.left[3] = {
-  FileLeft = {
-    provider = function()
-      local f = vim.fn.expand('%:t')
-      if #f == 0 then return '' end
-      if vim.bo.readonly then f = f .. ' ' .. icons.locker end
-      if vim.bo.modified then f = f .. ' ' .. icons.unsaved end
-      f = f .. ' '
-      return f
-    end,
-    condition = buffer_not_empty,
-    highlight = {cl.fg, cl.bg},
-    separator = sep.left,
-    separator_highlight = 'GalaxyViModeInv',
-  },
-}
-
-gls.right[2] = {
-  DiagnosticWarn = {
-    provider = function()
-      local n = vim.lsp.diagnostic.get_count(vim.fn.bufnr('%'), 'Warning')
-      if n == 0 then return '' end
-      return string.format(' %s %d ', u 'f071', n)
-    end,
-    highlight = {cl.bright_yellow, cl.bg},
-    separator = sep.right,
-    separator_highlight = 'GalaxyViModeInv',
-  },
-  DiagnosticError = {
-    provider = function()
-      local n = vim.lsp.diagnostic.get_count(vim.fn.bufnr('%'), 'Error')
-      if n == 0 then return '' end
-      return string.format(' %s %d ', u 'e009', n)
-    end,
-    highlight = {cl.bright_red, cl.bg},
-  },
-}
-
-gls.right[3] = {
-  FileType = {
-    provider = function()
-      local icon = icons[vim.bo.fileformat] or ''
-      return string.format(' %s %s ', icon, vim.bo.filetype)
-    end,
-    highlight = {cl.bright_orange, cl.bg},
-    separator = sep.right,
-    separator_highlight = 'GalaxyViModeInv',
-  },
-}
-
-gls.right[4] = {
-  PositionInfo = {
-    provider = {
-      function()
-        return string.format(' %s:%s ', vim.fn.line('.'), vim.fn.col('.'))
+gls.left = {
+  {
+    ViMode = {
+      provider = function()
+        vim.cmd('highlight GalaxyViMode guifg=' .. cl.bg .. ' guibg=' ..
+                  mode_hl() .. ' gui=bold')
+        vim.cmd('highlight GalaxyViModeInv guifg=' .. mode_hl() .. ' guibg=' ..
+                  cl.bg .. ' gui=bold')
+        return string.format('  %s ', mode_label())
       end,
+      separator = sep.left_filled,
+      separator_highlight = 'GalaxyViModeInv',
     },
-    highlight = 'GalaxyViMode',
-    condition = buffer_not_empty,
-    separator = sep.right_filled,
-    separator_highlight = 'GalaxyViModeInv',
+  },
+
+  {
+    FileIcon = {
+      provider = function()
+        local fname, ext = vim.fn.expand('%:t'), vim.fn.expand('%:e')
+        local icon, iconhl = devicons.get_icon(fname, ext)
+        if not icon then return '' end
+        local fg = vim.fn.synIDattr(vim.fn.hlID(iconhl), 'fg')
+        vim.cmd('highlight GalaxyFileIcon guifg=' .. fg .. ' guibg=' .. cl.bg)
+        return ' ' .. icon .. ' '
+      end,
+      condition = buffer_not_empty,
+    },
+    FileName = {
+      provider = function()
+        local fname = vim.fn.expand('%:t')
+        if not #fname then return '' end
+        if vim.bo.readonly then fname = fname .. ' ' .. icons.locker end
+        if vim.bo.modified then fname = fname .. ' ' .. icons.unsaved end
+        return ' ' .. fname .. ' '
+      end,
+      condition = buffer_not_empty,
+      highlight = {cl.fg, cl.bg},
+      separator = sep.left,
+      separator_highlight = 'GalaxyViModeInv',
+    },
   },
 }
 
-gls.right[5] = {
-  PercentInfo = {
-    provider = fileinfo.current_line_percent,
-    highlight = 'GalaxyViMode',
-    condition = buffer_not_empty,
-    separator = sep.right,
-    separator_highlight = 'GalaxyViMode',
+gls.right = {
+  {
+    DiagnosticWarn = {
+      provider = function()
+        local n = vim.lsp.diagnostic.get_count(vim.fn.bufnr('%'), 'Warning')
+        if n == 0 then return '' end
+        return string.format(' %s %d ', u 'f071', n)
+      end,
+      highlight = {cl.bright_yellow, cl.bg},
+      separator = sep.right,
+      separator_highlight = 'GalaxyViModeInv',
+    },
+    DiagnosticError = {
+      provider = function()
+        local n = vim.lsp.diagnostic.get_count(vim.fn.bufnr('%'), 'Error')
+        if n == 0 then return '' end
+        return string.format(' %s %d ', u 'e009', n)
+      end,
+      highlight = {cl.bright_red, cl.bg},
+    },
+  },
+
+  {
+    FileType = {
+      provider = function()
+        local icon = icons[vim.bo.fileformat] or ''
+        return string.format(' %s %s ', icon, vim.bo.filetype)
+      end,
+      highlight = {cl.fg, cl.bg},
+      separator = sep.right,
+      separator_highlight = 'GalaxyViModeInv',
+    },
+  },
+
+  {
+    PositionInfo = {
+      provider = {
+        function()
+          return string.format(' %s:%s ', vim.fn.line('.'), vim.fn.col('.'))
+        end,
+      },
+      highlight = 'GalaxyViMode',
+      condition = buffer_not_empty,
+      separator = sep.right_filled,
+      separator_highlight = 'GalaxyViModeInv',
+    },
+  },
+
+  {
+    PercentInfo = {
+      provider = fileinfo.current_line_percent,
+      highlight = 'GalaxyViMode',
+      condition = buffer_not_empty,
+      separator = sep.right,
+      separator_highlight = 'GalaxyViMode',
+    },
   },
 }

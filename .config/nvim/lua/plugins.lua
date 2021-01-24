@@ -13,7 +13,7 @@ local function load(use)
     'glepnir/galaxyline.nvim',
     branch = 'main',
     config = function() require 'galaxyline_cfg' end,
-    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
   }
 
   -- Tools
@@ -24,7 +24,7 @@ local function load(use)
   use 'tpope/vim-commentary'
   use {
     'nvim-telescope/telescope.nvim',
-    requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'}
+    requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'},
   }
 
   -- More useful text objects (e.g. function arguments)
@@ -47,7 +47,7 @@ local function load(use)
 
   use {
     'nvim-treesitter/nvim-treesitter',
-    run = function() vim.cmd 'TSUpdate' end
+    run = function() vim.cmd 'TSUpdate' end,
   }
   use 'nvim-treesitter/playground'
   use 'neovim/nvim-lspconfig'
@@ -55,7 +55,7 @@ local function load(use)
   use 'steelsojka/completion-buffers'
   use {
     'kyazdani42/nvim-tree.lua',
-    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
   }
 end
 

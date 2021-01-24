@@ -39,10 +39,10 @@ let FiletypeLabel = {-> luaeval('init.lightline.filetype_label()')}
 " let LSPWarnings = {-> luaeval('init.lightline.lspwarnings()')}
 " let LSPErrors = {-> luaeval('init.lightline.lsperrors()')}
 
-augroup lsp_on_publish_diagnostics
-  autocmd!
-  autocmd User LSPOnDiagnostics silent! call lightline#update()
-augroup END
+" augroup lsp_on_publish_diagnostics
+"   autocmd!
+"   autocmd User LSPOnDiagnostics silent! call lightline#update()
+" augroup END
 
 let g:left_triangle_filled = "\ue0b8"
 let g:left_triangle_sep = "\ue0b9"
@@ -405,7 +405,7 @@ highlight! link LspDiagnosticsUnderlineInformation LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineWarning LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineError LSPUnderline
 highlight! LspDiagnosticsSignHint guifg=yellow
-highlight! LspDiagnosticsSignInformation guifg=blue
+highlight! LspDiagnosticsSignInformation guifg=lightblue
 highlight! LspDiagnosticsSignWarnint guifg=yellow
 highlight! LspDiagnosticsSignError guifg=red
 

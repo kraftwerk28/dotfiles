@@ -4,7 +4,14 @@ local load_plugins = require 'plugins'
 local utils = require 'utils'
 local highlight = require 'vim.highlight'
 
-M.lightline = require 'lightline_cfg'
+function _G.dump(...)
+  local args = {...}
+  if #args == 1 then
+    print(vim.inspect(args[1]))
+  else
+    print(vim.inspect(args))
+  end
+end
 
 M.show_lsp_diagnostics = (function()
   local debounced =
