@@ -7,6 +7,7 @@ export PATH="$PATH:$HOME/.scripts"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+export RUSTC_WRAPPER=sccache
 
 # android
 export ANDROID_HOME=$HOME/Android/Sdk
@@ -27,11 +28,12 @@ export PYTHONPATH="$HOME/projects/python"
 
 # Lua
 export PATH="$PATH:$HOME/.luarocks/bin/"
-export LUA_PATH="$HOME/projects/lua/?.lua;;"
+export LUA_PATH="$HOME/projects/lua/?.lua;$HOME/.luarocks/share/lua/5.4/?.lua;;"
+export LUA_CPATH="$HOME/.luarocks/lib/lua/5.4/?.so"
 
 # npm global modules
-export NODE_PATH="$HOME/.npm-global/lib/node_modules/"
-export PATH="$PATH:$HOME/.npm-global/bin/"
+export NODE_PATH="$HOME/.npm-global/lib/node_modules"
+export PATH="$PATH:$HOME/.npm-global/bin"
 export NVS_HOME="$HOME/.nvs"
 
 # Haskell stuff

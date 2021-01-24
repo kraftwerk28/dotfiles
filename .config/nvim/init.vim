@@ -16,7 +16,22 @@ lua init.setup()
 " endif
 
 let g:ayucolor = 'dark'
-colorscheme ayu
+colorscheme gruvbox
+
+if colors_name == 'onedark'
+  let g:onedark_terminal_italics = 1
+elseif colors_name == 'gruvbox'
+  let g:gruvbox_italic = 1
+  let g:gruvbox_contrast_dark = 'medium'
+  let g:gruvbox_invert_selection = 0
+endif
+
+augroup alter_ayu_colorscheme
+  autocmd!
+  if exists('colors_name') && colors_name == 'ayu'
+    autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
+  endif
+augroup END
 
 "-------------------------------- Lightline -----------------------------------"
 let FilenameLabel = {-> luaeval('init.lightline.filename_label()')}
@@ -26,7 +41,7 @@ let FiletypeLabel = {-> luaeval('init.lightline.filetype_label()')}
 
 augroup lsp_on_publish_diagnostics
   autocmd!
-  autocmd User LSPOnDiagnostics call lightline#update()
+  autocmd User LSPOnDiagnostics silent! call lightline#update()
 augroup END
 
 let g:left_triangle_filled = "\ue0b8"
@@ -34,9 +49,12 @@ let g:left_triangle_sep = "\ue0b9"
 let g:right_triangle_filled = "\ue0ba"
 let g:right_triangle_sep = "\ue0bb"
 
-source ~/.config/nvim/lightline_ayu_dark.vim
+if g:colors_name == 'ayu'
+  source ~/.config/nvim/lightline_ayu_dark.vim
+endif
+
 let g:lightline = {
-\   'enable': {'statusline': 1, 'tabline': 0},
+\   'enable': {'statusline': 1, 'tabline': 1},
 \   'active': {
 \     'left': [
 \       ['mode', 'paste'],
@@ -61,18 +79,12 @@ let g:lightline = {
 \     'filetype': 'FiletypeLabel',
 \   },
 \ }
-let g:lightline.colorscheme = 'ayu_dark_custom'
 
-if exists('colors_name') && colors_name == 'onedark'
-  let g:onedark_terminal_italics = 1
+if g:colors_name == 'ayu'
+  let g:lightline.colorscheme = 'ayu_dark_custom'
+elseif g:colors_name == 'gruvbox'
+  let g:lightline.colorscheme = 'gruvbox'
 endif
-
-augroup alter_ayu_colorscheme
-  autocmd!
-  if exists('colors_name') && colors_name == 'ayu'
-    autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
-  endif
-augroup END
 
 " Must be AFTER augroup above
 syntax on
@@ -186,18 +198,27 @@ augroup auchecktime
 augroup END
 
 " Helping nvim detect filetype
-let s:additional_ftypes = {
-\   '*.zsh*': 'zsh',
-\   '.env.*': 'sh',
-\   '*.bnf': 'bnf',
-\   '*.webmanifest': 'json',
-\   '*.http': 'rest',
+let s:additional_filetypes = {
+\   'zsh': '*.zsh*',
+\   'sh': '.env.*',
+\   'bnf': '*.bnf',
+\   'json': '*.webmanifest',
+\   'rest': '*.http',
+\   'elixir': ['*.exs', '*.ex'],
 \ }
 
 augroup file_types
   autocmd!
-  for kv in items(s:additional_ftypes)
-    execute 'autocmd BufNewFile,BufRead' kv[0] 'setlocal filetype=' . kv[1]
+  for kv in items(s:additional_filetypes)
+    if type(kv[1]) == v:t_list
+      for ext in kv[1]
+        execute 'autocmd BufNewFile,BufRead ' . ext
+              \ . ' setlocal filetype=' . kv[0]
+      endfor
+    else
+      execute 'autocmd BufNewFile,BufRead ' . kv[1]
+            \ . ' setlocal filetype=' . kv[0]
+    endif
   endfor
 
   autocmd FileType markdown setlocal conceallevel=2
@@ -383,33 +404,26 @@ highlight! link LspDiagnosticsUnderlineHint LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineInformation LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineWarning LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineError LSPUnderline
-
-let g:hint_sign = '💡'
-let g:info_sign = '🔨'
-" let g:warning_sign = '🔥'
-let g:warning_sign = '🔶'
-" let g:error_sign = '❌'
-let g:error_sign = '⛔'
-" ♦️
-" 🟥
-" 🔴
-" 🚫
+highlight! LspDiagnosticsSignHint guifg=yellow
+highlight! LspDiagnosticsSignInformation guifg=blue
+highlight! LspDiagnosticsSignWarnint guifg=yellow
+highlight! LspDiagnosticsSignError guifg=red
 
 call sign_define('LspDiagnosticsSignHint', {
-\   'text': g:hint_sign,
-\   'texthl': 'LspDiagnosticsUnderlineHint',
+\   'text': "\uf0eb",
+\   'texthl': 'LspDiagnosticsSignHint',
 \ })
 call sign_define('LspDiagnosticsSignInformation', {
-\   'text': g:info_sign,
-\   'texthl': 'LspDiagnosticsUnderlineInformation',
+\   'text': "\uf129",
+\   'texthl': 'LspDiagnosticsSignInformation',
 \ })
 call sign_define('LspDiagnosticsSignWarning', {
-\   'text': g:warning_sign,
-\   'texthl': 'LspDiagnosticsUnderlineWarning',
+\   'text': "\uf071",
+\   'texthl': 'LspDiagnosticsSignWarning',
 \ })
 call sign_define('LspDiagnosticsSignError', {
-\   'text': g:error_sign,
-\   'texthl': 'LspDiagnosticsUnderlineError',
+\   'text': "\uf06a",
+\   'texthl': 'LspDiagnosticsSignError',
 \ })
 
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
@@ -495,7 +509,8 @@ function! Emoji2Unicode() abort
 endfunction
 
 "--------------------------- NvimTree configuration ---------------------------"
-highlight NvimTreeFolderName guifg=#FFB454
+highlight link NvimTreeFolderName Directory 
+highlight link NvimTreeFolderIcon Tag
 
 let g:nvim_tree_icons = {
 \   'folder': {
@@ -580,8 +595,23 @@ nnoremap < <<
 vnoremap > >gv
 vnoremap < <gv
 
+" Buffer nav
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
+nnoremap <silent> <Leader>d :call <SID>DellThisBuf()<CR>
+nnoremap <silent> <Leader>ad :call <SID>DellAllBuf()<CR>
+nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
+nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
+
+" Tab nav
+nnoremap th :tabprevious<CR>
+nnoremap tl :tabnext<CR>
+nnoremap tj :tablast<CR>
+nnoremap tk :tabfirst<CR>
+nnoremap th :tabnext<CR>
+nnoremap tt :tabnew<CR>
+nnoremap td :tabclose<CR>
+
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>cfg 
                   \ :e ~/.config/nvim/lua/init.lua <Bar>
@@ -635,11 +665,6 @@ vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 " snake_case -> kebab-case
 " TODO: implement
 
-nnoremap <silent> <Leader>d :call <SID>DellThisBuf()<CR>
-nnoremap <silent> <Leader>ad :call <SID>DellAllBuf()<CR>
-nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
-nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
-
 nnoremap <silent> <M-k> :m-2<CR>
 nnoremap <silent> <M-j> :m+1<CR>
 vnoremap <silent> <M-k> :m'<-2<CR>gv
@@ -675,3 +700,10 @@ nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
 map Q <Nop>
+
+" vnoremap <Leader>df d"=system('date +"%Y-%m-%d %H:%M:%S" -d @' . @")[:-2]<C-M>P
+" for pair in ["h \<Left>", "j \<Down>", "k \<Up>", "l \<Right>"]
+"   let s:p = split(pair, ' ')
+"   execute 'cnoremap ' . s:p[0] . ' ' . s:p[1]
+"   execute 'cnoremap ' . s:p[1] . ' ' . s:p[0]
+" endfor

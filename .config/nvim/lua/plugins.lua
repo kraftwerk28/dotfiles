@@ -4,24 +4,27 @@ local function load(use)
   -- Themes
   use 'ayu-theme/ayu-vim'
   use 'joshdick/onedark.vim'
+  use 'morhetz/gruvbox'
+  use 'shinchu/lightline-gruvbox.vim'
+
+  -- Statusline
+  use {'itchyny/lightline.vim', disable = true}
+  use {
+    'glepnir/galaxyline.nvim',
+    branch = 'main',
+    config = function() require 'galaxyline_cfg' end,
+    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+  }
 
   -- Tools
-  use 'itchyny/lightline.vim'
   use 'junegunn/vim-emoji'
   use 'tpope/vim-surround'
   use 'jiangmiao/auto-pairs'
 
   use 'tpope/vim-commentary'
-  use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
   use {
     'nvim-telescope/telescope.nvim',
     requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'}
-  }
-  use {
-    'akinsho/nvim-bufferline.lua',
-    requires = {'kyazdani42/nvim-web-devicons'},
-    config = function() require'bufferline'.setup() end
   }
 
   -- More useful text objects (e.g. function arguments)
@@ -46,10 +49,14 @@ local function load(use)
     'nvim-treesitter/nvim-treesitter',
     run = function() vim.cmd 'TSUpdate' end
   }
+  use 'nvim-treesitter/playground'
   use 'neovim/nvim-lspconfig'
   use 'nvim-lua/completion-nvim'
   use 'steelsojka/completion-buffers'
-  use {'kyazdani42/nvim-tree.lua', requires = {'kyazdani42/nvim-web-devicons'}}
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+  }
 end
 
 return function()
