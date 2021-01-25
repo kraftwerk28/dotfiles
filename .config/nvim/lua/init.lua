@@ -4,15 +4,6 @@ local load_plugins = require 'plugins'
 local utils = require 'utils'
 local highlight = require 'vim.highlight'
 
-function _G.dump(...)
-  local args = {...}
-  if #args == 1 then
-    print(vim.inspect(args[1]))
-  else
-    print(vim.inspect(args))
-  end
-end
-
 M.show_lsp_diagnostics = (function()
   local debounced =
     utils.debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
@@ -186,16 +177,6 @@ local function setup_telescope()
   telescope.setup {defaults = cfg}
 end
 
-local function setup_bufferline()
-  require'bufferline'.setup {
-    options = {always_show_bufferline = false, show_buffer_close_icons = false},
-    highlights = {
-      buffer_selected = {gui = 'bold'},
-      background = {guifg = 'gray'},
-    },
-  }
-end
-
 function M.format_code()
   if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) or vim.bo.filetype == 'haskell' then
     utils.format_formatprg()
@@ -205,10 +186,10 @@ function M.format_code()
 end
 
 function M.setup()
-  load_plugins()
-  setup_treesitter()
-  setup_lsp()
-  setup_telescope()
+  utils.pcall(load_plugins)
+  utils.pcall(setup_treesitter)
+  utils.pcall(setup_lsp)
+  utils.pcall(setup_telescope)
 end
 
 function M.yank_highlight() highlight.on_yank {timeout = 1000} end

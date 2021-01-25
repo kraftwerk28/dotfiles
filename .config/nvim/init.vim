@@ -400,13 +400,15 @@ augroup END
 "------------------------------- builtin LSP ----------------------------------"
 highlight LSPCurlyUnderline gui=undercurl
 highlight LSPUnderline gui=underline
+
 highlight! link LspDiagnosticsUnderlineHint LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineInformation LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineWarning LSPCurlyUnderline
 highlight! link LspDiagnosticsUnderlineError LSPUnderline
+
 highlight! LspDiagnosticsSignHint guifg=yellow
 highlight! LspDiagnosticsSignInformation guifg=lightblue
-highlight! LspDiagnosticsSignWarnint guifg=yellow
+highlight! LspDiagnosticsSignWarning guifg=darkyellow
 highlight! LspDiagnosticsSignError guifg=red
 
 call sign_define('LspDiagnosticsSignHint', {
@@ -699,7 +701,8 @@ nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
-map Q <Nop>
+nnoremap Q <Nop>
+nnoremap q: <Nop>
 
 " vnoremap <Leader>df d"=system('date +"%Y-%m-%d %H:%M:%S" -d @' . @")[:-2]<C-M>P
 " for pair in ["h \<Left>", "j \<Down>", "k \<Up>", "l \<Right>"]

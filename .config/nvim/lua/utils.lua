@@ -58,4 +58,18 @@ function M.u(code)
   return table.concat(t)
 end
 
+function _G.dump(...)
+  local args = {...}
+  if #args == 1 then
+    print(vim.inspect(args[1]))
+  else
+    print(vim.inspect(args))
+  end
+end
+
+function M.pcall(fn)
+  local ok, err = pcall(fn)
+  if not ok then print('ERROR:', err) end
+end
+
 return M

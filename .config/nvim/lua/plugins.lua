@@ -1,4 +1,8 @@
 local function load(use)
+  local use_rocks = require'packer'.use_rocks
+
+  use_rocks {'lua-cjson', 'http'}
+
   use {'wbthomason/packer.nvim', opt = true}
 
   -- Themes
