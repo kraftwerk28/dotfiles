@@ -186,6 +186,7 @@ function M.format_code()
 end
 
 function M.setup()
+  require 'cjson'
   utils.pcall(load_plugins)
   utils.pcall(setup_treesitter)
   utils.pcall(setup_lsp)
