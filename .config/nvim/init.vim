@@ -500,7 +500,7 @@ function! Emoji2Unicode() abort
 endfunction
 
 "--------------------------- NvimTree configuration ---------------------------"
-highlight link NvimTreeFolderName Directory 
+highlight link NvimTreeFolderName Title
 highlight link NvimTreeFolderIcon Tag
 
 let g:nvim_tree_icons = {

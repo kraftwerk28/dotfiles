@@ -73,10 +73,12 @@ gls.left = {
   },
   {
     FileIcon = {
+      -- provider = {function() return ' ' end, fileinfo.get_file_icon},
+      -- highlight = {fileinfo.get_file_icon_color, cl.bg},
       provider = function()
         local fname, ext = vim.fn.expand('%:t'), vim.fn.expand('%:e')
         local icon, iconhl = devicons.get_icon(fname, ext)
-        if not icon then return '' end
+        if icon == nil then return '' end
         local fg = vim.fn.synIDattr(vim.fn.hlID(iconhl), 'fg')
         vim.cmd('highlight GalaxyFileIcon guifg=' .. fg .. ' guibg=' .. cl.bg)
         return ' ' .. icon .. ' '
