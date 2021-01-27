@@ -70,11 +70,8 @@ gls.left = {
       separator = sep.left_filled,
       separator_highlight = 'GalaxyViModeInv',
     },
-  },
-  {
+  }, {
     FileIcon = {
-      -- provider = {function() return ' ' end, fileinfo.get_file_icon},
-      -- highlight = {fileinfo.get_file_icon_color, cl.bg},
       provider = function()
         local fname, ext = vim.fn.expand('%:t'), vim.fn.expand('%:e')
         local icon, iconhl = devicons.get_icon(fname, ext)
@@ -121,8 +118,7 @@ gls.right = {
       end,
       highlight = {cl.bright_red, cl.bg},
     },
-  },
-  {
+  }, {
     FileType = {
       provider = function()
         local icon = icons[vim.bo.fileformat] or ''
@@ -132,8 +128,7 @@ gls.right = {
       separator = sep.right,
       separator_highlight = 'GalaxyViModeInv',
     },
-  },
-  {
+  }, {
     PositionInfo = {
       provider = {
         function()
@@ -145,8 +140,7 @@ gls.right = {
       separator = sep.right_filled,
       separator_highlight = 'GalaxyViModeInv',
     },
-  },
-  {
+  }, {
     PercentInfo = {
       provider = fileinfo.current_line_percent,
       highlight = 'GalaxyViMode',
