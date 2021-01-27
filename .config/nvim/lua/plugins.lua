@@ -7,16 +7,14 @@ local function load(use)
 
   -- Themes
   use 'ayu-theme/ayu-vim'
-  use 'joshdick/onedark.vim'
-  use 'morhetz/gruvbox'
-  use 'shinchu/lightline-gruvbox.vim'
+  -- use 'joshdick/onedark.vim'
+  -- use 'morhetz/gruvbox'
 
   -- Statusline
-  use {'itchyny/lightline.vim', disable = true}
   use {
     'glepnir/galaxyline.nvim',
     branch = 'main',
-    config = function() require 'galaxyline_cfg' end,
+    config = function() require 'cfg.galaxyline' end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
   }
 
@@ -28,13 +26,16 @@ local function load(use)
   use 'tpope/vim-commentary'
   use {
     'nvim-telescope/telescope.nvim',
-    requires = {'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim'},
+    requires = {
+      'kyazdani42/nvim-web-devicons', 'nvim-lua/popup.nvim',
+      'nvim-lua/plenary.nvim',
+    },
   }
 
-  -- More useful text objects (e.g. function arguments)
-  use 'wellle/targets.vim'
-  use 'SirVer/ultisnips'
-  use 'honza/vim-snippets'
+  use 'wellle/targets.vim' -- More useful text objects (e.g. function arguments)
+  use 'Shougo/neosnippet.vim'
+  use 'Shougo/neosnippet-snippets'
+
   -- Git helper
   use 'tpope/vim-fugitive'
   use 'airblade/vim-gitgutter'
@@ -54,18 +55,22 @@ local function load(use)
     run = function() vim.cmd 'TSUpdate' end,
   }
   use 'nvim-treesitter/playground'
+
   use 'neovim/nvim-lspconfig'
-  use 'nvim-lua/completion-nvim'
+  use {'nvim-lua/completion-nvim'}
   use 'steelsojka/completion-buffers'
+
   use {
     'kyazdani42/nvim-tree.lua',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
   }
 end
 
+local config = {git = {clone_timeout = 240}}
+
 return function()
   vim.cmd 'packadd packer.nvim'
   local packer = require 'packer'
-  packer.startup {load, config = {git = {clone_timeout = 240}}}
+  packer.startup {load, config = config}
   vim.cmd 'autocmd BufWritePost plugins.lua PackerCompile'
 end

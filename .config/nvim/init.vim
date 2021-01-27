@@ -4,6 +4,7 @@ set background=dark
 
 lua init = require 'init'
 lua init.setup()
+autocmd VimEnter lua init.setup_later()
 
 "---------------------------------- Theme -------------------------------------"
 " if $XDG_CURRENT_DESKTOP == 'GNOME' &&
@@ -15,23 +16,21 @@ lua init.setup()
 "   let ayucolor = 'mirage'
 " endif
 
-let g:ayucolor = 'dark'
-colorscheme gruvbox
+colorscheme ayu
 
-if colors_name == 'onedark'
+if colors_name == 'ayu'
+  let g:ayucolor = 'mirage'
+  augroup alter_ayu_colorscheme
+    autocmd!
+    autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
+  augroup END
+elseif colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
 elseif colors_name == 'gruvbox'
   let g:gruvbox_italic = 1
   let g:gruvbox_contrast_dark = 'medium'
   let g:gruvbox_invert_selection = 0
 endif
-
-augroup alter_ayu_colorscheme
-  autocmd!
-  if exists('colors_name') && colors_name == 'ayu'
-    autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
-  endif
-augroup END
 
 "-------------------------------- Lightline -----------------------------------"
 let FilenameLabel = {-> luaeval('init.lightline.filename_label()')}
@@ -49,9 +48,7 @@ let g:left_triangle_sep = "\ue0b9"
 let g:right_triangle_filled = "\ue0ba"
 let g:right_triangle_sep = "\ue0bb"
 
-if g:colors_name == 'ayu'
-  source ~/.config/nvim/lightline_ayu_dark.vim
-endif
+" source ~/.config/nvim/lightline_ayu_dark.vim
 
 let g:lightline = {
 \   'enable': {'statusline': 1, 'tabline': 1},
@@ -91,28 +88,6 @@ syntax on
 
 let g:mapleader = ' '
 
-"--------------------------- Airline configuration ----------------------------"
-let g:airline_powerline_fonts = 1
-let g:airline_highlighting_cache = 1
-let g:airline_theme = 'ayu_dark'
-let g:airline_extensions = ['tabline', 'nvimlsp']
-let g:airline#extensions#tabline#show_tab_type = 0
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline_left_sep = "\ue0b8"
-let g:airline_right_sep = "\ue0ba"
-
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
-let g:airline#extensions#tabline#right_sep = ''
-let g:airline#extensions#tabline#right_alt_sep = ''
-
-"--------------------------- Devicos configuration ----------------------------"
-let g:webdevicons_enable_nerdtree = 1
-let g:DevIconsEnableFoldersOpenClose = 1
-let g:DevIconsDefaultFolderOpenSymbol = "\uf07c"
-let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol="\uf07b"
-let g:DevIconsEnableFolderExtensionPatternMatching = 1
-
 " let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
 
 let g:surround_{char2nr('r')} = "{'\r'}"
@@ -137,7 +112,7 @@ let g:javascript_plugin_jsdoc = 1
 set hidden
 set expandtab softtabstop=4 tabstop=4 shiftwidth=2
 set autoindent smartindent
-set list listchars=tab:➔\ ,trail:·,space:·
+set list listchars=tab:⇥\ ,trail:·,space:·
 set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
@@ -401,10 +376,10 @@ augroup END
 highlight LSPCurlyUnderline gui=undercurl
 highlight LSPUnderline gui=underline
 
-highlight! link LspDiagnosticsUnderlineHint LSPCurlyUnderline
-highlight! link LspDiagnosticsUnderlineInformation LSPCurlyUnderline
-highlight! link LspDiagnosticsUnderlineWarning LSPCurlyUnderline
-highlight! link LspDiagnosticsUnderlineError LSPUnderline
+highlight! LspDiagnosticsUnderlineHint gui=undercurl
+highlight! LspDiagnosticsUnderlineInformation gui=undercurl
+highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=darkyellow
+highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=darkred
 
 highlight! LspDiagnosticsSignHint guifg=yellow
 highlight! LspDiagnosticsSignInformation guifg=lightblue
@@ -412,34 +387,48 @@ highlight! LspDiagnosticsSignWarning guifg=darkyellow
 highlight! LspDiagnosticsSignError guifg=red
 
 call sign_define('LspDiagnosticsSignHint', {
-\   'text': "\uf0eb",
+\   'text': "\Uf0eb",
 \   'texthl': 'LspDiagnosticsSignHint',
 \ })
 call sign_define('LspDiagnosticsSignInformation', {
-\   'text': "\uf129",
+\   'text': "\Uf129",
 \   'texthl': 'LspDiagnosticsSignInformation',
 \ })
 call sign_define('LspDiagnosticsSignWarning', {
-\   'text': "\uf071",
+\   'text': "\Uf071",
 \   'texthl': 'LspDiagnosticsSignWarning',
 \ })
 call sign_define('LspDiagnosticsSignError', {
-\   'text': "\uf06a",
+\   'text': "\Uf46e",
 \   'texthl': 'LspDiagnosticsSignError',
 \ })
 
+"------------------------------ completion-nvim -------------------------------"
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-let g:completion_timer_cycle = 500
-
-let g:UltiSnipsExpandTrigger = "<nop>"
-let g:completion_enable_snippet = 'UltiSnips'
+let g:completion_timer_cycle = 300
+let g:completion_enable_snippet = 'Neosnippet'
 let g:completion_auto_change_source = 1
+let g:completion_confirm_key = ""
 let g:completion_chain_complete_list = {
 \   'default' : [
 \     {'complete_items': ['lsp', 'path']},
-\     {'complete_items': ['snippet', 'buffers']},
+\     {'complete_items': ['snippet', 'path', 'buffers']},
 \   ]
 \ }
+
+function! s:CompCR()
+  if pumvisible()
+    if neosnippet#expandable()
+      return "\<Plug>(neosnippet_expand)"
+    else
+      return "\<Plug>(completion_confirm_completion)"
+    endif
+  else
+    return "\<CR>"
+  endif
+endfunction
+
+imap <expr> <CR> <SID>CompCR()
 
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
@@ -607,10 +596,9 @@ nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
 
 " Tab nav
 nnoremap th :tabprevious<CR>
-nnoremap tl :tabnext<CR>
 nnoremap tj :tablast<CR>
 nnoremap tk :tabfirst<CR>
-nnoremap th :tabnext<CR>
+nnoremap tl :tabnext<CR>
 nnoremap tt :tabnew<CR>
 nnoremap td :tabclose<CR>
 
@@ -638,11 +626,12 @@ else
   imap <M-J> <Plug>(completion_next_source)
   imap <M-K> <Plug>(completion_prev_source)
   imap <silent> <C-Space> <Plug>(completion_trigger)
+
   nnoremap <silent> <Leader>f :lua init.format_code()<CR>
   nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
   nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
   nnoremap <silent> <Leader>ae
-                  \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+         \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
   nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
   nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 endif
@@ -689,10 +678,10 @@ nnoremap <silent> <F3> :NvimTreeToggle<CR>
 nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
 
 " Search tool
-nnoremap <C-P> :Telescope find_files<CR>
-nnoremap <Leader>rg :Telescope live_grep<CR>
-nnoremap <Leader>b :Telescope buffers<CR>
-nnoremap <C-B> :Telescope buffers<CR>
+nnoremap <silent> <C-P> :Telescope find_files<CR>
+nnoremap <silent> <Leader>rg :Telescope live_grep<CR>
+nnoremap <silent> <Leader>b :Telescope buffers<CR>
+nnoremap <silent> <C-B> :Telescope buffers<CR>
 
 " Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
@@ -701,12 +690,5 @@ nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
-nnoremap Q <Nop>
-nnoremap q: <Nop>
-
-" vnoremap <Leader>df d"=system('date +"%Y-%m-%d %H:%M:%S" -d @' . @")[:-2]<C-M>P
-" for pair in ["h \<Left>", "j \<Down>", "k \<Up>", "l \<Right>"]
-"   let s:p = split(pair, ' ')
-"   execute 'cnoremap ' . s:p[0] . ' ' . s:p[1]
-"   execute 'cnoremap ' . s:p[1] . ' ' . s:p[0]
-" endfor
+" nnoremap Q <Nop>
+" nnoremap q: <Nop>

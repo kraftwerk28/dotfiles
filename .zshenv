@@ -28,8 +28,14 @@ export PYTHONPATH="$HOME/projects/python"
 
 # Lua
 export PATH="$PATH:$HOME/.luarocks/bin/"
-export LUA_PATH="$HOME/projects/lua/?.lua;$HOME/.luarocks/share/lua/5.4/?.lua;;"
-export LUA_CPATH="$HOME/.luarocks/lib/lua/5.4/?.so"
+luavers=(5.1 5.4)
+export LUA_PATH="$HOME/projects/lua/?.lua;"
+for ver in ${luavers[@]}; do
+  export LUA_PATH="$LUA_PATH$HOME/.luarocks/share/lua/$ver/?.lua;"
+  export LUA_CPATH="$LUA_CPATH$HOME/.luarocks/lib/lua/$ver/?.so;"
+done
+export LUA_PATH="$LUA_PATH;"
+export LUA_CPATH="$LUA_CPATH;"
 
 # npm global modules
 export NODE_PATH="$HOME/.npm-global/lib/node_modules"
@@ -39,6 +45,3 @@ export NVS_HOME="$HOME/.nvs"
 # Haskell stuff
 export PATH="$PATH:$HOME/.cabal/bin/"
 export PATH="$PATH:$HOME/.ghcup/bin/"
-
-# Java MPI
-export MPJ_HOME="$HOME/projects/mpj-v0_44/"

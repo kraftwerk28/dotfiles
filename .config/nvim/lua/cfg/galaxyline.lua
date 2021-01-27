@@ -1,76 +1,25 @@
 local gl = require 'galaxyline'
 local gls = gl.section
+
 local fileinfo = require 'galaxyline.provider_fileinfo'
 local u = require'utils'.u
 local devicons = require 'nvim-web-devicons'
+local cl = require 'cfg.colors'
 
 gl.short_line_list = {'NvimTree', 'vista', 'dbui'}
 
--- Shamelessly stolen from Gruvbox repo
-local cl = {
-  dark0_hard = '#1d2021',
-  dark0 = '#282828',
-  dark0_soft = '#32302f',
-  dark1 = '#3c3836',
-  dark2 = '#504945',
-  dark3 = '#665c54',
-  dark4 = '#7c6f64',
-  dark4_256 = '#7c6f64',
-
-  gray_245 = '#928374',
-  gray_244 = '#928374',
-
-  light0_hard = '#f9f5d7',
-  light0 = '#fbf1c7',
-  light0_soft = '#f2e5bc',
-  light1 = '#ebdbb2',
-  light2 = '#d5c4a1',
-  light3 = '#bdae93',
-  light4 = '#a89984',
-  light4_256 = '#a89984',
-
-  bright_red = '#fb4934',
-  bright_green = '#b8bb26',
-  bright_yellow = '#fabd2f',
-  bright_blue = '#83a598',
-  bright_purple = '#d3869b',
-  bright_aqua = '#8ec07c',
-  bright_orange = '#fe8019',
-
-  neutral_red = '#cc241d',
-  neutral_green = '#98971a',
-  neutral_yellow = '#d79921',
-  neutral_blue = '#458588',
-  neutral_purple = '#b16286',
-  neutral_aqua = '#689d6a',
-  neutral_orange = '#d65d0e',
-
-  faded_red = '#9d0006',
-  faded_green = '#79740e',
-  faded_yellow = '#b57614',
-  faded_blue = '#076678',
-  faded_purple = '#8f3f71',
-  faded_aqua = '#427b58',
-  faded_orange = '#af3a03',
-
-  none = 'NONE',
-}
-
-cl.bg = vim.fn.synIDattr(vim.fn.hlID('StatusLine'), 'fg') -- Default background
-cl.fg = cl.light0 -- Default foreground
-
 local mode_map = {
-  ['n'] = {'NORMAL', cl.bright_green},
-  ['i'] = {'INSERT', cl.bright_blue},
-  ['R'] = {'REPLACE', cl.bright_red},
-  ['v'] = {'VISUAL', cl.bright_purple},
-  ['V'] = {'V-LINE', cl.bright_purple},
-  ['c'] = {'COMMAND', cl.bright_yellow},
-  ['s'] = {'SELECT', cl.bright_purple},
-  ['S'] = {'S-LINE', cl.bright_purple},
-  ['t'] = {'TERMINAL', cl.bright_aqua},
-  [''] = {'V-BLOCK', cl.bright_purple},
-  [''] = {'S-BLOCK', cl.bright_purple},
+  ['n'] = {'NORMAL', cl.normal},
+  ['i'] = {'INSERT', cl.insert},
+  ['R'] = {'REPLACE', cl.replace},
+  ['v'] = {'VISUAL', cl.visual},
+  ['V'] = {'V-LINE', cl.visual},
+  ['c'] = {'COMMAND', cl.command},
+  ['s'] = {'SELECT', cl.visual},
+  ['S'] = {'S-LINE', cl.visual},
+  ['t'] = {'TERMINAL', cl.terminal},
+  [''] = {'V-BLOCK', cl.visual},
+  [''] = {'S-BLOCK', cl.visual},
   ['Rv'] = {'VIRTUAL'},
   ['rm'] = {'--MORE'},
 }
@@ -122,7 +71,6 @@ gls.left = {
       separator_highlight = 'GalaxyViModeInv',
     },
   },
-
   {
     FileIcon = {
       provider = function()
@@ -172,7 +120,6 @@ gls.right = {
       highlight = {cl.bright_red, cl.bg},
     },
   },
-
   {
     FileType = {
       provider = function()
@@ -184,7 +131,6 @@ gls.right = {
       separator_highlight = 'GalaxyViModeInv',
     },
   },
-
   {
     PositionInfo = {
       provider = {
@@ -198,7 +144,6 @@ gls.right = {
       separator_highlight = 'GalaxyViModeInv',
     },
   },
-
   {
     PercentInfo = {
       provider = fileinfo.current_line_percent,
