@@ -52,7 +52,7 @@ local function diagnostic_exists()
 end
 
 local function wide_enough()
-  local squeeze_width = vim.fn.winwidth(0) / 2
+  local squeeze_width = vim.fn.winwidth(0)
   if squeeze_width > 40 then return true end
   return false
 end
@@ -84,8 +84,13 @@ gls.left = {
     },
     FileName = {
       provider = function()
-        local fname = vim.fn.expand('%:t')
-        if not #fname then return '' end
+        local fname
+        if wide_enough() then
+          fname = vim.fn.expand('%')
+        else
+          fname = vim.fn.expand('%:t')
+        end
+        if #fname == 0 then return '' end
         if vim.bo.readonly then fname = fname .. ' ' .. icons.locker end
         if vim.bo.modified then fname = fname .. ' ' .. icons.unsaved end
         return ' ' .. fname .. ' '
@@ -106,7 +111,7 @@ gls.right = {
         if n == 0 then return '' end
         return string.format(' %s %d ', u 'f071', n)
       end,
-      highlight = {cl.bright_yellow, cl.bg},
+      highlight = {'yellow', cl.bg},
       separator = sep.right,
       separator_highlight = 'GalaxyViModeInv',
     },
@@ -116,7 +121,7 @@ gls.right = {
         if n == 0 then return '' end
         return string.format(' %s %d ', u 'e009', n)
       end,
-      highlight = {cl.bright_red, cl.bg},
+      highlight = {'red', cl.bg},
     },
   }, {
     FileType = {

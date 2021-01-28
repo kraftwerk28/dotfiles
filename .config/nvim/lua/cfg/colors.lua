@@ -22,7 +22,7 @@ local ayu_dark, ayu_mirage = (function()
   }
 
   local ayu_mappings = {
-    bg = ayu_colors.bg,
+    bg = ayu_colors.selection,
     fg = ayu_colors.fg,
     normal = ayu_colors.string,
     insert = ayu_colors.tag,
@@ -37,7 +37,6 @@ local ayu_dark, ayu_mirage = (function()
     ayu_dark[k] = v.dark
     ayu_mirage[k] = v.mirage
   end
-
   return ayu_dark, ayu_mirage
 end)()
 

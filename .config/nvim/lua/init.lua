@@ -42,7 +42,7 @@ end
 
 function M.format_code()
   if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) or vim.bo.filetype == 'haskell' then
-    M.format_formatprg()
+    utils.format_formatprg()
   else
     vim.lsp.buf.formatting()
   end
@@ -58,5 +58,22 @@ end
 function M.setup_later() utils.pcall(require'translator'.setup) end
 
 function M.yank_highlight() highlight.on_yank {timeout = 1000} end
+
+function M.attach_completion() require'completion'.on_attach() end
+
+function M.run_prettier()
+  if vim.fn.executable('prettier') == 0 then return end
+  local ft = vim.bo.filetype
+  local parser
+  if ft == 'typescript' or ft == 'typescriptreact' then
+    parser = 'typescript'
+  elseif ft == 'javascript' or ft == 'javascriptreact' then
+    parser = 'babel'
+  end
+  local old_formatprg = vim.bo.formatprg
+  vim.bo.formatprg = 'prettier --parser ' .. parser
+  utils.format_formatprg()
+  vim.bo.formatprg = old_formatprg
+end
 
 return M

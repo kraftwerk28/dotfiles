@@ -47,6 +47,7 @@ local function load(use)
   use 'pangloss/vim-javascript'
   use {'evanleck/vim-svelte', branch = 'main'}
   use 'editorconfig/editorconfig-vim'
+  use 'elixir-editors/vim-elixir'
 
   -- use {'neoclide/coc.nvim', 'branch' = 'release'}
 

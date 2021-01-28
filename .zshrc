@@ -9,7 +9,7 @@ export ZSH="/home/kraftwerk28/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="custom"
+# ZSH_THEME="custom"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -79,7 +79,7 @@ plugins=(
 
 fpath=(~/.zfunc $fpath)
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 
@@ -107,14 +107,27 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+PROMPT_END_OK="$"
+PROMPT_END_FAIL="$"
+GIT_DIRTY="✗"
+GIT_CLEAN="✔"
+GIT_BRANCH_CH="\Ue0a0"
+
+PROMPT_STATUS="%(?:%B%F{green}$PROMPT_END_OK:%B%F{red}$PROMPT_END_FAIL)"
+PROMPT_VIMODE=""
+
+ZSH_THEME_GIT_PROMPT_PREFIX="%B%F{blue}$GIT_BRANCH_CH%b%F{yellow}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%b%f%k "
+ZSH_THEME_GIT_PROMPT_DIRTY="%B%F{blue}%F{red}$GIT_DIRTY"
+ZSH_THEME_GIT_PROMPT_CLEAN="%B%F{blue}%F{green}$GIT_CLEAN"
+CL_RESET="%b%f%k"
+
 source ~/.zsh_completions
 
 alias vim="nvim"
 alias vi="nvim"
 alias im="nvim"
 alias vin="nvim"
-alias pacin="sudo pacman -S --needed"
-alias pacrm="sudo pacman -Rs"
 alias ndoe="node"
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
@@ -137,7 +150,7 @@ alias serves="serve \
   --ssl-key ~/ca-tmp/localhost.key"
 alias ssh="kitty +kitten ssh"
 
-mkcd() {
+mkcd () {
   if [ -z "$1" ]; then
     echo "Usage: mkcd <dirname>"
     return 1
@@ -146,7 +159,7 @@ mkcd() {
   cd "$1"
 }
 
-cjq() {
+cjq () {
   if [ -z "$1" ]; then
     echo "Usage: mkcd <dirname>"
     return 1
@@ -158,9 +171,41 @@ if [[ -s "$NVS_HOME/nvs.sh" ]]; then
   source "$NVS_HOME/nvs.sh"
 fi
 
-bindkey -e
+refresh_prompt () {
+  if [ "$KEYMAP" = "vicmd" ] || [ "$1" = "block" ]; then
+    echo -ne "\e[1 q"
+    # PROMPT_VIMODE="%F{yellow}%SN%s%F{yellow}"
+    PROMPT_VIMODE="%F{yellow}N "
+  elif [ "$KEYMAP" = "main" ] || [ "$KEYMAP" = "viins" ] ||
+       [ "$KEYMAP" = "" ] || [ "$1" = "beam" ]; then
+    echo -ne "\e[5 q"
+    # PROMPT_VIMODE="%F{blue}%SI%s%F{blue}"
+    PROMPT_VIMODE="%F{blue}I "
+  fi
+  FPATH="%F{#ffa500}%(4~|…/%2~|%~) "
+  PROMPT="$FPATH\$(git_prompt_info)$PROMPT_VIMODE$PROMPT_STATUS$CL_RESET "
+  RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
+}
+
+KEYTIMEOUT=50
+
+zle-keymap-select () {
+  refresh_prompt $1
+  zle reset-prompt
+}
+
+zle -N zle-keymap-select
+precmd_functions+=(refresh_prompt)
+
+bindkey -v
 bindkey "^[OA" up-line-or-history
 bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept
+bindkey "^[[Z" reverse-menu-complete
+bindkey -M viins "^?" backward-delete-char
+bindkey -M viins "^W" backward-kill-word
+bindkey -M viins "^P" up-history
+bindkey -M viins "^N" down-history
+
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 export ZSH_AUTOSUGGEST_USE_ASYNC=1

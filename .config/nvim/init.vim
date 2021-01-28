@@ -359,12 +359,7 @@ endfunction
 
 augroup completion_nvim
   autocmd!
-  function! s:OnAttachLSP()
-    if index(['clap_input'], &filetype) == -1
-      lua require'completion'.on_attach()
-    endif
-  endfunction
-  " autocmd BufEnter * call s:OnAttachLSP()
+  autocmd BufEnter * lua init.attach_completion()
 augroup END
 
 augroup lsp_diagnostics
@@ -379,7 +374,7 @@ highlight LSPUnderline gui=underline
 highlight! LspDiagnosticsUnderlineHint gui=undercurl
 highlight! LspDiagnosticsUnderlineInformation gui=undercurl
 highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=darkyellow
-highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=darkred
+highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=red
 
 highlight! LspDiagnosticsSignHint guifg=yellow
 highlight! LspDiagnosticsSignInformation guifg=lightblue
@@ -408,27 +403,14 @@ let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_timer_cycle = 300
 let g:completion_enable_snippet = 'Neosnippet'
 let g:completion_auto_change_source = 1
-let g:completion_confirm_key = ""
+let g:completion_confirm_key = "\<CR>"
+let g:completion_sorting = 'none'
 let g:completion_chain_complete_list = {
 \   'default' : [
 \     {'complete_items': ['lsp', 'path']},
 \     {'complete_items': ['snippet', 'path', 'buffers']},
 \   ]
 \ }
-
-function! s:CompCR()
-  if pumvisible()
-    if neosnippet#expandable()
-      return "\<Plug>(neosnippet_expand)"
-    else
-      return "\<Plug>(completion_confirm_completion)"
-    endif
-  else
-    return "\<CR>"
-  endif
-endfunction
-
-imap <expr> <CR> <SID>CompCR()
 
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
@@ -498,6 +480,8 @@ function! Emoji2Unicode() abort
   let @m = substitute(l:u, '\(.\{4\}\)', '\\u\1', 'g')
   execute "normal xi\<C-R>m\<Esc>"
 endfunction
+
+command! -nargs=0 Prettier lua init.run_prettier()
 
 "--------------------------- NvimTree configuration ---------------------------"
 highlight link NvimTreeFolderName Title
@@ -595,18 +579,20 @@ nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
 nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
 
 " Tab nav
-nnoremap th :tabprevious<CR>
-nnoremap tj :tablast<CR>
-nnoremap tk :tabfirst<CR>
-nnoremap tl :tabnext<CR>
-nnoremap tt :tabnew<CR>
-nnoremap td :tabclose<CR>
+nnoremap <silent> th :tabprevious<CR>
+nnoremap <silent> tj :tablast<CR>
+nnoremap <silent> tk :tabfirst<CR>
+nnoremap <silent> tl :tabnext<CR>
+nnoremap <silent> tt :tabnew<CR>
+nnoremap <silent> td :tabclose<CR>
+nnoremap <silent> tH :-tabmove<CR>
+nnoremap <silent> tL :+tabmove<CR>
 
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>cfg 
                   \ :e ~/.config/nvim/lua/init.lua <Bar>
                   \ :e ~/.config/nvim/init.vim <CR>
-nnoremap <silent> <Leader>h :setlocal hlsearch!<CR>
+nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
 " LSP mappings:
@@ -685,8 +671,8 @@ nnoremap <silent> <C-B> :Telescope buffers<CR>
 
 " Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
-nnoremap <silent> <Leader>gs :Git<CR>
-nnoremap <Leader>gp :10split <Bar> :terminal git push origin HEAD<CR>
+nnoremap <silent> <Leader>gs :vertical Gstatus<CR>
+nnoremap <Leader>gp :copen <Bar> :G poosh<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
