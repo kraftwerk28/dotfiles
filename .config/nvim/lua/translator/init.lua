@@ -1,8 +1,5 @@
 local M = {}
 
--- TODO: implement for langcode completion
-function M.get_lang_list() return {'en', 'ua'} end
-
 function M.translate(text, ...)
   local args = {...}
   local from_lng, to_lng
@@ -28,7 +25,6 @@ function M.translate(text, ...)
     q = text,
   }
   local url = string.format('%s%s?%s', base, path, utils.dict_to_query(params))
-  print(url)
   local _, stream = request.new_from_uri(url):go()
   local ok, result = pcall(function()
     local b = cjson.decode(stream:get_body_as_string())
@@ -38,7 +34,8 @@ function M.translate(text, ...)
 end
 
 function M.setup()
-  vim.cmd('source ' .. vim.fn.expand('%:p:h') .. '/lua/translator/setupcmd.vim')
+  local path = '~/.config/nvim/lua/translator/setupcmd.vim'
+  vim.cmd('source ' .. path)
 end
 
 return M
