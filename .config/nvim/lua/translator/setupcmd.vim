@@ -53,6 +53,7 @@ endfunction
 
 function! s:Tr(...)
   if index([1, 2], len(a:000)) == -1
+    echoerr "Wrong argument number"
     return
   endif
 
@@ -68,7 +69,7 @@ function! s:Tr(...)
     let l:luaexpr = 'require''translator''.translate(vim.fn.submatch(0), '''
       \ . l:l1 . ''', ''' . l:l2 . ''')'
   endif
-  let l:fullexpr = 's#\%V.*\%V.#\=luaeval("' . l:luaexpr . '")#'
+  let l:fullexpr = 's#\%V\_.*\%V\_.#\=luaeval("' . l:luaexpr . '")#'
   normal! ma
   execute l:fullexpr
   normal! `a

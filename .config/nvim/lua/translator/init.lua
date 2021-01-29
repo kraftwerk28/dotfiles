@@ -28,6 +28,7 @@ function M.translate(text, ...)
     q = text,
   }
   local url = string.format('%s%s?%s', base, path, utils.dict_to_query(params))
+  print(url)
   local _, stream = request.new_from_uri(url):go()
   local ok, result = pcall(function()
     local b = cjson.decode(stream:get_body_as_string())
