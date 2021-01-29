@@ -175,15 +175,15 @@ refresh_prompt () {
   if [ "$KEYMAP" = "vicmd" ] || [ "$1" = "block" ]; then
     echo -ne "\e[1 q"
     # PROMPT_VIMODE="%F{yellow}%SN%s%F{yellow}"
-    PROMPT_VIMODE="%F{yellow}N "
+    prompt_vimode="%F{yellow}N "
   elif [ "$KEYMAP" = "main" ] || [ "$KEYMAP" = "viins" ] ||
        [ "$KEYMAP" = "" ] || [ "$1" = "beam" ]; then
     echo -ne "\e[5 q"
     # PROMPT_VIMODE="%F{blue}%SI%s%F{blue}"
-    PROMPT_VIMODE="%F{blue}I "
+    prompt_vimode="%F{blue}I "
   fi
-  FPATH="%F{#ffa500}%(4~|…/%2~|%~) "
-  PROMPT="$FPATH\$(git_prompt_info)$PROMPT_VIMODE$PROMPT_STATUS$CL_RESET "
+  filepath="%F{#ffa500}%(4~|…/%2~|%~) "
+  PROMPT="$filepath\$(git_prompt_info)$prompt_vimode$PROMPT_STATUS$CL_RESET "
   RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
 }
 
@@ -209,3 +209,4 @@ bindkey -M viins "^N" down-history
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
+# vim: ft=foo_ft

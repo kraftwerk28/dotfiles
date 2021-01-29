@@ -6,6 +6,9 @@ local u = require'utils'.u
 local devicons = require 'nvim-web-devicons'
 local cl = require 'cfg.colors'
 
+local my_icons = fileinfo.define_file_icon()
+my_icons['foo_ft'] = {'orange', '#'}
+
 gl.short_line_list = {'NvimTree', 'vista', 'dbui'}
 
 local mode_map = {

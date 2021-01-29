@@ -53,6 +53,7 @@ function M.setup()
   utils.pcall(require 'cfg.treesitter')
   utils.pcall(require 'cfg.lspconfig')
   utils.pcall(setup_telescope)
+  utils.pcall(require'translator.init'.setup)
 end
 
 function M.setup_later() utils.pcall(require'translator'.setup) end

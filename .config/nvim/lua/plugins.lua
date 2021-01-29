@@ -12,7 +12,7 @@ local function load(use)
 
   -- Statusline
   use {
-    '~/projects/neovim/galaxyline.nvim',
+    'glepnir/galaxyline.nvim',
     branch = 'main',
     config = function() require 'cfg.galaxyline' end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
