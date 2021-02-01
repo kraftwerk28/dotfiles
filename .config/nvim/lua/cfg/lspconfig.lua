@@ -24,20 +24,10 @@ return function()
     yapf = {enabled = true},
   }
 
-  local emmet_cfg = {
-    cmd = {'emmet-ls', '--stdio'},
-    filetypes = {'html', 'css', 'typescriptreact', 'javascriptreact'},
-    root_dir = function() return vim.loop.cwd() end,
-    settings = {},
-  }
-
   local lua_cfg = {
     cmd = {
-      'lua-language-server',
-      '-E',
-      '/usr/share/lua-language-server/main.lua',
-      '--logpath',
-      vim.lsp.get_log_path():match('(.*[/\\])'),
+      'lua-language-server', '-E', '/usr/share/lua-language-server/main.lua',
+      '--logpath', vim.lsp.get_log_path():match('(.*[/\\])'),
     },
     settings = {
       Lua = {

@@ -7,22 +7,13 @@ lua init.setup()
 autocmd VimEnter lua init.setup_later()
 
 "---------------------------------- Theme -------------------------------------"
-" if $XDG_CURRENT_DESKTOP == 'GNOME' &&
-" \  !(system('gsettings get org.gnome.desktop.interface gtk-theme') =~# 'dark')
-"   set background=light
-"   let ayucolor = 'light'
-" else
-"   set background=dark
-"   let ayucolor = 'mirage'
-" endif
-
 colorscheme ayu
 
 if colors_name == 'ayu'
   let g:ayucolor = 'mirage'
-  augroup alter_ayu_colorscheme
+  augroup alter_ayu
     autocmd!
-    autocmd ColorScheme * highlight VertSplit guifg=#FFC44C
+    autocmd ColorScheme * highlight! link VertSplit Comment
   augroup END
 elseif colors_name == 'onedark'
   let g:onedark_terminal_italics = 1
@@ -32,69 +23,14 @@ elseif colors_name == 'gruvbox'
   let g:gruvbox_invert_selection = 0
 endif
 
-"-------------------------------- Lightline -----------------------------------"
-let FilenameLabel = {-> luaeval('init.lightline.filename_label()')}
-let FiletypeLabel = {-> luaeval('init.lightline.filetype_label()')}
-" let LSPWarnings = {-> luaeval('init.lightline.lspwarnings()')}
-" let LSPErrors = {-> luaeval('init.lightline.lsperrors()')}
-
-" augroup lsp_on_publish_diagnostics
-"   autocmd!
-"   autocmd User LSPOnDiagnostics silent! call lightline#update()
-" augroup END
-
-let g:left_triangle_filled = "\ue0b8"
-let g:left_triangle_sep = "\ue0b9"
-let g:right_triangle_filled = "\ue0ba"
-let g:right_triangle_sep = "\ue0bb"
-
-" source ~/.config/nvim/lightline_ayu_dark.vim
-
-let g:lightline = {
-\   'enable': {'statusline': 1, 'tabline': 1},
-\   'active': {
-\     'left': [
-\       ['mode', 'paste'],
-\       ['filename', 'readonly', 'modified'],
-\     ],
-\     'right': [
-\       ['lineinfo'],
-\       ['percent'],
-\       ['fileencoding', 'filetype'],
-\     ],
-\   },
-\   'component': {
-\     'readonly': '%{&readonly ? "\uf023" : ""}',
-\     'modified': '%{&modified ? "\uf693" : ""}',
-\   },
-\   'component_visible_condition': {
-\    'readonly': '&readonly',
-\    'modified': '&modified',
-\   },
-\   'component_function': {
-\     'filename': 'FilenameLabel',
-\     'filetype': 'FiletypeLabel',
-\   },
-\ }
-
-if g:colors_name == 'ayu'
-  let g:lightline.colorscheme = 'ayu_dark_custom'
-elseif g:colors_name == 'gruvbox'
-  let g:lightline.colorscheme = 'gruvbox'
-endif
-
-" Must be AFTER augroup above
+" Must be AFTER augroups above
 syntax on
 
 let g:mapleader = ' '
 
-" let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,typescript.tsx'
-
 let g:surround_{char2nr('r')} = "{'\r'}"
 let g:surround_{char2nr('j')} = "{/* \r */}"
 let g:surround_{char2nr('c')} = "/* \r */"
-
-let g:python_highlight_all = 1
 
 let g:AutoPairsFlyMode = 0
 let g:AutoPairsMultilineClose = 0
@@ -106,8 +42,6 @@ endif
 
 let g:vim_indent_cont = 0
 
-let g:javascript_plugin_jsdoc = 1
-
 "---------------------------------- Options -----------------------------------"
 set hidden
 set expandtab softtabstop=4 tabstop=4 shiftwidth=2
@@ -117,7 +51,8 @@ set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
-set completeopt=menuone,noinsert,noselect
+" set completeopt=menuone,noinsert,noselect
+set completeopt=menu,menuone,noselect
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
@@ -214,9 +149,7 @@ let g:disable_line_numbers = [
 
 augroup aux_win_close
   autocmd!
-
-  autocmd FileType fugitive map <buffer> <Esc> gq
-
+  autocmd FileType fugitive nmap <buffer> <Esc> gq
   for _ft in g:q_close_ft
     execute 'autocmd FileType' _ft 'noremap <silent><buffer> q :q<CR>'
   endfor
@@ -250,6 +183,32 @@ augroup END
 function RevStr(str)
   let l:chars = split(submatch(0), '\zs')
   return join(reverse(l:chars), '')
+endfunction
+
+function! s:CompTab()
+  if exists('*neosnippet#jumpable') && neosnippet#jumpable()
+    return "\<Plug>(neosnippet_jump)"
+  elseif pumvisible()
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+
+function! s:CompSTab()
+  if pumvisible()
+    return "\<C-P>"
+  else
+    return "\<S-Tab>"
+  endif
+endfunction
+
+function! s:CompCR()
+  if pumvisible()
+    return compe#confirm()
+  else
+    return "\<CR>"
+  endif
 endfunction
 
 "----------------------------- Buffer operations ------------------------------"
@@ -287,55 +246,6 @@ function! s:DelToLeft()
   silent execute 'bdelete' join(range(1, bufnr() - 1))
 endfunction
 
-" Prettier bindings
-function! s:RunPrettier()
-  execute 'silent !prettier --write %'
-  edit
-endfunction
-
-"----------------------------- CoC configuration ------------------------------"
-let g:coc_global_extensions = [
-\   'coc-emmet',
-\   'coc-svelte',
-\ ]
-
-let g:coc_snippet_next = '<Tab>'
-let g:coc_snippet_prev = '<S-Tab>'
-
-highlight link CocWarningHighlight None
-
-function! s:CheckBackSpace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1] =~ '\s'
-endfunction
-
-function! s:ExpandCompletion() abort
-  if !pumvisible()
-    return coc#refresh()
-  endif
-  " if s:check_back_space()
-  "   return "\<Tab>"
-  " else
-  "   return coc#refresh()
-  " endif
-endfunction
-
-function! s:SelectCompletion() abort
-  if pumvisible()
-    return coc#_select_confirm()
-  else
-    return "\<C-G>u\<CR>"
-  endif
-endfunction
-
-function! s:CompletionTab()
-  return pumvisible() ? "\<C-N>" : "\<Tab>"
-endfunction
-
-function! s:CompletionShiftTab()
-  return pumvisible() ? "\<C-P>" : "\<Tab>"
-endfunction
-
 augroup formatprgs
   autocmd!
   autocmd FileType haskell setlocal formatprg=brittany
@@ -346,16 +256,6 @@ augroup formatprgs
   autocmd FileType cabal setlocal formatprg=cabal-fmt
   autocmd FileType lua setlocal formatprg=lua-format\ -c\ ~/.lua-format
 augroup END
-
-function! s:FormatCode()
-  if empty(&formatprg)
-    call CocActionAsync('format')
-  else
-    let l:v = winsaveview()
-    normal gggqG
-    call winrestview(l:v)
-  endif
-endfunction
 
 augroup completion_nvim
   autocmd!
@@ -398,20 +298,6 @@ call sign_define('LspDiagnosticsSignError', {
 \   'texthl': 'LspDiagnosticsSignError',
 \ })
 
-"------------------------------ completion-nvim -------------------------------"
-let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
-let g:completion_timer_cycle = 300
-let g:completion_enable_snippet = 'Neosnippet'
-let g:completion_auto_change_source = 1
-let g:completion_confirm_key = "\<CR>"
-let g:completion_sorting = 'none'
-let g:completion_chain_complete_list = {
-\   'default' : [
-\     {'complete_items': ['lsp', 'path']},
-\     {'complete_items': ['snippet', 'path', 'buffers']},
-\   ]
-\ }
-
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
   autocmd!
@@ -420,20 +306,21 @@ augroup END
 
 "------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
-let s:filetype_executables = { 'javascript': 'node' }
-function! s:Shebang()
-  write
-  execute 'silent !chmod u+x %'
+let s:filetype_executables = {'javascript': 'node'}
 
+function! s:Shebang()
+  silent write
+  execute 'silent !chmod u+x %'
   if stridx(getline(1), "#!") == 0
     echo 'Shebang already exists.'
     return
   endif
-  execute 'silent !which' &filetype
+  execute 'silent !which ' . &filetype
+  let l:shb = '#!/usr/bin/env '
   if v:shell_error == 0
-    let shb = '#!/usr/bin/env ' . &filetype
+    let l:shb =  . &filetype
   elseif has_key(s:filetype_executables, &filetype)
-    let shb = '#!/usr/bin/env ' . s:filetype_executables[&filetype]
+    let l:shb = l:shb . s:filetype_executables[&filetype]
   else
     echoerr 'Filename not supported.'
     return
@@ -504,24 +391,6 @@ function! s:VComment()
 endfunction
 autocmd FileType typescriptreact setlocal commentstring=//\ %s
 
-"-------------------------- Vim-clap configuration ----------------------------"
-let g:clap_insert_mode_only = v:true
-let g:clap_search_box_border_style = 'nil'
-
-let g:clap_selected_sign = {
-\   'text': "\uf00c",
-\   'texthl': 'ClapSelectedSign',
-\   'linehl': 'ClapSelected',
-\ }
-let g:clap_current_selection_sign = {
-\   'text': "\uf061",
-\   'texthl': 'ClapCurrentSelectionSign',
-\   'linehl': 'ClapCurrentSelection',
-\ }
-let g:clap_no_matches_msg = 'Bruh...'
-let g:clap_layout = { 'relative': 'editor', 'row': 4 }
-
-"-------------------------------- Git bindings --------------------------------"
 augroup LSP_highlight
   autocmd!
   autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
@@ -542,7 +411,6 @@ let g:gitgutter_sign_removed = '▕'
 "------------------------------- Neovide stuff --------------------------------"
 let g:neovide_fullscreen=v:true
 
-
 "--------------------------------- Mappings -----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
@@ -552,9 +420,6 @@ if has('nvim')
   nnoremap gj j
   nnoremap gk k
 endif
-
-inoremap ii <Esc>
-vnoremap ii <Esc>
 
 " Arrow movement mappings
 nnoremap <Down> <C-E>
@@ -607,11 +472,13 @@ if exists('g:coc_enabled') && g:coc_enabled
   nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
   nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
 else
-  imap <Tab> <Plug>(completion_smart_tab)
-  imap <S-Tab> <Plug>(completion_smart_s_tab)
-  imap <M-J> <Plug>(completion_next_source)
-  imap <M-K> <Plug>(completion_prev_source)
-  imap <silent> <C-Space> <Plug>(completion_trigger)
+  inoremap <expr> <Tab> <SID>CompTab()
+  inoremap <expr> <S-Tab> <SID>CompSTab()
+  inoremap <silent><expr> <C-Space> compe#complete()
+  inoremap <silent><expr> <CR> <SID>CompCR()
+  " imap <M-J> <Plug>(completion_next_source)
+  " imap <M-K> <Plug>(completion_prev_source)
+  " imap <silent> <C-Space> <Plug>(completion_trigger)
 
   nnoremap <silent> <Leader>f :lua init.format_code()<CR>
   nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>

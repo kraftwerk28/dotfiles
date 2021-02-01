@@ -86,7 +86,7 @@ gls.left = {
       provider = function()
         local fname
         if wide_enough() then
-          fname = vim.fn.expand('%')
+          fname = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
         else
           fname = vim.fn.expand('%:t')
         end
@@ -155,3 +155,10 @@ gls.right = {
     },
   },
 }
+
+for k, v in pairs(gls.left) do gls.short_line_left[k] = v end
+table.remove(gls.short_line_left)
+
+for k, v in pairs(gls.right) do gls.short_line_right[k] = v end
+table.remove(gls.short_line_right)
+table.remove(gls.short_line_right)

@@ -1,6 +1,5 @@
 local M = {}
 
-local load_plugins = require 'plugins'
 local utils = require 'utils'
 local highlight = require 'vim.highlight'
 
@@ -18,28 +17,6 @@ M.show_lsp_diagnostics = (function()
   end
 end)()
 
-local function setup_telescope()
-  local telescope = require 'telescope'
-  local actions = require 'telescope.actions'
-
-  local cfg = {
-    sorting_strategy = 'ascending',
-    prompt_prefix = utils.u 'f002',
-    prompt_position = 'top',
-    color_devicons = true,
-    scroll_strategy = 'cycle',
-    mappings = {
-      i = {
-        ['<C-K>'] = actions.move_selection_previous,
-        ['<C-J>'] = actions.move_selection_next,
-        ['<Esc>'] = actions.close,
-      },
-    },
-  }
-
-  telescope.setup {defaults = cfg}
-end
-
 function M.format_code()
   if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) or vim.bo.filetype == 'haskell' then
     utils.format_formatprg()
@@ -49,18 +26,20 @@ function M.format_code()
 end
 
 function M.setup()
-  utils.pcall(load_plugins)
+  utils.pcall(require 'plugins')
   utils.pcall(require 'cfg.treesitter')
   utils.pcall(require 'cfg.lspconfig')
-  utils.pcall(setup_telescope)
   utils.pcall(require'translator.init'.setup)
 end
 
-function M.setup_later() utils.pcall(require'translator'.setup) end
+function M.setup_later() end
 
 function M.yank_highlight() highlight.on_yank {timeout = 1000} end
 
-function M.attach_completion() require'completion'.on_attach() end
+function M.attach_completion()
+  local ok, completion = pcall(require, 'completion')
+  if ok then completion.on_attach() end
+end
 
 function M.run_prettier()
   if vim.fn.executable('prettier') == 0 then return end

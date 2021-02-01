@@ -30,24 +30,42 @@ local function load(use)
       'kyazdani42/nvim-web-devicons', 'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
     },
+    config = function()
+      local telescope = require 'telescope'
+      local actions = require 'telescope.actions'
+      local u = require'utils'.u
+      local cfg = {
+        sorting_strategy = 'ascending',
+        prompt_prefix = u 'f002',
+        prompt_position = 'top',
+        color_devicons = true,
+        scroll_strategy = 'cycle',
+        mappings = {
+          i = {
+            ['<C-K>'] = actions.move_selection_previous,
+            ['<C-J>'] = actions.move_selection_next,
+            ['<Esc>'] = actions.close,
+          },
+        },
+      }
+      telescope.setup {defaults = cfg}
+    end,
   }
 
   use 'wellle/targets.vim' -- More useful text objects (e.g. function arguments)
-  use 'Shougo/neosnippet.vim'
-  use 'Shougo/neosnippet-snippets'
-
-  -- Git helper
-  use 'tpope/vim-fugitive'
+  use 'tpope/vim-fugitive' -- Git helper
   use 'airblade/vim-gitgutter'
   use 'lyokha/vim-xkbswitch'
   use 'diepm/vim-rest-console'
   use 'chrisbra/Colorizer'
+  use 'mattn/emmet-vim'
 
   use 'neovimhaskell/haskell-vim'
   use 'pangloss/vim-javascript'
   use {'evanleck/vim-svelte', branch = 'main'}
   use 'editorconfig/editorconfig-vim'
   use 'elixir-editors/vim-elixir'
+  use 'chr4/nginx.vim'
 
   -- use {'neoclide/coc.nvim', 'branch' = 'release'}
 
@@ -58,8 +76,48 @@ local function load(use)
   use 'nvim-treesitter/playground'
 
   use 'neovim/nvim-lspconfig'
-  use {'nvim-lua/completion-nvim'}
-  use 'steelsojka/completion-buffers'
+
+  use {
+    'nvim-lua/completion-nvim',
+    -- requires = {'Shougo/neosnippet.vim', 'Shougo/neosnippet-snippets'},
+    disable = true,
+    config = function()
+      local cfg = {
+        completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'},
+        completion_timer_cycle = 300,
+        completion_enable_snippet = 'Neosnippet',
+        completion_auto_change_source = 1,
+        completion_sorting = 'none',
+        completion_trigger_character = {'.', '::'},
+        completion_chain_complete_list = {
+          default = {
+            {complete_items = {'lsp', 'path'}},
+            {complete_items = {'snippet', 'path', 'buffers'}},
+          },
+        },
+      }
+      for k, v in pairs(cfg) do vim.g[k] = v end
+    end,
+  }
+
+  use {
+    'hrsh7th/nvim-compe',
+    requires = {'SirVer/ultisnips', 'honza/vim-snippets'},
+    config = function()
+      require'compe'.setup {
+        source = {
+          path = true,
+          buffer = true,
+          calc = true,
+          nvim_lsp = true,
+          ultisnips = true,
+        },
+      }
+      vim.g.UltiSnipsExpandTrigger = '<Nop>'
+      vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
+      vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
+    end,
+  }
 
   use {
     'kyazdani42/nvim-tree.lua',
