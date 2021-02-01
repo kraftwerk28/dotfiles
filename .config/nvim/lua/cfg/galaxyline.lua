@@ -84,18 +84,18 @@ gls.left = {
     },
     FileName = {
       provider = function()
+        if not buffer_not_empty() then return '' end
         local fname
         if wide_enough() then
-          fname = vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
+          fname = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
         else
-          fname = vim.fn.expand('%:t')
+          fname = vim.fn.expand '%:t'
         end
         if #fname == 0 then return '' end
         if vim.bo.readonly then fname = fname .. ' ' .. icons.locker end
         if vim.bo.modified then fname = fname .. ' ' .. icons.unsaved end
         return ' ' .. fname .. ' '
       end,
-      condition = buffer_not_empty,
       highlight = {cl.fg, cl.bg},
       separator = sep.left,
       separator_highlight = 'GalaxyViModeInv',
@@ -157,7 +157,7 @@ gls.right = {
 }
 
 for k, v in pairs(gls.left) do gls.short_line_left[k] = v end
-table.remove(gls.short_line_left)
+table.remove(gls.short_line_left, 1)
 
 for k, v in pairs(gls.right) do gls.short_line_right[k] = v end
 table.remove(gls.short_line_right)
