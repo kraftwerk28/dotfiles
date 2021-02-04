@@ -78,33 +78,11 @@ local function load(use)
   use 'neovim/nvim-lspconfig'
 
   use {
-    'nvim-lua/completion-nvim',
-    -- requires = {'Shougo/neosnippet.vim', 'Shougo/neosnippet-snippets'},
-    disable = true,
-    config = function()
-      local cfg = {
-        completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'},
-        completion_timer_cycle = 300,
-        completion_enable_snippet = 'Neosnippet',
-        completion_auto_change_source = 1,
-        completion_sorting = 'none',
-        completion_trigger_character = {'.', '::'},
-        completion_chain_complete_list = {
-          default = {
-            {complete_items = {'lsp', 'path'}},
-            {complete_items = {'snippet', 'path', 'buffers'}},
-          },
-        },
-      }
-      for k, v in pairs(cfg) do vim.g[k] = v end
-    end,
-  }
-
-  use {
     'hrsh7th/nvim-compe',
     requires = {'SirVer/ultisnips', 'honza/vim-snippets'},
     config = function()
       require'compe'.setup {
+        throttle_time = 80,
         source = {
           path = true,
           buffer = true,

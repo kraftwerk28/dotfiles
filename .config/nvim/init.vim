@@ -51,12 +51,11 @@ set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
-" set completeopt=menuone,noinsert,noselect
-set completeopt=menu,menuone,noselect
+set completeopt=menu,menuone,noinsert,noselect
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
-set signcolumn=yes " Additional column on left for emoji signs
+set signcolumn=yes
 set autoread autowrite autowriteall
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
@@ -64,6 +63,7 @@ set foldexpr=nvim_treesitter#foldexpr()
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
 set diffopt+=vertical
+" Vim-like block cursor
 " set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
 set regexpengine=0

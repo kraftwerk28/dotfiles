@@ -30,6 +30,8 @@ local ayu_dark, ayu_mirage = (function()
     visual = ayu_colors.special,
     command = ayu_colors.keyword,
     terminal = ayu_colors.regexp,
+    lsp_active = ayu_colors.string,
+    lsp_inactive = ayu_colors.fg_idle,
   }
 
   local ayu_dark, ayu_mirage = {}, {}
