@@ -1,12 +1,11 @@
 local gl = require 'galaxyline'
-local gls = gl.section
-
 local fileinfo = require 'galaxyline.provider_fileinfo'
-local u = require'utils'.u
 local devicons = require 'nvim-web-devicons'
+local utils = require 'utils'
 local cl = require 'cfg.colors'
 
-gl.short_line_list = {'NvimTree', 'vista', 'dbui'}
+local gls = gl.section
+local u = utils.u
 
 local mode_map = {
   ['n'] = {'NORMAL', cl.normal},
@@ -25,10 +24,14 @@ local mode_map = {
 }
 
 local sep = {
-  right_filled = u 'e0b2',
-  left_filled = u 'e0b0',
-  right = u 'e0b3',
-  left = u 'e0b1',
+  right_filled = u '2590',
+  left_filled = u '258c',
+  -- right_filled = u 'e0b2',
+  -- left_filled = u 'e0b0',
+  right = u '2503',
+  left = u '2503',
+  -- right = u 'e0b3',
+  -- left = u 'e0b1',
 }
 
 local icons = {
@@ -37,6 +40,8 @@ local icons = {
   dos = u 'e70f',
   unix = u 'f17c',
   mac = u 'f179',
+  lsp_warn = u 'f071',
+  lsp_error = u 'f46e',
 }
 
 local function mode_label() return mode_map[vim.fn.mode()][1] or 'N/A' end
@@ -63,13 +68,15 @@ local function wide_enough()
   return false
 end
 
+gl.short_line_list = {'NvimTree', 'vista', 'dbui'}
+
 gls.left = {
   {
     ViMode = {
       provider = function()
         local modehl = mode_hl()
-        highlight('GalaxyViMode', cl.bg, modehl)
-        highlight('GalaxyViModeInv', modehl, cl.bg)
+        highlight('GalaxyViMode', cl.bg, modehl, 'bold')
+        highlight('GalaxyViModeInv', modehl, cl.bg, 'bold')
         return string.format('  %s ', mode_label())
       end,
       separator = sep.left_filled,
@@ -78,7 +85,7 @@ gls.left = {
   }, {
     FileIcon = {
       provider = function()
-        local fname, ext = vim.fn.expand('%:t'), vim.fn.expand('%:e')
+        local fname, ext = vim.fn.expand '%:t', vim.fn.expand '%:e'
         local icon, iconhl = devicons.get_icon(fname, ext)
         if icon == nil then return '' end
         local fg = vim.fn.synIDattr(vim.fn.hlID(iconhl), 'fg')
@@ -128,7 +135,7 @@ gls.right = {
       provider = function()
         local n = vim.lsp.diagnostic.get_count(0, 'Warning')
         if n == 0 then return '' end
-        return string.format(' %s %d ', u 'f071', n)
+        return string.format(' %s %d ', icons.lsp_warn, n)
       end,
       highlight = {'yellow', cl.bg},
     },
@@ -136,7 +143,7 @@ gls.right = {
       provider = function()
         local n = vim.lsp.diagnostic.get_count(0, 'Error')
         if n == 0 then return '' end
-        return string.format(' %s %d ', u 'e009', n)
+        return string.format(' %s %d ', icons.lsp_error, n)
       end,
       highlight = {'red', cl.bg},
     },
@@ -147,6 +154,7 @@ gls.right = {
         local icon = icons[vim.bo.fileformat] or ''
         return string.format(' %s %s ', icon, vim.bo.filetype)
       end,
+      condition = buffer_not_empty,
       highlight = {cl.fg, cl.bg},
       separator = sep.right,
       separator_highlight = 'GalaxyViModeInv',
@@ -155,7 +163,7 @@ gls.right = {
     PositionInfo = {
       provider = {
         function()
-          return string.format(' %s:%s ', vim.fn.line('.'), vim.fn.col('.'))
+          return string.format('%s:%s', vim.fn.line('.'), vim.fn.col('.'))
         end,
       },
       highlight = 'GalaxyViMode',
@@ -163,7 +171,6 @@ gls.right = {
       separator = sep.right_filled,
       separator_highlight = 'GalaxyViModeInv',
     },
-  }, {
     PercentInfo = {
       provider = fileinfo.current_line_percent,
       highlight = 'GalaxyViMode',

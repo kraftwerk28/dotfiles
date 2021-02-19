@@ -1,27 +1,9 @@
-set encoding=utf-8
 set termguicolors
 set background=dark
 
 lua init = require 'init'
 lua init.setup()
 autocmd VimEnter lua init.setup_later()
-
-"---------------------------------- Theme -------------------------------------"
-colorscheme ayu
-
-if colors_name == 'ayu'
-  let g:ayucolor = 'mirage'
-  augroup alter_ayu
-    autocmd!
-    autocmd ColorScheme * highlight! link VertSplit Comment
-  augroup END
-elseif colors_name == 'onedark'
-  let g:onedark_terminal_italics = 1
-elseif colors_name == 'gruvbox'
-  let g:gruvbox_italic = 1
-  let g:gruvbox_contrast_dark = 'medium'
-  let g:gruvbox_invert_selection = 0
-endif
 
 " Must be AFTER augroups above
 syntax on
@@ -51,15 +33,18 @@ set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
-set completeopt=menu,menuone,noinsert,noselect
+set completeopt=menu,menuone,noselect
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
 set signcolumn=yes
 set autoread autowrite autowriteall
+
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
+set foldopen=hor,mark,percent,quickfix,search,tag,undo
 " set foldcolumn=1 " Enable additional column w/ visual folds
+
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
 set diffopt+=vertical
@@ -72,6 +57,7 @@ set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 " set shada='1000,%
 set noshowmode
 set shortmess+=c
+set undofile
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup ft_indent
@@ -142,6 +128,7 @@ augroup END
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'fugitive']
+let g:esc_close_ft = ['NvimTree']
 let g:disable_line_numbers = [
 \   'nerdtree', 'NvimTree', 'help',
 \   'list', 'clap_input', 'TelescopePrompt',
@@ -150,8 +137,11 @@ let g:disable_line_numbers = [
 augroup aux_win_close
   autocmd!
   autocmd FileType fugitive nmap <buffer> <Esc> gq
-  for _ft in g:q_close_ft
-    execute 'autocmd FileType' _ft 'noremap <silent><buffer> q :q<CR>'
+  for ft in g:esc_close_ft
+    execute 'autocmd FileType ' . ft . ' noremap <silent><buffer> <Esc> :q<CR>'
+  endfor
+  for ft in g:q_close_ft
+    execute 'autocmd FileType ' . ft . ' noremap <silent><buffer> q :q<CR>'
   endfor
 augroup END
 
@@ -204,10 +194,24 @@ function! s:CompSTab()
 endfunction
 
 function! s:CompCR()
-  if pumvisible()
+  if pumvisible() && complete_info()['selected'] != -1
     return compe#confirm()
   else
     return "\<CR>"
+  endif
+endfunction
+
+function! s:nvimTreeToggle(find)
+  if &filetype == 'NvimTree'
+    NvimTreeClose
+  elseif a:find
+    NvimTreeFindFile
+  else
+    NvimTreeOpen
+    let l:found = win_findbuf(bufnr('NvimTree'))
+    if len(l:found)
+      call win_gotoid(l:found[0])
+    endif
   endif
 endfunction
 
@@ -267,37 +271,6 @@ augroup lsp_diagnostics
   autocmd CursorMoved * lua init.show_lsp_diagnostics()
 augroup END
 
-"------------------------------- builtin LSP ----------------------------------"
-highlight LSPCurlyUnderline gui=undercurl
-highlight LSPUnderline gui=underline
-
-highlight! LspDiagnosticsUnderlineHint gui=undercurl
-highlight! LspDiagnosticsUnderlineInformation gui=undercurl
-highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=darkyellow
-highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=red
-
-highlight! LspDiagnosticsSignHint guifg=yellow
-highlight! LspDiagnosticsSignInformation guifg=lightblue
-highlight! LspDiagnosticsSignWarning guifg=darkyellow
-highlight! LspDiagnosticsSignError guifg=red
-
-call sign_define('LspDiagnosticsSignHint', {
-\   'text': "\Uf0eb",
-\   'texthl': 'LspDiagnosticsSignHint',
-\ })
-call sign_define('LspDiagnosticsSignInformation', {
-\   'text': "\Uf129",
-\   'texthl': 'LspDiagnosticsSignInformation',
-\ })
-call sign_define('LspDiagnosticsSignWarning', {
-\   'text': "\Uf071",
-\   'texthl': 'LspDiagnosticsSignWarning',
-\ })
-call sign_define('LspDiagnosticsSignError', {
-\   'text': "\Uf46e",
-\   'texthl': 'LspDiagnosticsSignError',
-\ })
-
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
   autocmd!
@@ -308,8 +281,8 @@ augroup END
 " Adds shebang to current file and makes it executable (to current user)
 let s:filetype_executables = {'javascript': 'node'}
 
-function! s:Shebang()
-  silent write
+function! s:shebang()
+  silent! write
   execute 'silent !chmod u+x %'
   if stridx(getline(1), "#!") == 0
     echo 'Shebang already exists.'
@@ -318,9 +291,9 @@ function! s:Shebang()
   execute 'silent !which ' . &filetype
   let l:shb = '#!/usr/bin/env '
   if v:shell_error == 0
-    let l:shb =  . &filetype
+    let l:shb .= &filetype
   elseif has_key(s:filetype_executables, &filetype)
-    let l:shb = l:shb . s:filetype_executables[&filetype]
+    let l:shb .= s:filetype_executables[&filetype]
   else
     echoerr 'Filename not supported.'
     return
@@ -328,7 +301,8 @@ function! s:Shebang()
   call append(0, shb)
   update
 endfunction
-command! -nargs=0 Shebang call s:Shebang()
+
+command! -nargs=0 Shebang call s:shebang()
 
 function! Durka()
   let themes = map(
@@ -370,20 +344,8 @@ endfunction
 
 command! -nargs=0 Prettier lua init.run_prettier()
 
-"--------------------------- NvimTree configuration ---------------------------"
-highlight link NvimTreeFolderName Title
-highlight link NvimTreeFolderIcon Tag
-
-let g:nvim_tree_icons = {
-\   'folder': {
-\     'default': "\uf07b",
-\     'open': "\uf07c",
-\     'symlink': "\uf0c1",
-\   },
-\ }
-let g:nvim_tree_auto_close = 1
-let g:nvim_tree_quit_on_open = 1
-let g:nvim_tree_indent_markers = 1
+command! -nargs=0 RestartLsp lua init.restart_lsp()
+command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
 "------------------------- Comment tool configuration -------------------------"
 function! s:VComment()
@@ -402,11 +364,6 @@ function! PasteBlock()
   execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
   normal! p
 endfunction
-
-"-------------------------------- Git gutter ----------------------------------"
-let g:gitgutter_sign_added = '▕'
-let g:gitgutter_sign_modified = '▕'
-let g:gitgutter_sign_removed = '▕'
 
 "------------------------------- Neovide stuff --------------------------------"
 let g:neovide_fullscreen=v:true
@@ -430,8 +387,6 @@ nnoremap <C-Up> <C-B>M
 nnoremap <C-Down> <C-F>M
 
 " Indenting
-nnoremap > >>
-nnoremap < <<
 vnoremap > >gv
 vnoremap < <gv
 
@@ -461,36 +416,19 @@ nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
 " LSP mappings:
-if exists('g:coc_enabled') && g:coc_enabled
-  inoremap <silent><expr> <Tab> <SID>CompletionTab()
-  inoremap <silent><expr> <S-Tab> <SID>CompletionShiftTab()
-  inoremap <silent><expr> <C-Space> <SID>ExpandCompletion()
-  inoremap <silent><expr> <CR> <SID>SelectCompletion()
-  nnoremap <silent> <Leader>ah :call CocAction('doHover')<CR>
-  nnoremap <silent> <Leader>aj :call CocAction('jumpDefinition')<CR>
-  nnoremap <silent> <C-LeftMouse> :call CocAction('jumpDefinition')<CR>
-  nnoremap <silent> <F2> :call CocActionAsync('rename')<CR>
-  nnoremap <silent> <Leader>f :call <SID>FormatCode()<CR>
-else
-  inoremap <expr> <Tab> <SID>CompTab()
-  inoremap <expr> <S-Tab> <SID>CompSTab()
-  inoremap <silent><expr> <C-Space> compe#complete()
-  inoremap <silent><expr> <CR> <SID>CompCR()
-  " imap <M-J> <Plug>(completion_next_source)
-  " imap <M-K> <Plug>(completion_prev_source)
-  " imap <silent> <C-Space> <Plug>(completion_trigger)
-
-  nnoremap <silent> <Leader>f :lua init.format_code()<CR>
-  nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
-  nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
-  nnoremap <silent> <Leader>ae
-         \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
-  nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
-  nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
-endif
+inoremap <expr> <Tab> <SID>CompTab()
+inoremap <expr> <S-Tab> <SID>CompSTab()
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR> <SID>CompCR()
+nnoremap <silent> <Leader>f :lua init.format_code()<CR>
+nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> <Leader>ae
+       \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 
 vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
-
 nnoremap <Leader>eu :call Emoji2Unicode()<CR>
 
 " Case-conversion tools
@@ -527,8 +465,8 @@ inoremap <silent> <C-_> <C-O>:Commentary<CR>
 xmap <expr><silent> <C-_> <SID>VComment()
 
 " File explorer
-nnoremap <silent> <F3> :NvimTreeToggle<CR>
-nnoremap <silent> <Leader><F3> :NvimTreeFindFile<CR>
+nnoremap <silent> <F3> :call <SID>nvimTreeToggle(0)<CR>
+nnoremap <silent> <Leader><F3> :call <SID>nvimTreeToggle(1)<CR>
 
 " Search tool
 nnoremap <silent> <C-P> :Telescope find_files<CR>
@@ -542,6 +480,3 @@ nnoremap <silent> <Leader>gs :vertical Gstatus<CR>
 nnoremap <Leader>gp :copen <Bar> :G poosh<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
-
-" nnoremap Q <Nop>
-" nnoremap q: <Nop>

@@ -1,28 +1,50 @@
 local function load(use)
-  local use_rocks = require'packer'.use_rocks
-
-  use_rocks {'lua-cjson', 'http'}
-
   use {'wbthomason/packer.nvim', opt = true}
 
+  use {'kraftwerk28/gtranslate.nvim', rocks = {'lua-cjson', 'http'}}
+
   -- Themes
-  use 'ayu-theme/ayu-vim'
-  -- use 'joshdick/onedark.vim'
-  -- use 'morhetz/gruvbox'
+  use 'romgrk/doom-one.vim'
+  use {
+    'ayu-theme/ayu-vim',
+    config = function()
+      vim.g.ayucolor = 'mirage'
+      vim.api.nvim_exec([[
+        augroup alter_ayu
+          autocmd!
+          autocmd ColorScheme * highlight! link VertSplit Comment
+        augroup END
+      ]], false)
+      vim.cmd 'colorscheme ayu'
+    end,
+  }
+  -- use {
+  --   'joshdick/onedark.vim',
+  --   config = function() vim.g.onedark_terminal_italics = 1 end,
+  -- }
+  -- use {
+  --   'morhetz/gruvbox',
+  --   config = function()
+  --     vim.g.gruvbox_italic = 1
+  --     vim.g.gruvbox_contrast_dark = 'medium'
+  --     vim.g.gruvbox_invert_selection = 0
+  --     vim.cmd 'colorscheme gruvbox'
+  --   end,
+  -- }
 
   -- Statusline
+  -- TODO: if put `disable = true` here, `requires` doesn't work
   use {
     'glepnir/galaxyline.nvim',
     branch = 'main',
     config = function() require 'cfg.galaxyline' end,
-    requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    requires = {'kyazdani42/nvim-web-devicons'},
   }
 
   -- Tools
   use 'junegunn/vim-emoji'
   use 'tpope/vim-surround'
   use 'jiangmiao/auto-pairs'
-
   use 'tpope/vim-commentary'
   use {
     'nvim-telescope/telescope.nvim',
@@ -54,7 +76,16 @@ local function load(use)
 
   use 'wellle/targets.vim' -- More useful text objects (e.g. function arguments)
   use 'tpope/vim-fugitive' -- Git helper
-  use 'airblade/vim-gitgutter'
+  use {
+    'airblade/vim-gitgutter',
+    config = function()
+      local u = require'utils'.u
+      local gutter = u '2595'
+      vim.g.gitgutter_sign_added = gutter
+      vim.g.gitgutter_sign_modified = gutter
+      vim.g.gitgutter_sign_removed = gutter
+    end,
+  }
   use 'lyokha/vim-xkbswitch'
   use 'diepm/vim-rest-console'
   use 'chrisbra/Colorizer'
@@ -66,23 +97,29 @@ local function load(use)
   use 'editorconfig/editorconfig-vim'
   use 'elixir-editors/vim-elixir'
   use 'chr4/nginx.vim'
+  use 'tpope/vim-markdown'
 
   -- use {'neoclide/coc.nvim', 'branch' = 'release'}
 
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function() vim.cmd 'TSUpdate' end,
+    config = function() require 'cfg.treesitter' end,
   }
-  use 'nvim-treesitter/playground'
+  use {
+    'nvim-treesitter/playground',
+    requires = {'nvim-treesitter/nvim-treesitter'},
+  }
 
-  use 'neovim/nvim-lspconfig'
+  use {'neovim/nvim-lspconfig', config = function() require 'cfg.lspconfig' end}
 
   use {
     'hrsh7th/nvim-compe',
     requires = {'SirVer/ultisnips', 'honza/vim-snippets'},
     config = function()
       require'compe'.setup {
-        throttle_time = 80,
+        throttle_time = 200,
+        preselect = 'disable',
         source = {
           path = true,
           buffer = true,
@@ -91,7 +128,7 @@ local function load(use)
           ultisnips = true,
         },
       }
-      vim.g.UltiSnipsExpandTrigger = '<Nop>'
+      vim.g.UltiSnipsExpandTrigger = '\\<Nop>'
       vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
       vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
     end,
@@ -100,14 +137,32 @@ local function load(use)
   use {
     'kyazdani42/nvim-tree.lua',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    config = function()
+      local u = require'utils'.u
+      vim.cmd 'highlight link NvimTreeFolderName Title'
+      vim.cmd 'highlight link NvimTreeFolderIcon Tag'
+      vim.g.nvim_tree_icons = {
+        folder = {default = u 'f07b', open = u 'f07c', symlink = u 'f0c1'},
+      }
+      vim.g.nvim_tree_auto_close = 1
+      vim.g.nvim_tree_quit_on_open = 1
+      vim.g.nvim_tree_indent_markers = 1
+    end,
   }
+
+  use 'glacambre/firenvim'
 end
 
 local config = {git = {clone_timeout = 240}}
 
 return function()
-  vim.cmd 'packadd packer.nvim'
+  vim.api.nvim_exec([[
+    packadd packer.nvim
+    augroup packer_compile
+      autocmd!
+      autocmd BufWritePost plugins.lua PackerCompile
+    augroup END
+  ]], false)
   local packer = require 'packer'
   packer.startup {load, config = config}
-  vim.cmd 'autocmd BufWritePost plugins.lua PackerCompile'
 end

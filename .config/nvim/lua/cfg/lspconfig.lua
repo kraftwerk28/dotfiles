@@ -1,93 +1,132 @@
 local utils = require 'utils'
+local lsp = require 'lspconfig'
+local root_pattern = require'lspconfig.util'.root_pattern
+-- on_attach is called in init.vim
 
-return function()
-  local lsp = require 'lspconfig'
-  -- on_attach is called in init.vim
+local hl_cmds = [[
+  highlight! LspDiagnosticsUnderlineHint gui=undercurl
+  highlight! LspDiagnosticsUnderlineInformation gui=undercurl
+  highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=darkyellow
+  highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=red
 
-  local python_cfg = {
-    cmd = {'pyls'},
-    filetypes = {'python'},
-    jedi_completion = {enabled = true},
-    jedi_hover = {enabled = true},
-    jedi_references = {enabled = true},
-    jedi_signature_help = {enabled = true},
-    jedi_symbols = {enabled = true, all_scopes = true},
-    mccabe = {enabled = true, threshold = 15},
-    preload = {enabled = true},
-    pycodestyle = {enabled = true},
-    pydocstyle = {
-      enabled = false,
-      match = '(?!test_).*\\.py',
-      matchDir = '[^\\.].*',
-    },
-    rope_completion = {enabled = true},
-    yapf = {enabled = true},
-  }
+  highlight! LspDiagnosticsSignHint guifg=yellow
+  highlight! LspDiagnosticsSignInformation guifg=lightblue
+  highlight! LspDiagnosticsSignWarning guifg=darkyellow
+  highlight! LspDiagnosticsSignError guifg=red
+]]
+vim.api.nvim_exec(hl_cmds, false)
 
-  local lua_cfg = {
-    cmd = {
-      'lua-language-server', '-E', '/usr/share/lua-language-server/main.lua',
-      '--logpath', vim.lsp.get_log_path():match('(.*[/\\])'),
-    },
-    settings = {
-      Lua = {
-        runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-        diagnostics = {globals = {'vim'}},
-        workspace = {
-          library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-          },
+local sign_define = vim.fn.sign_define
+local u = utils.u
+local lsp_signs = {
+  LspDiagnosticsSignHint = {text = u 'f0eb', texthl = 'LspDiagnosticsSignHint'},
+  LspDiagnosticsSignInformation = {
+    text = u 'f129',
+    texthl = 'LspDiagnosticsSignInformation',
+  },
+  LspDiagnosticsSignWarning = {
+    text = u 'f071',
+    texthl = 'LspDiagnosticsSignWarning',
+  },
+  LspDiagnosticsSignError = {
+    text = u 'f46e',
+    texthl = 'LspDiagnosticsSignError',
+  },
+}
+for hl_group, config in pairs(lsp_signs) do sign_define(hl_group, config) end
+
+local python_cfg = {
+  cmd = {'pyls'},
+  filetypes = {'python'},
+  jedi_completion = {enabled = true},
+  jedi_hover = {enabled = true},
+  jedi_references = {enabled = true},
+  jedi_signature_help = {enabled = true},
+  jedi_symbols = {enabled = true, all_scopes = true},
+  mccabe = {enabled = true, threshold = 15},
+  preload = {enabled = true},
+  pycodestyle = {enabled = true},
+  pydocstyle = {
+    enabled = false,
+    match = '(?!test_).*\\.py',
+    matchDir = '[^\\.].*',
+  },
+  rope_completion = {enabled = true},
+  yapf = {enabled = true},
+}
+
+local lua_cfg = {
+  cmd = {
+    'lua-language-server', '-E', '/usr/share/lua-language-server/main.lua',
+    '--logpath', vim.lsp.get_log_path():match('(.*[/\\])'),
+  },
+  settings = {
+    Lua = {
+      runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
+      diagnostics = {globals = {'vim'}},
+      workspace = {
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
         },
       },
     },
-  }
+  },
+}
 
-  local json_cfg = {
-    cmd = {'vscode-json-languageserver', '--stdio'},
-    filetypes = {'json', 'jsonc'},
-    init_options = {provideFormatter = true},
-  }
+local json_cfg = {
+  cmd = {'vscode-json-languageserver', '--stdio'},
+  filetypes = {'json', 'jsonc'},
+  init_options = {provideFormatter = true},
+}
 
-  lsp.tsserver.setup {}
-  lsp.pyls.setup(python_cfg)
-  lsp.sumneko_lua.setup(lua_cfg)
-  lsp.rust_analyzer.setup {}
-  lsp.gopls.setup {}
-  lsp.hls.setup {}
-  lsp.clangd.setup {}
-  lsp.svelte.setup {}
-  lsp.jsonls.setup(json_cfg)
-  lsp.html.setup {}
+local clangd_cfg = {
+  cmd = {'clangd', '--background-index', '--compile-commands-dir', 'build/'},
+  filetypes = {'c', 'cpp', 'objc', 'objcpp'},
+  root_dir = root_pattern('CMakeLists.txt', 'compile_flags.txt', '.git',
+                          vim.fn.getcwd()),
+}
 
-  local on_publish_cfg = {
-    underline = true,
-    virtual_text = true,
-    update_in_insert = false,
-  }
+lsp.tsserver.setup {}
+lsp.pyls.setup(python_cfg)
+lsp.sumneko_lua.setup(lua_cfg)
+lsp.rust_analyzer.setup {}
+lsp.gopls.setup {}
+lsp.hls.setup {}
+lsp.clangd.setup(clangd_cfg)
+lsp.svelte.setup {}
+lsp.jsonls.setup(json_cfg)
+lsp.html.setup {}
+lsp.yamlls.setup {}
 
-  local on_publish_handler = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, on_publish_cfg)
+local on_publish_cfg = {
+  underline = true,
+  virtual_text = true,
+  update_in_insert = false,
+}
 
-  local function on_publish_diagnostics(...)
-    vim.api.nvim_command('doautocmd User LSPOnDiagnostics')
-    on_publish_handler(...)
-  end
+local on_publish_handler = vim.lsp.with(vim.lsp.diagnostic
+                                          .on_publish_diagnostics,
+                                        on_publish_cfg)
 
-  local stock_formatting = vim.lsp.handlers['textDocument/formatting']
-  -- Handle `formatting` error and try to format with 'formatprg'
-  -- { err, method, result, client_id, bufnr, config }
-  local function on_formatting(err, ...)
-    -- Doesn't work with typescript but does with haskell
-    -- if err == nil and (res == nil or #res > 0) then
-    if err == nil then
-      stock_formatting(err, ...)
-    else
-      print('Error formatting w/ LSP, falling back to \'formatprg\'...')
-      utils.format_formatprg()
-    end
-  end
-
-  vim.lsp.handlers['textDocument/formatting'] = on_formatting
-  vim.lsp.handlers['textDocument/publishDiagnostics'] = on_publish_diagnostics
+local function on_publish_diagnostics(...)
+  vim.api.nvim_command('doautocmd User LSPOnDiagnostics')
+  on_publish_handler(...)
 end
+
+local stock_formatting = vim.lsp.handlers['textDocument/formatting']
+-- Handle `formatting` error and try to format with 'formatprg'
+-- { err, method, result, client_id, bufnr, config }
+local function on_formatting(err, ...)
+  -- Doesn't work with typescript but does with haskell
+  -- if err == nil and (res == nil or #res > 0) then
+  if err == nil then
+    stock_formatting(err, ...)
+  else
+    print('Error formatting w/ LSP, falling back to \'formatprg\'...')
+    utils.format_formatprg()
+  end
+end
+
+vim.lsp.handlers['textDocument/formatting'] = on_formatting
+vim.lsp.handlers['textDocument/publishDiagnostics'] = on_publish_diagnostics

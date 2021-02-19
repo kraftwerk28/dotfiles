@@ -67,9 +67,25 @@ function _G.dump(...)
   end
 end
 
-function M.pcall(fn)
-  local ok, err = pcall(fn)
-  if not ok then print('ERROR:', err) end
+function _G.replace_text(startpos, endpos, text)
+end
+
+function M.load(path)
+  local ok, mod = pcall(require, path)
+  if not ok then print(string.format('Module %s doesn\'t exist', path)) end
+  if ok then
+    local ok, err = pcall(mod)
+    if not ok then print('ERROR:', err) end
+  end
+end
+
+function M.get_hl(hl_group)
+  local hl = vim.api.nvim_get_hl_by_name(hl_group, true)
+  hl.fg = hl.foreground
+  hl.bg = hl.background
+  hl.foreground = nil
+  hl.background = nil
+  return hl
 end
 
 return M

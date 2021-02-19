@@ -222,5 +222,6 @@
   "oneDarkPro.vivid": true,
   "workbench.iconTheme": "material-icon-theme",
   "workbench.list.smoothScrolling": true,
-  "workbench.colorTheme": "Gruvbox Dark Medium"
+  "workbench.colorTheme": "Ayu Mirage",
+  "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim"
 }

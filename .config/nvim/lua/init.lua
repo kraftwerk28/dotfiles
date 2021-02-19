@@ -25,15 +25,6 @@ function M.format_code()
   end
 end
 
-function M.setup()
-  utils.pcall(require 'plugins')
-  utils.pcall(require 'cfg.treesitter')
-  utils.pcall(require 'cfg.lspconfig')
-  utils.pcall(require'translator.init'.setup)
-end
-
-function M.setup_later() end
-
 function M.yank_highlight() highlight.on_yank {timeout = 1000} end
 
 function M.attach_completion()
@@ -55,5 +46,35 @@ function M.run_prettier()
   utils.format_formatprg()
   vim.bo.formatprg = old_formatprg
 end
+
+function M.restart_lsp()
+  local clients = vim.lsp.get_active_clients()
+  if not vim.tbl_isempty(clients) then
+    vim.lsp.stop_client(clients)
+    vim.defer_fn(function() vim.cmd('edit') end, 100)
+  end
+end
+
+function M.setup()
+  utils.load 'plugins'
+  -- local stl = require 'lua.statusline'
+  -- local cnt = 0
+  -- local sections = {
+  --   {{render = '%b'}}, {{render = '%f'}}, {
+  --     {
+  --       render = function()
+  --         cnt = cnt + 1
+  --         return cnt
+  --       end,
+  --     },
+  --   },
+  -- }
+  -- local s = stl.build_statusline {sections = sections}
+
+  -- dump(s)
+  -- vim.wo.statusline = s
+end
+
+function M.setup_later() end
 
 return M

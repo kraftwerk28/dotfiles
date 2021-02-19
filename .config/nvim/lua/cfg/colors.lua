@@ -1,3 +1,7 @@
+local utils = require 'utils'
+
+-- local sl_highlight = utils.get_hl('StatusLine')
+
 local ayu_dark, ayu_mirage = (function()
   local ayu_colors = {
     bg = {dark = '#0F1419', light = '#FAFAFA', mirage = '#212733'},
@@ -110,12 +114,12 @@ end)()
 -- colors.bg = vim.fn.synIDattr(vim.fn.hlID('StatusLine'), 'bg') -- Default background
 -- colors.fg = colors.light0 -- Default foreground
 
-if vim.g.colors_name == 'ayu' then
-  if vim.g.ayucolor == 'mirage' then
-    return ayu_mirage
+  if vim.g.colors_name == 'ayu' then
+    if vim.g.ayucolor == 'mirage' then
+      return ayu_mirage
+    else
+      return ayu_dark
+    end
   else
     return ayu_dark
   end
-else
-  return ayu_dark
-end
