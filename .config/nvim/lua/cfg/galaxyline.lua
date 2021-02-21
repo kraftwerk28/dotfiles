@@ -1,60 +1,60 @@
-local gl = require 'galaxyline'
-local fileinfo = require 'galaxyline.provider_fileinfo'
-local devicons = require 'nvim-web-devicons'
-local utils = require 'utils'
-local cl = require 'cfg.colors'
+local gl = require "galaxyline"
+local fileinfo = require "galaxyline.provider_fileinfo"
+local devicons = require "nvim-web-devicons"
+local utils = require "utils"
+local cl = require "cfg.colors"
 
 local gls = gl.section
 local u = utils.u
 
 local mode_map = {
-  ['n'] = {'NORMAL', cl.normal},
-  ['i'] = {'INSERT', cl.insert},
-  ['R'] = {'REPLACE', cl.replace},
-  ['v'] = {'VISUAL', cl.visual},
-  ['V'] = {'V-LINE', cl.visual},
-  ['c'] = {'COMMAND', cl.command},
-  ['s'] = {'SELECT', cl.visual},
-  ['S'] = {'S-LINE', cl.visual},
-  ['t'] = {'TERMINAL', cl.terminal},
-  [''] = {'V-BLOCK', cl.visual},
-  [''] = {'S-BLOCK', cl.visual},
-  ['Rv'] = {'VIRTUAL'},
-  ['rm'] = {'--MORE'},
+  ["n"] = {"NORMAL", cl.normal},
+  ["i"] = {"INSERT", cl.insert},
+  ["R"] = {"REPLACE", cl.replace},
+  ["v"] = {"VISUAL", cl.visual},
+  ["V"] = {"V-LINE", cl.visual},
+  ["c"] = {"COMMAND", cl.command},
+  ["s"] = {"SELECT", cl.visual},
+  ["S"] = {"S-LINE", cl.visual},
+  ["t"] = {"TERMINAL", cl.terminal},
+  [""] = {"V-BLOCK", cl.visual},
+  [""] = {"S-BLOCK", cl.visual},
+  ["Rv"] = {"VIRTUAL"},
+  ["rm"] = {"--MORE"},
 }
 
 local sep = {
-  right_filled = u '2590',
-  left_filled = u '258c',
+  right_filled = u "2590",
+  left_filled = u "258c",
   -- right_filled = u 'e0b2',
   -- left_filled = u 'e0b0',
-  right = u '2503',
-  left = u '2503',
+  right = u "2503",
+  left = u "2503",
   -- right = u 'e0b3',
   -- left = u 'e0b1',
 }
 
 local icons = {
-  locker = u 'f023',
-  unsaved = u 'f693',
-  dos = u 'e70f',
-  unix = u 'f17c',
-  mac = u 'f179',
-  lsp_warn = u 'f071',
-  lsp_error = u 'f46e',
+  locker = u "f023",
+  unsaved = u "f693",
+  dos = u "e70f",
+  unix = u "f17c",
+  mac = u "f179",
+  lsp_warn = u "f071",
+  lsp_error = u "f46e",
 }
 
-local function mode_label() return mode_map[vim.fn.mode()][1] or 'N/A' end
+local function mode_label() return mode_map[vim.fn.mode()][1] or "N/A" end
 local function mode_hl() return mode_map[vim.fn.mode()][2] or cl.none end
 
 local function highlight(group, fg, bg, gui)
-  local cmd = string.format('highlight %s guifg=%s guibg=%s', group, fg, bg)
-  if gui ~= nil then cmd = cmd .. ' gui=' .. gui end
+  local cmd = string.format("highlight %s guifg=%s guibg=%s", group, fg, bg)
+  if gui ~= nil then cmd = cmd .. " gui=" .. gui end
   vim.cmd(cmd)
 end
 
 local function buffer_not_empty()
-  if vim.fn.empty(vim.fn.expand '%:t') ~= 1 then return true end
+  if vim.fn.empty(vim.fn.expand "%:t") ~= 1 then return true end
   return false
 end
 
@@ -68,49 +68,49 @@ local function wide_enough()
   return false
 end
 
-gl.short_line_list = {'NvimTree', 'vista', 'dbui'}
+gl.short_line_list = {"NvimTree", "vista", "dbui"}
 
 gls.left = {
   {
     ViMode = {
       provider = function()
         local modehl = mode_hl()
-        highlight('GalaxyViMode', cl.bg, modehl, 'bold')
-        highlight('GalaxyViModeInv', modehl, cl.bg, 'bold')
-        return string.format('  %s ', mode_label())
+        highlight("GalaxyViMode", cl.bg, modehl, "bold")
+        highlight("GalaxyViModeInv", modehl, cl.bg, "bold")
+        return string.format("  %s ", mode_label())
       end,
       separator = sep.left_filled,
-      separator_highlight = 'GalaxyViModeInv',
+      separator_highlight = "GalaxyViModeInv",
     },
   }, {
     FileIcon = {
       provider = function()
-        local fname, ext = vim.fn.expand '%:t', vim.fn.expand '%:e'
+        local fname, ext = vim.fn.expand "%:t", vim.fn.expand "%:e"
         local icon, iconhl = devicons.get_icon(fname, ext)
-        if icon == nil then return '' end
-        local fg = vim.fn.synIDattr(vim.fn.hlID(iconhl), 'fg')
-        highlight('GalaxyFileIcon', fg, cl.bg)
-        return ' ' .. icon .. ' '
+        if icon == nil then return "" end
+        local fg = vim.fn.synIDattr(vim.fn.hlID(iconhl), "fg")
+        highlight("GalaxyFileIcon", fg, cl.bg)
+        return " " .. icon .. " "
       end,
       condition = buffer_not_empty,
     },
     FileName = {
       provider = function()
-        if not buffer_not_empty() then return '' end
+        if not buffer_not_empty() then return "" end
         local fname
         if wide_enough() then
-          fname = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
+          fname = vim.fn.fnamemodify(vim.fn.expand "%", ":~:.")
         else
-          fname = vim.fn.expand '%:t'
+          fname = vim.fn.expand "%:t"
         end
-        if #fname == 0 then return '' end
-        if vim.bo.readonly then fname = fname .. ' ' .. icons.locker end
-        if vim.bo.modified then fname = fname .. ' ' .. icons.unsaved end
-        return ' ' .. fname .. ' '
+        if #fname == 0 then return "" end
+        if vim.bo.readonly then fname = fname .. " " .. icons.locker end
+        if vim.bo.modified then fname = fname .. " " .. icons.unsaved end
+        return " " .. fname .. " "
       end,
       highlight = {cl.fg, cl.bg},
       separator = sep.left,
-      separator_highlight = 'GalaxyViModeInv',
+      separator_highlight = "GalaxyViModeInv",
     },
   },
 }
@@ -121,62 +121,62 @@ gls.right = {
       provider = function()
         local connected = not vim.tbl_isempty(vim.lsp.buf_get_clients(0))
         if connected then
-          return ' ' .. u 'f817' .. ' '
+          return " " .. u "f817" .. " "
         else
-          return ''
+          return ""
         end
       end,
       highlight = {cl.lsp_active, cl.bg},
       separator = sep.right,
-      separator_highlight = 'GalaxyViModeInv',
+      separator_highlight = "GalaxyViModeInv",
     },
   }, {
     DiagnosticWarn = {
       provider = function()
-        local n = vim.lsp.diagnostic.get_count(0, 'Warning')
-        if n == 0 then return '' end
-        return string.format(' %s %d ', icons.lsp_warn, n)
+        local n = vim.lsp.diagnostic.get_count(0, "Warning")
+        if n == 0 then return "" end
+        return string.format(" %s %d ", icons.lsp_warn, n)
       end,
-      highlight = {'yellow', cl.bg},
+      highlight = {"yellow", cl.bg},
     },
     DiagnosticError = {
       provider = function()
-        local n = vim.lsp.diagnostic.get_count(0, 'Error')
-        if n == 0 then return '' end
-        return string.format(' %s %d ', icons.lsp_error, n)
+        local n = vim.lsp.diagnostic.get_count(0, "Error")
+        if n == 0 then return "" end
+        return string.format(" %s %d ", icons.lsp_error, n)
       end,
-      highlight = {'red', cl.bg},
+      highlight = {"red", cl.bg},
     },
   }, {
     FileType = {
       provider = function()
-        if not buffer_not_empty() then return '' end
-        local icon = icons[vim.bo.fileformat] or ''
-        return string.format(' %s %s ', icon, vim.bo.filetype)
+        if not buffer_not_empty() then return "" end
+        local icon = icons[vim.bo.fileformat] or ""
+        return string.format(" %s %s ", icon, vim.bo.filetype)
       end,
       condition = buffer_not_empty,
       highlight = {cl.fg, cl.bg},
       separator = sep.right,
-      separator_highlight = 'GalaxyViModeInv',
+      separator_highlight = "GalaxyViModeInv",
     },
   }, {
     PositionInfo = {
       provider = {
         function()
-          return string.format('%s:%s', vim.fn.line('.'), vim.fn.col('.'))
+          return string.format("%s:%s", vim.fn.line("."), vim.fn.col("."))
         end,
       },
-      highlight = 'GalaxyViMode',
+      highlight = "GalaxyViMode",
       condition = buffer_not_empty,
       separator = sep.right_filled,
-      separator_highlight = 'GalaxyViModeInv',
+      separator_highlight = "GalaxyViModeInv",
     },
     PercentInfo = {
       provider = fileinfo.current_line_percent,
-      highlight = 'GalaxyViMode',
+      highlight = "GalaxyViMode",
       condition = buffer_not_empty,
       separator = sep.right,
-      separator_highlight = 'GalaxyViMode',
+      separator_highlight = "GalaxyViMode",
     },
   },
 }

@@ -1,7 +1,7 @@
 local M = {}
 
-local utils = require 'utils'
-local highlight = require 'vim.highlight'
+local utils = require "utils"
+local highlight = require "vim.highlight"
 
 M.show_lsp_diagnostics = (function()
   local debounced =
@@ -18,7 +18,7 @@ M.show_lsp_diagnostics = (function()
 end)()
 
 function M.format_code()
-  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) or vim.bo.filetype == 'haskell' then
+  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) or vim.bo.filetype == "haskell" then
     utils.format_formatprg()
   else
     vim.lsp.buf.formatting()
@@ -28,21 +28,21 @@ end
 function M.yank_highlight() highlight.on_yank {timeout = 1000} end
 
 function M.attach_completion()
-  local ok, completion = pcall(require, 'completion')
+  local ok, completion = pcall(require, "completion")
   if ok then completion.on_attach() end
 end
 
 function M.run_prettier()
-  if vim.fn.executable('prettier') == 0 then return end
+  if vim.fn.executable("prettier") == 0 then return end
   local ft = vim.bo.filetype
   local parser
-  if ft == 'typescript' or ft == 'typescriptreact' then
-    parser = 'typescript'
-  elseif ft == 'javascript' or ft == 'javascriptreact' then
-    parser = 'babel'
+  if ft == "typescript" or ft == "typescriptreact" then
+    parser = "typescript"
+  elseif ft == "javascript" or ft == "javascriptreact" then
+    parser = "babel"
   end
   local old_formatprg = vim.bo.formatprg
-  vim.bo.formatprg = 'prettier --parser ' .. parser
+  vim.bo.formatprg = "prettier --parser " .. parser
   utils.format_formatprg()
   vim.bo.formatprg = old_formatprg
 end
@@ -51,12 +51,12 @@ function M.restart_lsp()
   local clients = vim.lsp.get_active_clients()
   if not vim.tbl_isempty(clients) then
     vim.lsp.stop_client(clients)
-    vim.defer_fn(function() vim.cmd('edit') end, 100)
+    vim.defer_fn(function() vim.cmd("edit") end, 100)
   end
 end
 
 function M.setup()
-  utils.load 'plugins'
+  utils.load "plugins"
   -- local stl = require 'lua.statusline'
   -- local cnt = 0
   -- local sections = {

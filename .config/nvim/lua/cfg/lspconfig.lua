@@ -1,6 +1,6 @@
-local utils = require 'utils'
-local lsp = require 'lspconfig'
-local root_pattern = require'lspconfig.util'.root_pattern
+local utils = require "utils"
+local lsp = require "lspconfig"
+local root_pattern = require"lspconfig.util".root_pattern
 -- on_attach is called in init.vim
 
 local hl_cmds = [[
@@ -19,55 +19,58 @@ vim.api.nvim_exec(hl_cmds, false)
 local sign_define = vim.fn.sign_define
 local u = utils.u
 local lsp_signs = {
-  LspDiagnosticsSignHint = {text = u 'f0eb', texthl = 'LspDiagnosticsSignHint'},
+  LspDiagnosticsSignHint = {text = u "f0eb", texthl = "LspDiagnosticsSignHint"},
   LspDiagnosticsSignInformation = {
-    text = u 'f129',
-    texthl = 'LspDiagnosticsSignInformation',
+    text = u "f129",
+    texthl = "LspDiagnosticsSignInformation",
   },
   LspDiagnosticsSignWarning = {
-    text = u 'f071',
-    texthl = 'LspDiagnosticsSignWarning',
+    text = u "f071",
+    texthl = "LspDiagnosticsSignWarning",
   },
   LspDiagnosticsSignError = {
-    text = u 'f46e',
-    texthl = 'LspDiagnosticsSignError',
+    text = u "f46e",
+    texthl = "LspDiagnosticsSignError",
   },
 }
 for hl_group, config in pairs(lsp_signs) do sign_define(hl_group, config) end
 
 local python_cfg = {
-  cmd = {'pyls'},
-  filetypes = {'python'},
-  jedi_completion = {enabled = true},
-  jedi_hover = {enabled = true},
-  jedi_references = {enabled = true},
-  jedi_signature_help = {enabled = true},
-  jedi_symbols = {enabled = true, all_scopes = true},
-  mccabe = {enabled = true, threshold = 15},
-  preload = {enabled = true},
-  pycodestyle = {enabled = true},
-  pydocstyle = {
-    enabled = false,
-    match = '(?!test_).*\\.py',
-    matchDir = '[^\\.].*',
+  cmd = {"pyls"},
+  filetypes = {"python"},
+  settings = {
+    pyls = {
+      plugins = {
+        jedi_completion = {enabled = true},
+        jedi_hover = {enabled = true},
+        jedi_references = {enabled = true},
+        jedi_signature_help = {enabled = true},
+        jedi_symbols = {enabled = true, all_scopes = true},
+        yapf = {enabled = false},
+        pylint = {enabled = false},
+        pycodestyle = {enabled = false},
+        pydocstyle = {enabled = false},
+        mccabe = {enabled = false},
+        preload = {enabled = false},
+        rope_completion = {enabled = false},
+      },
+    },
   },
-  rope_completion = {enabled = true},
-  yapf = {enabled = true},
 }
 
 local lua_cfg = {
   cmd = {
-    'lua-language-server', '-E', '/usr/share/lua-language-server/main.lua',
-    '--logpath', vim.lsp.get_log_path():match('(.*[/\\])'),
+    "lua-language-server", "-E", "/usr/share/lua-language-server/main.lua",
+    "--logpath", vim.lsp.get_log_path():match("(.*[/\\])"),
   },
   settings = {
     Lua = {
-      runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-      diagnostics = {globals = {'vim'}},
+      runtime = {version = "LuaJIT", path = vim.split(package.path, ";")},
+      diagnostics = {globals = {"vim"}},
       workspace = {
         library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
         },
       },
     },
@@ -75,19 +78,24 @@ local lua_cfg = {
 }
 
 local json_cfg = {
-  cmd = {'vscode-json-languageserver', '--stdio'},
-  filetypes = {'json', 'jsonc'},
+  cmd = {"vscode-json-languageserver", "--stdio"},
+  filetypes = {"json", "jsonc"},
   init_options = {provideFormatter = true},
 }
 
 local clangd_cfg = {
-  cmd = {'clangd', '--background-index', '--compile-commands-dir', 'build/'},
-  filetypes = {'c', 'cpp', 'objc', 'objcpp'},
-  root_dir = root_pattern('CMakeLists.txt', 'compile_flags.txt', '.git',
+  cmd = {"clangd", "--background-index", "--compile-commands-dir", "build/"},
+  filetypes = {"c", "cpp", "objc", "objcpp"},
+  root_dir = root_pattern("CMakeLists.txt", "compile_flags.txt", ".git",
                           vim.fn.getcwd()),
 }
 
-lsp.tsserver.setup {}
+local tsserver_cfg = {
+  root_dir = root_pattern("package.json", "tsconfig.json", "jsconfig.json",
+                          ".git", vim.fn.getcwd()),
+}
+
+lsp.tsserver.setup(tsserver_cfg)
 lsp.pyls.setup(python_cfg)
 lsp.sumneko_lua.setup(lua_cfg)
 lsp.rust_analyzer.setup {}
@@ -110,11 +118,11 @@ local on_publish_handler = vim.lsp.with(vim.lsp.diagnostic
                                         on_publish_cfg)
 
 local function on_publish_diagnostics(...)
-  vim.api.nvim_command('doautocmd User LSPOnDiagnostics')
+  vim.api.nvim_command("doautocmd User LSPOnDiagnostics")
   on_publish_handler(...)
 end
 
-local stock_formatting = vim.lsp.handlers['textDocument/formatting']
+local stock_formatting = vim.lsp.handlers["textDocument/formatting"]
 -- Handle `formatting` error and try to format with 'formatprg'
 -- { err, method, result, client_id, bufnr, config }
 local function on_formatting(err, ...)
@@ -123,10 +131,10 @@ local function on_formatting(err, ...)
   if err == nil then
     stock_formatting(err, ...)
   else
-    print('Error formatting w/ LSP, falling back to \'formatprg\'...')
+    print("Error formatting w/ LSP, falling back to 'formatprg'...")
     utils.format_formatprg()
   end
 end
 
-vim.lsp.handlers['textDocument/formatting'] = on_formatting
-vim.lsp.handlers['textDocument/publishDiagnostics'] = on_publish_diagnostics
+vim.lsp.handlers["textDocument/formatting"] = on_formatting
+vim.lsp.handlers["textDocument/publishDiagnostics"] = on_publish_diagnostics

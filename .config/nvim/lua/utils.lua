@@ -1,6 +1,6 @@
 local M = {}
 
-function M.get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
+function M.get_cursor_pos() return {vim.fn.line("."), vim.fn.col(".")} end
 
 function M.debounce(func, timeout)
   local timer_id = nil
@@ -29,7 +29,7 @@ function M.format_formatprg()
   local opt_exists, formatprg = pcall(function() return vim.bo.formatprg end)
   if opt_exists and #formatprg > 0 then
     local view = vim.fn.winsaveview()
-    vim.api.nvim_command('normal gggqG')
+    vim.api.nvim_command("normal gggqG")
     vim.fn.winrestview(view)
     return true
   else
@@ -38,7 +38,7 @@ function M.format_formatprg()
 end
 
 function M.u(code)
-  if type(code) == 'string' then code = tonumber('0x' .. code) end
+  if type(code) == "string" then code = tonumber("0x" .. code) end
   local c = string.char
   if code <= 0x7f then return c(code) end
   local t = {}
@@ -67,15 +67,14 @@ function _G.dump(...)
   end
 end
 
-function _G.replace_text(startpos, endpos, text)
-end
+function _G.replace_text(startpos, endpos, text) end
 
 function M.load(path)
   local ok, mod = pcall(require, path)
-  if not ok then print(string.format('Module %s doesn\'t exist', path)) end
+  if not ok then print(string.format("Module %s doesn't exist", path)) end
   if ok then
     local ok, err = pcall(mod)
-    if not ok then print('ERROR:', err) end
+    if not ok then print("ERROR:", err) end
   end
 end
 
