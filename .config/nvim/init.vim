@@ -252,7 +252,7 @@ endfunction
 
 augroup formatprgs
   autocmd!
-  autocmd FileType haskell setlocal formatprg=brittany
+  " autocmd FileType haskell setlocal formatprg=brittany
   autocmd FileType typescript,typescriptreact
                  \ setlocal formatprg=prettier\ --parser\ typescript
   autocmd FileType javascript,javascriptreact

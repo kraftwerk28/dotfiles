@@ -6,17 +6,16 @@ local root_pattern = require'lspconfig.util'.root_pattern
 local hl_cmds = [[
   highlight! LspDiagnosticsUnderlineHint gui=undercurl
   highlight! LspDiagnosticsUnderlineInformation gui=undercurl
-  highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=darkyellow
+  highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=orange
   highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=red
 
   highlight! LspDiagnosticsSignHint guifg=yellow
   highlight! LspDiagnosticsSignInformation guifg=lightblue
-  highlight! LspDiagnosticsSignWarning guifg=darkyellow
+  highlight! LspDiagnosticsSignWarning guifg=orange
   highlight! LspDiagnosticsSignError guifg=red
 ]]
 vim.api.nvim_exec(hl_cmds, false)
 
-local sign_define = vim.fn.sign_define
 local u = utils.u
 local lsp_signs = {
   LspDiagnosticsSignHint = {text = u 'f0eb', texthl = 'LspDiagnosticsSignHint'},
@@ -33,7 +32,7 @@ local lsp_signs = {
     texthl = 'LspDiagnosticsSignError',
   },
 }
-for hl_group, config in pairs(lsp_signs) do sign_define(hl_group, config) end
+for hl_group, config in pairs(lsp_signs) do vim.fn.sign_define(hl_group, config) end
 
 lsp.tsserver.setup {
   root_dir = root_pattern('package.json', 'tsconfig.json', 'jsconfig.json',

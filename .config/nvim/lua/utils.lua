@@ -73,13 +73,13 @@ function M.load(path)
   local ok, mod = pcall(require, path)
   if not ok then print(string.format('Module %s doesn\'t exist', path)) end
   if ok then
-    local loadfunc
+    local loadfn
     if type(mod) == 'function' then
-      loadfunc = mod
+      loadfn = mod
     elseif mod.setup ~= nil then
-      loadfunc = mod.setup
+      loadfn = mod.setup
     end
-    local ok, err = pcall(mod)
+    local ok, err = pcall(loadfn)
     if not ok then print('ERROR:', err) end
   end
 end

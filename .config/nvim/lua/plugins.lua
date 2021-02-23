@@ -7,7 +7,7 @@ local function load(use)
   use 'romgrk/doom-one.vim'
   use {
     'ayu-theme/ayu-vim',
-    config = function()
+    setup = function()
       vim.g.ayucolor = 'mirage'
       vim.api.nvim_exec([[
         augroup alter_ayu
