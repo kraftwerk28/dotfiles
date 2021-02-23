@@ -3,7 +3,7 @@ set background=dark
 
 lua init = require 'init'
 lua init.setup()
-autocmd VimEnter lua init.setup_later()
+autocmd VimEnter * lua init.setup_later()
 
 " Must be AFTER augroups above
 syntax on
