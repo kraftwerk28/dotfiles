@@ -28,7 +28,7 @@ let g:vim_indent_cont = 0
 set hidden
 set expandtab softtabstop=4 tabstop=4 shiftwidth=2
 set autoindent smartindent
-set list listchars=tab:⇥\ ,trail:·,space:·
+set list listchars=tab:\ ,trail:·,eol:↲
 set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
