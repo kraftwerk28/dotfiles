@@ -16,23 +16,27 @@ local function load(use)
         augroup END
       ]], false)
       vim.cmd 'colorscheme ayu'
+      -- Loading statusline here lately because colors won't work
+      require'utils'.load 'statusline'
     end,
   }
 
-  -- use {
-  --   'joshdick/onedark.vim',
-  --   config = function() vim.g.onedark_terminal_italics = 1 end,
-  -- }
+  use {
+    disable = true,
+    'joshdick/onedark.vim',
+    config = function() vim.g.onedark_terminal_italics = 1 end,
+  }
 
-  -- use {
-  --   'morhetz/gruvbox',
-  --   config = function()
-  --     vim.g.gruvbox_italic = 1
-  --     vim.g.gruvbox_contrast_dark = 'medium'
-  --     vim.g.gruvbox_invert_selection = 0
-  --     vim.cmd 'colorscheme gruvbox'
-  --   end,
-  -- }
+  use {
+    disable = true,
+    'morhetz/gruvbox',
+    config = function()
+      vim.g.gruvbox_italic = 1
+      vim.g.gruvbox_contrast_dark = 'medium'
+      vim.g.gruvbox_invert_selection = 0
+      vim.cmd 'colorscheme gruvbox'
+    end,
+  }
 
   use 'kyazdani42/nvim-web-devicons'
 
@@ -88,13 +92,10 @@ local function load(use)
 
   use 'neovimhaskell/haskell-vim'
   use 'pangloss/vim-javascript'
-  use {'evanleck/vim-svelte', branch = 'main'}
   use 'editorconfig/editorconfig-vim'
   use 'elixir-editors/vim-elixir'
   use 'chr4/nginx.vim'
   use 'tpope/vim-markdown'
-
-  -- use {'neoclide/coc.nvim', 'branch' = 'release'}
 
   use {
     'nvim-treesitter/nvim-treesitter',
@@ -123,7 +124,7 @@ local function load(use)
           ultisnips = true,
         },
       }
-      vim.g.UltiSnipsExpandTrigger = '\\<Nop>'
+      vim.g.UltiSnipsExpandTrigger = ''
       vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
       vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
     end,
@@ -153,10 +154,10 @@ local config = {git = {clone_timeout = 240}}
 return function()
   vim.api.nvim_exec([[
     packadd packer.nvim
-    augroup packer_compile
-      autocmd!
-      autocmd BufWritePost plugins.lua PackerCompile
-    augroup END
+    " augroup packer_compile
+    "   autocmd!
+    "   autocmd BufWritePost plugins.lua PackerCompile
+    " augroup END
   ]], false)
   local packer = require 'packer'
   packer.startup {load, config = config}

@@ -9,7 +9,6 @@ export ZSH="/home/kraftwerk28/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
-# ZSH_THEME="custom"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -173,17 +172,18 @@ fi
 
 refresh_prompt () {
   if [ "$KEYMAP" = "vicmd" ] || [ "$1" = "block" ]; then
-    echo -ne "\e[1 q"
+    # echo -ne "\e[1 q"
     # PROMPT_VIMODE="%F{yellow}%SN%s%F{yellow}"
     # prompt_vimode="%F{yellow}N "
+    prompt_vimode="%F{green}n "
   elif [ "$KEYMAP" = "main" ] || [ "$KEYMAP" = "viins" ] ||
        [ "$KEYMAP" = "" ] || [ "$1" = "beam" ]; then
-    echo -ne "\e[5 q"
+    # echo -ne "\e[5 q"
     # PROMPT_VIMODE="%F{blue}%SI%s%F{blue}"
-    # prompt_vimode="%F{blue}I "
+    prompt_vimode="%F{cyan}i "
   fi
   filepath="%F{#ffa500}%(4~|…/%2~|%~) "
-  PROMPT="$filepath\$(git_prompt_info)$PROMPT_STATUS$CL_RESET "
+  PROMPT="${filepath}\$(git_prompt_info)${prompt_vimode}$PROMPT_STATUS$CL_RESET "
   RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
 }
 

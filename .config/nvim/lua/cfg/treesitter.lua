@@ -1,12 +1,20 @@
-local ts_configs = require'nvim-treesitter.parsers'.get_parser_configs()
+-- local ts_configs = require'nvim-treesitter.parsers'.get_parser_configs()
 
-ts_configs.elixir = {
-  install_info = {
-    url = '~/projects/treesitter/tree-sitter-elixir',
-    files = {'src/parser.c'},
-  },
-  filetype = 'elixir',
-}
+-- ts_configs.elixir = {
+--   install_info = {
+--     url = '~/projects/treesitter/tree-sitter-elixir',
+--     files = {'src/parser.c'},
+--   },
+--   filetype = 'elixir',
+-- }
+
+-- ts_configs.haskell = {
+--   install_info = {
+--     url = '~/projects/treesitter/tree-sitter-haskell',
+--     files = {'src/parser.c', 'src/scanner.cc'},
+--   },
+--   filetype = 'haskell',
+-- }
 
 local disabled = {
   'dart', 'ocaml', 'java', 'clojure', 'gdscript', 'ocamllex', 'fennel',

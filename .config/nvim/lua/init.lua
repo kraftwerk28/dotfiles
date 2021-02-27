@@ -57,6 +57,6 @@ end
 
 function M.setup() utils.load 'plugins' end
 
-function M.setup_later() utils.load 'statusline' end
+function M.setup_later() end
 
 return M

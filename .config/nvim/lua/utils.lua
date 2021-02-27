@@ -1,5 +1,12 @@
 local M = {}
 
+local function printf(...) print(string.format(...)) end
+
+local sprintf = string.format
+
+M.printf = printf
+M.sprintf = sprintf
+
 function M.get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
 
 function M.debounce(func, timeout)
@@ -67,20 +74,23 @@ function _G.dump(...)
   end
 end
 
-function _G.replace_text(startpos, endpos, text) end
-
 function M.load(path)
   local ok, mod = pcall(require, path)
-  if not ok then print(string.format('Module %s doesn\'t exist', path)) end
-  if ok then
-    local loadfn
+  if not ok then
+    printf('Error loading module `%s`', path)
+    print(mod)
+  else
+    local loadfunc
     if type(mod) == 'function' then
-      loadfn = mod
+      loadfunc = mod
     elseif mod.setup ~= nil then
-      loadfn = mod.setup
+      loadfunc = mod.setup
     end
-    local ok, err = pcall(loadfn)
-    if not ok then print('ERROR:', err) end
+    local ok, err = pcall(loadfunc)
+    if not ok then
+      printf('Error loading module `%s`', path)
+      print(err)
+    end
   end
 end
 

@@ -43,13 +43,12 @@ set autoread autowrite autowriteall
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
-" set foldcolumn=1 " Enable additional column w/ visual folds
-
+" set foldcolumn=1
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
 set diffopt+=vertical
 " Vim-like block cursor
-" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
@@ -64,10 +63,10 @@ augroup ft_indent
   autocmd!
   autocmd FileType go,make setlocal shiftwidth=4 softtabstop=4 noexpandtab
   autocmd FileType python,java,csharp
-                 \ setlocal sw=4 sts=4 et
+                 \ setlocal shiftwidth=4 softtabstop=4 expandtab
   autocmd FileType javascript,typescript,javascriptreact,typescriptreact,svelte,vim
-                 \ setlocal sw=2 sts=2 et
-  autocmd FileType lua setlocal sw=2 sts=2 et
+                 \ setlocal shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType lua setlocal shiftwidth=2 softtabstop=2 expandtab
 augroup END
 
 function! s:RestoreCursor()
@@ -176,9 +175,7 @@ function RevStr(str)
 endfunction
 
 function! s:CompTab()
-  if exists('*neosnippet#jumpable') && neosnippet#jumpable()
-    return "\<Plug>(neosnippet_jump)"
-  elseif pumvisible()
+  if pumvisible()
     return "\<C-N>"
   else
     return "\<Tab>"
@@ -477,6 +474,7 @@ nnoremap <silent> <C-B> :Telescope buffers<CR>
 " Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
 nnoremap <silent> <Leader>gs :vertical Gstatus<CR>
-nnoremap <Leader>gp :copen <Bar> :G poosh<CR>
+" nnoremap <silent> <Leader>gp :Git poosh <Bar> :copen<CR>
+nnoremap <silent> <Leader>gp :Git poosh<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
