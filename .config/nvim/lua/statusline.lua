@@ -1,25 +1,3 @@
---[[
-Config = {
-  sections: Section[],
-  separators: {
-
-  }
-}
-
-Section = (Component | Component[])[]
-
-Component = {
-  render: string | (() => string),
-  highlight = nil | string | HlGroupAdvanced,
-  separator: nil | string,
-}
-
-HlGroupAdvanced = [
-  string | (() => string), -- guifg
-  string | (() => string), -- guibg
-  string | (() => string), -- gui
-]
---]] --
 local cl = require 'cfg.colors'
 local utils = require 'utils'
 local u = utils.u
@@ -283,11 +261,6 @@ local function build_inactive_stl()
   return table.concat {'%#StatusLine#%=', icon, filename, fileattrs, '%='}
 end
 
--- local stl_refresh_events = {
---   'ColorScheme', 'FileType', 'BufWinEnter', 'BufReadPost', 'BufEnter',
---   'WinEnter', 'FileChangedShellPost', 'VimResized', 'TermOpen',
--- }
-
 _G.stl = {}
 function _G.stl.refresh() vim.wo.statusline = build_stl() end
 function _G.stl.unset() vim.wo.statusline = build_inactive_stl() end
@@ -297,6 +270,7 @@ function _G.stl.unset() vim.wo.statusline = build_inactive_stl() end
 --   '', '', '', '', '', '', '', '', '', '', '',
 --   '', '', '', '', '', '',
 -- }
+-- TODO: make spinner components for status feedback
 -- local function make_spinner()
 --   local frames = {'/', '-', '\\', '|'}
 --   local nthframe = 0
