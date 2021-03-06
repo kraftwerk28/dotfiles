@@ -59,8 +59,8 @@ function M.setup() utils.load 'plugins' end
 
 function M.setup_later()
   -- Unmapping UltiSnipsExpandTrigger, IDK how to do it in other way
-  vim.cmd 'unmap! <Nop>'
-  vim.cmd 'unmap <Nop>'
+  vim.cmd 'silent! unmap! <Nop>'
+  vim.cmd 'silent! unmap <Nop>'
 end
 
 return M

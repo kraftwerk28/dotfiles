@@ -41,17 +41,6 @@ local function load(use)
   use 'kyazdani42/nvim-web-devicons'
 
   -- Tools
-  -- use {
-  --   'mhinz/vim-startify',
-  --   config = function()
-  --     function _G.scp_logo()
-  --       local url = 'https://bit.ly/3sVFVNm'
-  --       local cont = vim.fn.system('jp2a ' .. url)
-  --       return vim.fn.split(cont, '\n')
-  --     end
-  --     vim.g.startify_custom_header = 'startify#center(v:lua.scp_logo())'
-  --   end,
-  -- }
   use 'tpope/vim-surround'
   use 'tpope/vim-commentary'
   use {
@@ -99,21 +88,21 @@ local function load(use)
   use 'chrisbra/Colorizer'
   use 'mattn/emmet-vim'
 
+  -- Missing languages in tree-sitter
   use 'neovimhaskell/haskell-vim'
   use 'editorconfig/editorconfig-vim'
   use 'elixir-editors/vim-elixir'
   use 'chr4/nginx.vim'
   use 'tpope/vim-markdown'
 
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function() vim.cmd 'TSUpdate' end,
-    config = function() require 'cfg.treesitter' end,
-  }
-  use {
-    'nvim-treesitter/playground',
-    requires = {'nvim-treesitter/nvim-treesitter'},
-  }
+  if vim.fn.executable('g++') or vim.fn.executable('clang++') then
+    use {
+      'nvim-treesitter/nvim-treesitter',
+      run = function() vim.cmd 'TSUpdate' end,
+      config = function() require 'cfg.treesitter' end,
+    }
+    use 'nvim-treesitter/playground'
+  end
 
   use {'neovim/nvim-lspconfig', config = function() require 'cfg.lspconfig' end}
 
@@ -160,13 +149,19 @@ end
 local config = {git = {clone_timeout = 240}}
 
 return function()
-  vim.api.nvim_exec([[
-    packadd packer.nvim
-    " augroup packer_compile
-    "   autocmd!
-    "   autocmd BufWritePost plugins.lua PackerCompile
-    " augroup END
-  ]], false)
-  local packer = require 'packer'
-  packer.startup {load, config = config}
+  local sprintf = require'utils'.sprintf
+  local packer_install_path = vim.fn.stdpath('data') ..
+                                '/site/pack/packer/opt/packer.nvim'
+  local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) > 0
+
+  if not_installed then
+    print 'packer is not installed, installing...'
+    local repo = 'https://github.com/wbthomason/packer.nvim'
+    vim.cmd(sprintf('!git clone %s %s', repo, packer_install_path))
+  end
+
+  vim.cmd 'packadd packer.nvim'
+  require'packer'.startup {load, config = config}
+
+  if not_installed then vim.cmd 'PackerSync' end
 end
