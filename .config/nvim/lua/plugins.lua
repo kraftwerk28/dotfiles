@@ -4,7 +4,7 @@ local function load(use)
   use {'kraftwerk28/gtranslate.nvim', rocks = {'lua-cjson', 'http'}}
 
   -- Themes
-  use 'romgrk/doom-one.vim'
+  use {'romgrk/doom-one.vim', disable = true}
   use {
     'ayu-theme/ayu-vim',
     setup = function()
@@ -22,14 +22,14 @@ local function load(use)
   }
 
   use {
-    disable = true,
     'joshdick/onedark.vim',
+    disable = true,
     config = function() vim.g.onedark_terminal_italics = 1 end,
   }
 
   use {
-    disable = true,
     'morhetz/gruvbox',
+    disable = true,
     config = function()
       vim.g.gruvbox_italic = 1
       vim.g.gruvbox_contrast_dark = 'medium'
@@ -41,9 +41,18 @@ local function load(use)
   use 'kyazdani42/nvim-web-devicons'
 
   -- Tools
-  use 'junegunn/vim-emoji'
+  -- use {
+  --   'mhinz/vim-startify',
+  --   config = function()
+  --     function _G.scp_logo()
+  --       local url = 'https://bit.ly/3sVFVNm'
+  --       local cont = vim.fn.system('jp2a ' .. url)
+  --       return vim.fn.split(cont, '\n')
+  --     end
+  --     vim.g.startify_custom_header = 'startify#center(v:lua.scp_logo())'
+  --   end,
+  -- }
   use 'tpope/vim-surround'
-  use 'jiangmiao/auto-pairs'
   use 'tpope/vim-commentary'
   use {
     'nvim-telescope/telescope.nvim',
@@ -57,8 +66,9 @@ local function load(use)
       local u = require'utils'.u
       local cfg = {
         sorting_strategy = 'ascending',
-        prompt_prefix = u 'f002',
+        prompt_prefix = u 'f002' .. ' ',
         prompt_position = 'top',
+        selection_caret = u 'f054' .. ' ',
         color_devicons = true,
         scroll_strategy = 'cycle',
         mappings = {
@@ -86,12 +96,10 @@ local function load(use)
     end,
   }
   use 'lyokha/vim-xkbswitch'
-  use 'diepm/vim-rest-console'
   use 'chrisbra/Colorizer'
   use 'mattn/emmet-vim'
 
   use 'neovimhaskell/haskell-vim'
-  use 'pangloss/vim-javascript'
   use 'editorconfig/editorconfig-vim'
   use 'elixir-editors/vim-elixir'
   use 'chr4/nginx.vim'
@@ -111,7 +119,7 @@ local function load(use)
 
   use {
     'hrsh7th/nvim-compe',
-    requires = {'SirVer/ultisnips', 'honza/vim-snippets'},
+    requires = {'SirVer/ultisnips', 'honza/vim-snippets', opt = true},
     config = function()
       require'compe'.setup {
         throttle_time = 200,
@@ -124,7 +132,8 @@ local function load(use)
           ultisnips = true,
         },
       }
-      vim.g.UltiSnipsExpandTrigger = ''
+      -- Doesn't work so I have to manually unmap it below
+      vim.g.UltiSnipsExpandTrigger = '<Nop>'
       vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
       vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
     end,
@@ -143,10 +152,9 @@ local function load(use)
       vim.g.nvim_tree_auto_close = 1
       vim.g.nvim_tree_quit_on_open = 1
       vim.g.nvim_tree_indent_markers = 1
+      vim.g.nvim_tree_disable_netrw = 0
     end,
   }
-
-  use 'glacambre/firenvim'
 end
 
 local config = {git = {clone_timeout = 240}}

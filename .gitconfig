@@ -9,5 +9,7 @@
 	poosh = push origin HEAD
 	nvpoosh = poosh --no-verify
 	loh = log --graph --oneline --all
+	repull = pull --rebase origin
 [pull]
 	rebase = false
+# vim: noet sw=0

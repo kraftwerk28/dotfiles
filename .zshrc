@@ -170,20 +170,28 @@ if [[ -s "$NVS_HOME/nvs.sh" ]]; then
   source "$NVS_HOME/nvs.sh"
 fi
 
+CHANGE_CURSOR_SHAPE=0
+SHOW_VIMODE=1
+
 refresh_prompt () {
-  if [ "$KEYMAP" = "vicmd" ] || [ "$1" = "block" ]; then
-    # echo -ne "\e[1 q"
-    # PROMPT_VIMODE="%F{yellow}%SN%s%F{yellow}"
-    # prompt_vimode="%F{yellow}N "
-    prompt_vimode="%F{green}n "
+  if [[ "$KEYMAP" = "vicmd" ]] || [[ "$1" = "block" ]]; then
+    if [[ "$CHANGE_CURSOR_SHAPE" = 1 ]]; then
+      echo -ne "\e[1 q"
+    fi
+    if [ "$SHOW_VIMODE" = 1 ]; then
+      PROMPT_VIMODE="%B%F{green}N "
+    fi
   elif [ "$KEYMAP" = "main" ] || [ "$KEYMAP" = "viins" ] ||
        [ "$KEYMAP" = "" ] || [ "$1" = "beam" ]; then
-    # echo -ne "\e[5 q"
-    # PROMPT_VIMODE="%F{blue}%SI%s%F{blue}"
-    prompt_vimode="%F{cyan}i "
+    if [ "$CHANGE_CURSOR_SHAPE" = 1 ]; then
+      echo -ne "\e[5 q"
+    fi
+    if [ "$SHOW_VIMODE" = 1 ]; then
+      PROMPT_VIMODE="%B%F{cyan}I "
+    fi
   fi
-  filepath="%F{#ffa500}%(4~|…/%2~|%~) "
-  PROMPT="${filepath}\$(git_prompt_info)${prompt_vimode}$PROMPT_STATUS$CL_RESET "
+  FILEPATH="%F{#ffa500}%(4~|…/%2~|%~) "
+  PROMPT="${FILEPATH}\$(git_prompt_info)$PROMPT_VIMODE$PROMPT_STATUS$CL_RESET "
   RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
 }
 

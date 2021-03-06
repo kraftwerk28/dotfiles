@@ -28,7 +28,7 @@ let g:vim_indent_cont = 0
 set hidden
 set expandtab softtabstop=4 tabstop=4 shiftwidth=2
 set autoindent smartindent
-set list listchars=tab:\ ,trail:·,eol:↲
+set list listchars=tab:\ ,trail:·
 set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
@@ -43,20 +43,20 @@ set autoread autowrite autowriteall
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
-" set foldcolumn=1
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
 set diffopt+=vertical
 " Vim-like block cursor
-set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
+set guicursor=n-v-sm-i-ve-c:block,ci:ver25,r-cr-o:hor20
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
 set guifont=JetBrains\ Mono\ Nerd\ Font:h18
-" set shada='1000,%
 set noshowmode
 set shortmess+=c
 set undofile
+" set langmap=ІЙЦУКЕНГШЩЗФВАПРОЛДЯЧСМИТЬ,SQWERTYUIOPADFGHJKLZXCVBNM;йцукенгшщзфвапролдячсмить,qwertyuiopadfghjklzxcvbnm
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup ft_indent
@@ -69,16 +69,17 @@ augroup ft_indent
   autocmd FileType lua setlocal shiftwidth=2 softtabstop=2 expandtab
 augroup END
 
-function! s:RestoreCursor()
+function! s:restoreCursor()
   echom 'Restoring cursor'
   let l:last_pos = line("'\"")
   if l:last_pos > 0 && l:last_pos <= line('$')
     exe 'normal! g`"'
   endif
 endfunction
+
 augroup restore_cursor
   autocmd!
-  autocmd BufReadPost * call s:RestoreCursor()
+  autocmd BufReadPost * call s:restoreCursor()
 augroup END
 
 augroup auto_save
@@ -100,37 +101,36 @@ let s:additional_filetypes = {
 \   'json': '*.webmanifest',
 \   'rest': '*.http',
 \   'elixir': ['*.exs', '*.ex'],
+\   'cjson': 'tsconfig.json',
 \ }
 
 augroup file_types
   autocmd!
   for kv in items(s:additional_filetypes)
+    let s:fstr = 'autocmd BufNewFile,BufRead %s setlocal filetype=%s'
     if type(kv[1]) == v:t_list
       for ext in kv[1]
-        execute 'autocmd BufNewFile,BufRead ' . ext
-              \ . ' setlocal filetype=' . kv[0]
+        execute printf(s:fstr, ext, kv[0])
       endfor
     else
-      execute 'autocmd BufNewFile,BufRead ' . kv[1]
-            \ . ' setlocal filetype=' . kv[0]
+      execute printf(s:fstr, kv[1], kv[0])
     endif
   endfor
 
   autocmd FileType markdown setlocal conceallevel=2
 
   " json 5 comment
-  autocmd FileType json
-                 \ syntax region Comment start="//" end="$" |
-                 \ syntax region Comment start="/\*" end="\*/" |
-                 \ setlocal commentstring=//\ %s
+  " autocmd FileType json
+  "                \ syntax region Comment start="//" end="$" |
+  "                \ syntax region Comment start="/\*" end="\*/" |
+  "                \ setlocal commentstring=//\ %s
 augroup END
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'fugitive']
 let g:esc_close_ft = ['NvimTree']
 let g:disable_line_numbers = [
-\   'nerdtree', 'NvimTree', 'help',
-\   'list', 'clap_input', 'TelescopePrompt',
+\   'help', 'list', 'clap_input', 'TelescopePrompt',
 \ ]
 
 augroup aux_win_close
@@ -149,13 +149,26 @@ augroup highlight_yank
   autocmd TextYankPost * silent! lua init.yank_highlight()
 augroup END
 
+augroup lsp_conceallevel
+  autocmd!
+  function! s:setConceal()
+    if win_gettype() == 'popup'
+      setlocal conceallevel=3
+    endif
+  endfunction
+  autocmd WinEnter * call s:setConceal()
+augroup END
+
 "------------------------- Line numbers configuration -------------------------"
-function! s:SetNumber(set)
+
+function! s:setNumber(alsoRelative)
   if empty(&filetype) || index(g:disable_line_numbers, &filetype) > -1
     return
   endif
-  setlocal number
-  if a:set
+  if !&number
+    setlocal number
+  endif
+  if a:alsoRelative
     setlocal relativenumber
   else
     setlocal norelativenumber
@@ -164,8 +177,8 @@ endfunction
 
 augroup line_numbers
   autocmd!
-  autocmd BufEnter,Winenter,FocusGained * call s:SetNumber(1)
-  autocmd BufLeave,Winleave,FocusLost * call s:SetNumber(0)
+  autocmd BufEnter,Winenter,FocusGained * call s:setNumber(1)
+  autocmd BufLeave,Winleave,FocusLost * call s:setNumber(0)
 augroup END
 
 "----------------------------- Mapping functions ------------------------------"
@@ -174,7 +187,7 @@ function RevStr(str)
   return join(reverse(l:chars), '')
 endfunction
 
-function! s:CompTab()
+function! s:compTab()
   if pumvisible()
     return "\<C-N>"
   else
@@ -182,7 +195,7 @@ function! s:CompTab()
   endif
 endfunction
 
-function! s:CompSTab()
+function! s:compShiftTab()
   if pumvisible()
     return "\<C-P>"
   else
@@ -190,7 +203,7 @@ function! s:CompSTab()
   endif
 endfunction
 
-function! s:CompCR()
+function! s:compEnter()
   if pumvisible() && complete_info()['selected'] != -1
     return compe#confirm()
   else
@@ -213,8 +226,8 @@ function! s:nvimTreeToggle(find)
 endfunction
 
 "----------------------------- Buffer operations ------------------------------"
-function! s:buf_filt(inc_cur)
-  function! s:filt_fn(include_current, idx, val)
+function! s:bufFilt(inc_cur)
+  function! s:filtFn(include_current, idx, val)
     if !bufexists(a:val) ||
      \ !buflisted(a:val) ||
      \ buffer_name(a:val) =~? 'NERD_tree_*' ||
@@ -223,12 +236,12 @@ function! s:buf_filt(inc_cur)
     endif
     return v:true
   endfunction
-  return filter(range(1, bufnr('$')), function('s:filt_fn', [a:inc_cur]))
+  return filter(range(1, bufnr('$')), function('s:filtFn', [a:inc_cur]))
 endfunction
 
 function! s:DellAllBuf()
   wall
-  silent execute 'bdelete ' . join(s:buf_filt(0))
+  silent execute 'bdelete ' . join(s:bufFilt(0))
 endfunction
 
 function! s:DellThisBuf()
@@ -239,7 +252,7 @@ endfunction
 " Delete buffers except current
 function! s:DelAllExcept()
   wall
-  silent execute 'bdelete' join(s:buf_filt(1))
+  silent execute 'bdelete' join(s:bufFilt(1))
 endfunction
 
 " TODO
@@ -413,10 +426,10 @@ nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
 " LSP mappings:
-inoremap <expr> <Tab> <SID>CompTab()
-inoremap <expr> <S-Tab> <SID>CompSTab()
+inoremap <expr> <Tab> <SID>compTab()
+inoremap <expr> <S-Tab> <SID>compShiftTab()
 inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR> <SID>CompCR()
+inoremap <silent><expr> <CR> <SID>compEnter()
 nnoremap <silent> <Leader>f :lua init.format_code()<CR>
 nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
@@ -473,8 +486,7 @@ nnoremap <silent> <C-B> :Telescope buffers<CR>
 
 " Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
-nnoremap <silent> <Leader>gs :vertical Gstatus<CR>
-" nnoremap <silent> <Leader>gp :Git poosh <Bar> :copen<CR>
-nnoremap <silent> <Leader>gp :Git poosh<CR>
+nnoremap <silent> <Leader>gs :vertical Git<CR>
+nnoremap <silent> <Leader>gp :Git --paginate push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>

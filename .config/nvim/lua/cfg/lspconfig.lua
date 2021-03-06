@@ -9,10 +9,10 @@ local hl_cmds = [[
   highlight! LspDiagnosticsUnderlineWarning gui=undercurl guisp=orange
   highlight! LspDiagnosticsUnderlineError gui=undercurl guisp=red
 
-  highlight! LspDiagnosticsSignHint guifg=yellow
-  highlight! LspDiagnosticsSignInformation guifg=lightblue
-  highlight! LspDiagnosticsSignWarning guifg=orange
-  highlight! LspDiagnosticsSignError guifg=red
+  highlight! LspDiagnosticsDefaultHint guifg=yellow
+  highlight! LspDiagnosticsDefaultInformation guifg=lightblue
+  highlight! LspDiagnosticsDefaultWarning guifg=orange
+  highlight! LspDiagnosticsDefaultError guifg=red
 ]]
 vim.api.nvim_exec(hl_cmds, false)
 
@@ -70,7 +70,7 @@ lsp.sumneko_lua.setup {
   settings = {
     Lua = {
       runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-      diagnostics = {globals = {'vim'}},
+      diagnostics = {globals = {'vim', 'dump'}},
       workspace = {
         library = {
           [vim.fn.expand '$VIMRUNTIME/lua'] = true,
@@ -81,10 +81,23 @@ lsp.sumneko_lua.setup {
   },
 }
 
-lsp.rust_analyzer.setup {}
+lsp.rust_analyzer.setup {
+  settings = {
+    ['rust-analyzer'] = {
+      inlayHints = {
+        enable = true,
+        chainingHints = true,
+        maxLength = 80,
+        parameterHints = true,
+        typeHints = true,
+      },
+      diagnostics = {enable = false},
+    },
+  },
+}
 lsp.gopls.setup {}
 
-lsp.hls.setup {}
+lsp.hls.setup {settings = {haskell = {formattingProvider = 'brittany'}}}
 
 lsp.clangd.setup {
   cmd = {'clangd', '--background-index', '--compile-commands-dir', 'build/'},
@@ -118,7 +131,9 @@ local function on_publish_diagnostics(...)
   on_publish_handler(...)
 end
 
-local stock_formatting = vim.lsp.handlers['textDocument/formatting']
+local handlers = vim.lsp.handlers
+
+local stock_formatting = handlers['textDocument/formatting']
 -- Handle `formatting` error and try to format with 'formatprg'
 -- { err, method, result, client_id, bufnr, config }
 local function on_formatting(err, ...)
@@ -132,5 +147,6 @@ local function on_formatting(err, ...)
   end
 end
 
-vim.lsp.handlers['textDocument/formatting'] = on_formatting
-vim.lsp.handlers['textDocument/publishDiagnostics'] = on_publish_diagnostics
+handlers['textDocument/formatting'] = on_formatting
+handlers['textDocument/publishDiagnostics'] = on_publish_diagnostics
+-- TODO: implement '$/progress'

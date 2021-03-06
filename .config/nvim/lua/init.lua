@@ -18,7 +18,7 @@ M.show_lsp_diagnostics = (function()
 end)()
 
 function M.format_code()
-  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) or vim.bo.filetype == 'haskell' then
+  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
     utils.format_formatprg()
   else
     vim.lsp.buf.formatting()
@@ -57,6 +57,10 @@ end
 
 function M.setup() utils.load 'plugins' end
 
-function M.setup_later() end
+function M.setup_later()
+  -- Unmapping UltiSnipsExpandTrigger, IDK how to do it in other way
+  vim.cmd 'unmap! <Nop>'
+  vim.cmd 'unmap <Nop>'
+end
 
 return M

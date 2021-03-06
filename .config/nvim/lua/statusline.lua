@@ -223,7 +223,7 @@ local function build_stl()
     cond = buf_nonempty,
     padr = 1,
   }
-  local filename = comp {'%f', hl = 'StatusLine'}
+  local filename = comp {'%t', hl = 'StatusLine'}
   local fileattrs = comp {file_attrs, hl = 'StatusLine'}
 
   -- Right
@@ -262,8 +262,13 @@ local function build_inactive_stl()
 end
 
 _G.stl = {}
-function _G.stl.refresh() vim.wo.statusline = build_stl() end
-function _G.stl.unset() vim.wo.statusline = build_inactive_stl() end
+function _G.stl.attach_stl()
+  if vim.g.statusline_winid == vim.fn.win_getid() then
+    return build_stl()
+  else
+    return build_inactive_stl()
+  end
+end
 
 -- local frames = {
 --   '', '', '', '', '', '', '', '', '', '', '',
@@ -283,14 +288,13 @@ function _G.stl.unset() vim.wo.statusline = build_inactive_stl() end
 -- end
 
 return function()
-  _G.stl.refresh()
   utils.highlight('StatusLineWarning', 'yellow', cl.bg)
   utils.highlight('StatusLineError', 'red', cl.bg)
   local autocommand = [[
     augroup stl_autocommands
       autocmd!
-      autocmd BufEnter,WinEnter * call v:lua.stl.refresh()
-      autocmd WinLeave * call v:lua.stl.unset()
+      autocmd BufEnter,WinEnter * setlocal statusline=%!v:lua.stl.attach_stl()
+      autocmd BufLeave,WinLeave * setlocal statusline=%!v:lua.stl.attach_stl()
     augroup END
   ]]
   vim.api.nvim_exec(autocommand, false)
