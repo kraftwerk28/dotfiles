@@ -36,6 +36,7 @@ local ayu_dark, ayu_mirage = (function()
     terminal = ayu_colors.regexp,
     lsp_active = ayu_colors.string,
     lsp_inactive = ayu_colors.fg_idle,
+    illuminate = {dar = '#3E4B59', mirage = '#3E4B59'},
   }
 
   local ayu_dark, ayu_mirage = {}, {}

@@ -28,15 +28,16 @@ local icons = {
   lsp_warn = u 'f071',
   lsp_error = u 'f46e',
   lsp_server_icon = u 'f817',
+  lsp_server_disconnected = u 'f818',
   col_num = u 'e0a3',
   line_num = u 'e0a1',
 }
 
 local function stl_mode()
   local m = mode_map[vim.fn.mode()]
-  utils.highlight('StatusLine', cl.fg, cl.bg, 'bold')
-  utils.highlight('StatusLineModeInv', m[2], cl.bg, 'reverse,bold')
-  utils.highlight('StatusLineMode', m[2], cl.bg, 'bold')
+  utils.highlight {'StatusLine', cl.fg, cl.bg, 'bold'}
+  utils.highlight {'StatusLineModeInv', m[2], cl.bg, 'reverse,bold'}
+  utils.highlight {'StatusLineMode', m[2], cl.bg, 'bold'}
   if vim.fn.winwidth(0) > 80 then
     return m[1]
   else
@@ -50,7 +51,7 @@ local function fileicon()
   local icon, icon_hl = devicons.get_icon(filename, fileext)
   if icon_hl ~= nil then
     local icon_hl_info = utils.hl_by_name(icon_hl)
-    utils.highlight('StatusLineFileIcon', icon_hl_info.fg, cl.bg)
+    utils.highlight {'StatusLineFileIcon', icon_hl_info.fg, cl.bg}
   end
   return icon or ''
 end
@@ -68,9 +69,11 @@ end
 
 local function lsp_connected()
   local connected = not vim.tbl_isempty(vim.lsp.buf_get_clients(0))
+  local icon = connected and icons.lsp_server_icon or
+                 icons.lsp_server_disconnected
   local icon_cl = connected and cl.lsp_active or cl.lsp_inactive
-  utils.highlight('StatusLineLspConn', icon_cl, cl.bg)
-  return icons.lsp_server_icon .. ' '
+  utils.highlight {'StatusLineLspConn', icon_cl, cl.bg}
+  return icon .. ' '
 end
 
 local function lsp_count(kind, icon)
@@ -263,6 +266,8 @@ end
 
 _G.stl = {}
 function _G.stl.attach_stl()
+  utils.highlight {'StatusLineWarning', 'yellow', cl.bg}
+  utils.highlight {'StatusLineError', 'red', cl.bg}
   if vim.g.statusline_winid == vim.fn.win_getid() then
     return build_stl()
   else
@@ -288,14 +293,13 @@ end
 -- end
 
 return function()
-  utils.highlight('StatusLineWarning', 'yellow', cl.bg)
-  utils.highlight('StatusLineError', 'red', cl.bg)
-  local autocommand = [[
-    augroup stl_autocommands
-      autocmd!
-      autocmd BufEnter,WinEnter * setlocal statusline=%!v:lua.stl.attach_stl()
-      autocmd BufLeave,WinLeave * setlocal statusline=%!v:lua.stl.attach_stl()
-    augroup END
-  ]]
-  vim.api.nvim_exec(autocommand, false)
+  vim.api.nvim_exec(
+    [[
+      setlocal statusline=%!v:lua.stl.attach_stl()
+      augroup stl_autocommands
+        autocmd!
+        autocmd BufEnter,WinEnter,BufLeave,WinLeave * setlocal statusline=%!v:lua.stl.attach_stl()
+      augroup END
+    ]], false
+  )
 end

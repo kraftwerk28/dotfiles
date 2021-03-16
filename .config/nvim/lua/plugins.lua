@@ -1,42 +1,31 @@
 local function load(use)
   use {'wbthomason/packer.nvim', opt = true}
 
-  use {'kraftwerk28/gtranslate.nvim', rocks = {'lua-cjson', 'http'}}
+  use {'~/projects/neovim/gtranslate.nvim', rocks = {'lua-cjson', 'http'}}
 
   -- Themes
   use {'romgrk/doom-one.vim', disable = true}
   use {
     'ayu-theme/ayu-vim',
-    setup = function()
+    opt = true,
+    config = function()
+      print('Running `config` for ayu')
       vim.g.ayucolor = 'mirage'
-      vim.api.nvim_exec([[
-        augroup alter_ayu
-          autocmd!
-          autocmd ColorScheme * highlight! link VertSplit Comment
-        augroup END
-      ]], false)
       vim.cmd 'colorscheme ayu'
-      -- Loading statusline here lately because colors won't work
-      require'utils'.load 'statusline'
     end,
   }
-
-  use {
-    'joshdick/onedark.vim',
-    disable = true,
-    config = function() vim.g.onedark_terminal_italics = 1 end,
-  }
-
+  use {'joshdick/onedark.vim', disable = true}
   use {
     'morhetz/gruvbox',
     disable = true,
     config = function()
-      vim.g.gruvbox_italic = 1
-      vim.g.gruvbox_contrast_dark = 'medium'
-      vim.g.gruvbox_invert_selection = 0
-      vim.cmd 'colorscheme gruvbox'
+      -- vim.g.gruvbox_italic = 1
+      -- vim.g.gruvbox_contrast_dark = 'medium'
+      -- vim.g.gruvbox_invert_selection = 0
+      -- vim.cmd 'colorscheme gruvbox'
     end,
   }
+  use {'npxbr/gruvbox.nvim', disable = true, requires = {'rktjmp/lush.nvim'}}
 
   use 'kyazdani42/nvim-web-devicons'
 
@@ -95,16 +84,41 @@ local function load(use)
   use 'chr4/nginx.vim'
   use 'tpope/vim-markdown'
 
-  if vim.fn.executable('g++') or vim.fn.executable('clang++') then
+  if vim.fn.exists('unix') and
+    (vim.fn.executable('g++') or vim.fn.executable('clang++')) then
     use {
       'nvim-treesitter/nvim-treesitter',
-      run = function() vim.cmd 'TSUpdate' end,
-      config = function() require 'cfg.treesitter' end,
+      run = function() vim.cmd('TSUpdate') end,
+      config = function() require('cfg.treesitter') end,
     }
     use 'nvim-treesitter/playground'
   end
 
-  use {'neovim/nvim-lspconfig', config = function() require 'cfg.lspconfig' end}
+  use {
+    'neovim/nvim-lspconfig',
+    config = function() require('cfg.lspconfig') end,
+  }
+
+  use {
+    'RRethy/vim-illuminate',
+    config = function()
+      local colors = require 'cfg.colors'
+      local utils = require 'utils'
+      utils.highlight {'illuminatedWord', fg = 'NONE', bg = colors.illuminate}
+    end,
+  }
+
+  use {
+    'SirVer/ultisnips',
+    config = function()
+      -- Doesn't work so I have to manually unmap it below
+      vim.g.UltiSnipsExpandTrigger = '<F10>'
+      vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
+      vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
+      -- vim.cmd 'silent! unmap <Nop>'
+      -- vim.cmd 'silent! unmap! <Nop>'
+    end,
+  }
 
   use {
     'hrsh7th/nvim-compe',
@@ -121,10 +135,6 @@ local function load(use)
           ultisnips = true,
         },
       }
-      -- Doesn't work so I have to manually unmap it below
-      vim.g.UltiSnipsExpandTrigger = '<Nop>'
-      vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
-      vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
     end,
   }
 
@@ -139,7 +149,6 @@ local function load(use)
         folder = {default = u 'f07b', open = u 'f07c', symlink = u 'f0c1'},
       }
       vim.g.nvim_tree_auto_close = 1
-      vim.g.nvim_tree_quit_on_open = 1
       vim.g.nvim_tree_indent_markers = 1
       vim.g.nvim_tree_disable_netrw = 0
     end,

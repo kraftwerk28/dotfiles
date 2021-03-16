@@ -1,9 +1,17 @@
 set termguicolors
 set background=dark
 
+let g:ayucolor = 'mirage'
+augroup alter_ayu
+  autocmd!
+  autocmd ColorScheme * highlight! link VertSplit Comment
+augroup END
+colorscheme ayu
+
 lua init = require 'init'
 lua init.setup()
-autocmd VimEnter * lua init.setup_later()
+autocmd VimEnter * silent! unmap <Nop>
+               \ | silent! unmap! <Nop>
 
 " Must be AFTER augroups above
 syntax on
@@ -39,7 +47,6 @@ set ignorecase smartcase
 set wildmenu wildmode=full
 set signcolumn=yes
 set autoread autowrite autowriteall
-
 set foldlevel=99 foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
@@ -48,7 +55,7 @@ set scrolloff=3
 set diffopt+=vertical
 " Vim-like block cursor
 " set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
-set guicursor=n-v-sm-i-ve-c:block,ci:ver25,r-cr-o:hor20
+set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
@@ -280,6 +287,7 @@ augroup lsp_diagnostics
   autocmd!
   autocmd CursorMoved * lua init.show_lsp_diagnostics()
 augroup END
+autocmd! lsp_diagnostics
 
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
@@ -316,9 +324,9 @@ command! -nargs=0 Shebang call s:shebang()
 
 function! Durka()
   let themes = map(
-  \   split(system("ls ~/.config/nvim/colors/")) +
-  \   split(system("ls /usr/share/nvim/runtime/colors/")),
-  \   "v:val[:-5]"
+  \   split(system('ls ~/.config/nvim/colors/')) +
+  \   split(system('ls /usr/share/nvim/runtime/colors/')),
+  \   'v:val[:-5]'
   \ )
   for th in themes
     echo th

@@ -125,6 +125,7 @@ source ~/.zsh_completions
 
 alias vim="nvim"
 alias vi="nvim"
+alias v="nvim"
 alias im="nvim"
 alias vin="nvim"
 alias ndoe="node"
@@ -133,7 +134,7 @@ alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 dotfilesupd () {
   commit_message=${1:-"Update dotfiles"}
   dotfiles add -u
-  dotfiles commit -m $commit_message
+  dotfiles commit -m "$commit_message"
   dotfiles push origin HEAD
 }
 
@@ -155,7 +156,7 @@ mkcd () {
     return 1
   fi
   mkdir -p "$1"
-  cd "$1"
+  cd "$1" || return
 }
 
 cjq () {
@@ -163,33 +164,45 @@ cjq () {
     echo "Usage: mkcd <dirname>"
     return 1
   fi
-  cat $1 | jq
+  cat "$1" | jq
 }
 
 if [[ -s "$NVS_HOME/nvs.sh" ]]; then
   source "$NVS_HOME/nvs.sh"
 fi
 
-CHANGE_CURSOR_SHAPE=0
+# Change cursor shape depending on vi mode
+CHANGE_CURSOR_SHAPE=1
+# Show a character depending on vi mode
 SHOW_VIMODE=1
 
 refresh_prompt () {
-  if [[ "$KEYMAP" = "vicmd" ]] || [[ "$1" = "block" ]]; then
-    if [[ "$CHANGE_CURSOR_SHAPE" = 1 ]]; then
-      echo -ne "\e[1 q"
+  if [[ "$KEYMAP" == "vicmd" ]] || [[ "$1" == "block" ]]; then
+    # NORMAL
+    if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
+      echo -ne "\e[1 q";
     fi
-    if [ "$SHOW_VIMODE" = 1 ]; then
+    if [[ "$SHOW_VIMODE" == 1 ]]; then
       PROMPT_VIMODE="%B%F{green}N "
     fi
-  elif [ "$KEYMAP" = "main" ] || [ "$KEYMAP" = "viins" ] ||
-       [ "$KEYMAP" = "" ] || [ "$1" = "beam" ]; then
-    if [ "$CHANGE_CURSOR_SHAPE" = 1 ]; then
+  elif [[ "$KEYMAP" =~ ^(main|viins|)$ ]] || [[ "$1" == "beam" ]]; then
+    # INSERT
+    if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
       echo -ne "\e[5 q"
     fi
-    if [ "$SHOW_VIMODE" = 1 ]; then
+    if [[ "$SHOW_VIMODE" == 1 ]]; then
       PROMPT_VIMODE="%B%F{cyan}I "
     fi
+  elif [[ "$KEYMAP" == "visual" ]]; then
+    # VISUAL
+    if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
+      echo -ne "\e[4 q"
+    fi
+    if [[ "$SHOW_VIMODE" == 1 ]]; then
+      PROMPT_VIMODE="%B%F{orange}V "
+    fi
   fi
+
   FILEPATH="%F{#ffa500}%(4~|…/%2~|%~) "
   PROMPT="${FILEPATH}\$(git_prompt_info)$PROMPT_VIMODE$PROMPT_STATUS$CL_RESET "
   RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
@@ -198,11 +211,12 @@ refresh_prompt () {
 KEYTIMEOUT=50
 
 zle-keymap-select () {
-  refresh_prompt $1
+  refresh_prompt "$1"
   zle reset-prompt
 }
 
 zle -N zle-keymap-select
+zle -N edit-command-line
 precmd_functions+=(refresh_prompt)
 
 bindkey -v

@@ -1,7 +1,6 @@
 local M = {}
 
 local function printf(...) print(string.format(...)) end
-
 local sprintf = string.format
 
 M.printf = printf
@@ -10,24 +9,36 @@ M.sprintf = sprintf
 function M.get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
 
 function M.debounce(func, timeout)
-  local timer_id = nil
+  local timer_id
   return function(...)
     if timer_id ~= nil then vim.fn.timer_stop(timer_id) end
     local args = {...}
-
-    timer_id = vim.fn.timer_start(timeout, function()
+    local function cb()
       func(args)
       timer_id = nil
-    end)
+    end
+    timer_id = vim.fn.timer_start(timeout, cb)
   end
 end
 
+-- FIXME
 function M.throttle(func, timeout)
-  local timer_id = nil
+  local timer_id
+  local did_call = false
   return function(...)
+    local args = {...}
     if timer_id == nil then
-      func {...}
-      timer_id = vim.fn.timer_start(timeout, function() timer_id = nil end)
+      func(args)
+      local function cb()
+        timer_id = nil
+        if did_call then
+          func(args)
+          did_call = false
+        end
+      end
+      timer_id = vim.fn.timer_start(timeout, cb)
+    else
+      did_call = true
     end
   end
 end
@@ -44,6 +55,7 @@ function M.format_formatprg()
   end
 end
 
+-- Convert UTF-8 hex code to character
 function M.u(code)
   if type(code) == 'string' then code = tonumber('0x' .. code) end
   local c = string.char
@@ -94,6 +106,7 @@ function M.load(path)
   end
 end
 
+-- Get information about highlight group
 function M.hl_by_name(hl_group)
   local hl = vim.api.nvim_get_hl_by_name(hl_group, true)
   if hl.foreground ~= nil then hl.fg = string.format('#%x', hl.foreground) end
@@ -101,11 +114,23 @@ function M.hl_by_name(hl_group)
   return hl
 end
 
-function M.highlight(hl_group, fg, bg, gui)
+-- Define a new highlight group
+-- TODO: rewrite to `nvim_set_hl()` when API will be stable
+function M.highlight(cfg)
+  local fg, bg = cfg.fg or cfg[2], cfg.bg or cfg[3]
+  local _gui, _guisp = cfg.gui or cfg[4], cfg.guisp or cfg[5]
   local guifg = fg and ' guifg=' .. fg or ''
   local guibg = bg and ' guibg=' .. bg or ''
-  local gui = gui and ' gui=' .. gui or ''
-  vim.cmd('highlight ' .. hl_group .. guibg .. guifg .. gui)
+  local gui = _gui and ' gui=' .. _gui or ''
+  local guisp = _guisp and ' guisp=' .. _guisp or ''
+  vim.cmd('highlight ' .. cfg[1] .. guifg .. guibg .. gui .. guisp)
 end
+
+-- function M.highlight(hl_group, fg, bg, gui)
+--   local guifg = fg and ' guifg=' .. fg or ''
+--   local guibg = bg and ' guibg=' .. bg or ''
+--   local gui = gui and ' gui=' .. gui or ''
+--   vim.cmd('highlight ' .. hl_group .. guibg .. guifg .. gui)
+-- end
 
 return M

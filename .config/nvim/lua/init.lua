@@ -4,14 +4,14 @@ local utils = require 'utils'
 local highlight = require 'vim.highlight'
 
 M.show_lsp_diagnostics = (function()
-  local debounced =
-    utils.debounce(vim.lsp.diagnostic.show_line_diagnostics, 300)
-  local cursorpos = utils.get_cursor_pos()
+  local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
+  local cursor_pos = utils.get_cursor_pos()
+  local debounced = utils.debounce(show_diagnostics, 300)
   return function()
-    local new_cursor = utils.get_cursor_pos()
-    if (new_cursor[1] ~= 1 and new_cursor[2] ~= 1) and
-      (new_cursor[1] ~= cursorpos[1] or new_cursor[2] ~= cursorpos[2]) then
-      cursorpos = new_cursor
+    local cursor_pos2 = utils.get_cursor_pos()
+    -- TODO: doesn't work when both diagnostics and popup is shown
+    if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
+      cursor_pos = cursor_pos2
       debounced()
     end
   end
@@ -55,12 +55,9 @@ function M.restart_lsp()
   end
 end
 
-function M.setup() utils.load 'plugins' end
-
-function M.setup_later()
-  -- Unmapping UltiSnipsExpandTrigger, IDK how to do it in other way
-  vim.cmd 'silent! unmap! <Nop>'
-  vim.cmd 'silent! unmap <Nop>'
+function M.setup()
+  utils.load 'plugins'
+  utils.load 'statusline'
 end
 
 return M
