@@ -1,34 +1,14 @@
+scriptencoding utf-8
 set termguicolors
 set background=dark
 
-let g:ayucolor = 'mirage'
-augroup alter_ayu
-  autocmd!
-  autocmd ColorScheme * highlight! link VertSplit Comment
-augroup END
-colorscheme ayu
-
 lua init = require 'init'
 lua init.setup()
-autocmd VimEnter * silent! unmap <Nop>
-               \ | silent! unmap! <Nop>
 
 " Must be AFTER augroups above
 syntax on
 
 let g:mapleader = ' '
-
-let g:surround_{char2nr('r')} = "{'\r'}"
-let g:surround_{char2nr('j')} = "{/* \r */}"
-let g:surround_{char2nr('c')} = "/* \r */"
-
-let g:AutoPairsFlyMode = 0
-let g:AutoPairsMultilineClose = 0
-
-let g:XkbSwitchEnabled = 1
-if $XDG_CURRENT_DESKTOP == 'GNOME'
-  let g:XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
-endif
 
 let g:vim_indent_cont = 0
 
@@ -36,7 +16,7 @@ let g:vim_indent_cont = 0
 set hidden
 set expandtab softtabstop=4 tabstop=4 shiftwidth=2
 set autoindent smartindent
-set list listchars=tab:\ ,trail:·
+set list listchars=tab:⇥\ ,trail:·
 set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
@@ -54,8 +34,10 @@ set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
 set diffopt+=vertical
 " Vim-like block cursor
-" set guicursor=n-v-c-i-ci:block,o:hor50,r-cr:hor30,sm:block
-set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
+" Vertical insert / cmdline-insert:
+" set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
+" Block insert / cmdline-insert:
+set guicursor=n-sm-c:block,r-cr-o-v:hor20
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
@@ -63,7 +45,6 @@ set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 set noshowmode
 set shortmess+=c
 set undofile
-" set langmap=ІЙЦУКЕНГШЩЗФВАПРОЛДЯЧСМИТЬ,SQWERTYUIOPADFGHJKLZXCVBNM;йцукенгшщзфвапролдячсмить,qwertyuiopadfghjklzxcvbnm
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup ft_indent
@@ -73,7 +54,7 @@ augroup ft_indent
                  \ setlocal shiftwidth=4 softtabstop=4 expandtab
   autocmd FileType javascript,typescript,javascriptreact,typescriptreact,svelte,vim
                  \ setlocal shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType lua setlocal shiftwidth=2 softtabstop=2 expandtab
+  autocmd FileType lua setlocal shiftwidth=4 softtabstop=4 expandtab
 augroup END
 
 function! s:restoreCursor()
@@ -97,7 +78,7 @@ augroup END
 " Reload file if it changed on disk
 augroup auchecktime
   autocmd!
-  autocmd BufEnter,FocusGained * silent! checktime
+  autocmd BufEnter,FocusGained * silent checktime
 augroup END
 
 " Helping nvim detect filetype
@@ -109,6 +90,7 @@ let s:additional_filetypes = {
 \   'rest': '*.http',
 \   'elixir': ['*.exs', '*.ex'],
 \   'cjson': 'tsconfig.json',
+\   'prolog': '*pl',
 \ }
 
 augroup file_types
@@ -125,20 +107,12 @@ augroup file_types
   endfor
 
   autocmd FileType markdown setlocal conceallevel=2
-
-  " json 5 comment
-  " autocmd FileType json
-  "                \ syntax region Comment start="//" end="$" |
-  "                \ syntax region Comment start="/\*" end="\*/" |
-  "                \ setlocal commentstring=//\ %s
 augroup END
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'fugitive']
 let g:esc_close_ft = ['NvimTree']
-let g:disable_line_numbers = [
-\   'help', 'list', 'clap_input', 'TelescopePrompt',
-\ ]
+let g:disable_line_numbers = ['help', 'list', 'clap_input', 'TelescopePrompt']
 
 augroup aux_win_close
   autocmd!
@@ -361,8 +335,6 @@ function! Emoji2Unicode() abort
 endfunction
 
 command! -nargs=0 Prettier lua init.run_prettier()
-
-command! -nargs=0 RestartLsp lua init.restart_lsp()
 command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
 "------------------------- Comment tool configuration -------------------------"
