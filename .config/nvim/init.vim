@@ -33,11 +33,12 @@ set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
 set diffopt+=vertical
-" Vim-like block cursor
+
 " Vertical insert / cmdline-insert:
-" set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
+set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
 " Block insert / cmdline-insert:
-set guicursor=n-sm-c:block,r-cr-o-v:hor20
+" set guicursor=n-sm-c:block,r-cr-o-v:hor20
+
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw

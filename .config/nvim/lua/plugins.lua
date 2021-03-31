@@ -5,31 +5,12 @@ local function load(use)
 
     -- Themes
     use {'romgrk/doom-one.vim', disable = true}
-    use {
-        'ayu-theme/ayu-vim',
-        config = function()
-            local utils = require('utils')
-            vim.g.ayucolor = 'mirage'
-            vim.cmd('autocmd ColorScheme ayu highlight! link VertSplit Comment')
-            vim.cmd('colorscheme ayu')
-            utils.load('statusline')
-            utils.load('tabline')
-        end,
-    }
-    use {'joshdick/onedark.vim'}
-    use {
-        'morhetz/gruvbox',
-        disable = true,
-        config = function()
-            vim.g.gruvbox_italic = 1
-            vim.g.gruvbox_contrast_dark = 'medium'
-            vim.g.gruvbox_invert_selection = 0
-            vim.cmd('colorscheme gruvbox')
-        end,
-    }
+    use {'ayu-theme/ayu-vim', opt = true}
+    use {'joshdick/onedark.vim', disable = true}
+    use {'morhetz/gruvbox', disable = true}
     use {'npxbr/gruvbox.nvim', disable = true, requires = {'rktjmp/lush.nvim'}}
 
-    use 'kyazdani42/nvim-web-devicons'
+    use {'kyazdani42/nvim-web-devicons'}
 
     -- Tools
     use {
@@ -74,7 +55,9 @@ local function load(use)
     }
 
     use 'wellle/targets.vim' -- More useful text objects (e.g. function arguments)
+
     use 'tpope/vim-fugitive' -- Git helper
+
     use {
         'airblade/vim-gitgutter',
         config = function()
@@ -85,6 +68,7 @@ local function load(use)
             vim.g.gitgutter_sign_removed = gutter
         end,
     }
+
     use {
         'lyokha/vim-xkbswitch',
         config = function()
@@ -94,16 +78,18 @@ local function load(use)
             end
         end,
     }
-    use 'chrisbra/Colorizer'
-    use 'mattn/emmet-vim'
+
+    use {'chrisbra/Colorizer'}
+
+    use {'mattn/emmet-vim'}
 
     -- Missing languages in tree-sitter
-    use 'neovimhaskell/haskell-vim'
-    use 'editorconfig/editorconfig-vim'
-    use 'elixir-editors/vim-elixir'
-    use 'chr4/nginx.vim'
-    use 'tpope/vim-markdown'
-    use 'adimit/prolog.vim'
+    use {'neovimhaskell/haskell-vim'}
+    use {'editorconfig/editorconfig-vim'}
+    use {'elixir-editors/vim-elixir'}
+    use {'chr4/nginx.vim'}
+    use {'tpope/vim-markdown'}
+    use {'adimit/prolog.vim'}
 
     if vim.fn.exists('unix') and
       (vim.fn.executable('g++') or vim.fn.executable('clang++')) then
@@ -113,7 +99,7 @@ local function load(use)
             config = function() require('cfg.treesitter') end,
         }
 
-        use 'nvim-treesitter/playground'
+        use {'nvim-treesitter/playground'}
     end
 
     use {

@@ -47,6 +47,28 @@ function M.run_prettier()
     vim.bo.formatprg = old_formatprg
 end
 
-function M.setup() utils.load('plugins') end
+local function load_colors()
+    vim.cmd('colorscheme ayu')
+    if vim.g.colors_name == 'ayu' then
+        vim.g.ayucolor = 'mirage'
+        vim.cmd('autocmd ColorScheme ayu highlight! link VertSplit Comment')
+    elseif vim.g.colors_name == 'gruvbox' then
+        vim.g.gruvbox_italic = 1
+        vim.g.gruvbox_contrast_dark = 'medium'
+        vim.g.gruvbox_invert_selection = 0
+    end
+    _G.on_load_colors = function()
+        local utils = require('utils')
+        utils.load('tabline')
+        utils.load('statusline')
+        print('Loaded')
+    end
+    vim.cmd('autocmd ColorScheme * call v:lua.on_load_colors()')
+end
+
+function M.setup()
+    utils.load('plugins')
+    pcall(load_colors)
+end
 
 return M
