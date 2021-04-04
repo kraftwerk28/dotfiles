@@ -33,7 +33,7 @@ local function load(use)
             local telescope = require 'telescope'
             local actions = require 'telescope.actions'
             local u = require'utils'.u
-            local previewers = require 'telescope.previewers'
+            -- local previewers = require 'telescope.previewers'
             local cfg = {
                 sorting_strategy = 'ascending',
                 prompt_prefix = u 'f002' .. ' ',
@@ -41,7 +41,7 @@ local function load(use)
                 selection_caret = u 'f054' .. ' ',
                 color_devicons = true,
                 scroll_strategy = 'cycle',
-                file_previewer = previewers.cat.new,
+                -- file_previewer = previewers.cat.new,
                 mappings = {
                     i = {
                         ['<C-K>'] = actions.move_selection_previous,
@@ -94,7 +94,7 @@ local function load(use)
     use {'tpope/vim-markdown'}
     use {'adimit/prolog.vim'}
 
-    if vim.fn.exists('unix') > 0 and
+    if vim.fn.has('unix') > 0 and
       (vim.fn.executable('g++') > 0 or vim.fn.executable('clang++') > 0) then
         use {
             '~/projects/neovim/nvim-treesitter',
