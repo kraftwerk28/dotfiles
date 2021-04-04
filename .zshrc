@@ -129,6 +129,7 @@ alias v="nvim"
 alias im="nvim"
 alias vin="nvim"
 alias ndoe="node"
+alias nvimcfg="cd $HOME/.config/nvim"
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 dotfilesupd () {

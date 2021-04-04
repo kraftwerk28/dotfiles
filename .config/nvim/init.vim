@@ -35,9 +35,9 @@ set scrolloff=3
 set diffopt+=vertical
 
 " Vertical insert / cmdline-insert:
-set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
+" set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
 " Block insert / cmdline-insert:
-" set guicursor=n-sm-c:block,r-cr-o-v:hor20
+set guicursor=n-sm-c:block,r-cr-o-v:hor20
 
 set splitbelow splitright
 set regexpengine=0
@@ -56,6 +56,7 @@ augroup ft_indent
   autocmd FileType javascript,typescript,javascriptreact,typescriptreact,svelte,vim
                  \ setlocal shiftwidth=2 softtabstop=2 expandtab
   autocmd FileType lua setlocal shiftwidth=4 softtabstop=4 expandtab
+  autocmd FileType jess setlocal commentstring=;\ %s
 augroup END
 
 function! s:restoreCursor()

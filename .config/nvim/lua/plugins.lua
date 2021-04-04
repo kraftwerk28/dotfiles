@@ -22,7 +22,7 @@ local function load(use)
             vim.g['surround_' .. char2nr('c')] = "/* \r */"
         end,
     }
-    use 'tpope/vim-commentary'
+    use {'tpope/vim-commentary'}
     use {
         'nvim-telescope/telescope.nvim',
         requires = {
@@ -54,9 +54,9 @@ local function load(use)
         end,
     }
 
-    use 'wellle/targets.vim' -- More useful text objects (e.g. function arguments)
+    use {'wellle/targets.vim'} -- More useful text objects (e.g. function arguments)
 
-    use 'tpope/vim-fugitive' -- Git helper
+    use {'tpope/vim-fugitive'} -- Git helper
 
     use {
         'airblade/vim-gitgutter',
@@ -69,15 +69,18 @@ local function load(use)
         end,
     }
 
-    use {
-        'lyokha/vim-xkbswitch',
-        config = function()
-            vim.g.XkbSwitchEnabled = 1
-            if vim.env['XDG_CURRENT_DESKTOP'] == 'GNOME' then
-                vim.g.XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
-            end
-        end,
-    }
+    if vim.fn.executable('xkb-switch') > 0 or vim.fn.executable('g3kb-switch') >
+      0 then
+        use {
+            'lyokha/vim-xkbswitch',
+            config = function()
+                vim.g.XkbSwitchEnabled = 1
+                if vim.env['XDG_CURRENT_DESKTOP'] == 'GNOME' then
+                    vim.g.XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
+                end
+            end,
+        }
+    end
 
     use {'chrisbra/Colorizer'}
 
@@ -91,8 +94,8 @@ local function load(use)
     use {'tpope/vim-markdown'}
     use {'adimit/prolog.vim'}
 
-    if vim.fn.exists('unix') and
-      (vim.fn.executable('g++') or vim.fn.executable('clang++')) then
+    if vim.fn.exists('unix') > 0 and
+      (vim.fn.executable('g++') > 0 or vim.fn.executable('clang++') > 0) then
         use {
             '~/projects/neovim/nvim-treesitter',
             run = function() vim.cmd('TSUpdate') end,

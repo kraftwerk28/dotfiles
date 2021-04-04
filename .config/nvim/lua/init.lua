@@ -59,9 +59,9 @@ local function load_colors()
     end
     _G.on_load_colors = function()
         local utils = require('utils')
+        utils.highlight {'VertSplit', 'Comment'}
         utils.load('tabline')
         utils.load('statusline')
-        print('Loaded')
     end
     vim.cmd('autocmd ColorScheme * call v:lua.on_load_colors()')
 end

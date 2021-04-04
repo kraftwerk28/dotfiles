@@ -111,8 +111,8 @@ end
 -- Get information about highlight group
 function M.hl_by_name(hl_group)
     local hl = vim.api.nvim_get_hl_by_name(hl_group, true)
-    if hl.foreground ~= nil then hl.fg = string.format('#%x', hl.foreground) end
-    if hl.background ~= nil then hl.bg = string.format('#%x', hl.background) end
+    if hl.foreground ~= nil then hl.fg = sprintf('#%x', hl.foreground) end
+    if hl.background ~= nil then hl.bg = sprintf('#%x', hl.background) end
     return hl
 end
 
@@ -120,17 +120,19 @@ end
 -- TODO: rewrite to `nvim_set_hl()` when API will be stable
 function M.highlight(cfg)
     local command = 'highlight'
+    if cfg.bang == true then command = command .. '!' end
 
     -- :highlight link
     if #cfg == 2 and type(cfg[1]) == 'string' and type(cfg[2]) == 'string' then
-        command = command .. '! link ' .. cfg[1] .. ' ' .. cfg[2]
+        command = command .. ' link ' .. cfg[1] .. ' ' .. cfg[2]
         vim.cmd(command)
         return
     end
 
-    if cfg.bang == true then command = command .. '!' end
-    local fg, bg = cfg.fg or cfg[2], cfg.bg or cfg[3]
-    local style, underline = cfg.gui or cfg[4], cfg.guisp or cfg[5]
+    local fg = cfg.fg or cfg.guifg or cfg[2]
+    local bg = cfg.bg or cfg.guibg or cfg[3]
+    local style = cfg.gui or cfg[4]
+    local underline = cfg.guisp or cfg[5]
 
     command = command .. ' ' .. cfg[1]
     if fg ~= nil then command = command .. ' guifg=' .. fg end
@@ -147,6 +149,10 @@ function M.autocmd(event_name, pattern, callback)
     autocmd_fn_index = autocmd_fn_index + 1
     _G[fn_name] = callback
     cmdf('autocmd %s %s call v:lua.%s()', event_name, pattern, fn_name)
+end
+
+function M.glob_exists(path)
+    return vim.fn.empty(vim.fn.glob(path)) == 0
 end
 
 -- function M.highlight(hl_group, fg, bg, gui)

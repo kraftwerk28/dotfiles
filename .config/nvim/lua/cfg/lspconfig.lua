@@ -106,8 +106,13 @@ lsp_config.hls.setup {
     ),
 }
 
+local clangdcmd = {'clangd', '--background-index'}
+if vim.fn.empty(vim.fn.glob('compile_commands.json')) > 0 then
+    vim.tbl_extend('force', clangdcmd, {'--compile-commands-dir', 'build'})
+end
+
 lsp_config.clangd.setup {
-    cmd = {'clangd', '--background-index', '--compile-commands-dir', 'build/'},
+    cmd = clangdcmd,
     filetypes = {'c', 'cpp', 'objc', 'objcpp'},
     root_dir = root_pattern(
       'CMakeLists.txt', 'compile_flags.txt', '.git', vim.fn.getcwd()
