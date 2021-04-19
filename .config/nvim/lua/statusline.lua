@@ -233,7 +233,7 @@ local function build_stl()
     local fileattrs = comp {file_attrs, hl = 'StatusLine'}
 
     -- Right
-    local lsp_indic = comp {lsp_connected, hl = 'StatusLineLspConn'}
+    local lsp_conn = comp {lsp_connected, hl = 'StatusLineLspConn'}
     local lsp_w = comp {lsp_warns, hl = 'StatusLineWarning'}
     local lsp_e = comp {lsp_errors, hl = 'StatusLineError'}
     local col_row = comp {
@@ -251,7 +251,7 @@ local function build_stl()
 
     return table.concat {
         mode, fileformat, filetype, char_hex, reset_hl, '%=', icon, filename,
-        fileattrs, '%=', lsp_indic, lsp_w, lsp_e, col_row, pos_percent,
+        fileattrs, '%=', lsp_conn, lsp_w, lsp_e, col_row, pos_percent,
     }
 end
 
@@ -264,7 +264,15 @@ local function build_inactive_stl()
     }
     local filename = comp {'%f', hl = 'StatusLine'}
     local fileattrs = comp {file_attrs, hl = 'StatusLine'}
-    return table.concat {'%#StatusLine#%=', icon, filename, fileattrs, '%='}
+
+    local lsp_conn = comp {lsp_connected, hl = 'StatusLineLspConn'}
+    local lsp_w = comp {lsp_warns, hl = 'StatusLineWarning'}
+    local lsp_e = comp {lsp_errors, hl = 'StatusLineError'}
+
+    return table.concat {
+        '%#StatusLine#%=', icon, filename, fileattrs, '%=', lsp_conn, lsp_w,
+        lsp_e,
+    }
 end
 
 _G.stl = {}

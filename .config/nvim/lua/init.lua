@@ -18,10 +18,11 @@ M.show_lsp_diagnostics = (function()
 end)()
 
 function M.format_code()
-    if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-        utils.format_formatprg()
-    else
+    if not vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
         vim.lsp.buf.formatting()
+    else
+        print('Neoformat')
+        -- vim.cmd('Neoformat')
     end
 end
 
@@ -32,20 +33,20 @@ function M.attach_completion()
     if ok then completion.on_attach() end
 end
 
-function M.run_prettier()
-    if vim.fn.executable('prettier') == 0 then return end
-    local ft = vim.bo.filetype
-    local parser
-    if ft == 'typescript' or ft == 'typescriptreact' then
-        parser = 'typescript'
-    elseif ft == 'javascript' or ft == 'javascriptreact' then
-        parser = 'babel'
-    end
-    local old_formatprg = vim.bo.formatprg
-    vim.bo.formatprg = 'prettier --parser ' .. parser
-    utils.format_formatprg()
-    vim.bo.formatprg = old_formatprg
-end
+-- function M.run_prettier()
+--     if vim.fn.executable('prettier') == 0 then return end
+--     local ft = vim.bo.filetype
+--     local parser
+--     if ft == 'typescript' or ft == 'typescriptreact' then
+--         parser = 'typescript'
+--     elseif ft == 'javascript' or ft == 'javascriptreact' then
+--         parser = 'babel'
+--     end
+--     local old_formatprg = vim.bo.formatprg
+--     vim.bo.formatprg = 'prettier --parser ' .. parser
+--     utils.format_formatprg()
+--     vim.bo.formatprg = old_formatprg
+-- end
 
 local function load_colors()
     vim.cmd('colorscheme ayu')

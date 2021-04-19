@@ -22,7 +22,16 @@ local function load(use)
             vim.g['surround_' .. char2nr('c')] = "/* \r */"
         end,
     }
-    use {'tpope/vim-commentary'}
+
+    use {
+        'b3nj5m1n/kommentary',
+        config = function()
+            require('kommentary.config').configure_language(
+              'default', {prefer_single_line_comments = true}
+            )
+        end,
+    }
+
     use {
         'nvim-telescope/telescope.nvim',
         requires = {
@@ -41,7 +50,6 @@ local function load(use)
                 selection_caret = u 'f054' .. ' ',
                 color_devicons = true,
                 scroll_strategy = 'cycle',
-                -- file_previewer = previewers.cat.new,
                 mappings = {
                     i = {
                         ['<C-K>'] = actions.move_selection_previous,
@@ -97,7 +105,7 @@ local function load(use)
     if vim.fn.has('unix') > 0 and
       (vim.fn.executable('g++') > 0 or vim.fn.executable('clang++') > 0) then
         use {
-            '~/projects/neovim/nvim-treesitter',
+            'nvim-treesitter/nvim-treesitter',
             run = function() vim.cmd('TSUpdate') end,
             config = function() require('cfg.treesitter') end,
         }
@@ -106,7 +114,8 @@ local function load(use)
     end
 
     use {
-        'neovim/nvim-lspconfig',
+        -- 'neovim/nvim-lspconfig',
+        '~/projects/neovim/nvim-lspconfig',
         config = function() require('cfg.lspconfig') end,
     }
 
@@ -163,8 +172,11 @@ local function load(use)
             vim.g.nvim_tree_indent_markers = 1
             vim.g.nvim_tree_quit_on_open = 1
             vim.g.nvim_tree_disable_netrw = 0
+            vim.g.nvim_tree_hijack_netrw = 1
         end,
     }
+
+    use {'sbdchd/neoformat', config = function() end}
 end
 
 return function()

@@ -11,13 +11,14 @@ highlight {'LspDiagnosticsUnderlineInformation', gui = 'undercurl'}
 highlight {
     'LspDiagnosticsUnderlineWarning',
     gui = 'undercurl',
-    guisp = 'orange',
+    guisp = 'Orange',
 }
-highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl', guisp = 'red'}
-highlight {'LspDiagnosticsDefaultHint', fg = 'yellow'}
-highlight {'LspDiagnosticsDefaultInformation', fg = 'lightblue'}
-highlight {'LspDiagnosticsDefaultWarning', fg = 'orange'}
-highlight {'LspDiagnosticsDefaultError', fg = 'red'}
+highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl', guisp = 'Red'}
+
+highlight {'LspDiagnosticsDefaultHint', fg = 'Yellow'}
+highlight {'LspDiagnosticsDefaultInformation', fg = 'LightBlue'}
+highlight {'LspDiagnosticsDefaultWarning', fg = 'Orange'}
+highlight {'LspDiagnosticsDefaultError', fg = 'Red'}
 
 local lsp_signs = {
     LspDiagnosticsSignHint = {
@@ -143,17 +144,16 @@ local on_publish_cfg = {
 lsp.handlers['textDocument/publishDiagnostics'] =
   lsp.with(lsp.diagnostic.on_publish_diagnostics, on_publish_cfg)
 
-local stock_formatting = lsp.handlers['textDocument/formatting']
+local __format_handler = lsp.handlers['textDocument/formatting']
 -- Handle `formatting` error and try to format with 'formatprg'
 -- { err, method, result, client_id, bufnr, config }
 local function on_formatting(err, ...)
     -- Doesn't work with typescript but does with haskell
     -- if err == nil and (res == nil or #res > 0) then
     if err == nil then
-        stock_formatting(err, ...)
+        __format_handler(err, ...)
     else
-        print('Error formatting via LSP, falling back to \'formatprg\'.')
-        utils.format_formatprg()
+        vim.cmd('Neoformat')
     end
 end
 

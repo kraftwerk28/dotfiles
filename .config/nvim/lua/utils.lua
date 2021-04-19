@@ -46,15 +46,14 @@ function M.throttle(func, timeout)
 end
 
 function M.format_formatprg()
-    local opt_exists, formatprg = pcall(function() return vim.bo.formatprg end)
-    if opt_exists and #formatprg > 0 then
+    local ok, formatprg = pcall(function() return vim.bo.formatprg end)
+    if ok and #formatprg > 0 then
         local view = vim.fn.winsaveview()
-        vim.api.nvim_command('normal gggqG')
+        vim.cmd('normal gggqG')
         vim.fn.winrestview(view)
         return true
-    else
-        return false
     end
+    return false
 end
 
 -- Convert UTF-8 hex code to character
@@ -138,7 +137,7 @@ function M.highlight(cfg)
     if fg ~= nil then command = command .. ' guifg=' .. fg end
     if bg ~= nil then command = command .. ' guibg=' .. bg end
     if style ~= nil then command = command .. ' gui=' .. style end
-    if underline ~= nil then command = command .. ' guisp=' .. style end
+    if underline ~= nil then command = command .. ' guisp=' .. underline end
     vim.cmd(command)
 end
 
@@ -151,15 +150,6 @@ function M.autocmd(event_name, pattern, callback)
     cmdf('autocmd %s %s call v:lua.%s()', event_name, pattern, fn_name)
 end
 
-function M.glob_exists(path)
-    return vim.fn.empty(vim.fn.glob(path)) == 0
-end
-
--- function M.highlight(hl_group, fg, bg, gui)
---   local guifg = fg and ' guifg=' .. fg or ''
---   local guibg = bg and ' guibg=' .. bg or ''
---   local gui = gui and ' gui=' .. gui or ''
---   vim.cmd('highlight ' .. hl_group .. guibg .. guifg .. gui)
--- end
+function M.glob_exists(path) return vim.fn.empty(vim.fn.glob(path)) == 0 end
 
 return M

@@ -14,10 +14,9 @@ let g:vim_indent_cont = 0
 
 "---------------------------------- Options -----------------------------------"
 set hidden
-set expandtab softtabstop=4 tabstop=4 shiftwidth=2
+set noexpandtab softtabstop=0 tabstop=4 shiftwidth=4
 set autoindent smartindent
 set list listchars=tab:⇥\ ,trail:·
-set ignorecase
 set cursorline colorcolumn=80,120
 set mouse=a
 set clipboard+=unnamedplus
@@ -27,8 +26,8 @@ set ignorecase smartcase
 set wildmenu wildmode=full
 set signcolumn=yes
 set autoread autowrite autowriteall
-set foldlevel=99 foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+set foldlevel=99 foldmethod=indent
+" set foldexpr=nvim_treesitter#foldexpr()
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set exrc secure " Project-local .nvimrc/.exrc configuration
 set scrolloff=3
@@ -46,16 +45,20 @@ set guifont=JetBrains\ Mono\ Nerd\ Font:h18
 set noshowmode
 set shortmess+=c
 set undofile
+set backupcopy=yes
 
 "---------------------------------- Autocmd -----------------------------------"
-augroup ft_indent
+augroup filetype_options
   autocmd!
-  autocmd FileType go,make setlocal shiftwidth=4 softtabstop=4 noexpandtab
-  autocmd FileType python,java,csharp
-                 \ setlocal shiftwidth=4 softtabstop=4 expandtab
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,svelte,vim
-                 \ setlocal shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType lua setlocal shiftwidth=4 softtabstop=4 expandtab
+  autocmd FileType
+  \ go,make,c,cpp,python
+  \ setlocal shiftwidth=4 tabstop=4 noexpandtab
+  autocmd FileType
+  \ java,csharp,lua
+  \ setlocal shiftwidth=4 tabstop=4 expandtab
+  autocmd FileType
+  \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml
+  \ setlocal shiftwidth=2 tabstop=2 expandtab
   autocmd FileType jess setlocal commentstring=;\ %s
 augroup END
 
@@ -95,26 +98,29 @@ let s:additional_filetypes = {
 \   'prolog': '*pl',
 \ }
 
-augroup file_types
+augroup extra_filetypes
   autocmd!
-  for kv in items(s:additional_filetypes)
+  for [ft, ext] in items(s:additional_filetypes)
     let s:fstr = 'autocmd BufNewFile,BufRead %s setlocal filetype=%s'
-    if type(kv[1]) == v:t_list
-      for ext in kv[1]
-        execute printf(s:fstr, ext, kv[0])
+    if type(ext) == v:t_list
+      for e in ext
+        execute printf(s:fstr, e, ft)
       endfor
     else
-      execute printf(s:fstr, kv[1], kv[0])
+      execute printf(s:fstr, ext, ft)
     endif
   endfor
 
   autocmd FileType markdown setlocal conceallevel=2
+  autocmd FileType NvimTree setlocal signcolumn=no
+  autocmd WinEnter * if win_gettype() == 'popup'
+                 \ |   setlocal conceallevel=3
+                 \ | endif
 augroup END
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'fugitive']
 let g:esc_close_ft = ['NvimTree']
-let g:disable_line_numbers = ['help', 'list', 'clap_input', 'TelescopePrompt']
 
 augroup aux_win_close
   autocmd!
@@ -132,25 +138,14 @@ augroup highlight_yank
   autocmd TextYankPost * silent! lua init.yank_highlight()
 augroup END
 
-augroup lsp_conceallevel
-  autocmd!
-  function! s:setConceal()
-    if win_gettype() == 'popup'
-      setlocal conceallevel=3
-    endif
-  endfunction
-  autocmd WinEnter * call s:setConceal()
-augroup END
-
 "------------------------- Line numbers configuration -------------------------"
+let g:no_line_numbers_ft = ['help', 'list', 'clap_input', 'TelescopePrompt']
 
 function! s:setNumber(alsoRelative)
-  if empty(&filetype) || index(g:disable_line_numbers, &filetype) > -1
+  if win_gettype() == 'popup' || index(g:no_line_numbers_ft, &filetype) > -1
     return
   endif
-  if !&number
-    setlocal number
-  endif
+  setlocal number
   if a:alsoRelative
     setlocal relativenumber
   else
@@ -212,9 +207,9 @@ endfunction
 function! s:bufFilt(inc_cur)
   function! s:filtFn(include_current, idx, val)
     if !bufexists(a:val) ||
-     \ !buflisted(a:val) ||
-     \ buffer_name(a:val) =~? 'NERD_tree_*' ||
-     \ (a:include_current && bufnr() == a:val)
+    \ !buflisted(a:val) ||
+    \ buffer_name(a:val) =~? 'NERD_tree_*' ||
+    \ (a:include_current && bufnr() == a:val)
       return v:false
     endif
     return v:true
@@ -246,10 +241,12 @@ endfunction
 augroup formatprgs
   autocmd!
   " autocmd FileType haskell setlocal formatprg=brittany
-  autocmd FileType typescript,typescriptreact
-                 \ setlocal formatprg=prettier\ --parser\ typescript
-  autocmd FileType javascript,javascriptreact
-                 \ setlocal formatprg=prettier\ --parser\ babel
+  autocmd FileType
+  \ typescript,typescriptreact
+  \ setlocal formatprg=prettier\ --parser\ typescript
+  autocmd FileType
+  \ javascript,javascriptreact
+  \ setlocal formatprg=prettier\ --parser\ babel
   autocmd FileType cabal setlocal formatprg=cabal-fmt
   autocmd FileType lua setlocal formatprg=lua-format\ -c\ ~/.lua-format
 augroup END
@@ -319,11 +316,11 @@ function! PrettyComment(comment, fill_char) abort
   let l:r_size = l:remain_len - l:l_size
 
   let l:result = a:comment .
-    \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
-    \ ' ' .
-    \ getline('.') .
-    \ ' ' .
-    \ repeat(a:fill_char, l:r_size - 1)
+  \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
+  \ ' ' .
+  \ getline('.') .
+  \ ' ' .
+  \ repeat(a:fill_char, l:r_size - 1)
 
   call setline('.', l:result)
 endfunction
@@ -340,9 +337,6 @@ command! -nargs=0 Prettier lua init.run_prettier()
 command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
 "------------------------- Comment tool configuration -------------------------"
-function! s:VComment()
-  return mode() ==# 'v' ? 'Scgv' : ":Commentary\<CR>gv"
-endfunction
 autocmd FileType typescriptreact setlocal commentstring=//\ %s
 
 augroup LSP_highlight
@@ -402,8 +396,8 @@ nnoremap <silent> tL :+tabmove<CR>
 
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>cfg 
-                  \ :e ~/.config/nvim/lua/init.lua <Bar>
-                  \ :e ~/.config/nvim/init.vim <CR>
+\ :e ~/.config/nvim/lua/init.lua <Bar>
+\ :e ~/.config/nvim/init.vim <CR>
 nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
@@ -416,7 +410,7 @@ nnoremap <silent> <Leader>f :lua init.format_code()<CR>
 nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <Leader>ae
-       \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+\ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
 nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 
@@ -447,21 +441,21 @@ vnoremap <silent> <M-j> :m'>+1<CR>gv
 vnoremap <Leader>rv :s/\%V
 
 nnoremap <Leader>o o<Esc>
-nnoremap <Leader><S-O> O<Esc>
+nnoremap <Leader>O O<Esc>
 
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
 " Commenting
-nnoremap <silent> <C-_> :Commentary<CR>
-inoremap <silent> <C-_> <C-O>:Commentary<CR>
-xmap <expr><silent> <C-_> <SID>VComment()
+nmap <silent> <C-_> gcc
+imap <silent> <C-_> <C-O>:normal gcc<CR>
+xmap <silent> <C-_> gc
 
 " File explorer
 nnoremap <silent> <F3> :call <SID>nvimTreeToggle(0)<CR>
 nnoremap <silent> <Leader><F3> :call <SID>nvimTreeToggle(1)<CR>
 
 " Search tool
-nnoremap <silent> <C-P> :Telescope find_files<CR>
+nnoremap <silent> <C-P> :lua require'telescope.builtin'.find_files({ previewer = false })<CR>
 nnoremap <silent> <Leader>rg :Telescope live_grep<CR>
 nnoremap <silent> <Leader>b :Telescope buffers<CR>
 nnoremap <silent> <C-B> :Telescope buffers<CR>
@@ -472,3 +466,5 @@ nnoremap <silent> <Leader>gs :vertical Git<CR>
 nnoremap <silent> <Leader>gp :Git --paginate push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
+
+inoremap </> </<C-X><C-O><C-N>

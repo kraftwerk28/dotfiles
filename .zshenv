@@ -18,6 +18,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # GO
 export GOPATH="$HOME/projects/go"
+export GO111MODULE="on"
 export PATH="$PATH:$HOME/projects/go/bin"
 
 # ruby
