@@ -11,14 +11,15 @@ highlight {'LspDiagnosticsUnderlineInformation', gui = 'undercurl'}
 highlight {
     'LspDiagnosticsUnderlineWarning',
     gui = 'undercurl',
-    guisp = 'Orange',
+    -- guisp = 'Orange',
 }
-highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl', guisp = 'Red'}
+-- highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl', guisp = 'Red'}
+highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl'}
 
-highlight {'LspDiagnosticsDefaultHint', fg = 'Yellow'}
-highlight {'LspDiagnosticsDefaultInformation', fg = 'LightBlue'}
+-- highlight {'LspDiagnosticsDefaultHint', fg = 'Yellow'}
+-- highlight {'LspDiagnosticsDefaultInformation', fg = 'LightBlue'}
 highlight {'LspDiagnosticsDefaultWarning', fg = 'Orange'}
-highlight {'LspDiagnosticsDefaultError', fg = 'Red'}
+-- highlight {'LspDiagnosticsDefaultError', fg = 'Red'}
 
 local lsp_signs = {
     LspDiagnosticsSignHint = {

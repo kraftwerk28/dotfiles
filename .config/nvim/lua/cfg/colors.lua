@@ -1,8 +1,6 @@
-local utils = require 'utils'
+local M = {}
 
--- local sl_highlight = utils.get_hl('StatusLine')
-
-local ayu_dark, ayu_mirage = (function()
+M.ayu_dark, M.ayu_mirage = (function()
     local ayu_colors = {
         bg = {dark = '#0F1419', light = '#FAFAFA', mirage = '#212733'},
         comment = {dark = '#5C6773', light = '#ABB0B6', mirage = '#5C6773'},
@@ -36,7 +34,7 @@ local ayu_dark, ayu_mirage = (function()
         terminal = ayu_colors.regexp,
         lsp_active = ayu_colors.string,
         lsp_inactive = ayu_colors.fg_idle,
-        illuminate = {dar = '#3E4B59', mirage = '#3E4B59'},
+        illuminate = {dark = '#3E4B59', mirage = '#3E4B59'},
     }
 
     local ayu_dark, ayu_mirage = {}, {}
@@ -46,6 +44,20 @@ local ayu_dark, ayu_mirage = (function()
     end
     return ayu_dark, ayu_mirage
 end)()
+
+M.onedark = {
+    bg = '#545862',
+    fg = '#c8ccd4',
+    normal = '#98c379',
+    insert = '#61afef',
+    replace = '#e06c75',
+    visual = '#e5c07b',
+    command = '#d19a66',
+    terminal = '#56b6c2',
+    lsp_active = '#98c379',
+    lsp_inactive = '#e06c75',
+    illuminate = {dark = '#3E4B59', mirage = '#3E4B59'},
+}
 
 -- local ayu_dark = {
 --   bg = '#0F1419',
@@ -115,12 +127,26 @@ end)()
 -- colors.bg = vim.fn.synIDattr(vim.fn.hlID('StatusLine'), 'bg') -- Default background
 -- colors.fg = colors.light0 -- Default foreground
 
-if vim.g.colors_name == 'ayu' then
-    if vim.g.ayucolor == 'mirage' then
-        return ayu_mirage
-    else
-        return ayu_dark
+function M.from_base16(name)
+    local base64 = require('base16-colorscheme')
+    local theme = base64.colorschemes[name]
+    local base_indexes = {
+        bg = 0x02,
+        fg = 0x07,
+        normal = 0x0B,
+        insert = 0x0D,
+        replace = 0x08,
+        visual = 0x0A,
+        command = 0x09,
+        terminal = 0x0C,
+        lsp_active = 0x0B,
+        lsp_inactive = 0x08,
+    }
+    local colors = {}
+    for key, index in pairs(base_indexes) do
+        colors[key] = theme['base' .. string.format('%02X', index)]
     end
-else
-    return ayu_dark
+    return colors
 end
+
+return M

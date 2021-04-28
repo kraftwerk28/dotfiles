@@ -1,9 +1,11 @@
-local cl = require 'cfg.colors'
-local utils = require 'utils'
+local colors = require('cfg.colors')
+local utils = require('utils')
 
 local u = utils.u
 local sprintf = utils.sprintf
 local highlight = utils.highlight
+
+local cl = colors.from_base16(vim.g.base16_theme)
 
 local mode_map = {
     ['n'] = {'NORMAL', cl.normal},

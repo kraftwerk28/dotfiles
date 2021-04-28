@@ -120,29 +120,44 @@ end
 function M.highlight(cfg)
     local command = 'highlight'
     if cfg.bang == true then command = command .. '!' end
-
-    -- :highlight link
     if #cfg == 2 and type(cfg[1]) == 'string' and type(cfg[2]) == 'string' then
+        -- :highlight link
         command = command .. ' link ' .. cfg[1] .. ' ' .. cfg[2]
         vim.cmd(command)
         return
     end
-
-    local fg = cfg.fg or cfg.guifg or cfg[2]
-    local bg = cfg.bg or cfg.guibg or cfg[3]
-    local style = cfg.gui or cfg[4]
-    local underline = cfg.guisp or cfg[5]
-
+    local guifg = cfg.fg or cfg.guifg or cfg[2]
+    local guibg = cfg.bg or cfg.guibg or cfg[3]
+    local gui = cfg.gui or cfg[4]
+    local guisp = cfg.guisp or cfg[5]
+    if cfg.override == true then
+        local existing = vim.api.nvim_get_hl_by_name(cfg[1], true)
+        if existing.foreground ~= nil then
+            guifg = sprintf('#%x', existing.foreground)
+        end
+        if existing.background ~= nil then
+            guibg = sprintf('#%x', existing.background)
+        end
+        if existing.special ~= nil then
+            guibg = sprintf('#%x', existing.background)
+        end
+        if existing.undercurl == true then
+            gui = 'undercurl'
+        elseif existing.underline == true then
+            gui = 'underline'
+        end
+    end
     command = command .. ' ' .. cfg[1]
-    if fg ~= nil then command = command .. ' guifg=' .. fg end
-    if bg ~= nil then command = command .. ' guibg=' .. bg end
-    if style ~= nil then command = command .. ' gui=' .. style end
-    if underline ~= nil then command = command .. ' guisp=' .. underline end
+    if guifg ~= nil then command = command .. ' guifg=' .. guifg end
+    if guibg ~= nil then command = command .. ' guibg=' .. guibg end
+    if gui ~= nil then command = command .. ' gui=' .. gui end
+    if guisp ~= nil then command = command .. ' guisp=' .. guisp end
     vim.cmd(command)
 end
 
 local autocmd_fn_index = 0
 
+-- WIP:
 function M.autocmd(event_name, pattern, callback)
     local fn_name = 'lua_autocmd' .. autocmd_fn_index
     autocmd_fn_index = autocmd_fn_index + 1

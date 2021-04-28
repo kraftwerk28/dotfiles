@@ -21,8 +21,7 @@ function M.format_code()
     if not vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
         vim.lsp.buf.formatting()
     else
-        print('Neoformat')
-        -- vim.cmd('Neoformat')
+        vim.cmd('Neoformat')
     end
 end
 
@@ -33,43 +32,20 @@ function M.attach_completion()
     if ok then completion.on_attach() end
 end
 
--- function M.run_prettier()
---     if vim.fn.executable('prettier') == 0 then return end
---     local ft = vim.bo.filetype
---     local parser
---     if ft == 'typescript' or ft == 'typescriptreact' then
---         parser = 'typescript'
---     elseif ft == 'javascript' or ft == 'javascriptreact' then
---         parser = 'babel'
---     end
---     local old_formatprg = vim.bo.formatprg
---     vim.bo.formatprg = 'prettier --parser ' .. parser
---     utils.format_formatprg()
---     vim.bo.formatprg = old_formatprg
--- end
+pcall(function()
+    vim.g.base16_theme = 'classic-dark'
+    local base16 = require('base16-colorscheme')
+    base16.setup(vim.g.base16_theme)
+    -- local b16 = require('base16')
+    -- b16(b16.themes['onedark'], true)
+    -- vim.g.ayucolor = 'mirage'
+    -- vim.cmd('colorscheme ayu')
+    -- vim.cmd('autocmd ColorScheme ayu highlight! link VertSplit Comment')
+    -- utils.highlight {'VertSplit', 'Comment', bang = true}
+end)
 
-local function load_colors()
-    vim.cmd('colorscheme ayu')
-    if vim.g.colors_name == 'ayu' then
-        vim.g.ayucolor = 'mirage'
-        vim.cmd('autocmd ColorScheme ayu highlight! link VertSplit Comment')
-    elseif vim.g.colors_name == 'gruvbox' then
-        vim.g.gruvbox_italic = 1
-        vim.g.gruvbox_contrast_dark = 'medium'
-        vim.g.gruvbox_invert_selection = 0
-    end
-    _G.on_load_colors = function()
-        local utils = require('utils')
-        utils.highlight {'VertSplit', 'Comment'}
-        utils.load('tabline')
-        utils.load('statusline')
-    end
-    vim.cmd('autocmd ColorScheme * call v:lua.on_load_colors()')
-end
-
-function M.setup()
-    utils.load('plugins')
-    pcall(load_colors)
-end
+utils.load('plugins')
+utils.load('tabline')
+utils.load('statusline')
 
 return M

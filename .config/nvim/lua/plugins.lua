@@ -4,11 +4,12 @@ local function load(use)
     use {'~/projects/neovim/gtranslate.nvim', rocks = {'lua-cjson', 'http'}}
 
     -- Themes
+    use {'ayu-theme/ayu-vim', opt = true, disable = true}
     use {'romgrk/doom-one.vim', disable = true}
-    use {'ayu-theme/ayu-vim', opt = true}
     use {'joshdick/onedark.vim', disable = true}
     use {'morhetz/gruvbox', disable = true}
     use {'npxbr/gruvbox.nvim', disable = true, requires = {'rktjmp/lush.nvim'}}
+    use {'RRethy/nvim-base16'}
 
     use {'kyazdani42/nvim-web-devicons'}
 
@@ -106,11 +107,13 @@ local function load(use)
       (vim.fn.executable('g++') > 0 or vim.fn.executable('clang++') > 0) then
         use {
             'nvim-treesitter/nvim-treesitter',
+            requires = {
+                'nvim-treesitter/playground',
+                -- 'nvim-treesitter/nvim-treesitter-refactor',
+            },
             run = function() vim.cmd('TSUpdate') end,
-            config = function() require('cfg.treesitter') end,
+            config = function() require('cfg.tree_sitter') end,
         }
-
-        use {'nvim-treesitter/playground'}
     end
 
     use {
@@ -121,6 +124,7 @@ local function load(use)
 
     use {
         'RRethy/vim-illuminate',
+        disable = true,
         config = function()
             local utils = require('utils')
             utils.highlight {'illuminatedWord', bg = '#303A49'}
@@ -193,6 +197,7 @@ return function()
 
     vim.cmd('packadd packer.nvim')
     require('packer').startup {load, config = {git = {clone_timeout = 240}}}
+    vim.cmd('autocmd BufWritePost plugins.lua :PackerCompile')
 
     if not_installed then vim.cmd('PackerSync') end
 end

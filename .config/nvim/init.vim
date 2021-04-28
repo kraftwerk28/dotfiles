@@ -1,15 +1,14 @@
 scriptencoding utf-8
+autocmd!
 set termguicolors
 set background=dark
 
-lua init = require 'init'
-lua init.setup()
-
-" Must be AFTER augroups above
+syntax enable
 syntax on
 
-let g:mapleader = ' '
+lua init = require('init')
 
+let g:mapleader = ' '
 let g:vim_indent_cont = 0
 
 "---------------------------------- Options -----------------------------------"
@@ -57,9 +56,10 @@ augroup filetype_options
   \ java,csharp,lua
   \ setlocal shiftwidth=4 tabstop=4 expandtab
   autocmd FileType
-  \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml
+  \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell
   \ setlocal shiftwidth=2 tabstop=2 expandtab
   autocmd FileType jess setlocal commentstring=;\ %s
+  autocmd FileType json,jsonc,cjson setlocal commentstring=//\ %s
 augroup END
 
 function! s:restoreCursor()
@@ -94,7 +94,7 @@ let s:additional_filetypes = {
 \   'json': '*.webmanifest',
 \   'rest': '*.http',
 \   'elixir': ['*.exs', '*.ex'],
-\   'cjson': 'tsconfig.json',
+\   'jsonc': 'tsconfig.json',
 \   'prolog': '*pl',
 \ }
 
@@ -119,18 +119,16 @@ augroup extra_filetypes
 augroup END
 
 " Filetypes names where q does :q<CR>
-let g:q_close_ft = ['help', 'list', 'fugitive']
+let g:q_close_ft = ['help', 'list']
 let g:esc_close_ft = ['NvimTree']
 
 augroup aux_win_close
   autocmd!
-  autocmd FileType fugitive nmap <buffer> <Esc> gq
-  for ft in g:esc_close_ft
-    execute 'autocmd FileType ' . ft . ' noremap <silent><buffer> <Esc> :q<CR>'
-  endfor
-  for ft in g:q_close_ft
-    execute 'autocmd FileType ' . ft . ' noremap <silent><buffer> q :q<CR>'
-  endfor
+  autocmd FileType fugitive,git nmap <buffer> q gq
+  execute printf('autocmd FileType %s noremap <silent><buffer> <Esc> :q<CR>',
+               \ join(g:esc_close_ft, ','))
+  execute printf('autocmd FileType %s noremap <silent><buffer> q :q<CR>',
+               \ join(g:q_close_ft, ','))
 augroup END
 
 augroup highlight_yank
@@ -337,12 +335,10 @@ command! -nargs=0 Prettier lua init.run_prettier()
 command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
 "------------------------- Comment tool configuration -------------------------"
-autocmd FileType typescriptreact setlocal commentstring=//\ %s
-
 augroup LSP_highlight
   autocmd!
-  autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
-  autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
+  " autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
+  " autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
   " autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 augroup END
 
@@ -467,4 +463,9 @@ nnoremap <silent> <Leader>gp :Git --paginate push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
-inoremap </> </<C-X><C-O><C-N>
+autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
+
+" tmap <Leader><Esc> <C-\><C-N>
+for key in ['h', 'j', 'k', 'l']
+  execute printf('tmap <buffer> <C-W>%s <C-\><C-N><C-W>%s', key, key)
+endfor
