@@ -130,8 +130,8 @@ function M.highlight(cfg)
     local guibg = cfg.bg or cfg.guibg or cfg[3]
     local gui = cfg.gui or cfg[4]
     local guisp = cfg.guisp or cfg[5]
-    if cfg.override == true then
-        local existing = vim.api.nvim_get_hl_by_name(cfg[1], true)
+    if type(cfg.override) == 'string' then
+        local existing = vim.api.nvim_get_hl_by_name(cfg.override, true)
         if existing.foreground ~= nil then
             guifg = sprintf('#%x', existing.foreground)
         end

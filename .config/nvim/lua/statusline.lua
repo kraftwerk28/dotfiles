@@ -279,8 +279,16 @@ end
 
 _G.stl = {}
 function _G.stl.attach_stl()
-    highlight {'StatusLineWarning', 'yellow', cl.bg}
-    highlight {'StatusLineError', 'red', cl.bg}
+    highlight {
+        'StatusLineWarning',
+        guibg = cl.bg,
+        override = 'LspDiagnosticsDefaultWarning',
+    }
+    highlight {
+        'StatusLineError',
+        guibg = cl.bg,
+        override = 'LspDiagnosticsDefaultError',
+    }
     if vim.g.statusline_winid == vim.fn.win_getid() then
         return build_stl()
     else
