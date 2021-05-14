@@ -17,11 +17,17 @@ M.show_lsp_diagnostics = (function()
     end
 end)()
 
+-- :Neoformat will be always ran in these filetypes
+vim.g.force_neoformat_filetypes = {
+    'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'lua',
+}
+
 function M.format_code()
-    if not vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-        vim.lsp.buf.formatting()
-    else
+    if vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype) or
+      vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
         vim.cmd('Neoformat')
+    else
+        vim.lsp.buf.formatting()
     end
 end
 
@@ -32,17 +38,19 @@ function M.attach_completion()
     if ok then completion.on_attach() end
 end
 
-pcall(function()
-    vim.g.base16_theme = 'classic-dark'
-    local base16 = require('base16-colorscheme')
-    base16.setup(vim.g.base16_theme)
-    -- local b16 = require('base16')
-    -- b16(b16.themes['onedark'], true)
-    -- vim.g.ayucolor = 'mirage'
-    -- vim.cmd('colorscheme ayu')
-    -- vim.cmd('autocmd ColorScheme ayu highlight! link VertSplit Comment')
-    -- utils.highlight {'VertSplit', 'Comment', bang = true}
-end)
+pcall(
+  function()
+      vim.g.base16_theme = 'classic-dark'
+      local base16 = require('base16-colorscheme')
+      base16.setup(vim.g.base16_theme)
+      -- local b16 = require('base16')
+      -- b16(b16.themes['onedark'], true)
+      -- vim.g.ayucolor = 'mirage'
+      -- vim.cmd('colorscheme ayu')
+      -- vim.cmd('autocmd ColorScheme ayu highlight! link VertSplit Comment')
+      -- utils.highlight {'VertSplit', 'Comment', bang = true}
+  end
+)
 
 utils.load('plugins')
 utils.load('tabline')

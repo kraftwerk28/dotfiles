@@ -38,20 +38,21 @@ local icons = {
 }
 
 local function stl_mode()
-    local m = mode_map[vim.fn.mode()]
+    local mode = vim.fn.mode()
+    local mode_label, mode_color = unpack(mode_map[mode])
     highlight {'StatusLine', cl.fg, cl.bg, 'bold'}
-    highlight {'StatusLineModeInv', m[2], cl.bg, 'reverse,bold'}
-    highlight {'StatusLineMode', m[2], cl.bg, 'bold'}
+    highlight {'StatusLineModeInv', mode_color, cl.bg, 'reverse,bold'}
+    highlight {'StatusLineMode', mode_color, cl.bg, 'bold'}
     if vim.fn.winwidth(0) > 80 then
-        return m[1]
+        return mode_label
     else
-        return m[1]:sub(1, 1)
+        return mode_label:sub(1, 1)
     end
 end
 
 local function fileicon()
     local devicons = require 'nvim-web-devicons'
-    local filename, fileext = vim.fn.expand '%:t', vim.fn.expand '%:e'
+    local filename, fileext = vim.fn.expand('%:t'), vim.fn.expand('%:e')
     local icon, icon_hl = devicons.get_icon(filename, fileext)
     local fg = cl.fg
     if icon_hl ~= nil then fg = utils.hl_by_name(icon_hl).fg end

@@ -180,7 +180,17 @@ local function load(use)
         end,
     }
 
-    use {'sbdchd/neoformat', config = function() end}
+    use {
+        'sbdchd/neoformat',
+        config = function()
+            for _, ft in ipairs {
+                'javascript', 'typescript', 'javascriptreact',
+                'typescriptreact',
+            } do vim.g['neoformat_enabled_' .. ft] = {} end
+            vim.g.neoformat_try_formatprg = 1
+            vim.g.neoformat_run_all_formatters = 0
+        end,
+    }
 end
 
 return function()

@@ -48,6 +48,12 @@ lsp_config.tsserver.setup {
     ),
 }
 
+-- lsp_config.flow.setup {
+--     cmd = {'flow', 'lsp'},
+--     filetypes = {'javascript', 'javascriptreact'},
+--     root_dir = root_pattern('.flowconfig'),
+-- }
+
 -- lsp_config.pyls.setup {
 -- 	cmd = {'pyls'},
 -- 	filetypes = {'python'},
@@ -136,28 +142,60 @@ lsp_config.yamlls.setup {}
 
 lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 
-local on_publish_cfg = {
-    underline = true,
-    virtual_text = true,
-    update_in_insert = false,
-}
+local function setup_diagnostics()
+    local method = 'textDocument/publishDiagnostics'
+    local on_publish_cfg = {
+        underline = true,
+        virtual_text = true,
+        update_in_insert = false,
+    }
+    local diagnostics_handler = lsp.with(
+      lsp.diagnostic.on_publish_diagnostics, on_publish_cfg
+    )
+    lsp.handlers[method] = diagnostics_handler
+    return
+    -- populate quickfix list with diagnostics
+    -- lsp.handlers[method] = function(...)
+    --     diagnostics_handler(...)
+    --     local err, method, result, client_id = ...
+    --     if result and result.diagnostics then
+    --         local item_list = {}
+    --         for _, v in ipairs(result.diagnostics) do
+    --             table.insert(
+    --               item_list, {
+    --                   filename = result.uri,
+    --                   lnum = v.range.start.line + 1,
+    --                   col = v.range.start.character + 1,
+    --                   text = v.message,
+    --               }
+    --             )
+    --         end
+    --         local old_items = vim.fn.getqflist()
+    --         for _, old_item in ipairs(old_items) do
+    --             local bufnr = vim.uri_to_bufnr(result.uri)
+    --             if vim.uri_from_bufnr(old_item.bufnr) ~= result.uri then
+    --                 table.insert(item_list, old_item)
+    --             end
+    --         end
+    --         vim.fn.setqflist({}, ' ', {title = 'LSP', items = item_list})
+    --     end
+    -- end
+end
 
-lsp.handlers['textDocument/publishDiagnostics'] =
-  lsp.with(lsp.diagnostic.on_publish_diagnostics, on_publish_cfg)
-
-local __format_handler = lsp.handlers['textDocument/formatting']
--- Handle `formatting` error and try to format with 'formatprg'
--- { err, method, result, client_id, bufnr, config }
-local function on_formatting(err, ...)
-    -- Doesn't work with typescript but does with haskell
-    -- if err == nil and (res == nil or #res > 0) then
-    if err == nil then
-        __format_handler(err, ...)
-    else
-        vim.cmd('Neoformat')
+local function setup_formatting()
+    local method = 'textDocument/formatting'
+    local defaut_handler = lsp.handlers[method]
+    lsp.handlers[method] = function(...)
+        local err = ...
+        if err == nil then
+            defaut_handler(...)
+        else
+            vim.cmd('Neoformat')
+        end
     end
 end
 
-lsp.handlers['textDocument/formatting'] = on_formatting
+setup_diagnostics()
+setup_formatting()
 -- TODO: implement '$/progress'
 -- handlers['$/progress'] = function(...) dump(...) end

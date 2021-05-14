@@ -50,14 +50,14 @@ set backupcopy=yes
 augroup filetype_options
   autocmd!
   autocmd FileType
-  \ go,make,c,cpp,python
-  \ setlocal shiftwidth=4 tabstop=4 noexpandtab
+        \ go,make,c,cpp,python
+        \ setlocal shiftwidth=4 tabstop=4 noexpandtab
   autocmd FileType
-  \ java,csharp,lua
-  \ setlocal shiftwidth=4 tabstop=4 expandtab
+        \ java,csharp,lua
+        \ setlocal shiftwidth=4 tabstop=4 expandtab
   autocmd FileType
-  \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell
-  \ setlocal shiftwidth=2 tabstop=2 expandtab
+        \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell,lisp
+        \ setlocal shiftwidth=2 tabstop=2 expandtab
   autocmd FileType jess setlocal commentstring=;\ %s
   autocmd FileType json,jsonc,cjson setlocal commentstring=//\ %s
 augroup END
@@ -70,10 +70,7 @@ function! s:restoreCursor()
   endif
 endfunction
 
-augroup restore_cursor
-  autocmd!
-  autocmd BufReadPost * call s:restoreCursor()
-augroup END
+autocmd BufReadPost * call s:restoreCursor()
 
 augroup auto_save
   autocmd!
@@ -81,10 +78,9 @@ augroup auto_save
 augroup END
 
 " Reload file if it changed on disk
-augroup auchecktime
-  autocmd!
-  autocmd BufEnter,FocusGained * silent checktime
-augroup END
+autocmd CursorHold,CursorHoldI * if !bufexists('[Command Line]')
+                             \ |   silent checktime
+                             \ | endif
 
 " Helping nvim detect filetype
 let s:additional_filetypes = {
@@ -238,13 +234,13 @@ endfunction
 
 augroup formatprgs
   autocmd!
-  " autocmd FileType haskell setlocal formatprg=brittany
+  autocmd FileType haskell setlocal formatprg=brittany
   autocmd FileType
-  \ typescript,typescriptreact
-  \ setlocal formatprg=prettier\ --parser\ typescript
+        \ typescript,typescriptreact
+        \ setlocal formatprg=prettier\ --parser\ typescript
   autocmd FileType
-  \ javascript,javascriptreact
-  \ setlocal formatprg=prettier\ --parser\ babel
+        \ javascript,javascriptreact
+        \ setlocal formatprg=prettier\ --parser\ babel
   autocmd FileType cabal setlocal formatprg=cabal-fmt
   autocmd FileType lua setlocal formatprg=lua-format\ -c\ ~/.lua-format
 augroup END
@@ -314,11 +310,11 @@ function! PrettyComment(comment, fill_char) abort
   let l:r_size = l:remain_len - l:l_size
 
   let l:result = a:comment .
-  \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
-  \ ' ' .
-  \ getline('.') .
-  \ ' ' .
-  \ repeat(a:fill_char, l:r_size - 1)
+               \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
+               \ ' ' .
+               \ getline('.') .
+               \ ' ' .
+               \ repeat(a:fill_char, l:r_size - 1)
 
   call setline('.', l:result)
 endfunction
@@ -331,7 +327,6 @@ function! Emoji2Unicode() abort
   execute "normal xi\<C-R>m\<Esc>"
 endfunction
 
-command! -nargs=0 Prettier lua init.run_prettier()
 command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
 "------------------------- Comment tool configuration -------------------------"
@@ -348,7 +343,7 @@ function! PasteBlock()
 endfunction
 
 "------------------------------- Neovide stuff --------------------------------"
-let g:neovide_fullscreen=v:true
+let g:neovide_fullscreen = v:true
 
 "--------------------------------- Mappings -----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
@@ -391,9 +386,9 @@ nnoremap <silent> tH :-tabmove<CR>
 nnoremap <silent> tL :+tabmove<CR>
 
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>cfg 
-\ :e ~/.config/nvim/lua/init.lua <Bar>
-\ :e ~/.config/nvim/init.vim <CR>
+nnoremap <silent> <Leader>cfg
+      \ :e ~/.config/nvim/lua/init.lua <Bar>
+      \ :e ~/.config/nvim/init.vim <CR>
 nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
@@ -406,12 +401,11 @@ nnoremap <silent> <Leader>f :lua init.format_code()<CR>
 nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <Leader>ae
-\ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+      \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
 nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 
 vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
-nnoremap <Leader>eu :call Emoji2Unicode()<CR>
 
 " Case-conversion tools
 " shake_case -> camelCase
@@ -465,7 +459,9 @@ nnoremap <silent> <Leader>m] :diffget //3<CR>
 
 autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
 
-" tmap <Leader><Esc> <C-\><C-N>
 for key in ['h', 'j', 'k', 'l']
   execute printf('tmap <buffer> <C-W>%s <C-\><C-N><C-W>%s', key, key)
 endfor
+
+nnoremap <silent> <Leader>qj :cnext<CR>
+nnoremap <silent> <Leader>qk :cprevious<CR>
