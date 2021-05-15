@@ -55,26 +55,26 @@ lsp_config.tsserver.setup {
 -- }
 
 -- lsp_config.pyls.setup {
--- 	cmd = {'pyls'},
--- 	filetypes = {'python'},
--- 	settings = {
--- 		pyls = {
--- 			plugins = {
--- 				jedi_completion = {enabled = true},
--- 				jedi_hover = {enabled = true},
--- 				jedi_references = {enabled = true},
--- 				jedi_signature_help = {enabled = true},
--- 				jedi_symbols = {enabled = true, all_scopes = true},
--- 				yapf = {enabled = false},
--- 				pylint = {enabled = false},
--- 				pycodestyle = {enabled = false},
--- 				pydocstyle = {enabled = false},
--- 				mccabe = {enabled = false},
--- 				preload = {enabled = false},
--- 				rope_completion = {enabled = false},
--- 			},
--- 		},
--- 	},
+--     cmd = {'pyls'},
+--     filetypes = {'python'},
+--     settings = {
+--         pyls = {
+--             plugins = {
+--                 jedi_completion = {enabled = true},
+--                 jedi_hover = {enabled = true},
+--                 jedi_references = {enabled = true},
+--                 jedi_signature_help = {enabled = true},
+--                 jedi_symbols = {enabled = true, all_scopes = true},
+--                 yapf = {enabled = false},
+--                 pylint = {enabled = false},
+--                 pycodestyle = {enabled = false},
+--                 pydocstyle = {enabled = false},
+--                 mccabe = {enabled = false},
+--                 preload = {enabled = false},
+--                 rope_completion = {enabled = false},
+--             },
+--         },
+--     },
 -- }
 
 lsp_config.pyright.setup {}
@@ -87,11 +87,11 @@ lsp_config.sumneko_lua.setup {
     settings = {
         Lua = {
             runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-            diagnostics = {globals = {'vim', 'dump'}},
+            diagnostics = {globals = {'vim', 'dump', 'love'}},
             workspace = {
                 library = {
-                    [vim.fn.expand '$VIMRUNTIME/lua'] = true,
-                    [vim.fn.expand '$VIMRUNTIME/lua/vim/lsp'] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
                 },
             },
         },
@@ -152,34 +152,28 @@ local function setup_diagnostics()
     local diagnostics_handler = lsp.with(
       lsp.diagnostic.on_publish_diagnostics, on_publish_cfg
     )
-    lsp.handlers[method] = diagnostics_handler
-    return
-    -- populate quickfix list with diagnostics
-    -- lsp.handlers[method] = function(...)
-    --     diagnostics_handler(...)
-    --     local err, method, result, client_id = ...
-    --     if result and result.diagnostics then
-    --         local item_list = {}
-    --         for _, v in ipairs(result.diagnostics) do
-    --             table.insert(
-    --               item_list, {
-    --                   filename = result.uri,
-    --                   lnum = v.range.start.line + 1,
-    --                   col = v.range.start.character + 1,
-    --                   text = v.message,
-    --               }
-    --             )
-    --         end
-    --         local old_items = vim.fn.getqflist()
-    --         for _, old_item in ipairs(old_items) do
-    --             local bufnr = vim.uri_to_bufnr(result.uri)
-    --             if vim.uri_from_bufnr(old_item.bufnr) ~= result.uri then
-    --                 table.insert(item_list, old_item)
-    --             end
-    --         end
-    --         vim.fn.setqflist({}, ' ', {title = 'LSP', items = item_list})
-    --     end
-    -- end
+    lsp.handlers[method] = function(...)
+        diagnostics_handler(...)
+        local all_diagnostics = vim.lsp.diagnostic.get_all()
+        local qflist = {}
+        for bufnr, diagnostic in pairs(all_diagnostics) do
+            for _, diag in ipairs(diagnostic) do
+                local item = {
+                    bufnr = bufnr,
+                    lnum = diag.range.start.line + 1,
+                    col = diag.range.start.character + 1,
+                    text = diag.message,
+                }
+                if diag.severity == 1 then
+                    item.type = 'E'
+                elseif diag.severity == 2 then
+                    item.type = 'W'
+                end
+                table.insert(qflist, item)
+            end
+        end
+        vim.lsp.util.set_qflist(qflist)
+    end
 end
 
 local function setup_formatting()
@@ -197,5 +191,3 @@ end
 
 setup_diagnostics()
 setup_formatting()
--- TODO: implement '$/progress'
--- handlers['$/progress'] = function(...) dump(...) end

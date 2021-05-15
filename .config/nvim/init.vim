@@ -115,7 +115,7 @@ augroup extra_filetypes
 augroup END
 
 " Filetypes names where q does :q<CR>
-let g:q_close_ft = ['help', 'list']
+let g:q_close_ft = ['help', 'list', 'qf']
 let g:esc_close_ft = ['NvimTree']
 
 augroup aux_win_close
