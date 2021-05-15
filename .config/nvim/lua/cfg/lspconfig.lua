@@ -172,7 +172,7 @@ local function setup_diagnostics()
                 table.insert(qflist, item)
             end
         end
-        vim.lsp.util.set_qflist(qflist)
+        vim.fn.setqflist(qflist)
     end
 end
 

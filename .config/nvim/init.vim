@@ -370,8 +370,9 @@ vnoremap < <gv
 " Buffer nav
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
-nnoremap <silent> <Leader>bad :call <SID>DellAllBuf()<CR>
-nnoremap <silent> <Leader>bod :call <SID>DelAllExcept()<CR>
+nnoremap <silent> <Leader>dbb :call <SID>DellThisBuf()<CR>
+nnoremap <silent> <Leader>dba :call <SID>DellAllBuf()<CR>
+nnoremap <silent> <Leader>dbo :call <SID>DelAllExcept()<CR>
 
 " Tab nav
 nnoremap <silent> th :tabprevious<CR>
