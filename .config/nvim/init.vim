@@ -370,10 +370,8 @@ vnoremap < <gv
 " Buffer nav
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
-nnoremap <silent> <Leader>d :call <SID>DellThisBuf()<CR>
-nnoremap <silent> <Leader>ad :call <SID>DellAllBuf()<CR>
-nnoremap <silent> <Leader>od :call <SID>DelAllExcept()<CR>
-nnoremap <silent> <Leader>ld :call <SID>DelToLeft()<CR>
+nnoremap <silent> <Leader>bad :call <SID>DellAllBuf()<CR>
+nnoremap <silent> <Leader>bod :call <SID>DelAllExcept()<CR>
 
 " Tab nav
 nnoremap <silent> th :tabprevious<CR>
@@ -449,6 +447,7 @@ nnoremap <silent> <C-P> :lua require'telescope.builtin'.find_files({ previewer =
 nnoremap <silent> <Leader>rg :Telescope live_grep<CR>
 nnoremap <silent> <Leader>b :Telescope buffers<CR>
 nnoremap <silent> <C-B> :Telescope buffers<CR>
+nnoremap <silent> <Leader>ad :Telescope lsp_workspace_diagnostics<CR>
 
 " Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
