@@ -117,8 +117,8 @@ local function load(use)
     end
 
     use {
-        -- 'neovim/nvim-lspconfig',
-        '~/projects/neovim/nvim-lspconfig',
+        'neovim/nvim-lspconfig',
+        -- '~/projects/neovim/nvim-lspconfig',
         config = function() require('cfg.lspconfig') end,
     }
 

@@ -142,6 +142,8 @@ lsp_config.yamlls.setup {}
 
 lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 
+lsp_config.solargraph.setup {}
+
 local function setup_diagnostics()
     local method = 'textDocument/publishDiagnostics'
     local on_publish_cfg = {

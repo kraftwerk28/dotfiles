@@ -459,8 +459,9 @@ nnoremap <silent> <Leader>m] :diffget //3<CR>
 
 autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
 
+tnoremap <Esc> <C-\><C-N>
 for key in ['h', 'j', 'k', 'l']
-  execute printf('tmap <buffer> <C-W>%s <C-\><C-N><C-W>%s', key, key)
+  execute printf('tnoremap <C-W>%s <C-\><C-N><C-W>%s', key, key)
 endfor
 
 nnoremap <silent> <Leader>qj :cnext<CR>
