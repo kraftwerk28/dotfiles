@@ -9,5 +9,12 @@ return function()
     -- TabLineSel - tab pages line, active tab page label
     highlight {'TabLine', guibg = 'bg', gui = 'NONE', bang = true}
     highlight {'TabLineFill', guibg = 'bg', gui = 'NONE', bang = true}
-    highlight {'TabLineSel', bg = cl.normal, fg = cl.bg, gui = 'bold'}
+    highlight {
+        'TabLineSel',
+        bg = cl.normal,
+        fg = cl.bg,
+        gui = 'bold',
+        bang = true,
+    }
+    -- highlight {'TabLineSel', 'StatusLineModeInv', bang = true}
 end

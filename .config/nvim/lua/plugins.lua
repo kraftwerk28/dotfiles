@@ -133,6 +133,7 @@ local function load(use)
 
     use {
         'SirVer/ultisnips',
+        disable = true,
         config = function()
             vim.g.UltiSnipsExpandTrigger = '<F10>'
             vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'

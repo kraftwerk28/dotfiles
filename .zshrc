@@ -69,11 +69,11 @@ DISABLE_MAGIC_FUNCTIONS=true
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
-  z
-  extract
-  sudo
-  zsh-autosuggestions
+	git
+	z
+	extract
+	sudo
+	zsh-autosuggestions
 )
 
 fpath=(~/.zfunc $fpath)
@@ -89,9 +89,9 @@ source "$ZSH/oh-my-zsh.sh"
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='nvim'
+#	export EDITOR='nvim'
 # else
-#   export EDITOR='nvim'
+#	export EDITOR='nvim'
 # fi
 
 # Compilation flags
@@ -133,10 +133,10 @@ alias nvimcfg="cd $HOME/.config/nvim"
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 dotfilesupd () {
-  commit_message=${1:-"Update dotfiles"}
-  dotfiles add -u
-  dotfiles commit -m "$commit_message"
-  dotfiles push origin HEAD
+	commit_message=${1:-"Update dotfiles"}
+	dotfiles add -u
+	dotfiles commit -m "$commit_message"
+	dotfiles push origin HEAD
 }
 
 alias ls="lsd -F"
@@ -147,73 +147,73 @@ alias icat="kitty +kitten icat"
 alias less="bat"
 alias cat="bat -p --color never --paging never"
 alias serves="serve \
-  --ssl-cert ~/ca-tmp/localhost.crt \
-  --ssl-key ~/ca-tmp/localhost.key"
-alias ssh="kitty +kitten ssh"
+	--ssl-cert ~/ca-tmp/localhost.crt \
+	--ssl-key ~/ca-tmp/localhost.key"
+	alias ssh="kitty +kitten ssh"
 
-mkcd () {
-  if [ -z "$1" ]; then
-    echo "Usage: mkcd <dirname>"
-    return 1
-  fi
-  mkdir -p "$1"
-  cd "$1" || return
-}
+	mkcd () {
+		if [ -z "$1" ]; then
+			echo "Usage: mkcd <dirname>"
+			return 1
+		fi
+		mkdir -p "$1"
+		cd "$1" || return
+	}
 
 cjq () {
-  if [ -z "$1" ]; then
-    echo "Usage: mkcd <dirname>"
-    return 1
-  fi
-  cat "$1" | jq
+	if [ -z "$1" ]; then
+		echo "Usage: mkcd <dirname>"
+		return 1
+	fi
+	cat "$1" | jq
 }
 
 if [[ -s "$NVS_HOME/nvs.sh" ]]; then
-  source "$NVS_HOME/nvs.sh"
+	source "$NVS_HOME/nvs.sh"
 fi
 
 # Change cursor shape depending on vi mode
-CHANGE_CURSOR_SHAPE=0
+CHANGE_CURSOR_SHAPE=1
 # Show a character depending on vi mode
 SHOW_VIMODE=1
 
 refresh_prompt () {
-  if [[ "$KEYMAP" == "vicmd" ]] || [[ "$1" == "block" ]]; then
-    # NORMAL
-    if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
-      echo -ne "\e[1 q";
-    fi
-    if [[ "$SHOW_VIMODE" == 1 ]]; then
-      PROMPT_VIMODE="%B%F{green}N "
-    fi
-  elif [[ "$KEYMAP" =~ ^(main|viins|)$ ]] || [[ "$1" == "beam" ]]; then
-    # INSERT
-    if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
-      echo -ne "\e[5 q"
-    fi
-    if [[ "$SHOW_VIMODE" == 1 ]]; then
-      PROMPT_VIMODE="%B%F{cyan}I "
-    fi
-  elif [[ "$KEYMAP" == "visual" ]]; then
-    # VISUAL
-    if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
-      echo -ne "\e[4 q"
-    fi
-    if [[ "$SHOW_VIMODE" == 1 ]]; then
-      PROMPT_VIMODE="%B%F{orange}V "
-    fi
-  fi
+	if [[ "$KEYMAP" == "vicmd" ]] || [[ "$1" == "block" ]]; then
+		# NORMAL
+		if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
+			echo -ne "\e[1 q";
+		fi
+		if [[ "$SHOW_VIMODE" == 1 ]]; then
+			PROMPT_VIMODE="%B%F{green}N "
+		fi
+	elif [[ "$KEYMAP" =~ ^(main|viins|)$ ]] || [[ "$1" == "beam" ]]; then
+		# INSERT
+		if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
+			echo -ne "\e[5 q"
+		fi
+		if [[ "$SHOW_VIMODE" == 1 ]]; then
+			PROMPT_VIMODE="%B%F{cyan}I "
+		fi
+	elif [[ "$KEYMAP" == "visual" ]]; then
+		# VISUAL
+		if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
+			echo -ne "\e[4 q"
+		fi
+		if [[ "$SHOW_VIMODE" == 1 ]]; then
+			PROMPT_VIMODE="%B%F{orange}V "
+		fi
+	fi
 
-  FILEPATH="%F{#ffa500}%(4~|…/%2~|%~) "
-  PROMPT="${FILEPATH}\$(git_prompt_info)$PROMPT_VIMODE$PROMPT_STATUS$CL_RESET "
-  RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
+	FILEPATH="%F{#ffa500}%(4~|…/%2~|%~) "
+	PROMPT="${FILEPATH}\$(git_prompt_info)$PROMPT_VIMODE$PROMPT_STATUS$CL_RESET "
+	RPROMPT="%F{green}[\$(date +%H:%M:%S)]$CL_RESET"
 }
 
 KEYTIMEOUT=50
 
 zle-keymap-select () {
-  refresh_prompt "$1"
-  zle reset-prompt
+refresh_prompt "$1"
+zle reset-prompt
 }
 
 zle -N zle-keymap-select

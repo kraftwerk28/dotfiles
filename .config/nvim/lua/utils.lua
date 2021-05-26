@@ -167,4 +167,13 @@ end
 
 function M.glob_exists(path) return vim.fn.empty(vim.fn.glob(path)) == 0 end
 
+function M.id_gen(start)
+    local cnt = start or 0
+    return function()
+        local result = cnt
+        cnt = cnt + 1
+        return result
+    end
+end
+
 return M

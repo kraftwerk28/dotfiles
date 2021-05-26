@@ -43,6 +43,10 @@ local lsp_signs = {
 for hl_group, config in pairs(lsp_signs) do vim.fn.sign_define(hl_group, config) end
 
 lsp_config.tsserver.setup {
+    cmd = {
+        'typescript-language-server', '--stdio', 'tsserver-log-verbosity',
+        'off',
+    },
     root_dir = root_pattern(
       'package.json', 'tsconfig.json', 'jsconfig.json', '.git', vim.fn.getcwd()
     ),
@@ -82,7 +86,7 @@ lsp_config.pyright.setup {}
 lsp_config.sumneko_lua.setup {
     cmd = {
         'lua-language-server', '-E', '/usr/share/lua-language-server/main.lua',
-        '--logpath', vim.lsp.get_log_path():match '(.*[/\\])',
+        '--logpath', vim.lsp.get_log_path():match('(.*[/\\])'),
     },
     settings = {
         Lua = {
