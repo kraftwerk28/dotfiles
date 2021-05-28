@@ -32,9 +32,9 @@ set scrolloff=3
 set diffopt+=vertical
 
 " Vertical insert / cmdline-insert:
-set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
+" set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
 " Block insert / cmdline-insert:
-" set guicursor=n-sm-c:block,r-cr-o-v:hor20
+set guicursor=n-sm-c:block,r-cr-o-v:hor20
 
 set splitbelow splitright
 set regexpengine=0
@@ -52,10 +52,10 @@ augroup filetype_options
         \ go,make,c,cpp,python
         \ setlocal shiftwidth=4 tabstop=4 noexpandtab
   autocmd FileType
-        \ java,csharp,lua,cabal
+        \ java,csharp,cabal
         \ setlocal shiftwidth=4 tabstop=4 expandtab
   autocmd FileType
-        \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell,lisp
+        \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell,lisp,lua
         \ setlocal shiftwidth=2 tabstop=2 expandtab
   autocmd FileType jess setlocal commentstring=;\ %s
   autocmd FileType json,jsonc,cjson setlocal commentstring=//\ %s
