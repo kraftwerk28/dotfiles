@@ -173,7 +173,7 @@ if [[ -s "$NVS_HOME/nvs.sh" ]]; then
 fi
 
 # Change cursor shape depending on vi mode
-CHANGE_CURSOR_SHAPE=1
+CHANGE_CURSOR_SHAPE=0
 # Show a character depending on vi mode
 SHOW_VIMODE=1
 

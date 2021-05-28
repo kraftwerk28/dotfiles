@@ -39,7 +39,7 @@ set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
-set guifont=JetBrains\ Mono\ Nerd\ Font:h18
+set guifont=JetBrains\ Mono\ Nerd\ Font:h12
 set noshowmode
 set shortmess+=c
 set undofile

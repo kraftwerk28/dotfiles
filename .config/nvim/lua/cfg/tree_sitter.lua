@@ -63,16 +63,16 @@ local disabled = {
 -- LuaFormatter on
 
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = 'maintained',
-    highlight = {enable = true, disable = disabled},
-    playground = {
-        enable = true,
-        disable = disabled,
-        updatetime = 25,
-        persist_queries = false,
-    },
-    -- refactor = {
-    --     highlight_definitions = {enable = true},
-    --     highlight_current_scope = {enable = true},
-    -- },
+  ensure_installed = 'maintained',
+  highlight = {enable = true, disable = disabled},
+  playground = {
+    enable = true,
+    disable = disabled,
+    updatetime = 25,
+    persist_queries = false,
+  },
+  -- refactor = {
+  --     highlight_definitions = {enable = true},
+  --     highlight_current_scope = {enable = true},
+  -- },
 }
