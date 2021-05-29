@@ -1,7 +1,7 @@
 local colors = require('cfg.colors')
 local utils = require('utils')
 local devicons = require('nvim-web-devicons')
-local stl = require('statusline.impl')
+local stl = require('statusline.core')
 local builtin = require('statusline.components')
 
 local u = utils.u

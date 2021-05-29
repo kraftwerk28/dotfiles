@@ -1,4 +1,4 @@
-local make_component = require('statusline.impl').make_component
+local make_component = require('statusline.core').make_component
 local M = {}
 
 M.alignment_separator = make_component {'%='}
