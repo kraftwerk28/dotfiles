@@ -22,8 +22,6 @@ local mode_map = {
   ['t'] = {'TERMINAL', cl.terminal},
   [''] = {'V-BLOCK', cl.visual},
   [''] = {'S-BLOCK', cl.visual},
-  ['Rv'] = {'VIRTUAL'},
-  ['rm'] = {'--MORE'},
 }
 
 local icons = {
@@ -101,7 +99,7 @@ end
 local function lsp_count(kind, icon)
   local n = vim.lsp.diagnostic.get_count(0, kind)
   if n == 0 then
-    return
+    return nil
   end
   return icon .. ' ' .. n
 end
@@ -120,12 +118,6 @@ local function percent()
     local rounded = frac + 0.5 - (frac + 0.5) % 1
     return sprintf('% 3d%%', rounded)
   end
-end
-
-local function charhex()
-  local col = vim.fn.col '.'
-  local ch = vim.fn.getline '.':sub(col, col)
-  return sprintf('0x%04x', vim.fn.char2nr(ch))
 end
 
 local function buf_nonempty()
@@ -155,12 +147,6 @@ local function build_stl()
     padding = {2, 1},
     right_separator = {'|', hl = 'StatusLineMode'},
   }
-  local char_hex = comp {
-    charhex,
-    hl = 'StatusLine',
-    padding = {2, 0},
-    condition = iswide,
-  }
 
   -- Center
   local icon = comp {
@@ -188,7 +174,7 @@ local function build_stl()
   }
 
   return stl.combine_components(
-    mode, fileformat, ft, char_hex, builtin.reset_highlight,
+    mode, fileformat, ft, builtin.reset_highlight,
       builtin.alignment_separator, icon, filename, fileattrs,
       builtin.alignment_separator, lsp_conn, lsp_w, lsp_e, col_row, pos_percent
   )

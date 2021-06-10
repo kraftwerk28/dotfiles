@@ -187,6 +187,29 @@ end
 
 function M.glob_exists(path) return vim.fn.empty(vim.fn.glob(path)) == 0 end
 
+M.show_lsp_diagnostics = (function()
+  local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
+  local cursor_pos = M.get_cursor_pos()
+  local debounced = M.debounce(show_diagnostics, 300)
+  return function()
+    local cursor_pos2 = M.get_cursor_pos()
+    -- TODO: doesn't work when both diagnostics and popup is shown
+    if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
+      cursor_pos = cursor_pos2
+      debounced()
+    end
+  end
+end)()
+
+function M.format_code()
+  if vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype) or
+    vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+    vim.cmd('Neoformat')
+  else
+    vim.lsp.buf.formatting()
+  end
+end
+
 function M.id_generator(start)
   local cnt = start or 0
   return function()

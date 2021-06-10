@@ -248,10 +248,7 @@ augroup formatprgs
   autocmd FileType lua setlocal formatprg=lua-format\ -c\ ~/.lua-format
 augroup END
 
-augroup completion_nvim
-  autocmd!
-  autocmd BufEnter * lua init.attach_completion()
-augroup END
+" autocmd BufEnter * lua require('lsp_signature').on_attach()
 
 augroup lsp_diagnostics
   autocmd!
@@ -335,10 +332,11 @@ command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 "------------------------- Comment tool configuration -------------------------"
 augroup LSP_highlight
   autocmd!
-  " autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
-  " autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
-  " autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+  autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 augroup END
+augroup! LSP_highlight
 
 function! PasteBlock()
   execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
@@ -460,6 +458,7 @@ nnoremap <silent> <Leader>gp :Git --paginate push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
+" Autoclose tag
 autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
 
 " tnoremap <Esc> <C-\><C-N>
@@ -474,3 +473,4 @@ tnoremap <ScrollWheelDown> <C-X><C-E>
 
 nnoremap <silent> <Leader>qj :cnext<CR>
 nnoremap <silent> <Leader>qk :cprevious<CR>
+nnoremap <silent> <Leader>qc :cprevious<CR>

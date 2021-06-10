@@ -20,6 +20,7 @@ highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl'}
 -- highlight {'LspDiagnosticsDefaultInformation', fg = 'LightBlue'}
 highlight {'LspDiagnosticsDefaultWarning', fg = 'Orange'}
 -- highlight {'LspDiagnosticsDefaultError', fg = 'Red'}
+highlight {'FloatBorder', fg = 'gray'}
 
 local lsp_signs = {
   LspDiagnosticsSignHint = {text = u 'f0eb', texthl = 'LspDiagnosticsSignHint'},
@@ -188,6 +189,12 @@ end
 
 local USE_DiAGNOSTIC_QUICKFIX = false
 
+local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
+local function setup_hover()
+  local method = 'textDocument/hover'
+  lsp.handlers[method] = lsp.with(lsp.handlers[method], {border = win_border})
+end
+
 local function setup_diagnostics()
   local method = 'textDocument/publishDiagnostics'
   local on_publish_cfg = {
@@ -240,3 +247,4 @@ end
 
 setup_diagnostics()
 setup_formatting()
+setup_hover()

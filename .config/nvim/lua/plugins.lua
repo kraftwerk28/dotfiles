@@ -120,6 +120,7 @@ local function load(use)
     -- '~/projects/neovim/nvim-lspconfig',
     config = function() require('cfg.lspconfig') end,
   }
+  -- use {'ray-x/lsp_signature.nvim'}
 
   use {
     'RRethy/vim-illuminate',
