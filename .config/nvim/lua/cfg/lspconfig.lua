@@ -161,6 +161,31 @@ lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 
 lsp_config.solargraph.setup {}
 
+if vim.fn.has("win64") then
+  lsp_config.jdtls.setup {
+    cmd = {
+      "java",
+      "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+      "-Dosgi.bundles.defaultStartLevel=4",
+      "-Declipse.product=org.eclipse.jdt.ls.core.product",
+      "-Dlog.protocol=true",
+      "-Dlog.level=ALL",
+      "-Xms1g",
+      "-Xmx2G",
+      "-jar",
+      "vim.NIL",
+      "-configuration",
+      "vim.NIL",
+      "-data",
+      "vim.NIL",
+      "--add-modules=ALL-SYSTEM",
+      "--add-opens java.base/java.util=ALL-UNNAMED",
+      "--add-opens java.base/java.lang=ALL-UNNAMED",
+    },
+    filetypes = {"java"},
+  }
+end
+
 local USE_DiAGNOSTIC_QUICKFIX = false
 
 local function setup_diagnostics()
