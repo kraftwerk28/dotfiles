@@ -44,9 +44,6 @@ set noshowmode
 set shortmess+=c
 set undofile
 set backupcopy=yes
-if has('win64')
-  set shell=powershell.exe
-endif
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup filetype_options
@@ -55,7 +52,7 @@ augroup filetype_options
         \ go,make,c,cpp,python
         \ setlocal shiftwidth=4 tabstop=4 noexpandtab
   autocmd FileType
-        \ java,csharp,cabal
+        \ java,groovy,csharp,cabal
         \ setlocal shiftwidth=4 tabstop=4 expandtab
   autocmd FileType
         \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell,lisp,lua
@@ -339,7 +336,7 @@ augroup LSP_highlight
   autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
   autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 augroup END
-augroup! LSP_highlight
+autocmd! LSP_highlight
 
 function! PasteBlock()
   execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))

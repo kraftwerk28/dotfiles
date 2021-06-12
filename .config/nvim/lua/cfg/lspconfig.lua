@@ -47,7 +47,11 @@ lsp_config.tsserver.setup {
     'typescript-language-server', '--stdio', 'tsserver-log-verbosity', 'off',
   },
   root_dir = root_pattern(
-    'package.json', 'tsconfig.json', 'jsconfig.json', '.git', vim.fn.getcwd()
+    'package.json',
+    'tsconfig.json',
+    'jsconfig.json',
+    '.git',
+    vim.fn.getcwd()
   ),
 }
 
@@ -127,8 +131,12 @@ lsp_config.gopls.setup {
 lsp_config.hls.setup {
   settings = {haskell = {formattingProvider = 'brittany'}},
   root_dir = root_pattern(
-    '*.cabal', 'stack.yaml', 'cabal.project', 'package.yaml', 'hie.yaml',
-      vim.fn.getcwd()
+    '*.cabal',
+    'stack.yaml',
+    'cabal.project',
+    'package.yaml',
+    'hie.yaml',
+    vim.fn.getcwd()
   ),
 }
 
@@ -141,7 +149,10 @@ lsp_config.clangd.setup {
   cmd = clangdcmd,
   filetypes = {'c', 'cpp', 'objc', 'objcpp'},
   root_dir = root_pattern(
-    'CMakeLists.txt', 'compile_flags.txt', '.git', vim.fn.getcwd()
+    'CMakeLists.txt',
+    'compile_flags.txt',
+    '.git',
+    vim.fn.getcwd()
   ),
 }
 
@@ -163,49 +174,61 @@ lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 lsp_config.solargraph.setup {}
 
 if vim.fn.has("win64") then
-  local expand = vim.fn.expand
-  local jdt_base = expand(
+  local jdt_base = vim.fn.expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )
-  local java_exe = expand("C:/Program Files/Java/jdk-11.0.11/bin/java.exe")
-
-  local jdtls_cmd = {
-    java_exe,
-    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    "-Dosgi.bundles.defaultStartLevel=4",
-    "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    "-Dlog.protocol=true",
-    "-Dlog.level=ALL",
-    "-Xmx1G",
-    "-noverify",
-    "-jar",
-    expand(
-      jdt_base ..
-      "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
-    ),
-    "-configuration",
-    expand(jdt_base .. "/config_win"),
-    "-data",
-    expand("~/Projects/jdt-ls-data"),
-    "--add-modules=ALL-SYSTEM",
-    "--add-opens", "java.base/java.util=ALL-UNNAMED",
-    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-  }
+  local java_home = vim.fn.expand("C:/Program Files/Java/jdk-11.0.11")
+  local gradle_home = vim.fn.expand("C:/Program Files/Gradle/gradle-6.5.1")
 
   lsp_config.jdtls.setup {
-    cmd = jdtls_cmd,
+    cmd = {
+      vim.fn.expand(java_home .. "/bin/java.exe"),
+      "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+      "-Dosgi.bundles.defaultStartLevel=4",
+      "-Declipse.product=org.eclipse.jdt.ls.core.product",
+      "-Dlog.protocol=true",
+      "-Dlog.level=ALL",
+      "-Xmx1G",
+      "-jar",
+      vim.fn.expand(
+        jdt_base ..
+        "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
+      ),
+      "-configuration",
+      vim.fn.expand(jdt_base .. "/config_win"),
+      "-data",
+      vim.fn.expand("~/Projects/jdt-ls-data"),
+      "--add-modules=ALL-SYSTEM",
+      "--add-opens",
+      "java.base/java.util=ALL-UNNAMED",
+      "--add-opens",
+      "java.base/java.lang=ALL-UNNAMED",
+    },
     filetypes = {"java"},
-    root_dir = root_pattern('.git', 'build.gradle', vim.fn.getcwd()),
+    root_dir = root_pattern("build.gradle", ".git"),
+    -- settings = {
+    --   java = {
+    --     home = java_home,
+    --     trace = {server = "verbose"},
+    --     import = {
+    --       gradle = {
+    --         wrapper = {enabled = false},
+    --         enabled = true
+    --       },
+    --     },
+    --     autobuild = {enabled = true},
+    --   },
+    -- },
   }
 end
-
-local USE_DiAGNOSTIC_QUICKFIX = false
 
 local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 local function setup_hover()
   local method = 'textDocument/hover'
   lsp.handlers[method] = lsp.with(lsp.handlers[method], {border = win_border})
 end
+
+local USE_DIAGNOSTIC_QUICKFIX = false
 
 local function setup_diagnostics()
   local method = 'textDocument/publishDiagnostics'
@@ -218,7 +241,7 @@ local function setup_diagnostics()
     lsp.diagnostic.on_publish_diagnostics, on_publish_cfg
   )
   lsp.handlers[method] = diagnostics_handler
-  if USE_DiAGNOSTIC_QUICKFIX then
+  if USE_DIAGNOSTIC_QUICKFIX then
     lsp.handlers[method] = function(...)
       diagnostics_handler(...)
       local all_diagnostics = vim.lsp.diagnostic.get_all()
