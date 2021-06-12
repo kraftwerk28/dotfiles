@@ -32,9 +32,9 @@ set scrolloff=3
 set diffopt+=vertical
 
 " Vertical insert / cmdline-insert:
-" set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
+set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
 " Block insert / cmdline-insert:
-set guicursor=n-sm-c:block,r-cr-o-v:hor20
+" set guicursor=n-sm-c:block,r-cr-o-v:hor20
 
 set splitbelow splitright
 set regexpengine=0
@@ -44,6 +44,9 @@ set noshowmode
 set shortmess+=c
 set undofile
 set backupcopy=yes
+if has('win64')
+  set shell=powershell.exe
+endif
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup filetype_options

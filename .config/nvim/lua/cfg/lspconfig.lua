@@ -163,27 +163,39 @@ lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 lsp_config.solargraph.setup {}
 
 if vim.fn.has("win64") then
+  local expand = vim.fn.expand
+  local jdt_base = expand(
+    "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
+  )
+  local java_exe = expand("C:/Program Files/Java/jdk-11.0.11/bin/java.exe")
+
+  local jdtls_cmd = {
+    java_exe,
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
+    "-Xmx1G",
+    "-noverify",
+    "-jar",
+    expand(
+      jdt_base ..
+      "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
+    ),
+    "-configuration",
+    expand(jdt_base .. "/config_win"),
+    "-data",
+    expand("~/Projects/jdt-ls-data"),
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens", "java.base/java.util=ALL-UNNAMED",
+    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+  }
+
   lsp_config.jdtls.setup {
-    cmd = {
-      "java",
-      "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-      "-Dosgi.bundles.defaultStartLevel=4",
-      "-Declipse.product=org.eclipse.jdt.ls.core.product",
-      "-Dlog.protocol=true",
-      "-Dlog.level=ALL",
-      "-Xms1g",
-      "-Xmx2G",
-      "-jar",
-      "vim.NIL",
-      "-configuration",
-      "vim.NIL",
-      "-data",
-      "vim.NIL",
-      "--add-modules=ALL-SYSTEM",
-      "--add-opens java.base/java.util=ALL-UNNAMED",
-      "--add-opens java.base/java.lang=ALL-UNNAMED",
-    },
+    cmd = jdtls_cmd,
     filetypes = {"java"},
+    root_dir = root_pattern('.git', 'build.gradle', vim.fn.getcwd()),
   }
 end
 
