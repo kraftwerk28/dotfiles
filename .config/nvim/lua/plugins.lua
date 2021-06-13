@@ -163,14 +163,15 @@ local function load(use)
     'kyazdani42/nvim-tree.lua',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
-      local u = require('utils').u
-      vim.cmd 'highlight link NvimTreeFolderName Title'
-      vim.cmd 'highlight link NvimTreeFolderIcon Tag'
+      local utils = require('utils')
+      local u = utils.u
+      utils.highlight {'NvimTreeFolderName', 'Title'}
+      utils.highlight {'NvimTreeFolderIcon', 'Title'}
       vim.g.nvim_tree_icons = {
         folder = {default = u 'f07b', open = u 'f07c', symlink = u 'f0c1'},
       }
       vim.g.nvim_tree_auto_close = 1
-      vim.g.nvim_tree_indent_markers = 1
+      vim.g.nvim_tree_indent_markers = 0
       vim.g.nvim_tree_quit_on_open = 1
       vim.g.nvim_tree_disable_netrw = 0
       vim.g.nvim_tree_hijack_netrw = 1

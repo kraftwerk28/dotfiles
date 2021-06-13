@@ -44,6 +44,7 @@ set noshowmode
 set shortmess+=c
 set undofile
 set backupcopy=yes
+set inccommand=nosplit
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup filetype_options
@@ -474,3 +475,24 @@ tnoremap <ScrollWheelDown> <C-X><C-E>
 nnoremap <silent> <Leader>qj :cnext<CR>
 nnoremap <silent> <Leader>qk :cprevious<CR>
 nnoremap <silent> <Leader>qc :cprevious<CR>
+
+" let s:pairs = ['{}', '()', '[]']
+" function! s:autoPair()
+"   let line = getline('.')
+"   let col = col('.')
+"   let before = line[col - 2:col - 2]
+"   let after = line[col - 1:col - 1]
+"   for pairStr in s:pairs
+"     if pairStr[0] == before &&
+"      \ pairStr[1] == after
+"       return "\<CR>\<CR>\<Up>\<Esc>cc"
+"     endif
+"   endfor
+"   return "\<CR>"
+" endfunction
+" for pairStr in s:pairs
+"   execute printf("inoremap <expr> %s '%s<\Left>'",
+"                \ pairStr[0],
+"                \ pairStr)
+" endfor
+" inoremap <expr> <CR> <SID>autoPair()
