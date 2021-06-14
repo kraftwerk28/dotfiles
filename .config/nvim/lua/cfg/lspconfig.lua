@@ -205,7 +205,7 @@ if vim.fn.has("win64") then
       "java.base/java.lang=ALL-UNNAMED",
     },
     filetypes = {"java"},
-    root_dir = root_pattern("build.gradle", "pom.xml", ".git"),
+    root_dir = root_pattern(".git"),
     -- settings = {
     --   java = {
     --     home = java_home,
