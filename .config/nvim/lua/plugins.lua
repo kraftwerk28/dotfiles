@@ -102,18 +102,12 @@ local function load(use)
   use {'tpope/vim-markdown'}
   use {'adimit/prolog.vim'}
 
-  if vim.fn.has('unix') > 0 and
-    (vim.fn.executable('g++') > 0 or vim.fn.executable('clang++') > 0) then
-    use {
-      'nvim-treesitter/nvim-treesitter',
-      requires = {
-        'nvim-treesitter/playground',
-        -- 'nvim-treesitter/nvim-treesitter-refactor',
-      },
-      run = function() vim.cmd('TSUpdate') end,
-      config = function() require('cfg.tree_sitter') end,
-    }
-  end
+  use {
+    "nvim-treesitter/nvim-treesitter",
+    requires = {"nvim-treesitter/playground"},
+    run = function() vim.cmd("TSUpdate") end,
+    config = function() require('cfg.tree_sitter') end,
+  }
 
   use {
     'neovim/nvim-lspconfig',

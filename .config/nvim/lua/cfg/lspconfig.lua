@@ -205,7 +205,7 @@ if vim.fn.has("win64") then
       "java.base/java.lang=ALL-UNNAMED",
     },
     filetypes = {"java"},
-    root_dir = root_pattern("build.gradle", ".git"),
+    root_dir = root_pattern("build.gradle", "pom.xml", ".git"),
     -- settings = {
     --   java = {
     --     home = java_home,
@@ -219,6 +219,17 @@ if vim.fn.has("win64") then
     --     autobuild = {enabled = true},
     --   },
     -- },
+  }
+
+  lsp_config.kotlin_language_server.setup {
+    cmd = {
+      vim.fn.expand(
+        "~/Projects/kotlin-language-server/server/build/install" ..
+        "/server/bin/kotlin-language-server.bat"
+      ),
+    },
+    filetypes = {"kotlin"},
+    root_dir = root_pattern("build.gradle", ".git", vim.fn.getcwd()),
   }
 end
 
