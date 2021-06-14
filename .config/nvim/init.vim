@@ -53,7 +53,7 @@ augroup filetype_options
         \ go,make,c,cpp,python
         \ setlocal shiftwidth=4 tabstop=4 noexpandtab
   autocmd FileType
-        \ java,groovy,csharp,cabal
+        \ java,kotlin,groovy,csharp,cabal
         \ setlocal shiftwidth=4 tabstop=4 expandtab
   autocmd FileType
         \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell,lisp,lua
