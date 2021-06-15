@@ -66,6 +66,11 @@ local function load(use)
   use {'wellle/targets.vim'} -- More useful text objects (e.g. function arguments)
 
   use {'tpope/vim-fugitive'} -- Git helper
+  -- use {
+  --   'TimUntersberger/neogit',
+  --   requires = 'nvim-lua/plenary.nvim',
+  --   config = function() require('neogit').setup {} end,
+  -- }
 
   use {
     'airblade/vim-gitgutter',
@@ -175,9 +180,14 @@ local function load(use)
   use {
     'sbdchd/neoformat',
     config = function()
-      for _, ft in ipairs {
-        'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-      } do
+      local disable_fmt = {
+        'javascript',
+        'typescript',
+        'javascriptreact',
+        'typescriptreact',
+        'lua',
+      }
+      for _, ft in ipairs(disable_fmt) do
         vim.g['neoformat_enabled_' .. ft] = {}
       end
       vim.g.neoformat_try_formatprg = 1

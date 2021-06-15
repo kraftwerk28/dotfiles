@@ -202,39 +202,39 @@ function! s:nvimTreeToggle(find)
 endfunction
 
 "----------------------------- Buffer operations ------------------------------"
-function! s:bufFilt(inc_cur)
-  function! s:filtFn(include_current, idx, val)
-    if !bufexists(a:val) ||
-    \ !buflisted(a:val) ||
-    \ buffer_name(a:val) =~? 'NERD_tree_*' ||
-    \ (a:include_current && bufnr() == a:val)
-      return v:false
-    endif
-    return v:true
-  endfunction
-  return filter(range(1, bufnr('$')), function('s:filtFn', [a:inc_cur]))
-endfunction
+" function! s:bufFilt(inc_cur)
+"   function! s:filtFn(include_current, idx, val)
+"     if !bufexists(a:val) ||
+"     \ !buflisted(a:val) ||
+"     \ buffer_name(a:val) =~? 'NERD_tree_*' ||
+"     \ (a:include_current && bufnr() == a:val)
+"       return v:false
+"     endif
+"     return v:true
+"   endfunction
+"   return filter(range(1, bufnr('$')), function('s:filtFn', [a:inc_cur]))
+" endfunction
 
-function! s:DellAllBuf()
-  wall
-  silent execute 'bdelete ' . join(s:bufFilt(0))
-endfunction
+" function! s:DellAllBuf()
+"   wall
+"   silent execute 'bdelete ' . join(s:bufFilt(0))
+" endfunction
 
-function! s:DellThisBuf()
-  update
-  bprevious | split | bnext | bdelete
-endfunction
+" function! s:DellThisBuf()
+"   update
+"   bprevious | split | bnext | bdelete
+" endfunction
 
-" Delete buffers except current
-function! s:DelAllExcept()
-  wall
-  silent execute 'bdelete' join(s:bufFilt(1))
-endfunction
+" " Delete buffers except current
+" function! s:DelAllExcept()
+"   wall
+"   silent execute 'bdelete' join(s:bufFilt(1))
+" endfunction
 
-" TODO
-function! s:DelToLeft()
-  silent execute 'bdelete' join(range(1, bufnr() - 1))
-endfunction
+" " TODO
+" function! s:DelToLeft()
+"   silent execute 'bdelete' join(range(1, bufnr() - 1))
+" endfunction
 
 augroup formatprgs
   autocmd!
@@ -246,7 +246,6 @@ augroup formatprgs
         \ javascript,javascriptreact
         \ setlocal formatprg=prettier\ --parser\ babel
   autocmd FileType cabal setlocal formatprg=cabal-fmt
-  autocmd FileType lua setlocal formatprg=lua-format\ -c\ ~/.lua-format
 augroup END
 
 " autocmd BufEnter * lua require('lsp_signature').on_attach()
@@ -372,9 +371,9 @@ vnoremap < <gv
 " Buffer nav
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
-nnoremap <silent> <Leader>dbb :call <SID>DellThisBuf()<CR>
-nnoremap <silent> <Leader>dba :call <SID>DellAllBuf()<CR>
-nnoremap <silent> <Leader>dbo :call <SID>DelAllExcept()<CR>
+" nnoremap <silent> <Leader>dbb :lua vim.api.nvim_buf_delete(0, {})<CR>
+" nnoremap <silent> <Leader>dba :lua init.delete_bufs(true)<CR>
+" nnoremap <silent> <Leader>dbo :lua init.delete_bufs(false)<CR>
 
 " Tab nav
 nnoremap <silent> th :tabprevious<CR>

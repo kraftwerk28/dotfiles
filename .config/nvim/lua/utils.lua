@@ -100,7 +100,9 @@ function M.load(path)
     print(mod)
   else
     local loadfunc
-    if type(mod) == 'function' then
+    if mod == true then
+      return
+    elseif type(mod) == 'function' then
       loadfunc = mod
     elseif mod.setup ~= nil then
       loadfunc = mod.setup
@@ -216,6 +218,33 @@ function M.id_generator(start)
     local result = cnt
     cnt = cnt + 1
     return result
+  end
+end
+
+function M.delete_bufs(include_current)
+  local cur = vim.api.nvim_get_current_buf()
+  for _, h in ipairs(vim.api.nvim_list_bufs()) do
+    if (
+      (h ~= cur or include_current) and
+      vim.api.nvim_buf_is_loaded(h)
+    ) then vim.api.nvim_buf_delete(h, {}) end
+  end
+end
+
+local map_func_counter = 0
+function M.map(mode, lhs, fn, opts)
+  local name = 'map_func_' .. map_func_counter
+  _G[name] = fn
+  local rhs = ':call v:lua.' .. name .. '()<CR>'
+  vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+  map_func_counter = map_func_counter + 1
+end
+
+for _, mode in ipairs {'', 'n', 'i', 'c', 'x'} do
+  M[mode .. 'noremap'] = function(lhs, fn, opts)
+    local mapopts = opts or {}
+    mapopts.noremap = true
+    return M.map(mode, lhs, fn, mapopts)
   end
 end
 

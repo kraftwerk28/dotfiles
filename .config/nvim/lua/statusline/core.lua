@@ -3,6 +3,7 @@ local M = {}
 local utils = require('utils')
 local sprintf = utils.sprintf
 
+-- @deprecated
 local function get_padding(cfg)
   local lp, rp = 0, 0
   if cfg.padding ~= nil then
@@ -45,7 +46,7 @@ function M.component_builder()
 
     local cond_expr = ''
     if has_condition then
-      local name = '_stl_cfn' .. get_id()
+      local name = "_stl_cfn" .. get_id()
       _G[name] = cond_fn
       cond_expr = "v:lua." .. name .. "()"
     end
@@ -88,7 +89,7 @@ function M.component_builder()
     elseif type(render) == "string" then
       result = result .. ("\\ "):rep(padl) .. config[1] .. ("\\ "):rep(padr)
     else
-      error("config[1] (config.render) must be function or string")
+      error("config[1] (or config.render) must be either function or string")
     end
 
     -- Right separator
@@ -113,14 +114,53 @@ function M.component_builder()
   end
 end
 
-function M.on_update()
-  for _, fn in on_update_handlers do
-    fn()
+function M.make_string(sections)
+  local section_str = {}
+  for _, section in ipairs(sections) do
+    table.insert(section_str, table.concat(section))
   end
+  return table.concat(section_str, '%=')
 end
 
-function M.combine_components(...) return table.concat {...} end
+M.component = M.component_builder()
 
-M.make_component = M.component_builder()
+function M.setup(config)
+  local primary, secondary = '', ''
+
+  function _G._stl_get_cached()
+    if vim.g.statusline_winid == vim.fn.win_getid() then
+      return primary
+    else
+      return secondary
+    end
+  end
+
+  function _G._stl_update()
+    if type(config.on_update) == "function" then
+      config.on_update()
+    end
+    for _, fn in ipairs(on_update_handlers) do
+      fn()
+    end
+    primary = M.make_string(config.primary)
+    if type(config.secondary) == "table" then
+      secondary = M.make_string(config.secondary)
+    end
+    vim.opt.statusline = "%!v:lua._stl_get_cached()"
+  end
+
+  local update_events = {"BufEnter", "BufLeave", "WinEnter", "WinLeave"}
+  local setup_au_cmd = [[
+    windo call v:lua._stl_update()
+    augroup stl_autocmd
+      autocmd!
+      autocmd %s * call v:lua._stl_update()
+    augroup END
+  ]]
+  vim.api.nvim_exec(
+    string.format(setup_au_cmd, table.concat(update_events, ',')),
+    false
+  )
+end
 
 return M

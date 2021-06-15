@@ -11,6 +11,11 @@ vim.g.force_neoformat_filetypes = {
 vim.g.base16_theme = 'default-dark'
 
 M.format_code = utils.format_code
+M.map = utils.map
+local mapopts = {silent = true}
+utils.nnoremap('dbb', function() vim.api.nvim_buf_delete(0, {}) end, mapopts)
+utils.nnoremap('dbo', function() utils.delete_bufs(false) end, mapopts)
+utils.nnoremap('dba', function() utils.delete_bufs(true) end, mapopts)
 
 function M.yank_highlight()
   if highlight ~= nil then
