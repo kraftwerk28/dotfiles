@@ -75,14 +75,14 @@ local mode = component {
 }
 
 local fileformat = component {
-  function() return icons[vim.bo.fileformat] or '' end,
+  function() return icons[vim.opt.fileformat:get()] or '' end,
   hl = 'StatusLine',
   padding = {2, 0},
   condition = buf_nonempty,
 }
 
 local ft = component {
-  function() return vim.bo.filetype end,
+  function() return vim.opt.filetype:get() end,
   hl = 'StatusLine',
   condition = buf_nonempty,
   padding = {2, 1},
@@ -97,7 +97,7 @@ local icon = component {
     local icon = devicons.get_icon(filename, fileext)
     return icon and (icon .. ' ') or ''
   end,
-  on_update = function()
+  on_focus_change = function()
     local filename = vim.fn.expand('%:t')
     local fileext = vim.fn.expand('%:e')
     local _, icon_hl = devicons.get_icon(filename, fileext)
@@ -116,10 +116,10 @@ local filename = component {'%t', hl = 'StatusLine'}
 local fileattrs = component {
   function()
     local result = ''
-    if vim.bo.readonly then
+    if vim.opt.readonly:get() then
       result = result .. ' ' .. icons.locker
     end
-    if vim.bo.modified then
+    if vim.opt.modified:get() then
       result = result .. ' ' .. icons.unsaved
     end
     return result
