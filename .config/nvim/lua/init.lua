@@ -2,6 +2,7 @@ local M = {}
 
 local utils = require('utils')
 local highlight = require('vim.highlight')
+utils.load('opts')
 
 -- :Neoformat will be always ran in these filetypes
 vim.g.force_neoformat_filetypes = {
@@ -10,10 +11,21 @@ vim.g.force_neoformat_filetypes = {
 
 M.format_code = utils.format_code
 M.map = utils.map
-local mapopts = {silent = true}
-utils.nnoremap('dbb', function() vim.api.nvim_buf_delete(0, {}) end, mapopts)
-utils.nnoremap('dbo', function() utils.delete_bufs(false) end, mapopts)
-utils.nnoremap('dba', function() utils.delete_bufs(true) end, mapopts)
+utils.nnoremap(
+  'dbb',
+  function() vim.api.nvim_buf_delete(0, {}) end,
+  {silent = true}
+)
+utils.nnoremap(
+  'dbo',
+  function() utils.delete_bufs(false) end,
+  {silent = true}
+)
+utils.nnoremap(
+  'dba',
+  function() utils.delete_bufs(true) end,
+  {silent = true}
+)
 
 function M.yank_highlight()
   if highlight ~= nil then

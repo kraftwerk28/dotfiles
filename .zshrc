@@ -133,9 +133,8 @@ alias nvimcfg="cd $HOME/.config/nvim"
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
 dotfilesupd () {
-	commit_message=${1:-"Update dotfiles"}
-	dotfiles add -u
-	dotfiles commit -m "$commit_message"
+	dotfiles add -u && \
+	dotfiles commit "$@" && \
 	dotfiles push origin HEAD
 }
 
@@ -149,16 +148,16 @@ alias cat="bat -p --color never --paging never"
 alias serves="serve \
 	--ssl-cert ~/ca-tmp/localhost.crt \
 	--ssl-key ~/ca-tmp/localhost.key"
-	alias ssh="kitty +kitten ssh"
+alias ssh="kitty +kitten ssh"
 
-	mkcd () {
-		if [ -z "$1" ]; then
-			echo "Usage: mkcd <dirname>"
-			return 1
-		fi
-		mkdir -p "$1"
-		cd "$1" || return
-	}
+mkcd () {
+	if [ -z "$1" ]; then
+		echo "Usage: mkcd <dirname>"
+		return 1
+	fi
+	mkdir -p "$1"
+	cd "$1" || return
+}
 
 cjq () {
 	if [ -z "$1" ]; then
@@ -212,8 +211,8 @@ refresh_prompt () {
 KEYTIMEOUT=50
 
 zle-keymap-select () {
-refresh_prompt "$1"
-zle reset-prompt
+	refresh_prompt "$1"
+	zle reset-prompt
 }
 
 zle -N zle-keymap-select

@@ -8,44 +8,6 @@ syntax on
 
 lua init = require('init')
 
-let g:mapleader = ' '
-let g:vim_indent_cont = 0
-
-"---------------------------------- Options -----------------------------------"
-set hidden
-set noexpandtab softtabstop=0 tabstop=4 shiftwidth=4
-set autoindent smartindent
-set list listchars=tab:⇥\ ,trail:·
-set cursorline colorcolumn=80,120
-set mouse=a
-set clipboard+=unnamedplus
-set completeopt=menu,menuone,noselect
-set incsearch nohlsearch
-set ignorecase smartcase
-set wildmenu wildmode=full
-set signcolumn=yes
-set autoread autowrite autowriteall
-set foldlevel=99 foldmethod=indent " foldexpr=nvim_treesitter#foldexpr()
-set foldopen=hor,mark,percent,quickfix,search,tag,undo
-set exrc secure " Project-local .nvimrc/.exrc configuration
-set scrolloff=3
-set diffopt+=vertical
-
-" Vertical insert / cmdline-insert:
-set guicursor=n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20
-" Block insert / cmdline-insert:
-" set guicursor=n-sm-c:block,r-cr-o-v:hor20
-
-set splitbelow splitright
-set regexpengine=0
-set lazyredraw
-set guifont=JetBrains\ Mono\ Nerd\ Font:h12
-set noshowmode
-set shortmess+=c
-set undofile
-set backupcopy=yes
-set inccommand=nosplit
-
 "---------------------------------- Autocmd -----------------------------------"
 augroup filetype_options
   autocmd!
@@ -200,41 +162,6 @@ function! s:nvimTreeToggle(find)
     endif
   endif
 endfunction
-
-"----------------------------- Buffer operations ------------------------------"
-" function! s:bufFilt(inc_cur)
-"   function! s:filtFn(include_current, idx, val)
-"     if !bufexists(a:val) ||
-"     \ !buflisted(a:val) ||
-"     \ buffer_name(a:val) =~? 'NERD_tree_*' ||
-"     \ (a:include_current && bufnr() == a:val)
-"       return v:false
-"     endif
-"     return v:true
-"   endfunction
-"   return filter(range(1, bufnr('$')), function('s:filtFn', [a:inc_cur]))
-" endfunction
-
-" function! s:DellAllBuf()
-"   wall
-"   silent execute 'bdelete ' . join(s:bufFilt(0))
-" endfunction
-
-" function! s:DellThisBuf()
-"   update
-"   bprevious | split | bnext | bdelete
-" endfunction
-
-" " Delete buffers except current
-" function! s:DelAllExcept()
-"   wall
-"   silent execute 'bdelete' join(s:bufFilt(1))
-" endfunction
-
-" " TODO
-" function! s:DelToLeft()
-"   silent execute 'bdelete' join(range(1, bufnr() - 1))
-" endfunction
 
 augroup formatprgs
   autocmd!
