@@ -32,11 +32,11 @@ function M.throttle(func, timeout)
   return function(...)
     local args = {...}
     if timer_id == nil then
-      func(args)
+      func(unpack(args))
       local function cb()
         timer_id = nil
         if did_call then
-          func(args)
+          func(unpack(args))
           did_call = false
         end
       end
@@ -189,11 +189,11 @@ end
 
 function M.glob_exists(path) return vim.fn.empty(vim.fn.glob(path)) == 0 end
 
-M.show_lsp_diagnostics = (function()
+do
   local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
   local cursor_pos = M.get_cursor_pos()
   local debounced = M.debounce(show_diagnostics, 300)
-  return function()
+  M.show_lsp_diagnostics = function()
     local cursor_pos2 = M.get_cursor_pos()
     -- TODO: doesn't work when both diagnostics and popup is shown
     if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
@@ -201,7 +201,7 @@ M.show_lsp_diagnostics = (function()
       debounced()
     end
   end
-end)()
+end
 
 function M.format_code()
   if vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype) or

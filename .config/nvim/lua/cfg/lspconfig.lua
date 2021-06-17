@@ -5,6 +5,7 @@ local root_pattern = require('lspconfig.util').root_pattern
 local lsp = vim.lsp
 local highlight = utils.highlight
 local u = utils.u
+local expand = vim.fn.expand
 
 highlight {'LspDiagnosticsUnderlineHint', gui = 'undercurl'}
 highlight {'LspDiagnosticsUnderlineInformation', gui = 'undercurl'}
@@ -97,8 +98,8 @@ lsp_config.sumneko_lua.setup {
       diagnostics = {globals = {'vim', 'dump', 'love'}},
       workspace = {
         library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          [expand('$VIMRUNTIME/lua')] = true,
+          [expand('$VIMRUNTIME/lua/vim/lsp')] = true,
         },
       },
     },
@@ -140,21 +141,23 @@ lsp_config.hls.setup {
   ),
 }
 
-local clangdcmd = {'clangd', '--background-index'}
-if vim.fn.empty(vim.fn.glob('compile_commands.json')) > 0 then
-  vim.tbl_extend('force', clangdcmd, {'--compile-commands-dir', 'build'})
-end
+do
+  local clangdcmd = {'clangd', '--background-index'}
+  if vim.fn.empty(vim.fn.glob('compile_commands.json')) > 0 then
+    vim.tbl_extend('force', clangdcmd, {'--compile-commands-dir', 'build'})
+  end
 
-lsp_config.clangd.setup {
-  cmd = clangdcmd,
-  filetypes = {'c', 'cpp', 'objc', 'objcpp'},
-  root_dir = root_pattern(
-    'CMakeLists.txt',
-    'compile_flags.txt',
-    '.git',
-    vim.fn.getcwd()
-  ),
-}
+  lsp_config.clangd.setup {
+    cmd = clangdcmd,
+    filetypes = {'c', 'cpp', 'objc', 'objcpp'},
+    root_dir = root_pattern(
+      'CMakeLists.txt',
+      'compile_flags.txt',
+      '.git',
+      vim.fn.getcwd()
+    ),
+  }
+end
 
 lsp_config.svelte.setup {}
 
@@ -174,15 +177,15 @@ lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 lsp_config.solargraph.setup {}
 
 if vim.fn.has("win64") then
-  local jdt_base = vim.fn.expand(
+  local jdt_base = expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )
-  local java_home = vim.fn.expand("C:/Program Files/Java/jdk-11.0.11")
-  local gradle_home = vim.fn.expand("C:/Program Files/Gradle/gradle-6.5.1")
+  local java_home = expand("C:/Program Files/Java/jdk-11.0.11")
+  local gradle_home = expand("C:/Program Files/Gradle/gradle-6.5.1")
 
   lsp_config.jdtls.setup {
     cmd = {
-      vim.fn.expand(java_home .. "/bin/java.exe"),
+      expand(java_home .. "/bin/java.exe"),
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
       "-Dosgi.bundles.defaultStartLevel=4",
       "-Declipse.product=org.eclipse.jdt.ls.core.product",
@@ -190,14 +193,14 @@ if vim.fn.has("win64") then
       "-Dlog.level=ALL",
       "-Xmx1G",
       "-jar",
-      vim.fn.expand(
+      expand(
         jdt_base ..
         "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
       ),
       "-configuration",
-      vim.fn.expand(jdt_base .. "/config_win"),
+      expand(jdt_base .. "/config_win"),
       "-data",
-      vim.fn.expand("~/Projects/jdt-ls-data"),
+      expand("~/Projects/jdt-ls-data"),
       "--add-modules=ALL-SYSTEM",
       "--add-opens",
       "java.base/java.util=ALL-UNNAMED",
@@ -223,7 +226,7 @@ if vim.fn.has("win64") then
 
   lsp_config.kotlin_language_server.setup {
     cmd = {
-      vim.fn.expand(
+      expand(
         "~/Projects/kotlin-language-server/server/build/install" ..
         "/server/bin/kotlin-language-server.bat"
       ),
