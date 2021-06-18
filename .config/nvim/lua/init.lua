@@ -38,6 +38,7 @@ vim.g.base16_theme = 'default-dark'
 local ok, base16 = pcall(require, 'base16-colorscheme')
 if ok then base16.setup(vim.g.base16_theme) end
 
+require('lsp_handlers').patch_lsp_handlers()
 utils.load('plugins')
 utils.load('tabline')
 utils.load('statusline')

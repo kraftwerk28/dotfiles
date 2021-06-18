@@ -248,4 +248,16 @@ for _, mode in ipairs {'', 'n', 'i', 'c', 'x'} do
   end
 end
 
+function M.log_time(fn, label)
+  return function(...)
+    local now = os.clock()
+    fn(...)
+    print(
+      ((label and (label .. ' ')) or '') ..
+      (math.floor((os.clock() - now) * 1e6) / 1000) ..
+      "ms."
+    )
+  end
+end
+
 return M

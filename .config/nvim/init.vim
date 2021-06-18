@@ -265,6 +265,11 @@ augroup LSP_highlight
 augroup END
 autocmd! LSP_highlight
 
+" augroup display_signature_help
+"   autocmd!
+"   autocmd CursorMoved <buffer> lua vim.lsp.buf.signature_help()
+" augroup END
+
 function! PasteBlock()
   execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
   normal! p
