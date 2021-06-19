@@ -39,6 +39,10 @@ function M.patch_lsp_handlers()
     return self._handlers[method] or {}
   end
 
+  function emitter:replace_all(method, handler)
+    self._handlers[method] = {handler}
+  end
+
   local emitter_mt = {
     __index = function(self, method)
         local handlers = self._handlers
@@ -53,7 +57,13 @@ function M.patch_lsp_handlers()
     __newindex = function(self, method, handler)
       local handlers = self._handlers
       if handlers[method] == nil then handlers[method] = {} end
+      if handler == nil then
+        -- Clear handlers for this method
+        handlers[method] = {}
+        return
+      end
       if vim.tbl_contains(handlers[method], handler) then
+        -- Skip adding multiple same handlers
         return
       end
       table.insert(handlers[method], handler)
