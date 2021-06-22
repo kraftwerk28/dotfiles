@@ -377,7 +377,7 @@ nnoremap <silent> <F3> :call <SID>nvimTreeToggle(0)<CR>
 nnoremap <silent> <Leader><F3> :call <SID>nvimTreeToggle(1)<CR>
 
 " Search tool
-nnoremap <silent> <C-P> :lua require'telescope.builtin'.find_files({ previewer = false })<CR>
+nnoremap <silent> <C-P> :Telescope find_files<CR>
 nnoremap <silent> <Leader>rg :Telescope live_grep<CR>
 nnoremap <silent> <Leader>b :Telescope buffers<CR>
 nnoremap <silent> <C-B> :Telescope buffers<CR>

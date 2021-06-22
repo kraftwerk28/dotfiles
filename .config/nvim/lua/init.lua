@@ -33,7 +33,7 @@ function M.yank_highlight()
   end
 end
 
-vim.g.base16_theme = 'default-dark'
+vim.g.base16_theme = "default-dark"
 
 local ok, base16 = pcall(require, 'base16-colorscheme')
 if ok then base16.setup(vim.g.base16_theme) end
@@ -42,5 +42,39 @@ require('lsp_handlers').patch_lsp_handlers()
 utils.load('plugins')
 utils.load('tabline')
 utils.load('statusline')
+
+if vim.fn.has("unix") then
+  -- Listen for :help call from .desktop python script
+  pcall(vim.fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
+end
+
+-- do
+--   local curl = require('plenary.curl')
+--   curl.get{
+--     url = "https://api.github.com/search/repositories",
+--     query = {
+--       q = "vim-surround",
+--       per_page = 1,
+--     },
+--     raw = {
+--       '-H',
+--       "Authorization: token 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",
+--     },
+--     callback = vim.schedule_wrap(function(res)
+--       local norm_headers = {}
+--       for _, h in ipairs(res.headers) do
+--         local name, value = h:match("(%w+):%s*(%w+)")
+--         if name ~= nil then
+--           norm_headers[name] = value
+--         end
+--       end
+--       dump(norm_headers)
+--       dump(vim.fn.json_decode(res.body))
+--     end),
+--   }
+-- end
+
+do
+end
 
 return M

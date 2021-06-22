@@ -236,6 +236,10 @@ if vim.fn.has("win64") then
   }
 end
 
+if vim.fn.has("unix") then
+  lsp_config.kotlin_language_server.setup {}
+end
+
 local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 local function setup_hover()
   local method = 'textDocument/hover'
@@ -257,7 +261,7 @@ local function setup_diagnostics()
   local diagnostics_handler = lsp.with(
     lsp.diagnostic.on_publish_diagnostics, on_publish_cfg
   )
-  lsp.handlers[method] = diagnostics_handler
+  lsp.handlers:replace_all(method, diagnostics_handler)
   if USE_DIAGNOSTIC_QUICKFIX then
     lsp.handlers[method] = function(...)
       diagnostics_handler(...)

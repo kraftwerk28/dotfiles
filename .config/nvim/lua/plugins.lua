@@ -40,26 +40,49 @@ local function load(use)
       'nvim-lua/plenary.nvim',
     },
     config = function()
-      local telescope = require 'telescope'
-      local actions = require 'telescope.actions'
+      local pickers = require('telescope.pickers')
+      local finders = require('telescope.finders')
+      local sorters = require('telescope.sorters')
+
+      _G.base16 = function(opts)
+        local results = {}
+        for i = 1, 50 do
+          table.insert(results, 'Result #' .. i)
+        end
+        pickers:new(opts, {
+          prompt_title = "base16 themes",
+          finder = finders.new_table {
+            results = results,
+          },
+          sorter = sorters.fuzzy_with_index_bias(),
+        }):find()
+      end
+
+      local telescope = require('telescope')
+      local actions = require('telescope.actions')
       local u = require'utils'.u
       -- local previewers = require 'telescope.previewers'
-      local cfg = {
-        sorting_strategy = 'ascending',
-        prompt_prefix = u 'f002' .. ' ',
-        prompt_position = 'top',
-        selection_caret = u 'f054' .. ' ',
-        color_devicons = true,
-        scroll_strategy = 'cycle',
-        mappings = {
-          i = {
-            ['<C-K>'] = actions.move_selection_previous,
-            ['<C-J>'] = actions.move_selection_next,
-            ['<Esc>'] = actions.close,
+      telescope.setup {
+        defaults = {
+          sorting_strategy = 'ascending',
+          prompt_prefix = u 'f002' .. ' ',
+          prompt_position = 'top',
+          selection_caret = u 'f054' .. ' ',
+          color_devicons = true,
+          scroll_strategy = "cycle",
+          mappings = {
+            i = {
+              ['<C-K>'] = actions.move_selection_previous,
+              ['<C-J>'] = actions.move_selection_next,
+              ['<Esc>'] = actions.close,
+            },
           },
         },
+        pickers = {
+          find_files = {previewer = false, theme = "dropdown"},
+        },
+        extensions = {}
       }
-      telescope.setup {defaults = cfg}
     end,
   }
 
@@ -191,7 +214,7 @@ local function load(use)
         vim.g['neoformat_enabled_' .. ft] = {}
       end
       vim.g.neoformat_try_formatprg = 1
-      vim.g.neoformat_run_all_formatters = 0
+      vim.g.neoformat_run_all_formatters = 1
     end,
   }
 end

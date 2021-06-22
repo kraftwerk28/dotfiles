@@ -46,3 +46,5 @@ export NVS_HOME="$HOME/.nvs"
 # Haskell stuff
 export PATH="$PATH:$HOME/.cabal/bin/"
 export PATH="$PATH:$HOME/.ghcup/bin/"
+
+export NVIM_LISTEN_PORT=6969

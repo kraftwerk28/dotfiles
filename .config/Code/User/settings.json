@@ -224,10 +224,7 @@
   "workbench.list.smoothScrolling": true,
   "workbench.colorTheme": "Ayu Mirage",
   "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
-  "workbench.editorAssociations": [
-    {
-      "viewType": "jupyter.notebook.ipynb",
-      "filenamePattern": "*.ipynb"
-    }
-  ]
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  }
 }
