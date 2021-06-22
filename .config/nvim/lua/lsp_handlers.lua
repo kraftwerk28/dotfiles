@@ -43,32 +43,31 @@ function M.patch_lsp_handlers()
     self._handlers[method] = {handler}
   end
 
-  local emitter_mt = {
-    __index = function(self, method)
-        local handlers = self._handlers
-        if handlers[method] == nil then return nil end
-        if #handlers[method] == 1 then return handlers[method][1] end
-        return function(...)
-          for _, handler in ipairs(handlers[method]) do
-            handler(...)
-          end
-        end
-    end,
-    __newindex = function(self, method, handler)
+  local emitter_mt = {}
+  function emitter_mt:__index(method)
       local handlers = self._handlers
-      if handlers[method] == nil then handlers[method] = {} end
-      if handler == nil then
-        -- Clear handlers for this method
-        handlers[method] = {}
-        return
+      if handlers[method] == nil then return nil end
+      if #handlers[method] == 1 then return handlers[method][1] end
+      return function(...)
+        for _, handler in ipairs(handlers[method]) do
+          handler(...)
+        end
       end
-      if vim.tbl_contains(handlers[method], handler) then
-        -- Skip adding multiple same handlers
-        return
-      end
-      table.insert(handlers[method], handler)
-    end,
-  }
+  end
+  function emitter_mt:__newindex(method, handler)
+    local handlers = self._handlers
+    if handlers[method] == nil then handlers[method] = {} end
+    if handler == nil then
+      -- Clear handlers for this method
+      handlers[method] = {}
+      return
+    end
+    if vim.tbl_contains(handlers[method], handler) then
+      -- Skip adding multiple same handlers
+      return
+    end
+    table.insert(handlers[method], handler)
+  end
 
   setmetatable(emitter, emitter_mt)
 
