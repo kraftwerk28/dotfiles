@@ -281,11 +281,11 @@ let g:neovide_fullscreen = v:true
 "--------------------------------- Mappings -----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
-if has('nvim')
-  nnoremap j gj
-  nnoremap k gk
-  nnoremap gj j
-  nnoremap gk k
+if has("nvim")
+  nnoremap <silent> j gj
+  nnoremap <silent> k gk
+  nnoremap <silent> gj j
+  nnoremap <silent> gk k
 endif
 
 " Arrow movement mappings
