@@ -176,12 +176,11 @@ lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
 
 lsp_config.solargraph.setup {}
 
-if vim.fn.has("win64") then
+if vim.fn.has("win64") == 1 then
   local jdt_base = expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )
   local java_home = expand("C:/Program Files/Java/jdk-11.0.11")
-  local gradle_home = expand("C:/Program Files/Gradle/gradle-6.5.1")
 
   lsp_config.jdtls.setup {
     cmd = {
@@ -202,26 +201,11 @@ if vim.fn.has("win64") then
       "-data",
       expand("~/Projects/jdt-ls-data"),
       "--add-modules=ALL-SYSTEM",
-      "--add-opens",
-      "java.base/java.util=ALL-UNNAMED",
-      "--add-opens",
-      "java.base/java.lang=ALL-UNNAMED",
+      "--add-opens", "java.base/java.util=ALL-UNNAMED",
+      "--add-opens", "java.base/java.lang=ALL-UNNAMED",
     },
     filetypes = {"java"},
     root_dir = root_pattern(".git"),
-    -- settings = {
-    --   java = {
-    --     home = java_home,
-    --     trace = {server = "verbose"},
-    --     import = {
-    --       gradle = {
-    --         wrapper = {enabled = false},
-    --         enabled = true
-    --       },
-    --     },
-    --     autobuild = {enabled = true},
-    --   },
-    -- },
   }
 
   lsp_config.kotlin_language_server.setup {
@@ -232,11 +216,21 @@ if vim.fn.has("win64") then
       ),
     },
     filetypes = {"kotlin"},
-    root_dir = root_pattern("build.gradle", ".git", vim.fn.getcwd()),
+    root_dir = root_pattern("build.gradle", ".git"),
+  }
+
+  lsp_config.groovyls.setup {
+    cmd = {
+      "java", "-jar",
+      expand(
+        "~/Projects/groovy-language-server" ..
+        "/build/libs/groovy-language-server-all.jar"
+      ),
+    },
   }
 end
 
-if vim.fn.has("unix") then
+if vim.fn.has("unix") == 1 then
   lsp_config.kotlin_language_server.setup {}
 end
 
