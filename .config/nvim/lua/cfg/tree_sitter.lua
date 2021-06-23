@@ -39,7 +39,7 @@ local enabled_windows = {
 }
 
 local ensure_installed
-if vim.fn.has("unix") > 0 then
+if vim.fn.has("unix") == 1 then
   ensure_installed = enabled_linux
 else
   ensure_installed = enabled_windows
