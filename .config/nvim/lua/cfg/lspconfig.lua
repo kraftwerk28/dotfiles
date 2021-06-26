@@ -216,7 +216,10 @@ if vim.fn.has("win64") == 1 then
       ),
     },
     filetypes = {"kotlin"},
-    root_dir = root_pattern("build.gradle"),
+    settings = {
+      kotlin = {compiler = {jvm = {target = "1.8"}}},
+    },
+    root_dir = root_pattern("build.gradle", "build.gradle.kts"),
   }
 
   lsp_config.groovyls.setup {
