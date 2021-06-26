@@ -216,12 +216,13 @@ if vim.fn.has("win64") == 1 then
       ),
     },
     filetypes = {"kotlin"},
-    root_dir = root_pattern("build.gradle", ".git"),
+    root_dir = root_pattern("build.gradle"),
   }
 
   lsp_config.groovyls.setup {
     cmd = {
-      "java", "-jar",
+      "java",
+      "-jar",
       expand(
         "~/Projects/groovy-language-server" ..
         "/build/libs/groovy-language-server-all.jar"
