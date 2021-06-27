@@ -205,7 +205,7 @@ if vim.fn.has("win64") == 1 then
       "--add-opens", "java.base/java.lang=ALL-UNNAMED",
     },
     filetypes = {"java"},
-    root_dir = root_pattern(".git"),
+    root_dir = root_pattern(".git", "build.gradle", "build.gradle.kts"),
   }
 
   lsp_config.kotlin_language_server.setup {

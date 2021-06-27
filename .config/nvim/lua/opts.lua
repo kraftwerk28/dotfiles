@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+local o = vim.opt
 
 local opts = {
   hidden = true,
@@ -55,8 +56,17 @@ local opts = {
 }
 
 for k, v in pairs(opts) do
-  vim.opt[k] = v
+  o[k] = v
 end
 
-vim.opt.shortmess:append("c")
-vim.opt.diffopt:append("vertical")
+o.shortmess:append("c")
+o.diffopt:append("vertical")
+
+if vim.fn.has("win64") then
+  o.shell = "powershell.exe"
+  o.shellquote = ""
+  o.shellpipe = "|"
+  o.shellxquote = ""
+  o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+  o.shellredir = "| Out-File -Encoding UTF8"
+end
