@@ -48,7 +48,6 @@ local opts = {
   splitright = true,
   regexpengine = 0,
   lazyredraw = true,
-  guifont = "JetBrains Mono Nerd Font:h12",
   showmode = false,
   undofile = true,
   backupcopy = "yes",
@@ -62,7 +61,8 @@ end
 o.shortmess:append("c")
 o.diffopt:append("vertical")
 
-if vim.fn.has("win64") then
+if vim.fn.has("win64") == 1 then
+  o.guifont = "JetBrainsMono NF:h18"
   o.shell = "powershell.exe"
   o.shellquote = ""
   o.shellpipe = "|"

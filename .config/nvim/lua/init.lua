@@ -38,12 +38,19 @@ vim.g.base16_theme = "default-dark"
 local ok, base16 = pcall(require, 'base16-colorscheme')
 if ok then base16.setup(vim.g.base16_theme) end
 
+do
+  vim.g.neovide_fullscreen = true
+  vim.g.neovide_refresh_rate = 60
+  vim.g.neovide_fullscreen = true
+  vim.env.NeovideMultiGrid = 1
+end
+
 require('lsp_handlers').patch_lsp_handlers()
 utils.load('plugins')
 utils.load('tabline')
 utils.load('statusline')
 
-if vim.fn.has("unix") then
+if vim.fn.has("unix") == 1 then
   -- Listen for :help call from .desktop python script
   pcall(vim.fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 end

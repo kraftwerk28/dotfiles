@@ -275,9 +275,6 @@ function! PasteBlock()
   normal! p
 endfunction
 
-"------------------------------- Neovide stuff --------------------------------"
-let g:neovide_fullscreen = v:true
-
 "--------------------------------- Mappings -----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
