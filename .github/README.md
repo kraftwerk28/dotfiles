@@ -13,7 +13,7 @@
 
 Neovim (0.5) configs aren't completely in Lua, because not all APIs
 have alternative functions (at least native).
-Autocommands, mappings and settings are in
+Autocommands and mappings are in
 [Vimscript](../.config/nvim/init.vim),
 everything else - in [Lua](../.config/nvim/lua).
 
