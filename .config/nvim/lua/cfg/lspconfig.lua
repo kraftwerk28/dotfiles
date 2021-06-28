@@ -208,20 +208,6 @@ if vim.fn.has("win64") == 1 then
     root_dir = root_pattern(".git", "build.gradle", "build.gradle.kts"),
   }
 
-  lsp_config.kotlin_language_server.setup {
-    cmd = {
-      expand(
-        "~/Projects/kotlin-language-server/server/build/install" ..
-        "/server/bin/kotlin-language-server.bat"
-      ),
-    },
-    filetypes = {"kotlin"},
-    settings = {
-      kotlin = {compiler = {jvm = {target = "1.8"}}},
-    },
-    root_dir = root_pattern("build.gradle", "build.gradle.kts"),
-  }
-
   lsp_config.groovyls.setup {
     cmd = {
       "java",
@@ -234,8 +220,22 @@ if vim.fn.has("win64") == 1 then
   }
 end
 
-if vim.fn.has("unix") == 1 then
-  lsp_config.kotlin_language_server.setup {}
+do
+  local kt_cmd
+  if vim.fn.has("win64") == 1 then
+    kt_cmd = {
+      expand(
+        "~/Projects/kotlin-language-server/server/build/install" ..
+        "/server/bin/kotlin-language-server.bat"
+      ),
+    }
+  end
+  lsp_config.kotlin_language_server.setup {
+    cmd = kt_cmd,
+    filetypes = {"kotlin"},
+    settings = {kotlin = {compiler = {jvm = {target = "1.8"}}}},
+    root_dir = root_pattern("build.gradle", "build.gradle.kts"),
+  }
 end
 
 local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
@@ -290,6 +290,15 @@ local function setup_formatting()
   local method = 'textDocument/formatting'
   local defaut_handler = lsp.handlers[method]
   lsp.handlers:replace_all(method, function(...)
+    -- local err, method, result, client_id, bufnr, config = ...
+    -- dump {
+    --   err = err,
+    --   method = method,
+    --   result = result,
+    --   client_id = client_id,
+    --   bufnr = bufnr,
+    --   config = config,
+    -- }
     local err = ...
     if err == nil then
       defaut_handler(...)

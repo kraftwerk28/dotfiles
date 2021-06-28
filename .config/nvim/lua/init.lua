@@ -5,8 +5,14 @@ local highlight = require('vim.highlight')
 utils.load('opts')
 
 -- :Neoformat will be always ran in these filetypes
+-- If LSP isn't capable to do nice formatting, I place that filetype below
 vim.g.force_neoformat_filetypes = {
-  'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'lua',
+  "typescript",
+  "typescriptreact",
+  "javascript",
+  "javascriptreact",
+  "lua",
+  "python",
 }
 
 M.format_code = utils.format_code
@@ -81,7 +87,14 @@ end
 --   }
 -- end
 
-do
+function _G.startyank()
+  local function y(n)
+    if n > 0 then
+      vim.cmd('norm jye')
+      vim.defer_fn(function() y(n - 1) end, 300)
+    end
+  end
+  y(4)
 end
 
 return M

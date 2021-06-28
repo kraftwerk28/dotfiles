@@ -128,6 +128,7 @@ alias vi="nvim"
 alias v="nvim"
 alias im="nvim"
 alias vin="nvim"
+alias updatenvim="yay -S --needed --noconfirm neovim-git"
 alias ndoe="node"
 alias nvimcfg="cd $HOME/.config/nvim"
 
@@ -231,3 +232,5 @@ bindkey -M viins "^N" down-history
 
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+tabs -4

@@ -155,7 +155,6 @@ local function load(use)
 
   use {
     'SirVer/ultisnips',
-    disable = true,
     config = function()
       vim.g.UltiSnipsExpandTrigger = '<F10>'
       vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
@@ -203,16 +202,10 @@ local function load(use)
   use {
     'sbdchd/neoformat',
     config = function()
-      local disable_fmt = {
-        'javascript',
-        'typescript',
-        'javascriptreact',
-        'typescriptreact',
-        'lua',
-      }
-      for _, ft in ipairs(disable_fmt) do
+      for _, ft in ipairs(vim.g.force_neoformat_filetypes) do
         vim.g['neoformat_enabled_' .. ft] = {}
       end
+      vim.g["neoformat_enabled_python"] = {"autopep8"}
       vim.g.neoformat_try_formatprg = 1
       vim.g.neoformat_run_all_formatters = 1
     end,

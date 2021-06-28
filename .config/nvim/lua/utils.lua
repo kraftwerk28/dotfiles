@@ -47,17 +47,6 @@ function M.throttle(func, timeout)
   end
 end
 
-function M.format_formatprg()
-  local ok, formatprg = pcall(function() return vim.bo.formatprg end)
-  if ok and #formatprg > 0 then
-    local view = vim.fn.winsaveview()
-    vim.cmd('normal gggqG')
-    vim.fn.winrestview(view)
-    return true
-  end
-  return false
-end
-
 -- Convert UTF-8 hex code to character
 function M.u(code)
   if type(code) == 'string' then
@@ -204,8 +193,10 @@ do
 end
 
 function M.format_code()
-  if vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype) or
-    vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+  if
+    vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype)
+    or vim.tbl_isempty(vim.lsp.buf_get_clients(0))
+  then
     vim.cmd('Neoformat')
   else
     vim.lsp.buf.formatting()
