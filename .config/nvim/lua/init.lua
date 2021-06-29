@@ -1,8 +1,22 @@
 local M = {}
 
-local utils = require('utils')
-local highlight = require('vim.highlight')
-utils.load('opts')
+local utils = require("utils")
+local highlight = require("vim.highlight")
+local load = utils.load
+
+M.format_code = utils.format_code
+
+function M.yank_highlight()
+  if highlight ~= nil then
+    highlight.on_yank {timeout = 1000}
+  end
+end
+
+do
+  vim.g.base16_theme = "default-dark"
+  local ok, base16 = pcall(require, "base16-colorscheme")
+  if ok then base16.setup(vim.g.base16_theme) end
+end
 
 -- :Neoformat will be always ran in these filetypes
 -- If LSP isn't capable to do nice formatting, I place that filetype below
@@ -14,47 +28,14 @@ vim.g.force_neoformat_filetypes = {
   "lua",
   "python",
 }
-
-M.format_code = utils.format_code
-M.map = utils.map
-utils.nnoremap(
-  'dbb',
-  function() vim.api.nvim_buf_delete(0, {}) end,
-  {silent = true}
-)
-utils.nnoremap(
-  'dbo',
-  function() utils.delete_bufs(false) end,
-  {silent = true}
-)
-utils.nnoremap(
-  'dba',
-  function() utils.delete_bufs(true) end,
-  {silent = true}
-)
-
-function M.yank_highlight()
-  if highlight ~= nil then
-    highlight.on_yank {timeout = 1000}
-  end
-end
-
-vim.g.base16_theme = "default-dark"
-
-local ok, base16 = pcall(require, 'base16-colorscheme')
-if ok then base16.setup(vim.g.base16_theme) end
-
-do
-  vim.g.neovide_fullscreen = true
-  vim.g.neovide_refresh_rate = 60
-  vim.g.neovide_fullscreen = true
-  vim.env.NeovideMultiGrid = 1
-end
+vim.g.neovide_refresh_rate = 60
 
 require('lsp_handlers').patch_lsp_handlers()
-utils.load('plugins')
-utils.load('tabline')
-utils.load('statusline')
+load("mappings")
+load("opts")
+load("plugins")
+load("tabline")
+load("statusline")
 
 if vim.fn.has("unix") == 1 then
   -- Listen for :help call from .desktop python script
@@ -86,15 +67,5 @@ end
 --     end),
 --   }
 -- end
-
-function _G.startyank()
-  local function y(n)
-    if n > 0 then
-      vim.cmd('norm jye')
-      vim.defer_fn(function() y(n - 1) end, 300)
-    end
-  end
-  y(4)
-end
 
 return M
