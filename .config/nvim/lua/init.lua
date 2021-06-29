@@ -42,30 +42,4 @@ if vim.fn.has("unix") == 1 then
   pcall(vim.fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 end
 
--- do
---   local curl = require('plenary.curl')
---   curl.get{
---     url = "https://api.github.com/search/repositories",
---     query = {
---       q = "vim-surround",
---       per_page = 1,
---     },
---     raw = {
---       '-H',
---       "Authorization: token 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",
---     },
---     callback = vim.schedule_wrap(function(res)
---       local norm_headers = {}
---       for _, h in ipairs(res.headers) do
---         local name, value = h:match("(%w+):%s*(%w+)")
---         if name ~= nil then
---           norm_headers[name] = value
---         end
---       end
---       dump(norm_headers)
---       dump(vim.fn.json_decode(res.body))
---     end),
---   }
--- end
-
 return M
