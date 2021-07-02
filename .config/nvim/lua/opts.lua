@@ -62,7 +62,8 @@ o.shortmess:append("c")
 o.diffopt:append("vertical")
 
 if vim.fn.has("win64") == 1 then
-  o.guifont = "JetBrainsMono NF:h18"
+  -- Obsolette after I switched to nvim-qt:
+  -- o.guifont = "JetBrainsMono NF:h18"
   o.shell = "powershell.exe"
   o.shellquote = ""
   o.shellpipe = "|"
