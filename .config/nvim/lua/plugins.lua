@@ -209,6 +209,8 @@ local function load(use)
       vim.g.neoformat_run_all_formatters = 1
     end,
   }
+
+  use {"equalsraf/neovim-gui-shim", opt = true}
 end
 
 return function()
