@@ -12,17 +12,6 @@ do
 end
 
 vim.g.mapleader = " "
-
--- :Neoformat will be always ran in these filetypes
--- If LSP isn't capable to do nice formatting, I place that filetype below
-vim.g.force_neoformat_filetypes = {
-  "typescript",
-  "typescriptreact",
-  "javascript",
-  "javascriptreact",
-  "lua",
-  "python",
-}
 vim.g.neovide_refresh_rate = 60
 
 if vim.go.term == "nvim" then

@@ -365,9 +365,15 @@ nnoremap <Leader>O O<Esc>
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
 " Commenting
-nmap <silent> <C-_> gcc
-imap <silent> <C-_> <C-O>:normal gcc<CR>
-xmap <silent> <C-_> gc
+if &term ==? "nvim"
+  nmap <silent> <C-/> gcc
+  imap <silent> <C-/> <C-O>:normal gcc<CR>
+  xmap <silent> <C-/> gc
+else
+  nmap <silent> <C-_> gcc
+  imap <silent> <C-_> <C-O>:normal gcc<CR>
+  xmap <silent> <C-_> gc
+endif
 
 " File explorer
 nnoremap <silent> <F3> :call <SID>nvimTreeToggle(0)<CR>
