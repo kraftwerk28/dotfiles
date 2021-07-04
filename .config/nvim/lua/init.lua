@@ -14,10 +14,6 @@ end
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 
-if vim.go.term == "nvim" then
-  vim.cmd("packadd neovim-gui-shim")
-end
-
 require('lsp_handlers').patch_lsp_handlers()
 
 load("mappings")
