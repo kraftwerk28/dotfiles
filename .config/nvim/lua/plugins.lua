@@ -195,6 +195,7 @@ local function load(use)
       vim.g.nvim_tree_quit_on_open = 1
       vim.g.nvim_tree_disable_netrw = 0
       vim.g.nvim_tree_hijack_netrw = 1
+      vim.g.nvim_tree_width_allow_resize = 1
     end,
   }
 
@@ -225,8 +226,9 @@ end
 
 return function()
   local sprintf = require('utils').sprintf
-  local packer_install_path = vim.fn.stdpath('data') ..
-                                '/site/pack/packer/opt/packer.nvim'
+  local packer_install_path =
+    vim.fn.stdpath('data') ..
+    '/site/pack/packer/opt/packer.nvim'
   local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) > 0
 
   if not_installed then

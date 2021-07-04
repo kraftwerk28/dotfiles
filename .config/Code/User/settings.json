@@ -70,7 +70,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "window.customMenuBarAltFocus": false,
   "tslint.packageManager": "npm",
@@ -226,5 +226,12 @@
   "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
   "workbench.editorAssociations": {
     "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": true,
+    "markdown": false
   }
 }

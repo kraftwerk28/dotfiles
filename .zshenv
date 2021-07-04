@@ -9,6 +9,8 @@ export PATH="$PATH:$HOME/.scripts"
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUSTC_WRAPPER=sccache
 
+export JAVA_HOME="/usr/lib/jvm/default"
+
 # android
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
