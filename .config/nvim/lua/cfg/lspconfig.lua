@@ -221,18 +221,25 @@ if vim.fn.has("win64") == 1 then
 end
 
 do
-  local kt_cmd
+  local cmd, cmd_env
   if vim.fn.has("win64") == 1 then
-    kt_cmd = {
+    cmd = {
       expand(
         "~/Projects/kotlin-language-server/server/build/install" ..
         "/server/bin/kotlin-language-server.bat"
       ),
     }
   end
+  if vim.fn.has("unix") == 1 then
+    local jdk_home = "/usr/lib/jvm/java-11-openjdk"
+    cmd_env = {
+      PATH = jdk_home .. "/bin:" .. vim.env.PATH,
+      JAVA_HOME = jdk_home,
+    }
+  end
   lsp_config.kotlin_language_server.setup {
-    cmd = kt_cmd,
-    filetypes = {"kotlin"},
+    cmd = cmd,
+    cmd_env = cmd_env,
     settings = {kotlin = {compiler = {jvm = {target = "1.8"}}}},
     root_dir = root_pattern("build.gradle", "build.gradle.kts"),
   }
