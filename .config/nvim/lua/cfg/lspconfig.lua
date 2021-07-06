@@ -299,7 +299,7 @@ local function setup_formatting()
   lsp.handlers:replace_all(method, function(...)
     -- local err, method, result, client_id, bufnr, config = ...
     -- dump {
-    --   err = err,
+    --   err = (...)[1],
     --   method = method,
     --   result = result,
     --   client_id = client_id,

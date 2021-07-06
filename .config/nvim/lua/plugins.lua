@@ -204,7 +204,7 @@ local function load(use)
     config = function()
       -- :Neoformat will be always ran in these filetypes
       -- If LSP isn't capable to do nice formatting, I place that filetype below
-      local force_neoformat_filetypes = {
+      vim.g.force_neoformat_filetypes = {
         "typescript",
         "typescriptreact",
         "javascript",
@@ -212,7 +212,7 @@ local function load(use)
         "lua",
         "python",
       }
-      for _, ft in ipairs(force_neoformat_filetypes) do
+      for _, ft in ipairs(vim.g.force_neoformat_filetypes) do
         vim.g['neoformat_enabled_' .. ft] = {}
       end
       vim.g["neoformat_enabled_python"] = {"autopep8"}

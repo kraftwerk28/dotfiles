@@ -51,6 +51,7 @@ local opts = {
   undofile = true,
   backupcopy = "yes",
   inccommand = "nosplit",
+  title = true,
 }
 
 for k, v in pairs(opts) do
