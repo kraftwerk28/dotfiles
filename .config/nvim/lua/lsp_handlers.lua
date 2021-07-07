@@ -45,14 +45,14 @@ function M.patch_lsp_handlers()
 
   local emitter_mt = {}
   function emitter_mt:__index(method)
-      local handlers = self._handlers
-      if handlers[method] == nil then return nil end
-      if #handlers[method] == 1 then return handlers[method][1] end
-      return function(...)
-        for _, handler in ipairs(handlers[method]) do
-          handler(...)
-        end
+    local handlers = self._handlers
+    if handlers[method] == nil then return nil end
+    if #handlers[method] == 1 then return handlers[method][1] end
+    return function(...)
+      for _, handler in ipairs(handlers[method]) do
+        handler(...)
       end
+    end
   end
   function emitter_mt:__newindex(method, handler)
     local handlers = self._handlers
