@@ -7,7 +7,7 @@
   - [Kitty config](../.config/kitty/kitty.conf)
   - [OpenTTD config](../.openttd/openttd.cfg)
   - [Yay config](../.config/yay/config.json)
-  - [ZShell dots](../.zshrc)
+  - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
   - [VSCode config](../.config/Code/User/settings.json)
     (obsolette, since I almost don't use it anymore)
 
