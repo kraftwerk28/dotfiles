@@ -43,7 +43,6 @@ local function load(use)
       -- local pickers = require('telescope.pickers')
       -- local finders = require('telescope.finders')
       -- local sorters = require('telescope.sorters')
-
       -- _G.base16 = function(opts)
       --   local results = {}
       --   for i = 1, 50 do
@@ -65,8 +64,9 @@ local function load(use)
       telescope.setup {
         defaults = {
           sorting_strategy = "ascending",
-          prompt_prefix = u"f002" .. ' ',
-          layout_config = {vertical = {mirror = true}},
+          prompt_prefix = u"f002" .. " ",
+          layout_strategy = "horizontal",
+          layout_config = {prompt_position = "top"},
           selection_caret = u"f054" .. ' ',
           color_devicons = true,
           scroll_strategy = "cycle",

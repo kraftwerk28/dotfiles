@@ -26,13 +26,6 @@ for dir in $(ls "/usr/lib/jvm/"); do
   fi
 done
 
-alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
-dotfilesupd () {
-	dotfiles add -u && \
-	dotfiles commit "$@" && \
-	dotfiles push origin HEAD
-}
-
 alias gst="git status"
 alias gco="git checkout"
 alias gcb="git checkout -b"
@@ -42,10 +35,11 @@ alias ....="../../.."
 alias .....="../../../.."
 alias ......="../../../../.."
 
-cjq () {
-	if [ -z "$1" ]; then
-		echo "Usage: mkcd <dirname>"
+mkcd () {
+	if [[ -z "$1" ]]; then
+		echo "Usage: mkcd <dir>" 1>&2
 		return 1
 	fi
-	cat "$1" | jq
+	mkdir -p $1
+	cd $1
 }

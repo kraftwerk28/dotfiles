@@ -1,3 +1,4 @@
+# zmodload zsh/zprof
 setopt appendhistory autocd
 
 fpath=(~/.zfunc $fpath)
@@ -6,6 +7,9 @@ plugdir="/usr/share/zsh/plugins"
 source $plugdir/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 source $plugdir/zsh-z/zsh-z.plugin.zsh
 source $plugdir/zsh-extract/extract.plugin.zsh
+
+autoload -U select-word-style
+select-word-style bash
 
 for cfg in ~/.config/zsh/*.zsh; do
 	source $cfg
@@ -39,9 +43,9 @@ bindkey -M viins "^?" backward-delete-char
 bindkey -M viins "^W" backward-kill-word
 bindkey -M viins "^P" up-history
 bindkey -M viins "^N" down-history
-bindkey -s '^[l' 'ls\n'
 
 export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
 	source "$NVM_DIR/nvm.sh" --no-use
 fi
+# zprof
