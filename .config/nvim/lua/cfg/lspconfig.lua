@@ -248,10 +248,7 @@ end
 local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 local function setup_hover()
   local method = 'textDocument/hover'
-  lsp.handlers:replace_all(
-    method,
-    lsp.with(lsp.handlers[method], {border = win_border})
-  )
+  lsp.handlers[method] = lsp.with(lsp.handlers[method], {border = win_border})
 end
 
 local USE_DIAGNOSTIC_QUICKFIX = false
@@ -266,7 +263,8 @@ local function setup_diagnostics()
   local diagnostics_handler = lsp.with(
     lsp.diagnostic.on_publish_diagnostics, on_publish_cfg
   )
-  lsp.handlers:replace_all(method, diagnostics_handler)
+  lsp.handlers[method] = diagnostics_handler
+
   if USE_DIAGNOSTIC_QUICKFIX then
     lsp.handlers[method] = function(...)
       diagnostics_handler(...)
@@ -296,10 +294,10 @@ end
 local function setup_formatting()
   local method = 'textDocument/formatting'
   local defaut_handler = lsp.handlers[method]
-  lsp.handlers:replace_all(method, function(...)
+  lsp.handlers[method] = function(...)
     -- local err, method, result, client_id, bufnr, config = ...
     -- dump {
-    --   err = (...)[1],
+    --   err = err,
     --   method = method,
     --   result = result,
     --   client_id = client_id,
@@ -312,7 +310,7 @@ local function setup_formatting()
     else
       vim.cmd('Neoformat')
     end
-  end)
+  end
 end
 
 setup_diagnostics()

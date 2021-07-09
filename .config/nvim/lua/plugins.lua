@@ -210,7 +210,7 @@ local function load(use)
       -- :Neoformat will be always ran in these filetypes
       -- If LSP isn't capable to do nice formatting, I place that filetype below
       vim.g.force_neoformat_filetypes = {
-        "typescript",
+        -- "typescript",
         "typescriptreact",
         "javascript",
         "javascriptreact",
