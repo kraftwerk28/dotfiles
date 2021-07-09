@@ -180,22 +180,27 @@ local function load(use)
   }
 
   use {
-    'kyazdani42/nvim-tree.lua',
+    "kyazdani42/nvim-tree.lua",
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
-      local utils = require('utils')
+      local utils = require("utils")
       local u = utils.u
-      utils.highlight {'NvimTreeFolderName', 'Title'}
-      utils.highlight {'NvimTreeFolderIcon', 'Title'}
-      vim.g.nvim_tree_icons = {
-        folder = {default = u 'f07b', open = u 'f07c', symlink = u 'f0c1'},
-      }
-      vim.g.nvim_tree_auto_close = 1
-      vim.g.nvim_tree_indent_markers = 0
-      vim.g.nvim_tree_quit_on_open = 1
-      vim.g.nvim_tree_disable_netrw = 0
-      vim.g.nvim_tree_hijack_netrw = 1
-      vim.g.nvim_tree_width_allow_resize = 1
+      utils.highlight {"NvimTreeFolderName", "Title"}
+      utils.highlight {"NvimTreeFolderIcon", "Title"}
+      for k, v in pairs {
+        auto_close = 1,
+        indent_markers = 0,
+        quit_on_open = 1,
+        disable_netrw = 0,
+        hijack_netrw = 1,
+        width_allow_resize = 1,
+        width_allow_resize = 1,
+        highlight_opened_files = 1,
+        auto_resize = 0,
+        icons = {
+          folder = {default = u"f07b", open = u"f07c", symlink = u"f0c1"},
+        }
+      } do vim.g["nvim_tree_"..k] = v end
     end,
   }
 
