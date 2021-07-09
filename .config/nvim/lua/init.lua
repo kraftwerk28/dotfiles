@@ -37,4 +37,6 @@ function M.yank_highlight()
   end
 end
 
+vim.cmd("autocmd VimEnter * cd %:p:h")
+
 return M

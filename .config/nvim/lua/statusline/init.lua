@@ -31,6 +31,7 @@ local icons = {
   mac = u 'f179',
   lsp_warn = u 'f071',
   lsp_error = u 'f46e',
+  lsp_hint = u 'f0eb',
   lsp_server_icon = u 'f817',
   lsp_server_disconnected = u 'f818',
   col_num = u 'e0a3',
@@ -142,12 +143,20 @@ local lsp_conn = component {
 
 local lsp_w = component {
   function() return lsp_count("Warning", icons.lsp_warn) end,
+  padding = 1,
   hl = 'StatusLineWarning'
 }
 
 local lsp_e = component {
   function() return lsp_count('Error', icons.lsp_error) end,
+  padding = 1,
   hl = 'StatusLineError'
+}
+
+local lsp_h = component {
+  function() return lsp_count('Hint', icons.lsp_hint) end,
+  padding = 1,
+  hl = 'StatusLineHint'
 }
 
 local col_row = component {
@@ -183,17 +192,25 @@ return function()
         'StatusLineWarning',
         guibg = cl.bg,
         override = 'LspDiagnosticsDefaultWarning',
+        gui = "bold",
       }
       highlight {
         'StatusLineError',
         guibg = cl.bg,
         override = 'LspDiagnosticsDefaultError',
+        gui = "bold",
+      }
+      highlight {
+        'StatusLineHint',
+        guibg = cl.bg,
+        override = 'LspDiagnosticsDefaultHint',
+        gui = "bold",
       }
     end,
     primary = {
       {mode, fileformat, ft},
       {icon, filename, fileattrs},
-      {lsp_conn, lsp_w, lsp_e, col_row, pos_percent},
+      {lsp_conn, lsp_h, lsp_w, lsp_e, col_row, pos_percent},
     },
     secondary = {
       {},

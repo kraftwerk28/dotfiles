@@ -424,3 +424,11 @@ nnoremap <silent> <Leader>qc :cprevious<CR>
 "                \ pairStr)
 " endfor
 " inoremap <expr> <CR> <SID>autoPair()
+
+" autocmd VimEnter * if isdirectory(expand('%:p'))
+"                \ |   cd %:p
+"                \ |   bdelete
+"                \ | else
+"                \ |   cd %:p:h
+"                \ | endif
+
