@@ -193,13 +193,11 @@ local function load(use)
         quit_on_open = 1,
         disable_netrw = 0,
         hijack_netrw = 1,
-        width_allow_resize = 1,
-        width_allow_resize = 1,
         highlight_opened_files = 1,
         auto_resize = 0,
         icons = {
           folder = {default = u"f07b", open = u"f07c", symlink = u"f0c1"},
-        }
+        },
       } do vim.g["nvim_tree_"..k] = v end
     end,
   }
@@ -210,7 +208,7 @@ local function load(use)
       -- :Neoformat will be always ran in these filetypes
       -- If LSP isn't capable to do nice formatting, I place that filetype below
       vim.g.force_neoformat_filetypes = {
-        -- "typescript",
+        "typescript",
         "typescriptreact",
         "javascript",
         "javascriptreact",

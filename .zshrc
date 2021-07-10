@@ -1,4 +1,3 @@
-# zmodload zsh/zprof
 setopt appendhistory autocd
 
 fpath=(~/.zfunc $fpath)
@@ -48,4 +47,3 @@ export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
 	source "$NVM_DIR/nvm.sh" --no-use
 fi
-# zprof
