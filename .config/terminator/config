@@ -15,7 +15,8 @@
   move_tab_right = <Primary><Alt>bracketright
   move_tab_left = <Primary><Alt>bracketleft
   next_tab = <Primary>braceright
-  prev_tab = ""
+  prev_tab = <Primary>braceleft
+  layout_launcher = ""
 [profiles]
   [[default]]
     urgent_bell = True
@@ -25,7 +26,6 @@
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden
-    palette = "#000000:#aa0000:#00aa00:#aa5500:#0000aa:#aa00aa:#00aaaa:#aaaaaa:#555555:#ff5555:#55ff55:#ffff55:#5555ff:#ff55ff:#55ffff:#ffffff"
     use_system_font = False
     use_theme_colors = True
 [layouts]
