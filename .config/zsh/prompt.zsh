@@ -11,9 +11,9 @@ git_info () {
 	fi
 	result=" %B%F{blue}\ue0a0%b%F{yellow}$(git branch --show-current)"
 	if command git diff-index --quiet HEAD 2>&1 > /dev/null; then
-		result="$result %B%F{blue}%F{green}✔"
+		result="${result}%B%F{green}✔"
 	else
-		result="$result %B%F{blue}%F{red}✗"
+		result="${result}%B%F{red}✗"
 	fi
 	result="$result%b%f%k"
 	echo $result
@@ -55,7 +55,7 @@ refresh_prompt () {
 	RPROMPT="%F{green}[$(date +%H:%M:%S)]$CL_RESET"
 }
 
-function zle-keymap-select {
+zle-keymap-select () {
 	refresh_prompt "$1"
 	zle reset-prompt
 }
