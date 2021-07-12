@@ -404,6 +404,8 @@ nnoremap <silent> <Leader>qj :cnext<CR>
 nnoremap <silent> <Leader>qk :cprevious<CR>
 nnoremap <silent> <Leader>qc :cprevious<CR>
 
+inoremap <C-H> <C-W>
+
 " let s:pairs = ['{}', '()', '[]']
 " function! s:autoPair()
 "   let line = getline('.')
@@ -431,4 +433,3 @@ nnoremap <silent> <Leader>qc :cprevious<CR>
 "                \ | else
 "                \ |   cd %:p:h
 "                \ | endif
-

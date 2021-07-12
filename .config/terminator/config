@@ -27,7 +27,6 @@
     show_titlebar = False
     scrollbar_position = hidden
     use_system_font = False
-    use_theme_colors = True
 [layouts]
   [[default]]
     [[[child1]]]

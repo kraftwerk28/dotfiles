@@ -24,7 +24,10 @@ export GO111MODULE="on"
 export PATH="$PATH:$HOME/projects/go/bin"
 
 # ruby
-export PATH="$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
+if [[ -d ~/.gem/ruby ]]; then
+	ver=$(find ~/.gem/ruby/* -maxdepth 0 | sort -rV | head -n 1)
+	export PATH="$PATH:${ver}/bin"
+fi
 
 # python
 export PYTHONPATH="$HOME/projects/python"

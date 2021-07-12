@@ -42,7 +42,7 @@ bindkey -M viins "^?" backward-delete-char
 bindkey -M viins "^W" backward-kill-word
 bindkey -M viins "^P" up-history
 bindkey -M viins "^N" down-history
-bindkey -s "^H" backward-kill-word
+bindkey -M viins "^H" backward-kill-word
 bindkey -s "^[l" "ls\n"
 
 export NVM_DIR="$HOME/.nvm"

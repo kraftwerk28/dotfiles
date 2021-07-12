@@ -20,11 +20,13 @@ alias serves="serve \
 alias ssh="kitty +kitten ssh"
 
 # Java aliases, i.e. java8, java11, ...
-for dir in $(ls "/usr/lib/jvm/"); do
-  if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
-    eval "alias java${ver}=/usr/lib/jvm/${dir}bin/java"
-  fi
-done
+if [[ -d /usr/lib/jvm ]]; then
+	for dir in /usr/lib/jvm/*; do
+	  if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
+		eval "alias java${ver}=/usr/lib/jvm/${dir}bin/java"
+	  fi
+	done
+fi
 
 alias gst="git status"
 alias gco="git checkout"

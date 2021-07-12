@@ -212,16 +212,6 @@ function M.id_generator(start)
   end
 end
 
-function M.delete_bufs(include_current)
-  local cur = vim.api.nvim_get_current_buf()
-  for _, h in ipairs(vim.api.nvim_list_bufs()) do
-    if (
-      (h ~= cur or include_current) and
-      vim.api.nvim_buf_is_loaded(h)
-    ) then vim.api.nvim_buf_delete(h, {}) end
-  end
-end
-
 local map_func_counter = 0
 function M.map(mode, lhs, fn, opts)
   local name = 'map_func_' .. map_func_counter
