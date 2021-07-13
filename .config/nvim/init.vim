@@ -50,9 +50,9 @@ let s:additional_filetypes = {
 \   'sh': '.env.*',
 \   'bnf': '*.bnf',
 \   'json': '*.webmanifest',
+\   'jsonc': 'tsconfig.json',
 \   'rest': '*.http',
 \   'elixir': ['*.exs', '*.ex'],
-\   'jsonc': 'tsconfig.json',
 \   'prolog': '*pl',
 \ }
 

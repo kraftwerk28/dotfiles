@@ -161,12 +161,21 @@ end
 
 lsp_config.svelte.setup {}
 
-lsp_config.jsonls.setup {
-  cmd = {'vscode-json-languageserver', '--stdio'},
-  filetypes = {'json', 'jsonc'},
-  init_options = {provideFormatter = true},
-  root_dir = root_pattern('.git', vim.fn.getcwd()),
-}
+do
+  local schemas = {
+    {
+      fileMatch = {"tsconfig.json", "tsconfig.*.json"},
+      url = "http://json.schemastore.org/tsconfig",
+    },
+  }
+  lsp_config.jsonls.setup {
+    cmd = {"vscode-json-languageserver", "--stdio"},
+    filetypes = {"json", "jsonc"},
+    -- init_options = {provideFormatter = true},
+    root_dir = root_pattern(".git", vim.fn.getcwd()),
+    settings = {json = {schemas = schemas}},
+  }
+end
 
 lsp_config.html.setup {}
 
