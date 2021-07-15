@@ -145,21 +145,26 @@ local function load(use)
 
   use {
     'RRethy/vim-illuminate',
-    disable = true,
     config = function()
       local utils = require('utils')
-      utils.highlight {'illuminatedWord', bg = '#303A49'}
+      utils.highlight {"illuminatedWord", guibg = "#303030"}
     end,
   }
 
-  use {
-    'SirVer/ultisnips',
-    config = function()
-      vim.g.UltiSnipsExpandTrigger = '<F10>'
-      vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
-      vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
-    end,
-  }
+  do
+    vim.fn.system([[python -c "import pynvim"]])
+    local disable = vim.v.shell_error ~= 0
+    if disable then print("Please install python's pynvim package") end
+    use {
+      'SirVer/ultisnips',
+      disable = disable,
+      config = function()
+        vim.g.UltiSnipsExpandTrigger = '<F10>'
+        vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
+        vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
+      end,
+    }
+  end
 
   use {
     'hrsh7th/nvim-compe',

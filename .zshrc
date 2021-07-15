@@ -10,6 +10,10 @@ source $plugdir/zsh-extract/extract.plugin.zsh
 autoload -U select-word-style
 select-word-style bash
 
+if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
+	source /etc/profile.d/vte.sh
+fi
+
 for cfg in ~/.config/zsh/*.zsh; do
 	source $cfg
 done

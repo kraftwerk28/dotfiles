@@ -12,7 +12,7 @@ alias la="lsd -Fah"
 alias ll="lsd -Flh"
 alias l="lsd -Flah"
 alias icat="kitty +kitten icat"
-alias less="bat"
+alias less="LESS=\"-I\" bat"
 alias cat="bat -p --color never --paging never"
 alias serves="serve \
 	--ssl-cert ~/ca-tmp/localhost.crt \

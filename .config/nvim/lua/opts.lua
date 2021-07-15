@@ -30,7 +30,6 @@ local opts = {
   foldopen = {"hor", "mark", "percent", "quickfix", "search", "tag", "undo"},
   exrc = true,
   secure = true,
-  scrolloff = 3,
 
   -- Vertical insert / cmdline-insert:
   -- guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20",
@@ -41,6 +40,7 @@ local opts = {
   --   ["r-cr-o-v"] = "hor20",
   -- },
   -- Block insert / cmdline-insert:
+
   guicursor = "n-sm-c:block,r-cr-o-v:hor20",
 
   splitbelow = true,
