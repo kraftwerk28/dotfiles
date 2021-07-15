@@ -5,6 +5,8 @@
 ### In this repo:
   - [Neovim config](../.config/nvim)
   - [Kitty config](../.config/kitty/kitty.conf)
+    (obsolette)
+  - [Tilix config](../.config/tilix/tilix.dconf)
   - [OpenTTD config](../.openttd/openttd.cfg)
   - [Yay config](../.config/yay/config.json)
   - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
