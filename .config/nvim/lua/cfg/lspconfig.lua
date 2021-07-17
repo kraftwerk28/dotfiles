@@ -1,41 +1,41 @@
-local utils = require('utils')
-local lsp_config = require('lspconfig')
-local root_pattern = require('lspconfig.util').root_pattern
+local utils = require("utils")
+local lsp_config = require("lspconfig")
+local root_pattern = require("lspconfig.util").root_pattern
 
 local lsp = vim.lsp
 local highlight = utils.highlight
 local u = utils.u
 local expand = vim.fn.expand
 
-highlight {'LspDiagnosticsUnderlineHint', gui = 'undercurl'}
-highlight {'LspDiagnosticsUnderlineInformation', gui = 'undercurl'}
+highlight {"LspDiagnosticsUnderlineHint", gui = "undercurl"}
+highlight {"LspDiagnosticsUnderlineInformation", gui = "undercurl"}
 highlight {
-  'LspDiagnosticsUnderlineWarning',
-  gui = 'undercurl',
-  -- guisp = 'Orange',
+  "LspDiagnosticsUnderlineWarning",
+  gui = "undercurl",
+  -- guisp = "Orange",
 }
--- highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl', guisp = 'Red'}
-highlight {'LspDiagnosticsUnderlineError', gui = 'undercurl'}
+-- highlight {"LspDiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
+highlight {"LspDiagnosticsUnderlineError", gui = "undercurl"}
 
--- highlight {'LspDiagnosticsDefaultHint', fg = 'Yellow'}
--- highlight {'LspDiagnosticsDefaultInformation', fg = 'LightBlue'}
-highlight {'LspDiagnosticsDefaultWarning', fg = 'Orange'}
--- highlight {'LspDiagnosticsDefaultError', fg = 'Red'}
-highlight {'FloatBorder', fg = 'gray'}
+-- highlight {"LspDiagnosticsDefaultHint", fg = "Yellow"}
+-- highlight {"LspDiagnosticsDefaultInformation", fg = "LightBlue"}
+highlight {"LspDiagnosticsDefaultWarning", fg = "Orange"}
+-- highlight {"LspDiagnosticsDefaultError", fg = "Red"}
+highlight {"FloatBorder", fg = "gray"}
 
 local lsp_signs = {
-  LspDiagnosticsSignHint = {text = u 'f0eb', texthl = 'LspDiagnosticsSignHint'},
+  LspDiagnosticsSignHint = {text = u "f0eb", texthl = "LspDiagnosticsSignHint"},
   LspDiagnosticsSignInformation = {
-    text = u 'f129',
-    texthl = 'LspDiagnosticsSignInformation',
+    text = u "f129",
+    texthl = "LspDiagnosticsSignInformation",
   },
   LspDiagnosticsSignWarning = {
-    text = u 'f071',
-    texthl = 'LspDiagnosticsSignWarning',
+    text = u "f071",
+    texthl = "LspDiagnosticsSignWarning",
   },
   LspDiagnosticsSignError = {
-    text = u 'f46e',
-    texthl = 'LspDiagnosticsSignError',
+    text = u "f46e",
+    texthl = "LspDiagnosticsSignError",
   },
 }
 
@@ -45,13 +45,16 @@ end
 
 lsp_config.tsserver.setup {
   cmd = {
-    'typescript-language-server', '--stdio', 'tsserver-log-verbosity', 'off',
+    "typescript-language-server",
+    "--stdio",
+    "tsserver-log-verbosity",
+    "off",
   },
   root_dir = root_pattern(
-    'package.json',
-    'tsconfig.json',
-    'jsconfig.json',
-    '.git',
+    "package.json",
+    "tsconfig.json",
+    "jsconfig.json",
+    ".git",
     vim.fn.getcwd()
   ),
 }
@@ -89,17 +92,24 @@ lsp_config.pyright.setup {}
 
 lsp_config.sumneko_lua.setup {
   cmd = {
-    'lua-language-server', '-E', '/usr/share/lua-language-server/main.lua',
-    '--logpath', vim.lsp.get_log_path():match('(.*[/\\])'),
+    "lua-language-server",
+    "-E", "/usr/share/lua-language-server/main.lua",
+    "--logpath",
+    vim.lsp.get_log_path():match("(.*[/\\])"),
   },
   settings = {
     Lua = {
-      runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-      diagnostics = {globals = {'vim', 'dump', 'love'}},
+      runtime = {
+        version = "LuaJIT",
+        path = vim.split(package.path, ";"),
+      },
+      diagnostics = {
+        globals = {"vim", "dump", "love"},
+      },
       workspace = {
         library = {
-          [expand('$VIMRUNTIME/lua')] = true,
-          [expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+          [expand("$VIMRUNTIME/lua")] = true,
+          [expand("$VIMRUNTIME/lua/vim/lsp")] = true,
         },
       },
     },
@@ -124,36 +134,36 @@ lsp_config.sumneko_lua.setup {
 lsp_config.rust_analyzer.setup {}
 
 lsp_config.gopls.setup {
-  cmd = {'gopls', 'serve'},
-  filetypes = {'go', 'gomod'},
-  root_dir = root_pattern('go.mod', '.git', vim.fn.getcwd()),
+  cmd = {"gopls", "serve"},
+  filetypes = {"go", "gomod"},
+  root_dir = root_pattern("go.mod", ".git", vim.fn.getcwd()),
 }
 
 lsp_config.hls.setup {
-  settings = {haskell = {formattingProvider = 'brittany'}},
+  settings = {haskell = {formattingProvider = "brittany"}},
   root_dir = root_pattern(
-    '*.cabal',
-    'stack.yaml',
-    'cabal.project',
-    'package.yaml',
-    'hie.yaml',
+    "*.cabal",
+    "stack.yaml",
+    "cabal.project",
+    "package.yaml",
+    "hie.yaml",
     vim.fn.getcwd()
   ),
 }
 
 do
-  local clangdcmd = {'clangd', '--background-index'}
-  if vim.fn.empty(vim.fn.glob('compile_commands.json')) > 0 then
-    vim.tbl_extend('force', clangdcmd, {'--compile-commands-dir', 'build'})
+  local clangdcmd = {"clangd", "--background-index"}
+  if vim.fn.empty(vim.fn.glob("compile_commands.json")) == 1 then
+    vim.tbl_extend("force", clangdcmd, {"--compile-commands-dir", "build"})
   end
 
   lsp_config.clangd.setup {
     cmd = clangdcmd,
-    filetypes = {'c', 'cpp', 'objc', 'objcpp'},
+    filetypes = {"c", "cpp", "objc", "objcpp"},
     root_dir = root_pattern(
-      'CMakeLists.txt',
-      'compile_flags.txt',
-      '.git',
+      "CMakeLists.txt",
+      "compile_flags.txt",
+      ".git",
       vim.fn.getcwd()
     ),
   }
@@ -251,6 +261,37 @@ do
     cmd_env = cmd_env,
     settings = {kotlin = {compiler = {jvm = {target = "1.8"}}}},
     root_dir = root_pattern("build.gradle", "build.gradle.kts"),
+  }
+end
+
+do
+  local eslint = {
+    lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+    lintStdin = true,
+    lintFormats = {"%f:%l:%c: %m"},
+    lintIgnoreExitCode = true,
+    formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
+    formatStdin = true,
+  }
+  local languages = {
+    javascript = {eslint},
+    javascriptreact = {eslint},
+    typescript = {eslint},
+    typescriptreact = {eslint},
+  }
+  lsp_config.efm.setup {
+    cmd = {"efm-langserver"},
+    on_attach = function(client)
+      client.resolved_capabilities.document_formatting = true
+      client.resolved_capabilities.goto_definition = false
+    end,
+    setttings = {
+      languages = languages,
+      log_level = 1,
+      log_file = vim.fn.expand("~/.config/efm-langserver/efm.log"),
+    },
+    root_dir = root_pattern(".eslintrc.yml"),
+    filetypes = vim.tbl_keys(languages),
   }
 end
 

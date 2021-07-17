@@ -10,7 +10,7 @@ local opts = {
   smartindent = true,
   list = true,
   listchars = {tab = "⇥ ", trail = "·"},
-  cursorline = true,
+  cursorline = false,
   colorcolumn={80, 120},
   mouse= "a",
   clipboard = "unnamedplus",

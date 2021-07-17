@@ -1,7 +1,7 @@
 local function load(use)
   use {'wbthomason/packer.nvim', opt = true}
 
-  use {'~/projects/neovim/gtranslate.nvim', rocks = {'lua-cjson', 'http'}}
+  use {'~/projects/neovim/gtranslate.nvim'}
 
   -- Themes
   use {'ayu-theme/ayu-vim', opt = true, disable = true}
@@ -27,8 +27,9 @@ local function load(use)
   use {
     'b3nj5m1n/kommentary',
     config = function()
-      require('kommentary.config').configure_language(
-        'default', {prefer_single_line_comments = true}
+      require("kommentary.config").configure_language(
+        "default",
+        {prefer_single_line_comments = true}
       )
     end,
   }
@@ -105,29 +106,32 @@ local function load(use)
     end,
   }
 
-  if vim.fn.executable('xkb-switch') > 0 or vim.fn.executable('g3kb-switch') > 0 then
+  if
+    vim.fn.executable('xkb-switch') > 0
+    or vim.fn.executable('g3kb-switch') > 0
+  then
     use {
-      'lyokha/vim-xkbswitch',
+      "lyokha/vim-xkbswitch",
       config = function()
         vim.g.XkbSwitchEnabled = 1
-        if vim.env['XDG_CURRENT_DESKTOP'] == 'GNOME' then
-          vim.g.XkbSwitchLib = '/usr/local/lib/libg3kbswitch.so'
+        if vim.env["XDG_CURRENT_DESKTOP"] == "GNOME" then
+          vim.g.XkbSwitchLib = "/usr/local/lib/libg3kbswitch.so"
         end
       end,
     }
   end
 
-  use {'chrisbra/Colorizer'}
+  use {"chrisbra/Colorizer"}
 
-  use {'mattn/emmet-vim'}
+  use {"mattn/emmet-vim"}
 
   -- Missing languages in tree-sitter
-  use {'neovimhaskell/haskell-vim'}
-  use {'editorconfig/editorconfig-vim'}
-  use {'elixir-editors/vim-elixir'}
-  use {'chr4/nginx.vim'}
-  use {'tpope/vim-markdown'}
-  use {'adimit/prolog.vim'}
+  use {"neovimhaskell/haskell-vim"}
+  use {"editorconfig/editorconfig-vim"}
+  use {"elixir-editors/vim-elixir"}
+  use {"chr4/nginx.vim"}
+  use {"tpope/vim-markdown"}
+  use {"adimit/prolog.vim"}
 
   use {
     "nvim-treesitter/nvim-treesitter",
@@ -167,7 +171,7 @@ local function load(use)
   end
 
   use {
-    'hrsh7th/nvim-compe',
+    "hrsh7th/nvim-compe",
     requires = {'SirVer/ultisnips', 'honza/vim-snippets', opt = true},
     config = function()
       require('compe').setup {

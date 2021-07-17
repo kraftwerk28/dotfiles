@@ -4,18 +4,12 @@ local utils = require("utils")
 local highlight = require("vim.highlight")
 local load = utils.load
 
--- Setup theme
-do
-  vim.g.base16_theme = "default-dark"
-  local ok, base16 = pcall(require, "base16-colorscheme")
-  if ok then base16.setup(vim.g.base16_theme) end
-end
-
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 
 require('lsp_handlers').patch_lsp_handlers()
 
+load("theme")
 load("mappings")
 load("opts")
 load("plugins")
@@ -36,7 +30,5 @@ function M.yank_highlight()
     highlight.on_yank {timeout = 1000}
   end
 end
-
-vim.cmd("autocmd VimEnter * cd %:p:h")
 
 return M

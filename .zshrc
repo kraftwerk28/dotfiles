@@ -2,10 +2,13 @@ setopt appendhistory autocd
 
 fpath=(~/.zfunc $fpath)
 
-plugdir="/usr/share/zsh/plugins"
-source $plugdir/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-source $plugdir/zsh-z/zsh-z.plugin.zsh
-source $plugdir/zsh-extract/extract.plugin.zsh
+plug () {
+	source /usr/share/zsh/plugins/$1
+}
+plug zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+plug zsh-z/zsh-z.plugin.zsh
+plug zsh-extract/extract.plugin.zsh
+plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 autoload -U select-word-style
 select-word-style bash
@@ -32,8 +35,9 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=10000
 
-export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
-export ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZVM_CURSOR_STYLE_ENABLED=false
 
 tabs -4
 

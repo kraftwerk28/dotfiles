@@ -212,13 +212,15 @@ function M.id_generator(start)
   end
 end
 
-local map_func_counter = 0
-function M.map(mode, lhs, fn, opts)
-  local name = 'map_func_' .. map_func_counter
-  _G[name] = fn
-  local rhs = ':call v:lua.' .. name .. '()<CR>'
-  vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-  map_func_counter = map_func_counter + 1
+do
+  local map_func_counter = 0
+  function M.map(mode, lhs, fn, opts)
+    local name = 'map_func_' .. map_func_counter
+    _G[name] = fn
+    local rhs = ':call v:lua.' .. name .. '()<CR>'
+    vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+    map_func_counter = map_func_counter + 1
+  end
 end
 
 for _, mode in ipairs {'', 'n', 'i', 'c', 'x'} do
@@ -239,6 +241,16 @@ function M.log_time(fn, label)
       "ms."
     )
   end
+end
+
+function M.index_of(t, v, eqfn)
+  eqfn = eqfn or (function(el) return el == v end)
+  for i, value in ipairs(t) do
+    if eqfn(value, v) then
+      return i
+    end
+  end
+  return -1
 end
 
 return M
