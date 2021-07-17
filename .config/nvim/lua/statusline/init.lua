@@ -7,21 +7,9 @@ local u = utils.u
 local sprintf = utils.sprintf
 local highlight = utils.highlight
 local component = stl.component
-local cl = colors.from_base16(vim.g.base16_theme)
 
-local mode_map = {
-  ['n'] = {'NORMAL', cl.normal},
-  ['i'] = {'INSERT', cl.insert},
-  ['R'] = {'REPLACE', cl.replace},
-  ['v'] = {'VISUAL', cl.visual},
-  ['V'] = {'V-LINE', cl.visual},
-  ['c'] = {'COMMAND', cl.command},
-  ['s'] = {'SELECT', cl.visual},
-  ['S'] = {'S-LINE', cl.visual},
-  ['t'] = {'TERMINAL', cl.terminal},
-  [''] = {'V-BLOCK', cl.visual},
-  [''] = {'S-BLOCK', cl.visual},
-}
+local mode_map -- mode labels & colors
+local cl -- colors
 
 local icons = {
   locker = u 'f023',
@@ -186,6 +174,21 @@ local pos_percent = component {
 local secondary_filename = component {'%f', hl = 'StatusLine'}
 
 return function()
+  cl = colors.from_base16(vim.g.base16_theme)
+  mode_map = {
+    ['n'] = {'NORMAL', cl.normal},
+    ['i'] = {'INSERT', cl.insert},
+    ['R'] = {'REPLACE', cl.replace},
+    ['v'] = {'VISUAL', cl.visual},
+    ['V'] = {'V-LINE', cl.visual},
+    ['c'] = {'COMMAND', cl.command},
+    ['s'] = {'SELECT', cl.visual},
+    ['S'] = {'S-LINE', cl.visual},
+    ['t'] = {'TERMINAL', cl.terminal},
+    [''] = {'V-BLOCK', cl.visual},
+    [''] = {'S-BLOCK', cl.visual},
+  }
+
   stl.setup {
     on_update = function()
       highlight {

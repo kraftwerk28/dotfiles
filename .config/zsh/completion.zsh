@@ -3,7 +3,6 @@ setopt complete_in_word
 setopt always_to_end
 
 autoload -Uz compinit
-autoload -Uz compinit
 if [[ -n "${ZDOTDIR}/.zcompdump(#qN.mh+24)" ]]; then
 	compinit
 else

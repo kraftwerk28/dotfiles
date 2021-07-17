@@ -90,15 +90,16 @@ function M.load(path)
   else
     local loadfunc
     if mod == true then
+      -- Module doesn't export anything
       return
-    elseif type(mod) == 'function' then
-      loadfunc = mod
-    elseif mod.setup ~= nil then
+    elseif type(mod) == "table" and mod.setup ~= nil then
       loadfunc = mod.setup
+    elseif type(mod) == "function" then
+      loadfunc = mod
     end
     local ok, err = pcall(loadfunc)
     if not ok then
-      printf('Error loading module `%s`', path)
+      printf("Error loading module `%s`", path)
       print(err)
     end
   end

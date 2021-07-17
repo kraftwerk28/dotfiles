@@ -1,0 +1,7 @@
+source /home/kraftwerk28/.config/nvim/init.vim
+set ideajoin
+set ideaput
+set surround
+set ideavimsupport=singleline
+set visualbell
+set noerrorbells

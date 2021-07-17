@@ -14,6 +14,7 @@ local function base16_next()
   vim.g.base16_theme = name
   print(("(%d/%d) %s"):format(nameidx, #names, name))
   base16.setup(name)
+  utils.load("statusline")
 end
 
 local function base16_prev()
@@ -25,6 +26,7 @@ local function base16_prev()
   vim.g.base16_theme = name
   print(("(%d/%d) %s"):format(nameidx, #names, name))
   base16.setup(name)
+  utils.load("statusline")
 end
 
 utils.nnoremap("<F6>", base16_prev, {silent = true})
