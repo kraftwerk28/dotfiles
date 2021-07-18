@@ -1,6 +1,9 @@
 fpath=(~/.zfunc $fpath)
 
-plug () { source /usr/share/zsh/plugins/$1 }
+plug () {
+	local plugfile=/usr/share/zsh/plugins/$1
+	[[ -f $plugfile ]] && source $plugfile
+}
 
 plug zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 plug zsh-z/zsh-z.plugin.zsh
