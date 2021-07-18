@@ -1,25 +1,29 @@
-alias vim="nvim"
-alias vi="nvim"
-alias v="nvim"
-alias im="nvim"
-alias vin="nvim"
-alias updatenvim="yay -S --needed --noconfirm neovim-git"
-alias ndoe="node"
-alias nvimcfg="cd $HOME/.config/nvim"
+if type nvim > /dev/null; then
+	alias vim="nvim"
+	alias vi="nvim"
+	alias v="nvim"
+	alias im="nvim"
+	alias vin="nvim"
+	alias updatenvim="yay -S --needed --noconfirm neovim-git"
+fi
 
-alias ls="lsd -F"
-alias la="lsd -Fah"
-alias ll="lsd -Flh"
-alias l="lsd -Flah"
-alias icat="kitty +kitten icat"
+if type lsd > /dev/null; then
+	alias ls="lsd -F"
+	alias la="lsd -Fah"
+	alias ll="lsd -Flh"
+	alias l="lsd -Flah"
+fi
+
 alias less="LESS=\"-I\" bat"
-alias cat="bat -p --color never --paging never"
+
+if type bat > /dev/null; then
+	alias cat="bat -p --color never --paging never"
+fi
+
 alias serves="serve \
 	--ssl-cert ~/ca-tmp/localhost.crt \
 	--ssl-key ~/ca-tmp/localhost.key"
-alias ssh="kitty +kitten ssh"
 
-# Java aliases, i.e. java8, java11, ...
 if [[ -d /usr/lib/jvm ]]; then
 	for dir in /usr/lib/jvm/*; do
 	  if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
@@ -45,5 +49,3 @@ mkcd () {
 	mkdir -p $1
 	cd $1
 }
-
-alias g="git"

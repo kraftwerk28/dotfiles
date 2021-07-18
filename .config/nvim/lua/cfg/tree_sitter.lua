@@ -9,7 +9,6 @@ local enabled_linux = {
   "erlang",
   "go",
   "graphql",
-  "haskell",
   "html",
   "java",
   "javascript",

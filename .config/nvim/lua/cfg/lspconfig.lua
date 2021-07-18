@@ -177,6 +177,18 @@ do
       fileMatch = {"tsconfig.json", "tsconfig.*.json"},
       url = "http://json.schemastore.org/tsconfig",
     },
+    {
+      fileMatch = {"jsconfig.json", "jsconfig.*.json"},
+      url = "http://json.schemastore.org/jsconfig",
+    },
+    {
+      fileMatch = {".eslintrc*"},
+      url = "http://json.schemastore.org/eslintrc",
+    },
+    {
+      fileMatch = {".babelrc*"},
+      url = "http://json.schemastore.org/babelrc",
+    },
   }
   lsp_config.jsonls.setup {
     cmd = {"vscode-json-languageserver", "--stdio"},
@@ -187,11 +199,17 @@ do
   }
 end
 
+lsp_config.yamlls.setup {
+  settings = {
+    yaml = {
+      schemaStore = {enable = true},
+    },
+  },
+}
+
 lsp_config.html.setup {}
 
-lsp_config.yamlls.setup {}
-
-lsp_config.bashls.setup {filetypes = {'bash', 'sh', 'zsh'}}
+lsp_config.bashls.setup {filetypes = {"bash", "sh", "zsh"}}
 
 lsp_config.solargraph.setup {}
 
@@ -265,6 +283,7 @@ do
 end
 
 do
+  -- TODO: setop efm
   local eslint = {
     lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
     lintStdin = true,
@@ -297,14 +316,14 @@ end
 
 local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 local function setup_hover()
-  local method = 'textDocument/hover'
+  local method = "textDocument/hover"
   lsp.handlers[method] = lsp.with(lsp.handlers[method], {border = win_border})
 end
 
 local USE_DIAGNOSTIC_QUICKFIX = false
 
 local function setup_diagnostics()
-  local method = 'textDocument/publishDiagnostics'
+  local method = "textDocument/publishDiagnostics"
   local on_publish_cfg = {
     underline = true,
     virtual_text = true,
@@ -342,7 +361,7 @@ local function setup_diagnostics()
 end
 
 local function setup_formatting()
-  local method = 'textDocument/formatting'
+  local method = "textDocument/formatting"
   local defaut_handler = lsp.handlers[method]
   lsp.handlers[method] = function(...)
     -- local err, method, result, client_id, bufnr, config = ...
@@ -358,7 +377,7 @@ local function setup_formatting()
     if err == nil then
       defaut_handler(...)
     else
-      vim.cmd('Neoformat')
+      vim.cmd("Neoformat")
     end
   end
 end

@@ -1,10 +1,7 @@
-setopt appendhistory autocd
-
 fpath=(~/.zfunc $fpath)
 
-plug () {
-	source /usr/share/zsh/plugins/$1
-}
+plug () { source /usr/share/zsh/plugins/$1 }
+
 plug zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
 plug zsh-z/zsh-z.plugin.zsh
 plug zsh-extract/extract.plugin.zsh
@@ -12,19 +9,10 @@ plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 autoload -U select-word-style
 select-word-style bash
-
-if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
-	source /etc/profile.d/vte.sh
-fi
-
-for cfg in ~/.config/zsh/*.zsh; do
-	source $cfg
-done
-
+setopt appendhistory autocd
 setopt auto_pushd
 setopt pushd_ignore_dups
 setopt pushdminus
-
 setopt extended_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
@@ -40,6 +28,14 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZVM_CURSOR_STYLE_ENABLED=false
 
 tabs -4
+
+if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
+	source /etc/profile.d/vte.sh
+fi
+
+for cfg in ~/.config/zsh/*.zsh; do
+	source $cfg
+done
 
 bindkey -v
 bindkey "^[OA" up-line-or-history
