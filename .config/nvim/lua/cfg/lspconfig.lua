@@ -324,14 +324,12 @@ local USE_DIAGNOSTIC_QUICKFIX = false
 
 local function setup_diagnostics()
   local method = "textDocument/publishDiagnostics"
-  local on_publish_cfg = {
+  local diagnostics_handler = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
     underline = true,
     virtual_text = true,
     update_in_insert = false,
-  }
-  local diagnostics_handler = lsp.with(
-    lsp.diagnostic.on_publish_diagnostics, on_publish_cfg
-  )
+    -- border = win_border,
+  })
   lsp.handlers[method] = diagnostics_handler
 
   if USE_DIAGNOSTIC_QUICKFIX then

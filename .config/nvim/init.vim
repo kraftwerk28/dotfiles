@@ -329,8 +329,7 @@ inoremap <silent><expr> <CR> <SID>compEnter()
 nnoremap <silent> <Leader>f :lua init.format_code()<CR>
 nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <Leader>ae
-      \ :lua vim.lsp.diagnostic.show_line_diagnostics()<CR>
+nnoremap <silent> <Leader>ae :lua init.show_line_diagnostics()<CR>
 nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 

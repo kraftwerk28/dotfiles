@@ -25,6 +25,12 @@ end
 
 M.format_code = utils.format_code
 
+function M.show_line_diagnostics()
+  vim.lsp.diagnostic.show_line_diagnostics({
+    border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
+  })
+end
+
 function M.yank_highlight()
   if highlight ~= nil then
     highlight.on_yank {timeout = 1000}
