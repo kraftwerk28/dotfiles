@@ -24,7 +24,10 @@ highlight {"LspDiagnosticsDefaultWarning", fg = "Orange"}
 highlight {"FloatBorder", fg = "gray"}
 
 local lsp_signs = {
-  LspDiagnosticsSignHint = {text = u "f0eb", texthl = "LspDiagnosticsSignHint"},
+  LspDiagnosticsSignHint = {
+    text = u "f0eb",
+    texthl = "LspDiagnosticsSignHint",
+  },
   LspDiagnosticsSignInformation = {
     text = u "f129",
     texthl = "LspDiagnosticsSignInformation",
