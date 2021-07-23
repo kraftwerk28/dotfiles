@@ -317,10 +317,12 @@ do
   }
 end
 
-local win_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 local function setup_hover()
   local method = "textDocument/hover"
-  lsp.handlers[method] = lsp.with(lsp.handlers[method], {border = win_border})
+  lsp.handlers[method] = lsp.with(
+    lsp.handlers[method],
+    {border = vim.g.floatwin_border}
+  )
 end
 
 local USE_DIAGNOSTIC_QUICKFIX = false

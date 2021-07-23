@@ -6,6 +6,7 @@ local load = utils.load
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
+vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 
 require('lsp_handlers').patch_lsp_handlers()
 
@@ -26,9 +27,7 @@ end
 M.format_code = utils.format_code
 
 function M.show_line_diagnostics()
-  vim.lsp.diagnostic.show_line_diagnostics({
-    border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
-  })
+  vim.lsp.diagnostic.show_line_diagnostics({ border = vim.g.floatwin_border })
 end
 
 function M.yank_highlight()

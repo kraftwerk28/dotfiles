@@ -1,10 +1,3 @@
-# Change cursor shape depending on vi mode
-CHANGE_CURSOR_SHAPE=0
-# Show a character depending on vi mode
-SHOW_VIMODE=1
-
-KEYTIMEOUT=1
-
 git_info () {
 	if [[ ! -d ".git" ]] || ! git rev-parse --git-dir 2>&1 > /dev/null; then
 		return

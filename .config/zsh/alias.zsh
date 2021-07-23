@@ -14,7 +14,9 @@ if type lsd > /dev/null; then
 	alias l="lsd -Flah"
 fi
 
-alias less="LESS=\"-I\" bat"
+# if type bat > /dev/null; then
+# 	alias less="bat"
+# fi
 
 if type bat > /dev/null; then
 	alias cat="bat -p --color never --paging never"

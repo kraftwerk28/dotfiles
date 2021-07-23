@@ -10,6 +10,12 @@ plug zsh-z/zsh-z.plugin.zsh
 plug zsh-extract/extract.plugin.zsh
 plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
+# Change cursor shape depending on vi mode
+CHANGE_CURSOR_SHAPE=0
+# Show a character depending on vi mode
+SHOW_VIMODE=1
+KEYTIMEOUT=1
+
 autoload -U select-word-style
 select-word-style bash
 setopt appendhistory autocd
