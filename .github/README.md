@@ -12,6 +12,7 @@
   - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
   - [VSCode config](../.config/Code/User/settings.json)
     (obsolette, since I almost don't use it anymore)
+  - [SwayWM config](../.config/sway/config)
 
 Neovim (0.5) configs aren't completely in Lua, because not all APIs
 have alternative functions (at least native).
