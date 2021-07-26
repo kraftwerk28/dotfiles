@@ -20,7 +20,7 @@ set $term tilix
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu bemenu-run
-bindsym $mod+p exec wofi --show drun -i
+bindsym $mod+p exec wofi
 
 # for_window [app_id="^tilix$"] opacity 0.9
 #
@@ -98,10 +98,10 @@ output * bg ~/Pictures/1546566.jpg fill
 	bindsym $mod+$up focus up
 	bindsym $mod+$right focus right
 	# Or use $mod+[up|down|left|right]
-	bindsym $mod+Left focus left
-	bindsym $mod+Down focus down
-	bindsym $mod+Up focus up
-	bindsym $mod+Right focus right
+	# bindsym $mod+Left focus left
+	# bindsym $mod+Down focus down
+	# bindsym $mod+Up focus up
+	# bindsym $mod+Right focus right
 
 	# Move the focused window with the same, but add Shift
 	bindsym $mod+Shift+$left move left
@@ -127,6 +127,9 @@ output * bg ~/Pictures/1546566.jpg fill
 	bindsym $mod+8 workspace number 8
 	bindsym $mod+9 workspace number 9
 	bindsym $mod+0 workspace number 10
+	bindsym $mod+Tab workspace back_and_forth
+	bindsym $mod+Right workspace next
+	bindsym $mod+Left workspace prev
 	# Move focused container to workspace
 	bindsym $mod+Shift+1 move container to workspace number 1
 	bindsym $mod+Shift+2 move container to workspace number 2
@@ -257,6 +260,7 @@ seat seat0 xcursor_theme Breeze
 # gaps outer 8
 # gaps inner 16
 
+smart_borders on
 default_border pixel 1
 client.focused #00bb00 #00bb00 #ffffff
 client.unfocused #444444 #444444 #ffffff
@@ -269,6 +273,9 @@ focus_follows_mouse no
 # exec slack
 # exec ~/Telegram/Telegram
 exec dunst
+exec gammastep -O 5000K
+exec blueman-applet
+exec ~/.config/sway/kbd_layout_per_window.py
 
 # assign [app_id="tilix"] 1
 # assign [app_id="firefox"] 4
