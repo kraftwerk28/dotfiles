@@ -4,6 +4,7 @@ local utils = require("utils")
 local highlight = require("vim.highlight")
 local load = utils.load
 
+vim.g.base16_theme = "default-dark"
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}

@@ -128,8 +128,14 @@ output * bg ~/Pictures/1546566.jpg fill
 	bindsym $mod+9 workspace number 9
 	bindsym $mod+0 workspace number 10
 	bindsym $mod+Tab workspace back_and_forth
-	bindsym $mod+Right workspace next
-	bindsym $mod+Left workspace prev
+
+	# bindsym $mod+Left workspace prev
+	# bindsym $mod+Right workspace next
+	bindsym $mod+Ctrl+h workspace prev
+	bindsym $mod+Ctrl+l workspace next
+	bindsym $mod+bracketleft workspace prev
+	bindsym $mod+bracketright workspace next
+
 	# Move focused container to workspace
 	bindsym $mod+Shift+1 move container to workspace number 1
 	bindsym $mod+Shift+2 move container to workspace number 2
@@ -257,8 +263,8 @@ bindsym Print exec grimshot copy area
 
 seat seat0 xcursor_theme Breeze
 
-# gaps outer 8
-# gaps inner 16
+# gaps inner 8
+# gaps outer -8
 
 smart_borders on
 default_border pixel 1
@@ -276,6 +282,7 @@ exec dunst
 exec gammastep -O 5000K
 exec blueman-applet
 exec ~/.config/sway/kbd_layout_per_window.py
+exec kdeconnect-indicator
 
 # assign [app_id="tilix"] 1
 # assign [app_id="firefox"] 4
