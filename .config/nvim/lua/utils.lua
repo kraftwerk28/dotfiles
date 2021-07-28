@@ -3,25 +3,26 @@ local M = {}
 local function printf(...) print(string.format(...)) end
 local sprintf = string.format
 local function cmdf(...) vim.cmd(sprintf(...)) end
+local fn, api = vim.fn, vim.api
 
 M.printf = printf
 M.sprintf = sprintf
 M.cmdf = cmdf
 
-function M.get_cursor_pos() return {vim.fn.line('.'), vim.fn.col('.')} end
+function M.get_cursor_pos() return {fn.line('.'), fn.col('.')} end
 
 function M.debounce(func, timeout)
   local timer_id
   return function(...)
     if timer_id ~= nil then
-      vim.fn.timer_stop(timer_id)
+      fn.timer_stop(timer_id)
     end
     local args = {...}
     local function cb()
       func(args)
       timer_id = nil
     end
-    timer_id = vim.fn.timer_start(timeout, cb)
+    timer_id = fn.timer_start(timeout, cb)
   end
 end
 
@@ -40,7 +41,7 @@ function M.throttle(func, timeout)
           did_call = false
         end
       end
-      timer_id = vim.fn.timer_start(timeout, cb)
+      timer_id = fn.timer_start(timeout, cb)
     else
       did_call = true
     end
@@ -107,7 +108,7 @@ end
 
 -- Get information about highlight group
 function M.hl_by_name(hl_group)
-  local hl = vim.api.nvim_get_hl_by_name(hl_group, true)
+  local hl = api.nvim_get_hl_by_name(hl_group, true)
   if hl.foreground ~= nil then
     hl.fg = sprintf('#%x', hl.foreground)
   end
@@ -135,7 +136,7 @@ function M.highlight(cfg)
   local gui = cfg.gui or cfg[4]
   local guisp = cfg.guisp or cfg[5]
   if type(cfg.override) == 'string' then
-    local existing = vim.api.nvim_get_hl_by_name(cfg.override, true)
+    local existing = api.nvim_get_hl_by_name(cfg.override, true)
     if existing.foreground ~= nil then
       guifg = sprintf('#%x', existing.foreground)
     end
@@ -177,7 +178,7 @@ function M.autocmd(event_name, pattern, callback)
   cmdf('autocmd %s %s call v:lua.%s()', event_name, pattern, fn_name)
 end
 
-function M.glob_exists(path) return vim.fn.empty(vim.fn.glob(path)) == 0 end
+function M.glob_exists(path) return fn.empty(fn.glob(path)) == 0 end
 
 do
   local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
@@ -219,7 +220,7 @@ do
     local name = 'map_func_' .. map_func_counter
     _G[name] = fn
     local rhs = ':call v:lua.' .. name .. '()<CR>'
-    vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+    api.nvim_set_keymap(mode, lhs, rhs, opts)
     map_func_counter = map_func_counter + 1
   end
 end

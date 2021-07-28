@@ -19,8 +19,6 @@ set $term tilix
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu bemenu-run
-bindsym $mod+p exec wofi
 
 # for_window [app_id="^tilix$"] opacity 0.9
 #
@@ -66,13 +64,14 @@ output * bg ~/Pictures/1546566.jpg fill
 # Basics:
 #
 	# Start a terminal
-	bindsym $mod+Return exec $term
+	bindsym --to-code $mod+Return exec tilix
+	# bindsym --to-code $mod+Shift+Return exec \
+	# 	tilix -w $(zsh -c "z -t | tail -n1 | grep -o '/.*'")
 
 	# Kill focused window
 	bindsym $mod+Shift+q kill
 
-	# Start your launcher
-	bindsym $mod+d exec $menu
+	bindsym $mod+p exec wofi
 
 	# Drag floating windows by holding down $mod and left mouse button.
 	# Resize them with right mouse button + $mod.
@@ -93,10 +92,10 @@ output * bg ~/Pictures/1546566.jpg fill
 # Moving around:
 #
 	# Move your focus around
-	bindsym $mod+$left focus left
-	bindsym $mod+$down focus down
-	bindsym $mod+$up focus up
-	bindsym $mod+$right focus right
+	bindsym --to-code $mod+$left focus left
+	bindsym --to-code $mod+$down focus down
+	bindsym --to-code $mod+$up focus up
+	bindsym --to-code $mod+$right focus right
 	# Or use $mod+[up|down|left|right]
 	# bindsym $mod+Left focus left
 	# bindsym $mod+Down focus down
@@ -104,15 +103,15 @@ output * bg ~/Pictures/1546566.jpg fill
 	# bindsym $mod+Right focus right
 
 	# Move the focused window with the same, but add Shift
-	bindsym $mod+Shift+$left move left
-	bindsym $mod+Shift+$down move down
-	bindsym $mod+Shift+$up move up
-	bindsym $mod+Shift+$right move right
+	bindsym --to-code $mod+Shift+$left move left
+	bindsym --to-code $mod+Shift+$down move down
+	bindsym --to-code $mod+Shift+$up move up
+	bindsym --to-code $mod+Shift+$right move right
 	# Ditto, with arrow keys
-	bindsym $mod+Shift+Left move left
-	bindsym $mod+Shift+Down move down
-	bindsym $mod+Shift+Up move up
-	bindsym $mod+Shift+Right move right
+	# bindsym $mod+Shift+Left move left
+	# bindsym $mod+Shift+Down move down
+	# bindsym $mod+Shift+Up move up
+	# bindsym $mod+Shift+Right move right
 #
 # Workspaces:
 #
@@ -129,12 +128,8 @@ output * bg ~/Pictures/1546566.jpg fill
 	bindsym $mod+0 workspace number 10
 	bindsym $mod+Tab workspace back_and_forth
 
-	# bindsym $mod+Left workspace prev
-	# bindsym $mod+Right workspace next
-	bindsym $mod+Ctrl+h workspace prev
-	bindsym $mod+Ctrl+l workspace next
-	bindsym $mod+bracketleft workspace prev
-	bindsym $mod+bracketright workspace next
+	bindsym --to-code $mod+bracketleft workspace prev
+	bindsym --to-code $mod+bracketright workspace next
 
 	# Move focused container to workspace
 	bindsym $mod+Shift+1 move container to workspace number 1
@@ -170,7 +165,7 @@ output * bg ~/Pictures/1546566.jpg fill
 	bindsym $mod+Shift+f floating toggle
 
 	# Swap focus between the tiling area and the floating area
-	bindsym $mod+space focus mode_toggle
+	# bindsym $mod+space focus mode_toggle
 
 	# Move focus to the parent container
 	bindsym $mod+a focus parent
@@ -249,19 +244,19 @@ input type:touchpad {
 
 include /etc/sway/config.d/*
 
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +10%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -10%
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
+bindsym {
+	XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+	XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+	XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+	XF86MonBrightnessDown exec brightnessctl set 5%-
+	XF86MonBrightnessUp exec brightnessctl set +5%
+	XF86AudioPlay exec playerctl play-pause
+	XF86AudioNext exec playerctl next
+	XF86AudioPrev exec playerctl previous
+}
 
 bindsym Shift+Print exec grimshot copy window
 bindsym Print exec grimshot copy area
-
-seat seat0 xcursor_theme Breeze
 
 # gaps inner 8
 # gaps outer -8
@@ -273,16 +268,23 @@ client.unfocused #444444 #444444 #ffffff
 
 focus_follows_mouse no
 
-# Autostart
-# exec tilix
-# exec firefox
-# exec slack
-# exec ~/Telegram/Telegram
-exec dunst
-exec gammastep -O 5000K
-exec blueman-applet
-exec ~/.config/sway/kbd_layout_per_window.py
-exec kdeconnect-indicator
+set $cursor_theme "Adwaita"
+seat seat0 xcursor_theme $cursor_theme
+
+exec_always {
+	dunst
+	gammastep -O 5000K
+	blueman-applet
+	~/.config/sway/kbd_layout_per_window.py
+	kdeconnect-indicator
+	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
+}
+
+# exec swayidle -w \
+# 	# timeout 300 'swaylock -f -c 000000' \
+# 	timeout 6 'swaymsg "output * dpms off"' \
+# 	resume 'swaymsg "output * dpms on"'
+# 	# before-sleep 'swaylock -f -c 000000'
 
 # assign [app_id="tilix"] 1
 # assign [app_id="firefox"] 4

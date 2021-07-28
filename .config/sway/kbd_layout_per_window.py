@@ -44,6 +44,9 @@ def on_window(ipc, event):
     elif event.change == "close":
         on_window_close(ipc, event)
 
+def on_new_window(ipc, event):
+    pass
+
 
 if __name__ == "__main__":
     ipc = Connection()
@@ -51,4 +54,5 @@ if __name__ == "__main__":
     if focused is not None:
         prev_focused = focused.id
     ipc.on(Event.WINDOW, on_window)
+    # ipc.on(Event.WINDOW_NEW, on_new_window)
     ipc.main()
