@@ -1,0 +1,4 @@
+[Service]
+ExecStart=gammastep -O 4000K
+[Install]
+WantedBy=default.target

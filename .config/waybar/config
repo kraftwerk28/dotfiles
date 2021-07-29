@@ -75,7 +75,7 @@
     "clock": {
         // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%d.%m.%Y}"
     },
     "cpu": {
         "format": " {usage}% {avg_frequency:1.2f} GHz",
@@ -153,6 +153,9 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "sway/language": {
+        "format": "<b>{}</b>"
     }
 }
 // vim: ft=jsonc: sw=4: et

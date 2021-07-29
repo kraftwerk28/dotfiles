@@ -269,14 +269,18 @@ client.unfocused #444444 #444444 #ffffff
 focus_follows_mouse no
 
 set $cursor_theme "Adwaita"
+set $screen_temperature 4500K
+
 seat seat0 xcursor_theme $cursor_theme
 
-exec_always {
+exec {
 	dunst
-	gammastep -O 5000K
 	blueman-applet
-	~/.config/sway/kbd_layout_per_window.py
 	kdeconnect-indicator
+}
+
+exec_always {
+	~/.config/sway/kbd_layout_per_window.py
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
 }
 

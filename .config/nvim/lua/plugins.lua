@@ -106,20 +106,20 @@ local function load(use)
     end,
   }
 
-  if
-    vim.fn.executable('xkb-switch') > 0
-    or vim.fn.executable('g3kb-switch') > 0
-  then
-    use {
-      "lyokha/vim-xkbswitch",
-      config = function()
-        vim.g.XkbSwitchEnabled = 1
-        if vim.env["XDG_CURRENT_DESKTOP"] == "GNOME" then
-          vim.g.XkbSwitchLib = "/usr/local/lib/libg3kbswitch.so"
-        end
-      end,
-    }
-  end
+  -- if
+  --   vim.fn.executable('xkb-switch') > 0
+  --   or vim.fn.executable('g3kb-switch') > 0
+  -- then
+  --   use {
+  --     "lyokha/vim-xkbswitch",
+  --     config = function()
+  --       vim.g.XkbSwitchEnabled = 1
+  --       if vim.env["XDG_CURRENT_DESKTOP"] == "GNOME" then
+  --         vim.g.XkbSwitchLib = "/usr/local/lib/libg3kbswitch.so"
+  --       end
+  --     end,
+  --   }
+  -- end
 
   use {"chrisbra/Colorizer"}
 
