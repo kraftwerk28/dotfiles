@@ -72,6 +72,7 @@ output * bg ~/Pictures/1546566.jpg fill
 	bindsym $mod+Shift+q kill
 
 	bindsym $mod+p exec wofi
+	bindsym $mod+d exec bemenu-run
 
 	# Drag floating windows by holding down $mod and left mouse button.
 	# Resize them with right mouse button + $mod.
@@ -277,6 +278,8 @@ exec {
 	dunst
 	blueman-applet
 	kdeconnect-indicator
+	gammastep -O 4000K
+	~/.config/sway/kbd_layout_per_window.py
 }
 
 exec_always {
