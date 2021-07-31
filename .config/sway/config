@@ -7,21 +7,22 @@
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
-set $mod Mod4
-# Home row direction keys, like vim
-set $left h
-set $down j
-set $up k
-set $right l
-# Your preferred terminal emulator
-set $term tilix
+set {
+	$mod Mod4
+	$left h
+	$down j
+	$up k
+	$right l
+	$term tilix
+	$cursor_theme "Adwaita"
+	$screen_temperature 4500K}
+}
+
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
-# for_window [app_id="^tilix$"] opacity 0.9
-#
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg ~/Pictures/1546566.jpg fill
 # output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
@@ -205,6 +206,7 @@ mode "resize" {
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
+
 bindsym $mod+r mode "resize"
 
 #
@@ -254,23 +256,17 @@ bindsym {
 	XF86AudioPlay exec playerctl play-pause
 	XF86AudioNext exec playerctl next
 	XF86AudioPrev exec playerctl previous
+
+	Shift+Print exec grimshot copy window
+	Print exec grimshot copy area
 }
-
-bindsym Shift+Print exec grimshot copy window
-bindsym Print exec grimshot copy area
-
-# gaps inner 8
-# gaps outer -8
 
 smart_borders on
 default_border pixel 1
-client.focused #00bb00 #00bb00 #ffffff
+client.focused #dd6600 #dd6600 #ffffff
 client.unfocused #444444 #444444 #ffffff
 
 focus_follows_mouse no
-
-set $cursor_theme "Adwaita"
-set $screen_temperature 4500K
 
 seat seat0 xcursor_theme $cursor_theme
 
@@ -283,7 +279,6 @@ exec {
 }
 
 exec_always {
-	~/.config/sway/kbd_layout_per_window.py
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
 }
 

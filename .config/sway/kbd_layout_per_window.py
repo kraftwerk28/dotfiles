@@ -5,7 +5,7 @@ prev_focused = -1
 windows = {}
 
 
-def on_window_focus(ipc, event):
+def focus_handler(ipc, event):
     global windows, prev_focused
 
     # Save current layout
@@ -32,54 +32,47 @@ def on_window_focus(ipc, event):
     prev_focused = container_id
 
 
-def on_window_close(ipc, event):
+def close_handler(ipc, event):
     global windows
     if (container_id := event.container.id) in windows:
         del windows[container_id]
 
 
-def on_window(ipc, event):
-    if event.change == "focus":
-        on_window_focus(ipc, event)
-    elif event.change == "close":
-        on_window_close(ipc, event)
+# FLOATING_TRESHOLD = 360000
 
 
-FLOATING_TRESHOLD = 360000
-
-
-def autofloating_handler(ipc, event):
-    from pprint import pprint
-    container = event.container
-    geom = container.geometry
-    area = geom.width*geom.height
-    print("area:", area)
-    if area < FLOATING_TRESHOLD:
-        pprint(vars(container))
-        ipc.command("floating enable")
-    # focused_container = ipc.get_tree().find_focused()
-    # # Doesn't work either
-    # if (
-    #     area < FLOATING_TRESHOLD
-    #     and focused_container.id == container.id
-    #     and focused_container.type != "floating_con"
-    # ):
-    #     ipc.command("floating toggle")
-    #     # if focused_container.id == container.id:
-    #     #     # Just focus it
-    #     #     ipc.command("floating toggle")
-    #     # else:
-    #     #     # Focus new window, float it, then focus back
-    #     #     ipc.command(f"[id=\"{container.id}\"] focus")
-    #     #     ipc.command("floating toggle")
-    #     #     ipc.command(f"[id=\"{focused_container.id}\"] focus")
-
+# def autofloating_handler(ipc, event):
+#     from pprint import pprint
+#     container = event.container
+#     geom = container.geometry
+#     area = geom.width*geom.height
+#     print("area:", area)
+#     if area < FLOATING_TRESHOLD:
+#         pprint(vars(container))
+#         ipc.command("floating enable")
+#     focused_container = ipc.get_tree().find_focused()
+#     # Doesn't work either
+#     if (
+#         area < FLOATING_TRESHOLD
+#         and focused_container.id == container.id
+#         and focused_container.type != "floating_con"
+#     ):
+#         ipc.command("floating toggle")
+#         # if focused_container.id == container.id:
+#         #     # Just focus it
+#         #     ipc.command("floating toggle")
+#         # else:
+#         #     # Focus new window, float it, then focus back
+#         #     ipc.command(f"[id=\"{container.id}\"] focus")
+#         #     ipc.command("floating toggle")
+#         #     ipc.command(f"[id=\"{focused_container.id}\"] focus")
 
 if __name__ == "__main__":
     ipc = Connection()
     focused = ipc.get_tree().find_focused()
     if focused is not None:
         prev_focused = focused.id
-    ipc.on(Event.WINDOW, on_window)
+    ipc.on(Event.WINDOW_FOCUS, focus_handler)
+    ipc.on(Event.WINDOW_CLOSE, close_handler)
     # ipc.on(Event.WINDOW_FOCUS, autofloating_handler)
     ipc.main()

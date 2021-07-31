@@ -182,7 +182,7 @@ local function load(use)
           buffer = true,
           calc = true,
           nvim_lsp = true,
-          ultisnips = true,
+          -- ultisnips = true,
         },
         documentation = {border = vim.g.floatwin_border},
       }
