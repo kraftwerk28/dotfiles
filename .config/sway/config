@@ -15,8 +15,9 @@ set {
 	$right l
 	$term tilix
 	$cursor_theme "Adwaita"
-	$screen_temperature 4500K}
 }
+
+exec "systemctl --user import-environment; systemctl --user start sway-session.target"
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
@@ -263,7 +264,7 @@ bindsym {
 
 smart_borders on
 default_border pixel 1
-client.focused #dd6600 #dd6600 #ffffff
+client.focused #ff8800 #ff8800 #ffffff
 client.unfocused #444444 #444444 #ffffff
 
 focus_follows_mouse no
@@ -271,10 +272,9 @@ focus_follows_mouse no
 seat seat0 xcursor_theme $cursor_theme
 
 exec {
-	dunst
+	mako
 	blueman-applet
 	kdeconnect-indicator
-	gammastep -O 4000K
 	~/.config/sway/kbd_layout_per_window.py
 }
 

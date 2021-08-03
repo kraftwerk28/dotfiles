@@ -21,7 +21,7 @@ def focus_handler(ipc, event):
     # Restore layout of the newly focused window
     if (container_id := event.container.id) in windows:
         for input_id, layout_index in windows[container_id].items():
-            if layout_index != input_layout_data[input_id]:
+            if layout_index != input_layout_data.get(input_id, None):
                 cmd = f"input \"{input_id}\" xkb_switch_layout {layout_index}"
                 ipc.command(cmd)
     else:

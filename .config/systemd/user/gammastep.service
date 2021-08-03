@@ -1,3 +1,5 @@
+[Unit]
+After=graphical-session.target
 [Service]
 ExecStart=gammastep -O 4000K
 [Install]

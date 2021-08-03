@@ -205,7 +205,10 @@ end
 lsp_config.yamlls.setup {
   settings = {
     yaml = {
-      schemaStore = {enable = true},
+      schemaStore = {
+        enable = true,
+        url = "https://www.schemastore.org/json",
+      },
     },
   },
 }

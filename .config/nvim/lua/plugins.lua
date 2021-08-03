@@ -206,7 +206,11 @@ local function load(use)
         highlight_opened_files = 1,
         auto_resize = 0,
         icons = {
-          folder = {default = u"f07b", open = u"f07c", symlink = u"f0c1"},
+          folder = {
+            default = u"f07b",
+            open = u"f07c",
+            symlink = u"f0c1",
+          },
         },
       } do vim.g["nvim_tree_"..k] = v end
     end,
@@ -231,6 +235,12 @@ local function load(use)
       vim.g["neoformat_enabled_python"] = {"autopep8"}
       vim.g.neoformat_try_formatprg = 1
       vim.g.neoformat_run_all_formatters = 1
+      -- local eslint_cfg = {
+      --   exe = "eslint",
+      --   args = {"--fix", '"%:p"'},
+      -- }
+      -- vim.g["neoformat_javascript_eslint"] = eslint_cfg
+      -- vim.g["neoformat_typescript_eslint"] = eslint_cfg
     end,
   }
 
