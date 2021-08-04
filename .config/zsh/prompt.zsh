@@ -3,7 +3,7 @@ git_info () {
 		return
 	fi
 	result=" %B%F{blue}\ue0a0%b%F{yellow}$(git branch --show-current)"
-	if command git diff-index --quiet HEAD 2>&1 > /dev/null; then
+	if command git diff-index --quiet HEAD > /dev/null 2>&1 ; then
 		result="${result}%B%F{green}✔"
 	else
 		result="${result}%B%F{red}✗"
