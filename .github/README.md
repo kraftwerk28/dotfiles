@@ -11,7 +11,10 @@
   - [Yay config](../.config/yay/config.json)
   - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
   - [VSCode config](../.config/Code/User/settings.json) (obsolette)
-  - [SwayWM config](../.config/sway/config)
+  - [SwayWM configs](../.config/sway)
+  - [Wofi config](../.config/wofi/config)
+  - [Waybar configs](../.config/waybar)
+  - [Systemd user units](../.config/systemd/user)
 
 Neovim (0.5) configs aren't completely in Lua, because not all APIs
 have alternative functions (at least native).
