@@ -134,8 +134,10 @@ bindsym {
 	$mod+0 workspace number 10
 	$mod+Tab workspace back_and_forth
 
-	--to-code $mod+bracketleft workspace prev
-	--to-code $mod+bracketright workspace next
+	--to-code $mod+Bracketleft workspace prev
+	--to-code $mod+Bracketright workspace next
+	--to-code $mod+Shift+Bracketleft exec ~/.config/sway/workspace_switch prev
+	--to-code $mod+Shift+Bracketright exec ~/.config/sway/workspace_switch next
 
 	# Move focused container to workspace
 	$mod+Shift+1 move container to workspace number 1
