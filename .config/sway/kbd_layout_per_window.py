@@ -1,71 +1,60 @@
 #!/usr/bin/env python
-from i3ipc import Connection, Event
+from i3ipc import Connection, Event, events
 
 prev_focused = -1
 windows = {}
+DEFAULT_LAYOUT_INDEX = 0
+
+def dump_event(event):
+    import os
+    os.system(f"notify-send {event.change}")
 
 
-def focus_handler(ipc, event):
+def focus_handler(ipc: Connection, event: events.WindowEvent):
+    dump_event(event)
     global windows, prev_focused
 
     # Save current layout
     inputs = ipc.get_inputs()
     input_layout_data = {}
     for input in inputs:
-        index = input.xkb_active_layout_index
-        if index is not None:
+        if (index := input.xkb_active_layout_index) is not None:
             input_layout_data[input.identifier] = index
     if prev_focused != -1:
         windows[prev_focused] = input_layout_data
 
+    container_id = event.container.id
     # Restore layout of the newly focused window
-    if (container_id := event.container.id) in windows:
-        for input_id, layout_index in windows[container_id].items():
+    if (cur_layout_data := windows.get(container_id, None)) is not None:
+        for input_id, layout_index in cur_layout_data.items():
             if layout_index != input_layout_data.get(input_id, None):
-                cmd = f"input \"{input_id}\" xkb_switch_layout {layout_index}"
-                ipc.command(cmd)
+                ipc.command(
+                    f"input \"{input_id}\" xkb_switch_layout "
+                    f"{layout_index}"
+                )
     else:
         for input in inputs:
-            cmd = f"input \"{input.identifier}\" xkb_switch_layout 0"
-            ipc.command(cmd)
+            if input.xkb_active_layout_index != DEFAULT_LAYOUT_INDEX:
+                ipc.command(
+                    f"input \"{input.identifier}\" xkb_switch_layout "
+                    f"{DEFAULT_LAYOUT_INDEX}"
+                )
 
     prev_focused = container_id
 
 
 def close_handler(ipc, event):
-    global windows
-    if (container_id := event.container.id) in windows:
-        del windows[container_id]
+    windows.pop(event.container.id, None)
 
 
-# FLOATING_TRESHOLD = 360000
+def workspace_init_handler(ipc: Connection, event: events.WorkspaceEvent):
+    dump_event(event)
+    for input in ipc.get_inputs():
+        ipc.command(
+            f"input \"{input.identifier}\" xkb_switch_layout "
+            f"{DEFAULT_LAYOUT_INDEX}"
+        )
 
-
-# def autofloating_handler(ipc, event):
-#     from pprint import pprint
-#     container = event.container
-#     geom = container.geometry
-#     area = geom.width*geom.height
-#     print("area:", area)
-#     if area < FLOATING_TRESHOLD:
-#         pprint(vars(container))
-#         ipc.command("floating enable")
-#     focused_container = ipc.get_tree().find_focused()
-#     # Doesn't work either
-#     if (
-#         area < FLOATING_TRESHOLD
-#         and focused_container.id == container.id
-#         and focused_container.type != "floating_con"
-#     ):
-#         ipc.command("floating toggle")
-#         # if focused_container.id == container.id:
-#         #     # Just focus it
-#         #     ipc.command("floating toggle")
-#         # else:
-#         #     # Focus new window, float it, then focus back
-#         #     ipc.command(f"[id=\"{container.id}\"] focus")
-#         #     ipc.command("floating toggle")
-#         #     ipc.command(f"[id=\"{focused_container.id}\"] focus")
 
 if __name__ == "__main__":
     ipc = Connection()
@@ -74,5 +63,5 @@ if __name__ == "__main__":
         prev_focused = focused.id
     ipc.on(Event.WINDOW_FOCUS, focus_handler)
     ipc.on(Event.WINDOW_CLOSE, close_handler)
-    # ipc.on(Event.WINDOW_FOCUS, autofloating_handler)
+    # ipc.on(Event.WORKSPACE_INIT, workspace_init_handler)
     ipc.main()

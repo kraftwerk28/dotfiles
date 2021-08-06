@@ -4,9 +4,8 @@
 
 ### In this repo:
   - [Neovim config](../.config/nvim)
-  - [Kitty config](../.config/kitty/kitty.conf)
-    (obsolette)
-  - [Tilix config](../.config/tilix/tilix.dconf)
+  - [Kitty config](../.config/kitty/kitty.conf) (obsolette)
+  - [Tilix config](../.config/tilix/tilix.dconf) (obsolette)
   - [OpenTTD config](../.openttd/openttd.cfg)
   - [Yay config](../.config/yay/config.json)
   - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
@@ -15,6 +14,7 @@
   - [Wofi config](../.config/wofi/config)
   - [Waybar configs](../.config/waybar)
   - [Systemd user units](../.config/systemd/user)
+  - [Alacritty config](../.config/alacritty/alacritty.yml)
 
 Neovim (0.5) configs aren't completely in Lua, because not all APIs
 have alternative functions (at least native).

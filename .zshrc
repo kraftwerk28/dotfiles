@@ -62,3 +62,8 @@ export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
 	source "$NVM_DIR/nvm.sh" --no-use
 fi
+
+dump_cwd () {
+	echo $(pwd) > /tmp/last_pwd
+}
+precmd_functions+=(dump_cwd)

@@ -13,7 +13,6 @@ set {
 	$down j
 	$up k
 	$right l
-	$term tilix
 	$cursor_theme "Adwaita"
 }
 
@@ -69,7 +68,10 @@ bindsym {
 	# Basics:
 	#
 	# Start a terminal
-	--to-code $mod+Return exec tilix
+	--to-code $mod+Return exec alacritty
+	--to-code $mod+Shift+Return exec \
+		alacritty \
+		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo ~)
 	# bindsym --to-code $mod+Shift+Return exec \
 	# 	tilix -w $(zsh -c "z -t | tail -n1 | grep -o '/.*'")
 
@@ -301,4 +303,6 @@ exec_always {
 # 	# before-sleep 'swaylock -f -c 000000'
 
 for_window [app_id="firefox" title="^Picture-in-Picture$"] \
+	floating enable, sticky enable
+for_window [app_id="firefox" title="Sharing Indicator"] \
 	floating enable, sticky enable

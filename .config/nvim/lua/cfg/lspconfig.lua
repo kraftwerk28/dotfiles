@@ -68,30 +68,30 @@ lsp_config.tsserver.setup {
 --   root_dir = root_pattern('.flowconfig'),
 -- }
 
--- lsp_config.pyls.setup {
---   cmd = {'pyls'},
---   filetypes = {'python'},
---   settings = {
---     pyls = {
---       plugins = {
---         jedi_completion = {enabled = true},
---         jedi_hover = {enabled = true},
---         jedi_references = {enabled = true},
---         jedi_signature_help = {enabled = true},
---         jedi_symbols = {enabled = true, all_scopes = true},
---         yapf = {enabled = false},
---         pylint = {enabled = false},
---         pycodestyle = {enabled = false},
---         pydocstyle = {enabled = false},
---         mccabe = {enabled = false},
---         preload = {enabled = false},
---         rope_completion = {enabled = false},
---       },
---     },
---   },
--- }
+lsp_config.pylsp.setup {
+  cmd = {"pyls"},
+  filetypes = {"python"},
+  settings = {
+    pyls = {
+      plugins = {
+        jedi_completion = {enabled = true},
+        jedi_hover = {enabled = true},
+        jedi_references = {enabled = true},
+        jedi_signature_help = {enabled = true},
+        jedi_symbols = {enabled = true, all_scopes = true},
+        yapf = {enabled = false},
+        pylint = {enabled = false},
+        pycodestyle = {enabled = false},
+        pydocstyle = {enabled = false},
+        mccabe = {enabled = false},
+        preload = {enabled = false},
+        rope_completion = {enabled = false},
+      },
+    },
+  },
+}
 
-lsp_config.pyright.setup {}
+-- lsp_config.pyright.setup {}
 
 lsp_config.sumneko_lua.setup {
   cmd = {
