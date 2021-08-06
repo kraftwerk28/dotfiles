@@ -68,10 +68,17 @@ bindsym {
 	# Basics:
 	#
 	# Start a terminal
-	--to-code $mod+Return exec alacritty
+
+	# For alacritty
+	# --to-code $mod+Return exec alacritty
+	# --to-code $mod+Shift+Return exec \
+	# 	alacritty \
+	# 	--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo ~)
+
+	--to-code $mod+Return exec tilix
 	--to-code $mod+Shift+Return exec \
-		alacritty \
-		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo ~)
+		tilix -w $(cat /tmp/last_pwd 2>/dev/null || echo ~)
+
 	# bindsym --to-code $mod+Shift+Return exec \
 	# 	tilix -w $(zsh -c "z -t | tail -n1 | grep -o '/.*'")
 
