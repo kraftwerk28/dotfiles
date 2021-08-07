@@ -4,9 +4,25 @@
     "height": 30, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode", "custom/media", "sway/window"],
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/window"
+    ],
     "modules-center": [],
-    "modules-right": ["tray", "pulseaudio", "network", "cpu", "backlight", "keyboard-state", "battery", "battery#bat2", "sway/language", "clock"],
+    "modules-right": [
+        "tray",
+        "custom/wttr",
+        "pulseaudio",
+        "network",
+        "cpu",
+        "backlight",
+        "keyboard-state",
+        "battery",
+        "battery#bat2",
+        "sway/language",
+        "clock"
+    ],
     // Modules configuration
     // "sway/workspaces": {
     //     "disable-scroll": true,
@@ -158,6 +174,10 @@
     },
     "sway/language": {
         "format": "<b>{}</b>"
+    },
+    "custom/wttr": {
+        "exec": "~/.config/waybar/weather.py",
+        "interval": 1800
     }
 }
 // vim: ft=jsonc: sw=4: et

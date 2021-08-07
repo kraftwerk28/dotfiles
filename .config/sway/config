@@ -285,8 +285,9 @@ smart_gaps on
 gaps inner 4
 
 default_border pixel 1
-client.focused #ff8800 #ff8800 #ffffff
-client.unfocused #444444 #444444 #ffffff
+client.focused "#ff8800" "#ff8800" "#000000"
+client.unfocused "#444444" "#444444" "#ffffff"
+font "Hack Nerd Font 10"
 
 focus_follows_mouse no
 
