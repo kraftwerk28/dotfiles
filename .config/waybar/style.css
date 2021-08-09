@@ -80,7 +80,7 @@ window#waybar.chromium {
 #network,
 #pulseaudio,
 #custom-media,
-#custom-wttr,
+#custom-openweather,
 #tray,
 #mode,
 #idle_inhibitor,
@@ -241,6 +241,6 @@ label:focus {
 	min-width: 20px;
 }
 
-#custom-wttr {
+#custom-openweather {
 	border-color: #8800ff;
 }

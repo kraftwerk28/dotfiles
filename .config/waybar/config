@@ -12,7 +12,7 @@
     "modules-center": [],
     "modules-right": [
         "tray",
-        "custom/wttr",
+        "custom/openweather",
         "pulseaudio",
         "network",
         "cpu",
@@ -175,8 +175,9 @@
     "sway/language": {
         "format": "<b>{}</b>"
     },
-    "custom/wttr": {
+    "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",
+        "on-click": "~/.config/waybar/weather.py open",
         "interval": 1800
     }
 }

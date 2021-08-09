@@ -13,13 +13,12 @@ set {
 	$down j
 	$up k
 	$right l
-	$cursor_theme "Adwaita"
+	$cursor_theme "breeze_cursors"
 }
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
 
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-
 # SCP
 output * bg ~/Pictures/1546566.jpg fill
 # output * bg ~/projects/go/src/gopics/my_avatarka/avatar.png fill
@@ -60,10 +59,15 @@ output * bg ~/Pictures/1546566.jpg fill
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
 floating_modifier $mod normal
 
 bindsym {
-	### Key bindings
+### Key bindings
 	#
 	# Basics:
 	#
@@ -79,21 +83,13 @@ bindsym {
 	--to-code $mod+Shift+Return exec \
 		tilix -w $(cat /tmp/last_pwd 2>/dev/null || echo ~)
 
-	# bindsym --to-code $mod+Shift+Return exec \
-	# 	tilix -w $(zsh -c "z -t | tail -n1 | grep -o '/.*'")
+	--to-code $mod+b exec firefox
 
 	# Kill focused window
 	$mod+Shift+q kill
 
 	$mod+p exec wofi
 	$mod+d exec bemenu-run
-
-	# Drag floating windows by holding down $mod and left mouse button.
-	# Resize them with right mouse button + $mod.
-	# Despite the name, also works for non-floating windows.
-	# Change normal to inverse to use left mouse button for resizing and right
-	# mouse button for dragging.
-
 
 	# Reload the configuration file
 	$mod+Shift+c reload
@@ -266,6 +262,7 @@ input type:touchpad {
 
 include /etc/sway/config.d/*
 
+# Various multimedia keys
 bindsym {
 	XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 	XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
@@ -283,6 +280,7 @@ bindsym {
 smart_borders on
 smart_gaps on
 gaps inner 4
+focus_wrapping off
 
 default_border pixel 1
 client.focused "#ff8800" "#ff8800" "#000000"
@@ -292,16 +290,15 @@ font "Hack Nerd Font 10"
 focus_follows_mouse no
 
 seat seat0 xcursor_theme $cursor_theme
+exec_always {
+	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
+}
 
 exec {
 	mako
 	blueman-applet
 	kdeconnect-indicator
 	~/.config/sway/kbd_layout_per_window.py
-}
-
-exec_always {
-	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
 }
 
 # exec swayidle -w \
