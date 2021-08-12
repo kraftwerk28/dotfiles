@@ -1,5 +1,7 @@
 insensitive=true
-show=drun
 allow_images=true
-key_expand=Right
+key_expand=Control_L-l
+key_down=Control_L-j
+key_up=Control_L-k
 image_size=24
+parse_action=false

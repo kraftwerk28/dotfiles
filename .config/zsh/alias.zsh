@@ -17,6 +17,7 @@ fi
 # if type bat > /dev/null; then
 # 	alias less="bat"
 # fi
+alias less="less -i"
 
 if type bat > /dev/null; then
 	alias cat="bat -p --color never --paging never"

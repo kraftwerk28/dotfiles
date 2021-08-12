@@ -64,6 +64,9 @@ if [[ -s "$NVM_DIR/nvm.sh" ]]; then
 fi
 
 dump_cwd () {
-	echo $(pwd) > /tmp/last_pwd
+	dir=$(pwd)
+	if [[ $dir != $HOME ]]; then
+		echo $dir > /tmp/last_pwd
+	fi
 }
 precmd_functions+=(dump_cwd)

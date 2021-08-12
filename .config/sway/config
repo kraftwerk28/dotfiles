@@ -66,6 +66,17 @@ output * bg ~/Pictures/1546566.jpg fill
 # mouse button for dragging.
 floating_modifier $mod normal
 
+bindsym --to-code {
+	$mod+Return exec alacritty
+	$mod+Shift+Return exec alacritty \
+		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo ~)
+}
+
+# bindsym --to-code {
+# 	$mod+Return exec tilix
+# 	$mod+Shift+Return exec tilix -w $(cat /tmp/last_pwd 2>/dev/null || echo ~)
+# }
+
 bindsym {
 ### Key bindings
 	#
@@ -73,26 +84,13 @@ bindsym {
 	#
 	# Start a terminal
 
-	# For alacritty
-	# --to-code $mod+Return exec alacritty
-	# --to-code $mod+Shift+Return exec \
-	# 	alacritty \
-	# 	--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo ~)
-
-	--to-code $mod+Return exec tilix
-	--to-code $mod+Shift+Return exec \
-		tilix -w $(cat /tmp/last_pwd 2>/dev/null || echo ~)
-
-	--to-code $mod+b exec firefox
-
 	# Kill focused window
-	$mod+Shift+q kill
+	--to-code $mod+Shift+q kill
 
-	$mod+p exec wofi
-	$mod+d exec bemenu-run
+	$mod+p exec wofi --show drun
 
 	# Reload the configuration file
-	$mod+Shift+c reload
+	--to-code $mod+Shift+c reload
 
 	# Exit sway (logs you out of your Wayland session)
 	$mod+Shift+e exec swaynag \
@@ -267,7 +265,8 @@ bindsym {
 	XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 	XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 	XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-	XF86MonBrightnessDown exec brightnessctl set 5%-
+	XF86MonBrightnessDown exec \
+		[[ $(brightnessctl g) -gt 6000 ]] && brightnessctl set 5%-
 	XF86MonBrightnessUp exec brightnessctl set +5%
 	XF86AudioPlay exec playerctl play-pause
 	XF86AudioNext exec playerctl next
@@ -280,16 +279,18 @@ bindsym {
 smart_borders on
 smart_gaps on
 gaps inner 4
-focus_wrapping off
-
+gaps outer 0
 default_border pixel 1
-client.focused "#ff8800" "#ff8800" "#000000"
+
+focus_wrapping off
+focus_follows_mouse no
+
+# client.focused "#ff8800" "#ff8800" "#000000"
+client.focused "#aaaaaa" "#aaaaaa" "#000000"
 client.unfocused "#444444" "#444444" "#ffffff"
 font "Hack Nerd Font 10"
 
-focus_follows_mouse no
-
-seat seat0 xcursor_theme $cursor_theme
+seat * xcursor_theme $cursor_theme
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
 }

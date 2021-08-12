@@ -56,4 +56,11 @@ function M.yank_highlight()
   end
 end
 
+-- local tm = vim.loop.new_timer()
+-- local count = 0
+-- tm:start(1000, 1000, vim.schedule_wrap(function()
+--   count = count + 1
+--   dump{count, fn.getpos("'<"), fn.getpos("'>")}
+-- end))
+
 return M
