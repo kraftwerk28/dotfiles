@@ -285,8 +285,8 @@ default_border pixel 1
 focus_wrapping off
 focus_follows_mouse no
 
-# client.focused "#ff8800" "#ff8800" "#000000"
-client.focused "#aaaaaa" "#aaaaaa" "#000000"
+client.focused "#ff8800" "#ff8800" "#000000"
+# client.focused "#aaaaaa" "#aaaaaa" "#000000"
 client.unfocused "#444444" "#444444" "#ffffff"
 font "Hack Nerd Font 10"
 

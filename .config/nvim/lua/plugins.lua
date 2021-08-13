@@ -1,31 +1,34 @@
 local function load(use)
-  use {'wbthomason/packer.nvim', opt = true}
+  use {"wbthomason/packer.nvim", opt = true}
 
-  use {'~/projects/neovim/gtranslate.nvim'}
+  use {
+    "~/projects/neovim/gtranslate.nvim",
+    requires = {"nvim-lua/plenary.nvim"},
+  }
 
   -- Themes
-  use {'ayu-theme/ayu-vim', opt = true, disable = true}
-  use {'romgrk/doom-one.vim', disable = true}
-  use {'joshdick/onedark.vim', disable = true}
-  use {'morhetz/gruvbox', disable = true}
-  use {'npxbr/gruvbox.nvim', disable = true, requires = {'rktjmp/lush.nvim'}}
-  use {'RRethy/nvim-base16'}
+  use {"ayu-theme/ayu-vim", opt = true, disable = true}
+  use {"romgrk/doom-one.vim", disable = true}
+  use {"joshdick/onedark.vim", disable = true}
+  use {"morhetz/gruvbox", disable = true}
+  use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+  use {"RRethy/nvim-base16"}
 
-  use {'kyazdani42/nvim-web-devicons'}
+  use {"kyazdani42/nvim-web-devicons"}
 
   -- Tools
   use {
-    'tpope/vim-surround',
+    "tpope/vim-surround",
     config = function()
       local char2nr = vim.fn.char2nr
-      vim.g['surround_' .. char2nr('r')] = "{'\r'}"
-      vim.g['surround_' .. char2nr('j')] = "{/* \r */}"
-      vim.g['surround_' .. char2nr('c')] = "/* \r */"
+      vim.g["surround_" .. char2nr('r')] = "{'\r'}"
+      vim.g["surround_" .. char2nr('j')] = "{/* \r */}"
+      vim.g["surround_" .. char2nr('c')] = "/* \r */"
     end,
   }
 
   use {
-    'b3nj5m1n/kommentary',
+    "b3nj5m1n/kommentary",
     config = function()
       require("kommentary.config").configure_language(
         "default",
@@ -35,10 +38,10 @@ local function load(use)
   }
 
   use {
-    'nvim-telescope/telescope.nvim',
+    "nvim-telescope/telescope.nvim",
     requires = {
-      'kyazdani42/nvim-web-devicons', 'nvim-lua/popup.nvim',
-      'nvim-lua/plenary.nvim',
+      "kyazdani42/nvim-web-devicons", "nvim-lua/popup.nvim",
+      "nvim-lua/plenary.nvim",
     },
     config = function()
       -- local pickers = require('telescope.pickers')
