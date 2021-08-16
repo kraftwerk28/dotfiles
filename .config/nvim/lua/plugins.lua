@@ -163,8 +163,7 @@ local function load(use)
     local disable = vim.v.shell_error ~= 0
     if disable then print("Please install python's pynvim package") end
     use {
-      'SirVer/ultisnips',
-      disable = disable,
+      "SirVer/ultisnips",
       config = function()
         vim.g.UltiSnipsExpandTrigger = '<F10>'
         vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
@@ -175,7 +174,7 @@ local function load(use)
 
   use {
     "hrsh7th/nvim-compe",
-    requires = {'SirVer/ultisnips', 'honza/vim-snippets', opt = true},
+    requires = {"SirVer/ultisnips", "honza/vim-snippets"},
     config = function()
       require('compe').setup {
         throttle_time = 200,
@@ -185,7 +184,7 @@ local function load(use)
           buffer = true,
           calc = true,
           nvim_lsp = true,
-          -- ultisnips = true,
+          ultisnips = true,
         },
         documentation = {border = vim.g.floatwin_border},
       }

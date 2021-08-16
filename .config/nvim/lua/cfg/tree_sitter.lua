@@ -28,6 +28,7 @@ local enabled_linux = {
   "tsx",
   "typescript",
   "yaml",
+  -- "haskell",
 }
 
 local enabled_windows = {

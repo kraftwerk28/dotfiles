@@ -20,7 +20,7 @@ exec "systemctl --user import-environment; systemctl --user start sway-session.t
 
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # SCP
-output * bg ~/Pictures/1546566.jpg fill
+output * bg $HOME/Pictures/scp_wallpaper_1.jpg fill
 # output * bg ~/projects/go/src/gopics/my_avatarka/avatar.png fill
 # output * bg ~/Pictures/voxel-island-wallpaper.jpg fill
 
@@ -92,6 +92,10 @@ bindsym {
 	# Reload the configuration file
 	--to-code $mod+Shift+c reload
 
+	$mod+f2 exec alacritty \
+		--working-directory "$HOME/.config/sway" \
+		--command nvim config
+
 	# Exit sway (logs you out of your Wayland session)
 	$mod+Shift+e exec swaynag \
 		-t warning \
@@ -140,9 +144,9 @@ bindsym {
 	--to-code $mod+Bracketleft workspace prev
 	--to-code $mod+Bracketright workspace next
 	--to-code $mod+Shift+Bracketleft \
-		exec ~/.config/sway/workspace_switch.sh prev
+		exec $HOME/.config/sway/workspace_switch.sh prev
 	--to-code $mod+Shift+Bracketright \
-		exec ~/.config/sway/workspace_switch.sh next
+		exec $HOME/.config/sway/workspace_switch.sh next
 
 	# Move focused container to workspace
 	$mod+Shift+1 move container to workspace number 1
@@ -194,6 +198,8 @@ bindsym {
 	# Show the next scratchpad window or hide the focused scratchpad window.
 	# If there are multiple scratchpad windows, this command cycles through them.
 	$mod+minus scratchpad show
+
+	--to-code $mod+c move position center
 }
 
 #
@@ -286,8 +292,8 @@ focus_wrapping off
 focus_follows_mouse no
 
 client.focused "#ff8800" "#ff8800" "#000000"
-# client.focused "#aaaaaa" "#aaaaaa" "#000000"
-client.unfocused "#444444" "#444444" "#ffffff"
+client.focused_inactive "#555555" "#555555" "#ffffff"
+client.unfocused "#555555" "#555555" "#ffffff"
 font "Hack Nerd Font 10"
 
 seat * xcursor_theme $cursor_theme
@@ -299,8 +305,13 @@ exec {
 	mako
 	blueman-applet
 	kdeconnect-indicator
-	~/.config/sway/kbd_layout_per_window.py
+	$HOME/.config/sway/kbd_layout_per_window.py
 }
+
+workspace 4; exec firefox
+workspace 5; exec ~/Telegram/Telegram
+workspace 6; exec slack
+workspace 1; exec alacritty
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
