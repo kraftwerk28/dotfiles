@@ -1,6 +1,7 @@
 let mapleader = " "
 
 source /home/kraftwerk28/.config/nvim/init.vim
+source /home/kraftwerk28/.config/nvim/opts.vim
 set ideajoin
 set ideaput
 set surround
@@ -10,3 +11,4 @@ set noerrorbells
 
 map <Leader>ae <Action>(ShowErrorDescription)
 map <Leader>ah <Action>(QuickJavaDoc)
+map <Leader>f <Action>(ReformatCode)

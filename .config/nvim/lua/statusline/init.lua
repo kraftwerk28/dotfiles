@@ -164,62 +164,62 @@ local pos_percent = component {
   function()
     local cur, total = vim.fn.line '.', vim.fn.line '$'
     if cur == 1 then
-      return ' Top'
+      return " Top"
     elseif cur == total then
-      return ' Bot'
+      return " Bot"
     else
       local frac = (cur / total) * 100
       local rounded = frac + 0.5 - (frac + 0.5) % 1
-      return sprintf('% 3d%%', rounded)
+      return sprintf("% 3d%%", rounded)
     end
   end,
   condition = iswide,
-  left_separator = {'|', hl = 'StatusLineModeInv'},
+  left_separator = {'|', hl = "StatusLineModeInv"},
   padding = {0, 1},
 }
 
-local secondary_filename = component {'%f', hl = 'StatusLine'}
+local secondary_filename = component {'%f', hl = "StatusLine"}
 
 return function()
   cl = colors.from_base16(vim.g.base16_theme)
   mode_map = {
-    ['n'] = {'NORMAL', cl.normal},
-    ['i'] = {'INSERT', cl.insert},
-    ['R'] = {'REPLACE', cl.replace},
-    ['v'] = {'VISUAL', cl.visual},
-    ['V'] = {'V-LINE', cl.visual},
-    ['c'] = {'COMMAND', cl.command},
-    ['s'] = {'SELECT', cl.visual},
-    ['S'] = {'S-LINE', cl.visual},
-    ['t'] = {'TERMINAL', cl.terminal},
-    [''] = {'V-BLOCK', cl.visual},
-    [''] = {'S-BLOCK', cl.visual},
+    ['n'] = {"NORMAL", cl.normal},
+    ['i'] = {"INSERT", cl.insert},
+    ['R'] = {"REPLACE", cl.replace},
+    ['v'] = {"VISUAL", cl.visual},
+    ['V'] = {"V-LINE", cl.visual},
+    ['c'] = {"COMMAND", cl.command},
+    ['s'] = {"SELECT", cl.visual},
+    ['S'] = {"S-LINE", cl.visual},
+    ['t'] = {"TERMINAL", cl.terminal},
+    [''] = {"V-BLOCK", cl.visual},
+    [''] = {"S-BLOCK", cl.visual},
   }
 
   stl.setup {
     on_update = function()
       highlight {
-        'StatusLineWarning',
+        "StatusLineWarning",
         guibg = cl.bg,
-        override = 'LspDiagnosticsDefaultWarning',
+        override = "LspDiagnosticsDefaultWarning",
         gui = "bold",
       }
       highlight {
-        'StatusLineError',
+        "StatusLineError",
         guibg = cl.bg,
-        override = 'LspDiagnosticsDefaultError',
+        override = "LspDiagnosticsDefaultError",
         gui = "bold",
       }
       highlight {
-        'StatusLineHint',
+        "StatusLineHint",
         guibg = cl.bg,
-        override = 'LspDiagnosticsDefaultHint',
+        override = "LspDiagnosticsDefaultHint",
         gui = "bold",
       }
       highlight {
-        'StatusLineInformation',
+        "StatusLineInformation",
         guibg = cl.bg,
-        override = 'LspDiagnosticsDefaultInformation',
+        override = "LspDiagnosticsDefaultInformation",
         gui = "bold",
       }
     end,

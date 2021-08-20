@@ -7,6 +7,7 @@ DEFAULT_LAYOUT_INDEX = 0
 
 class Handler:
     def __init__(self, ipc):
+        # покращений
         self.ipc = ipc
         self.windows = {}
         self.prev_focused = None
@@ -53,7 +54,11 @@ class Handler:
     def close_handler(self, ipc, event):
         self.windows.pop(event.container.id, None)
 
-    def workspace_init_handler(self, ipc: Connection, event: events.WorkspaceEvent):
+    def workspace_init_handler(
+        self,
+        ipc: Connection,
+        event: events.WorkspaceEvent
+    ):
         for input in self._get_inputs():
             ipc.command(
                 f"input \"{input.identifier}\" xkb_switch_layout "

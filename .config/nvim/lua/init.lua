@@ -56,6 +56,52 @@ function M.yank_highlight()
   end
 end
 
+utils.nnoremap("<Leader>ar", function()
+  local _, line_num, col_num, _, _ = unpack(fn.getcurpos())
+  line_num = line_num - 1
+  col_num = col_num - 1
+
+  -- local bufnum, start_row, start_col, _ = unpack(fn.getpos("'<"))
+  -- local _, end_row, end_col, _ = unpack(fn.getpos("'>"))
+  -- start_row = start_row - 1
+  -- start_col = start_col - 1
+  -- end_row = end_row - 1
+
+  local parser = vim.treesitter.get_parser()
+  local root_node = parser:parse()[1]:root()
+
+  local arguments_node =
+    root_node:named_descendant_for_range(line_num, col_num, line_num, col_num)
+  while true do
+    local type = arguments_node:type()
+    if arguments_node == root_node then
+      print("Not inside arguments")
+      return
+    elseif type ~= "arguments" then
+      arguments_node = arguments_node:parent()
+    else
+      break
+    end
+  end
+
+  local child_count= arguments_node:named_child_count()
+  for i = 0, child_count - 1 do
+    local child = arguments_node:named_child(i)
+    local line, col, e_line, e_col = child:range()
+    print(("%s; [%d %d, %d, %d]"):format(child:type(), line, col, e_line, e_col))
+    fn.cursor(line+1, col+1)
+    break
+  end
+  -- for child in arguments_node:iter_children() do
+  --   if child:named() then
+  --     print("Child type: "..child:type())
+  --     print("Child sexpr: "..child:sexpr())
+  --     print(child:range())
+  --   end
+  -- end
+
+end)
+
 -- local tm = vim.loop.new_timer()
 -- local count = 0
 -- tm:start(1000, 1000, vim.schedule_wrap(function()

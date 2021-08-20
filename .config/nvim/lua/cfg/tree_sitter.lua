@@ -47,8 +47,14 @@ end
 
 require("nvim-treesitter.configs").setup {
   ensure_installed = ensure_installed,
-  highlight = {enable = true},
-  playground = {enable = true, updatetime = 25, persist_queries = false},
+  highlight = {
+    enable = true,
+  },
+  playground = {
+    enable = true,
+    updatetime = 25,
+    persist_queries = false,
+  },
   incremental_selection = {
     enable = true,
     keymaps = {

@@ -10,11 +10,16 @@ plug zsh-z/zsh-z.plugin.zsh
 plug zsh-extract/extract.plugin.zsh
 plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
+ZVM_CURSOR_STYLE_ENABLED=true
+ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
+ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+
 # Change cursor shape depending on vi mode
-CHANGE_CURSOR_SHAPE=0
+# CHANGE_CURSOR_SHAPE=false
 # Show a character depending on vi mode
-SHOW_VIMODE=1
-KEYTIMEOUT=1
+# SHOW_VIMODE=true
+KEYTIMEOUT=true
 
 autoload -U select-word-style
 select-word-style bash
@@ -34,7 +39,6 @@ SAVEHIST=10000
 
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
-ZVM_CURSOR_STYLE_ENABLED=false
 
 tabs -4
 

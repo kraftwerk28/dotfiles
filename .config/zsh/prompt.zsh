@@ -12,32 +12,29 @@ git_info () {
 	echo $result
 }
 
+# vimode () {
+# 	if [[ "$KEYMAP" == "vicmd" ]] || [[ "$1" == "block" ]]; then
+# 		# NORMAL
+# 		[[ $CHANGE_CURSOR_SHAPE = true ]] && echo -ne "\e[1 q"
+# 		[[ $SHOW_VIMODE = true ]] && echo " %B%F{green}N"
+# 	elif [[ "$KEYMAP" =~ ^(main|viins|)$ ]] || [[ "$1" == "beam" ]]; then
+# 		# INSERT
+# 		[[ $CHANGE_CURSOR_SHAPE = true ]] && echo -ne "\e[5 q"
+# 		[[ $SHOW_VIMODE = true ]] && echo " %B%F{cyan}I"
+# 	elif [[ "$KEYMAP" == "visual" ]]; then
+# 		# VISUAL
+# 		[[ $CHANGE_CURSOR_SHAPE = true ]] && echo -ne "\e[3 q"
+# 		[[ $SHOW_VIMODE = true ]] && echo " %B%F{orange}V"
+# 	fi
+# }
+
 vimode () {
-	if [[ "$KEYMAP" == "vicmd" ]] || [[ "$1" == "block" ]]; then
-		# NORMAL
-		if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
-			echo -ne "\e[1 q";
-		fi
-		if [[ "$SHOW_VIMODE" == 1 ]]; then
-			echo " %B%F{green}N"
-		fi
-	elif [[ "$KEYMAP" =~ ^(main|viins|)$ ]] || [[ "$1" == "beam" ]]; then
-		# INSERT
-		if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
-			echo -ne "\e[5 q"
-		fi
-		if [[ "$SHOW_VIMODE" == 1 ]]; then
-			echo " %B%F{cyan}I"
-		fi
-	elif [[ "$KEYMAP" == "visual" ]]; then
-		# VISUAL
-		if [[ "$CHANGE_CURSOR_SHAPE" == 1 ]]; then
-			echo -ne "\e[4 q"
-		fi
-		if [[ "$SHOW_VIMODE" == 1 ]]; then
-			echo " %B%F{orange}V"
-		fi
-	fi
+	case $ZVM_MODE in
+		$ZVM_MODE_NORMAL) echo " %B%F{green}N";;
+		$ZVM_MODE_INSERT) echo " %B%F{cyan}I";;
+		$ZVM_MODE_VISUAL) echo " %B%F{yellow}V";;
+		*) echo " %B%F{cyan}I";;
+	esac
 }
 
 refresh_prompt () {
@@ -45,7 +42,7 @@ refresh_prompt () {
 	PROMPT_STATUS=" %(?:%B%F{green}\$:%B%F{red}\$)"
 	CL_RESET="%b%f%k"
 	PROMPT="${FILEPATH}$(git_info)$(vimode)${PROMPT_STATUS}${CL_RESET} "
-	RPROMPT="%F{green}[$(date +%H:%M:%S)]$CL_RESET"
+	# RPROMPT="%F{green}[$(date +%H:%M:%S)]$CL_RESET"
 }
 
 zle-keymap-select () {

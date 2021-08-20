@@ -2,6 +2,7 @@ local M = {}
 
 local utils = require('utils')
 local sprintf = utils.sprintf
+local api, fn = vim.api, vim.fn
 
 -- @deprecated
 local function get_padding(cfg)
@@ -136,38 +137,50 @@ local builder = Builder:new()
 M.component = function(...) return builder:component(...) end
 
 function M.setup(config)
-  local primary, secondary = '', ''
+  local primary, secondary = "", ""
+  local get_cached_key = "_stl_get_cached"
+  local update_stl_key = "_stl_update"
+  local augroup_name = "stl_augroup"
 
-  function _G._stl_get_cached()
-    if vim.g.statusline_winid == vim.fn.win_getid() then
+  _G[get_cached_key] = function()
+    if vim.g.statusline_winid == fn.win_getid() then
       return primary
     else
       return secondary
     end
   end
 
-  function _G._stl_update()
+  _G[update_stl_key] = function()
     if type(config.on_update) == "function" then config.on_update() end
-    for _, fn in ipairs(on_focuschange_handlers) do fn() end
+    for _, callback in ipairs(on_focuschange_handlers) do
+      callback()
+    end
     primary = M.make_string(config.primary)
     if type(config.secondary) == "table" then
       secondary = M.make_string(config.secondary)
     end
-    vim.opt.statusline = "%!v:lua._stl_get_cached()"
+    vim.opt.statusline = ("%%!v:lua.%s()"):format(get_cached_key)
   end
 
-  local update_events = {"BufEnter", "BufLeave", "WinEnter", "WinLeave"}
-  local setup_au_cmd = [[
-    windo call v:lua._stl_update()
-    augroup stl_autocmd
+  local update_events = {
+    "BufEnter", "BufLeave",
+    "WinEnter", "WinLeave",
+  }
+
+  local setup_au_cmd = ([[
+    windo call v:lua.%s()
+    augroup %s
       autocmd!
-      autocmd %s * call v:lua._stl_update()
+      autocmd %s * call v:lua.%s()
     augroup END
-  ]]
-  vim.api.nvim_exec(
-    string.format(setup_au_cmd, table.concat(update_events, ',')),
-    false
+  ]]):format(
+    update_stl_key,
+    augroup_name,
+    table.concat(update_events, ','),
+    update_stl_key
   )
+
+  api.nvim_exec(setup_au_cmd, false)
 end
 
 return M

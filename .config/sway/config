@@ -7,6 +7,7 @@
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
+
 set {
 	$mod Mod4
 	$left h
@@ -64,7 +65,7 @@ output * bg $HOME/Pictures/scp_wallpaper_1.jpg fill
 # Despite the name, also works for non-floating windows.
 # Change normal to inverse to use left mouse button for resizing and right
 # mouse button for dragging.
-floating_modifier $mod normal
+floating_modifier $mod
 
 bindsym --to-code {
 	$mod+Return exec alacritty
@@ -88,6 +89,7 @@ bindsym {
 	--to-code $mod+Shift+q kill
 
 	$mod+p exec wofi --show drun
+	# $mod+p exec rofi -show drun
 
 	# Reload the configuration file
 	--to-code $mod+Shift+c reload
@@ -148,6 +150,15 @@ bindsym {
 	--to-code $mod+Shift+Bracketright \
 		exec $HOME/.config/sway/workspace_switch.sh next
 
+	--to-code $mod+Control+Up \
+		exec $HOME/.config/sway/push-window.sh top
+	--to-code $mod+Control+Right \
+		exec $HOME/.config/sway/push-window.sh right
+	--to-code $mod+Control+Down \
+		exec $HOME/.config/sway/push-window.sh bottom
+	--to-code $mod+Control+Left \
+		exec $HOME/.config/sway/push-window.sh left
+
 	# Move focused container to workspace
 	$mod+Shift+1 move container to workspace number 1
 	$mod+Shift+2 move container to workspace number 2
@@ -176,7 +187,7 @@ bindsym {
 	$mod+e layout toggle split
 
 	# Make the current focus fullscreen
-	$mod+f fullscreen
+	--release $mod+f fullscreen
 
 	# Toggle the current focus between tiling and floating mode
 	$mod+Shift+f floating toggle
@@ -284,8 +295,8 @@ bindsym {
 
 smart_borders on
 smart_gaps on
-gaps inner 4
-gaps outer 0
+# gaps inner 4
+# gaps outer 0
 default_border pixel 1
 
 focus_wrapping off
@@ -296,11 +307,10 @@ client.focused_inactive "#555555" "#555555" "#ffffff"
 client.unfocused "#555555" "#555555" "#ffffff"
 font "Hack Nerd Font 10"
 
-seat * xcursor_theme $cursor_theme
-exec_always {
-	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
-}
+seat seat0 xcursor_theme $cursor_theme
+exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
 
+# Autostart
 exec {
 	mako
 	blueman-applet
@@ -320,6 +330,6 @@ workspace 1; exec alacritty
 # 	# before-sleep 'swaylock -f -c 000000'
 
 for_window [app_id="firefox" title="^Picture-in-Picture$"] \
-	floating enable, sticky enable
+	floating enable, sticky enable, border pixel
 for_window [app_id="firefox" title="Sharing Indicator"] \
 	floating enable, sticky enable

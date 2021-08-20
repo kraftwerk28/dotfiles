@@ -5,16 +5,16 @@ local opts = {
   expandtab = false,
   softtabstop = 0,
   tabstop = 4,
-  shiftwidth=4,
+  shiftwidth = 4,
   autoindent = true,
   smartindent = true,
   list = true,
   listchars = {tab = "⇥ ", trail = "·"},
   cursorline = false,
-  colorcolumn={80, 120},
-  mouse= "a",
+  colorcolumn = {80, 120},
+  mouse = "a",
   clipboard = "unnamedplus",
-  completeopt={"menu", "menuone", "noselect"},
+  completeopt = {"menu", "menuone", "noselect"},
   incsearch = true,
   hlsearch = false,
   ignorecase = true,
@@ -32,7 +32,7 @@ local opts = {
   secure = true,
 
   -- Vertical insert / cmdline-insert:
-  -- guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20",
+  guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20",
 
   -- guicursor = {
   --   ["n-sm-c"] = "block",
@@ -41,7 +41,7 @@ local opts = {
   -- },
   -- Block insert / cmdline-insert:
 
-  guicursor = "n-sm-c:block,r-cr-o-v:hor20",
+  -- guicursor = "n-sm-c:block,r-cr-o-v:hor20",
 
   splitbelow = true,
   splitright = true,

@@ -1,6 +1,5 @@
 insensitive=true
 allow_images=true
+key_forward=Control_L-j
+key_backward=Control_L-k
 key_expand=Control_L-l
-key_down=Control_L-j
-key_up=Control_L-k
-parse_action=false
