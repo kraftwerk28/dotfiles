@@ -17,7 +17,7 @@
         "network",
         "cpu",
         "backlight",
-        "keyboard-state",
+        // "keyboard-state",
         "battery",
         "battery#bat2",
         "sway/language",
@@ -68,7 +68,7 @@
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
-        "format": "{name} {icon}",
+        "format": "{name} {icon} ",
         "format-icons": {
             "locked": "",
             "unlocked": ""
@@ -175,7 +175,8 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "sway/language": {
-        "format": "<b>{}</b>"
+        "format": "<b>{}</b>",
+        "on-click": "swaymsg input '*' xkb_switch_layout next"
     },
     "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",

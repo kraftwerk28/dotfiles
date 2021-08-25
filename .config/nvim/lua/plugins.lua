@@ -144,16 +144,15 @@ local function load(use)
   }
 
   use {
-    'neovim/nvim-lspconfig',
-    -- '~/projects/neovim/nvim-lspconfig',
-    config = function() require('cfg.lspconfig') end,
+    "neovim/nvim-lspconfig",
+    -- "~/projects/neovim/nvim-lspconfig",
+    config = function() require("cfg.lspconfig") end,
   }
-  -- use {'ray-x/lsp_signature.nvim'}
 
   use {
-    'RRethy/vim-illuminate',
+    "RRethy/vim-illuminate",
     config = function()
-      local utils = require('utils')
+      local utils = require("utils")
       utils.highlight {"illuminatedWord", guibg = "#303030"}
     end,
   }
@@ -172,11 +171,41 @@ local function load(use)
     }
   end
 
+  -- use {
+  --   "hrsh7th/nvim-cmp",
+  --   requires = {
+  --     "hrsh7th/cmp-nvim-lsp",
+  --     "hrsh7th/cmp-buffer",
+  --     "hrsh7th/cmp-path",
+  --   },
+  --   config = function()
+  --     local cmp = require("cmp")
+  --     local maps = cmp.mapping
+  --     cmp.setup {
+  --       mapping = {
+  --         -- Plugin errors when this is empty
+  --         ["<S-Tab>"] = maps.select_prev_item(),
+  --         ["<Tab>"] = maps.select_next_item(),
+  --         ["<C-Space>"] = maps.complete(),
+  --       },
+  --       sources = {
+  --         {name = "nvim-lsp"},
+  --         {name = "buffer"},
+  --         {name = "path"},
+  --       },
+  --     }
+  --   end,
+  -- }
+
   use {
     "hrsh7th/nvim-compe",
-    requires = {"SirVer/ultisnips", "honza/vim-snippets"},
+    requires = {
+      "SirVer/ultisnips",
+      "honza/vim-snippets",
+    },
     config = function()
-      require('compe').setup {
+      local compe = require('compe')
+      compe.setup {
         throttle_time = 200,
         preselect = 'disable',
         source = {

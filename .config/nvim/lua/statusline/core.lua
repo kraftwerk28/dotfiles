@@ -1,27 +1,27 @@
 local M = {}
 
-local utils = require('utils')
+local utils = require("utils")
 local sprintf = utils.sprintf
 local api, fn = vim.api, vim.fn
 
 -- @deprecated
-local function get_padding(cfg)
-  local lp, rp = 0, 0
-  if cfg.padding ~= nil then
-    return cfg.padding, cfg.padding
-  end
-  if cfg.padl ~= nil then
-    lp = cfg.padl
-  end
-  if cfg.padr ~= nil then
-    rp = cfg.padr
-  end
-  if cfg.padding ~= nil then
-    lp = cfg.padding
-    rp = cfg.padding
-  end
-  return lp, rp
-end
+-- local function get_padding(cfg)
+--   local lp, rp = 0, 0
+--   if cfg.padding ~= nil then
+--     return cfg.padding, cfg.padding
+--   end
+--   if cfg.padl ~= nil then
+--     lp = cfg.padl
+--   end
+--   if cfg.padr ~= nil then
+--     rp = cfg.padr
+--   end
+--   if cfg.padding ~= nil then
+--     lp = cfg.padding
+--     rp = cfg.padding
+--   end
+--   return lp, rp
+-- end
 
 local on_focuschange_handlers = {}
 
@@ -35,9 +35,9 @@ end
 function Builder:component(config)
   local result = ''
   local padl, padr = 0, 0
-  if type(config.padding) == 'table' and #config.padding >= 2 then
+  if type(config.padding) == "table" and #config.padding >= 2 then
     padl, padr = unpack(config.padding)
-  elseif type(config.padding) == 'number' then
+  elseif type(config.padding) == "number" then
     padl, padr = config.padding, config.padding
   end
 
@@ -51,7 +51,7 @@ function Builder:component(config)
 
   local cond_expr = ''
   if has_condition then
-    local name = "_stl_cfn" .. self:get_id()
+    local name = "_stl_cfn" .. self:next_id()
     _G[name] = cond_fn
     cond_expr = "v:lua." .. name .. "()"
   end
@@ -79,7 +79,7 @@ function Builder:component(config)
     result = result .. "%{"
     local padl_str = (" "):rep(padl)
     local padr_str = (" "):rep(padr)
-    local fn_name = "_stl_fn" .. self:get_id()
+    local fn_name = "_stl_fn" .. self:next_id()
     _G[fn_name] = function()
       local rendered = render()
       if rendered == nil then
@@ -94,7 +94,7 @@ function Builder:component(config)
   elseif type(render) == "string" then
     result = result .. ("\\ "):rep(padl) .. config[1] .. ("\\ "):rep(padr)
   else
-    error("config[1] (or config.render) must be either function or string")
+    error("config[1] or config.render must be either function or string")
   end
 
   -- Right separator
@@ -118,7 +118,8 @@ function Builder:component(config)
   return result
 end
 
-function Builder:get_id()
+-- Get unique ID for global scope functions
+function Builder:next_id()
   self.id_count = self.id_count + 1
   return self.id_count
 end
@@ -151,7 +152,9 @@ function M.setup(config)
   end
 
   _G[update_stl_key] = function()
-    if type(config.on_update) == "function" then config.on_update() end
+    if type(config.on_update) == "function" then
+      config.on_update()
+    end
     for _, callback in ipairs(on_focuschange_handlers) do
       callback()
     end

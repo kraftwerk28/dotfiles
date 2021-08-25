@@ -121,20 +121,20 @@ end
 -- Define a new highlight group
 -- TODO: rewrite to `nvim_set_hl()` when API will be stable
 function M.highlight(cfg)
-  local command = 'highlight'
+  local command = "highlight"
   if cfg.bang == true then
     command = command .. '!'
   end
+
   if #cfg == 2 and type(cfg[1]) == 'string' and type(cfg[2]) == 'string' then
     -- :highlight link
-    command = command .. ' link ' .. cfg[1] .. ' ' .. cfg[2]
-    vim.cmd(command)
+    vim.cmd(command.." link "..cfg[1].." "..cfg[2])
     return
   end
-  local guifg = cfg.fg or cfg.guifg or cfg[2]
-  local guibg = cfg.bg or cfg.guibg or cfg[3]
-  local gui = cfg.gui or cfg[4]
-  local guisp = cfg.guisp or cfg[5]
+  local guifg = cfg.fg or cfg.guifg
+  local guibg = cfg.bg or cfg.guibg
+  local gui = cfg.gui
+  local guisp = cfg.guisp
   if type(cfg.override) == 'string' then
     local existing = api.nvim_get_hl_by_name(cfg.override, true)
     if existing.foreground ~= nil then
@@ -147,9 +147,9 @@ function M.highlight(cfg)
       guibg = sprintf('#%x', existing.background)
     end
     if existing.undercurl == true then
-      gui = 'undercurl'
+      gui = "undercurl"
     elseif existing.underline == true then
-      gui = 'underline'
+      gui = "underline"
     end
   end
   command = command .. ' ' .. cfg[1]

@@ -119,9 +119,6 @@ augroup line_numbers
   autocmd BufLeave,Winleave,FocusLost * call s:setNumber(0)
 augroup END
 
-autocmd FileType man nnoremap <buffer> <Space> <C-F>
-autocmd FileType man nnoremap <buffer> b <C-B>
-
 "----------------------------- Mapping functions ------------------------------"
 function RevStr(str)
   let l:chars = split(submatch(0), '\zs')

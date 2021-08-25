@@ -12,19 +12,19 @@ local mode_map -- mode labels & colors
 local cl -- colors
 
 local icons = {
-  locker = u 'f023',
-  unsaved = u 'f693',
-  dos = u 'e70f',
-  unix = u 'f17c',
-  mac = u 'f179',
-  lsp_warn = u 'f071',
-  lsp_error = u 'f46e',
-  lsp_hint = u 'f0eb',
-  lsp_information = u 'f129',
-  lsp_server_icon = u 'f817',
-  lsp_server_disconnected = u 'f818',
-  col_num = u 'e0a3',
-  line_num = u 'e0a1',
+  locker = u"f023",
+  unsaved = u"f693",
+  dos = u"e70f",
+  unix = u"f17c",
+  mac = u"f179",
+  lsp_warn = u"f071",
+  lsp_error = u"f46e",
+  lsp_hint = u"f0eb",
+  lsp_information = u"f129",
+  lsp_server_icon = u"f817",
+  lsp_server_disconnected = u"f818",
+  col_num = u"e0a3",
+  line_num = u"e0a1",
 }
 
 local function lsp_count(kind, icon)
@@ -36,24 +36,40 @@ local function lsp_count(kind, icon)
 end
 
 local function buf_nonempty()
-  if vim.fn.empty(vim.fn.expand('%:t')) ~= 1 then
-    return true
-  end
-  return false
+  return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
 end
 
 local function iswide()
   return vim.fn.winwidth(0) > 80
 end
 
+local count = 0
+
 -- Left
 local mode = component {
   function()
+    count = count+1
+    -- print(count .. " mode component")
     local mode = vim.fn.mode()
     local mode_label, mode_color = unpack(mode_map[mode])
-    highlight {'StatusLine', cl.fg, cl.bg, 'bold'}
-    highlight {'StatusLineModeInv', mode_color, cl.bg, 'reverse,bold'}
-    highlight {'StatusLineMode', mode_color, cl.bg, 'bold'}
+    highlight {
+      "StatusLine",
+      guifg = cl.fg,
+      guibg = cl.bg,
+      gui = "bold",
+    }
+    highlight {
+      "StatusLineModeInv",
+      guifg = mode_color,
+      guibg = cl.bg,
+      gui = "reverse,bold",
+    }
+    highlight {
+      "StatusLineMode",
+      guifg = mode_color,
+      guibg = cl.bg,
+      gui = "bold",
+    }
     if vim.fn.winwidth(0) > 80 then
       return mode_label
     else
@@ -65,14 +81,18 @@ local mode = component {
 }
 
 local fileformat = component {
-  function() return icons[vim.opt.fileformat:get()] or '' end,
+  function()
+    return icons[vim.opt.fileformat:get()] or ""
+  end,
   hl = 'StatusLine',
   padding = {2, 0},
   condition = buf_nonempty,
 }
 
 local ft = component {
-  function() return vim.opt.filetype:get() end,
+  function()
+    return vim.opt.filetype:get()
+  end,
   hl = 'StatusLine',
   condition = buf_nonempty,
   padding = {2, 1},
@@ -82,39 +102,39 @@ local ft = component {
 -- Center
 local icon = component {
   function()
-    local filename = vim.fn.expand('%:t')
-    local fileext = vim.fn.expand('%:e')
+    local filename = vim.fn.expand("%:t")
+    local fileext = vim.fn.expand("%:e")
     local icon = devicons.get_icon(filename, fileext)
     return icon and (icon .. ' ') or ''
   end,
   on_focus_change = function()
-    local filename = vim.fn.expand('%:t')
-    local fileext = vim.fn.expand('%:e')
+    local filename = vim.fn.expand("%:t")
+    local fileext = vim.fn.expand("%:e")
     local _, icon_hl = devicons.get_icon(filename, fileext)
     local fg = cl.fg
     if icon_hl ~= nil then
       fg = utils.hl_by_name(icon_hl).fg
     end
-    highlight {'StatusLineFileIcon', fg, cl.bg}
+    highlight {"StatusLineFileIcon", guifg = fg, guibg = cl.bg}
   end,
-  hl = 'StatusLineFileIcon',
+  hl = "StatusLineFileIcon",
   condition = buf_nonempty,
 }
 
-local filename = component {'%t', hl = 'StatusLine'}
+local filename = component {"%t", hl = "StatusLine"}
 
 local fileattrs = component {
   function()
-    local result = ''
+    local result = ""
     if vim.opt.readonly:get() then
-      result = result .. ' ' .. icons.locker
+      result = result .. " " .. icons.locker
     end
     if vim.opt.modified:get() then
-      result = result .. ' ' .. icons.unsaved
+      result = result .. " " .. icons.unsaved
     end
     return result
   end,
-  hl = "StatusLine"
+  hl = "StatusLine",
 }
 
 -- Right
@@ -124,16 +144,16 @@ local lsp_conn = component {
     local icon = connected and icons.lsp_server_icon or
                    icons.lsp_server_disconnected
     local icon_cl = connected and cl.lsp_active or cl.lsp_inactive
-    highlight {'StatusLineLspConn', icon_cl, cl.bg}
+    highlight {"StatusLineLspConn", guifg = icon_cl, guibg = cl.bg}
     return icon .. ' '
   end,
-  hl = 'StatusLineLspConn'
+  hl = 'StatusLineLspConn',
 }
 
 local lsp_w = component {
   function() return lsp_count("Warning", icons.lsp_warn) end,
   padding = 1,
-  hl = 'StatusLineWarning'
+  hl = "StatusLineWarning",
 }
 
 local lsp_e = component {
@@ -156,8 +176,8 @@ local lsp_i = component {
 
 local col_row = component {
   icons.line_num .. '%l ' .. icons.col_num .. '%c',
-  hl = 'StatusLineModeInv',
-  left_separator = {u '2590', hl = 'StatusLineMode'},
+  hl = "StatusLineModeInv",
+  left_separator = {u"2590", hl = 'StatusLineMode'},
 }
 
 local pos_percent = component {

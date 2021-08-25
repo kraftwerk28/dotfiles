@@ -264,7 +264,7 @@ input type:pointer {
 
 input type:keyboard {
 	xkb_layout "us,ua"
-	xkb_options "grp:win_space_toggle,caps:escape"
+	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
 	repeat_delay 300
 	repeat_rate 20
 }
@@ -316,6 +316,7 @@ exec {
 	blueman-applet
 	kdeconnect-indicator
 	$HOME/.config/sway/kbd_layout_per_window.py
+	xsettingsd
 }
 
 workspace 4; exec firefox
