@@ -187,7 +187,8 @@
         "interval": 1800
     },
     "custom/sensors": {
-        "exec": "~/.config/waybar/cputemp.sh",
+        "exec": "sensors | awk -f ~/.config/waybar/cputemp.awk",
+        "return-type": "json",
         "interval": 5
     }
 }
