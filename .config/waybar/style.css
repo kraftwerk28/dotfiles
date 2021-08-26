@@ -61,8 +61,22 @@ window#waybar.chromium {
 	border-color: #ffffff;
 }
 
+@keyframes ws-urgent {
+	from {
+		border-color: #ff0000;
+	}
+	to {
+		border-color: #ffffff;
+	}
+}
+
 #workspaces button.urgent {
 	border-color: #eb4d4b;
+	animation-name: ws-urgent;
+	animation-duration: 0.5s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
 }
 
 #mode {
@@ -81,12 +95,13 @@ window#waybar.chromium {
 #pulseaudio,
 #custom-media,
 #custom-openweather,
+#custom-sensors,
 #tray,
 #mode,
 #idle_inhibitor,
 #mpd,
 #language {
-	padding: 0 10px;
+	padding: 0 4px;
 	margin: 0 4px;
 	color: #ffffff;
 	border-bottom-width: 3px;
@@ -243,4 +258,8 @@ label:focus {
 
 #custom-openweather {
 	border-color: #8800ff;
+}
+
+#custom-sensors {
+	border-color: #aaff00;
 }

@@ -244,7 +244,8 @@ bindsym $mod+r mode "resize"
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-	swaybar_command waybar
+	swaybar_command /home/kraftwerk28/projects/sway/Waybar/build/waybar
+	# swaybar_command waybar
 	position top
 
 	# When the status_command prints a new line to stdout, swaybar updates.
@@ -320,7 +321,7 @@ exec {
 }
 
 workspace 4; exec firefox
-workspace 5; exec ~/Telegram/Telegram
+workspace 5; exec kotatogram-desktop
 workspace 6; exec slack
 workspace 1; exec alacritty
 

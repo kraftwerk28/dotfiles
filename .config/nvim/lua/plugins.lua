@@ -171,34 +171,42 @@ local function load(use)
     }
   end
 
-  -- use {
-  --   "hrsh7th/nvim-cmp",
-  --   requires = {
-  --     "hrsh7th/cmp-nvim-lsp",
-  --     "hrsh7th/cmp-buffer",
-  --     "hrsh7th/cmp-path",
-  --   },
-  --   config = function()
-  --     local cmp = require("cmp")
-  --     local maps = cmp.mapping
-  --     cmp.setup {
-  --       mapping = {
-  --         -- Plugin errors when this is empty
-  --         ["<S-Tab>"] = maps.select_prev_item(),
-  --         ["<Tab>"] = maps.select_next_item(),
-  --         ["<C-Space>"] = maps.complete(),
-  --       },
-  --       sources = {
-  --         {name = "nvim-lsp"},
-  --         {name = "buffer"},
-  --         {name = "path"},
-  --       },
-  --     }
-  --   end,
-  -- }
+  use {
+    "hrsh7th/nvim-cmp",
+    disable = true,
+    requires = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+    },
+    config = function()
+      local cmp = require("cmp")
+      local maps = cmp.mapping
+      cmp.setup {
+        mapping = {
+          -- Plugin errors when this is empty
+          ["<Tab>"] = function(fallback)
+            fallback()
+          end,
+          ["<S-Tab>"] = maps.select_prev_item(),
+          -- ["<Tab>"] = maps.select_next_item(),
+          ["<C-Space>"] = maps.complete(),
+        },
+        sources = {
+          {name = "nvim-lsp"},
+          {name = "buffer"},
+          {name = "path"},
+        },
+        completion = {
+          autocomplete = false,
+        },
+      }
+    end,
+  }
 
   use {
     "hrsh7th/nvim-compe",
+    -- disable = true,
     requires = {
       "SirVer/ultisnips",
       "honza/vim-snippets",

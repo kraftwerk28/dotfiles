@@ -16,6 +16,7 @@
         "pulseaudio",
         "network",
         "cpu",
+        "custom/sensors",
         "backlight",
         // "keyboard-state",
         "battery",
@@ -108,8 +109,9 @@
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
+        "format": " {temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "interval": 1
     },
     "backlight": {
         // "device": "acpi_video1",
@@ -175,13 +177,18 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "sway/language": {
-        "format": "<b>{}</b>",
+        // "format": "<b>{long:.2}</b>",
+        "format": "<b>{long:.2}</b>",
         "on-click": "swaymsg input '*' xkb_switch_layout next"
     },
     "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",
         "on-click": "~/.config/waybar/weather.py open",
         "interval": 1800
+    },
+    "custom/sensors": {
+        "exec": "~/.config/waybar/cputemp.sh",
+        "interval": 5
     }
 }
 // vim: ft=jsonc: sw=4: et

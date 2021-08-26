@@ -332,6 +332,7 @@ nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <Leader>ae :lua init.show_line_diagnostics()<CR>
 nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
+inoremap <silent> <C-S> <Cmd>lua vim.lsp.buf.signature_help()<CR>
 
 vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
 
