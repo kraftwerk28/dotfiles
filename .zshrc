@@ -10,6 +10,8 @@ plug zsh-z/zsh-z.plugin.zsh
 plug zsh-extract/extract.plugin.zsh
 plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
+BASE16_THEME="gruvbox-dark-medium"
+
 ZVM_CURSOR_STYLE_ENABLED=true
 ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM

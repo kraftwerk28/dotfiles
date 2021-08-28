@@ -32,7 +32,7 @@ def get_weather_string(app_id, location=None):
         temperature = f"{temperature}"
     condition = data["weather"][0]["main"]
     location_icon = "\uf450 " if location is None else ""
-    return f"{location_icon}{temperature}°C, {condition}"
+    return f"{location_icon}{temperature}°C {condition}"
 
 
 def get_browser_url(app_id, location=None):

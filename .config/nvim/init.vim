@@ -183,11 +183,21 @@ augroup lsp_diagnostics
 augroup END
 autocmd! lsp_diagnostics
 
+augroup LSP_highlight
+  autocmd!
+  autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+augroup END
+autocmd! LSP_highlight
+
 "----------------------------- Embedded terminal ------------------------------"
 augroup terminal_insert
   autocmd!
   autocmd TermOpen * startinsert
 augroup END
+
+autocmd FocusGained * silent !pwd > /tmp/last_pwd
 
 "------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
@@ -256,15 +266,6 @@ endfunction
 
 command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
-"------------------------- Comment tool configuration -------------------------"
-augroup LSP_highlight
-  autocmd!
-  autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
-  autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
-  autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-augroup END
-autocmd! LSP_highlight
-
 " augroup display_signature_help
 "   autocmd!
 "   autocmd CursorMoved <buffer> lua vim.lsp.buf.signature_help()
@@ -274,6 +275,12 @@ function! PasteBlock()
   execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
   normal! p
 endfunction
+
+" function s:expandFolds()
+"   let l:fld = &foldlevel
+"   let &foldlevel = 99
+"   let &foldlevel = l:fld
+" endfunction
 
 "--------------------------------- Mappings -----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
@@ -322,10 +329,10 @@ nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
 
 " LSP mappings:
-inoremap <expr> <Tab> <SID>compTab()
-inoremap <expr> <S-Tab> <SID>compShiftTab()
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR> <SID>compEnter()
+" inoremap <expr> <Tab> <SID>compTab()
+" inoremap <expr> <S-Tab> <SID>compShiftTab()
+" inoremap <silent><expr> <C-Space> compe#complete()
+" inoremap <silent><expr> <CR> <SID>compEnter()
 nnoremap <silent> <Leader>f :lua init.format_code()<CR>
 nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>

@@ -246,12 +246,12 @@ return function()
     primary = {
       {mode, fileformat, ft},
       {icon, filename, fileattrs},
-      {col_row, pos_percent},
+      {lsp_conn, lsp_i, lsp_h, lsp_w, lsp_e, col_row, pos_percent},
     },
     secondary = {
       {},
       {icon, secondary_filename, fileattrs},
-      {},
+      {lsp_conn, lsp_w, lsp_e},
     },
   }
 end

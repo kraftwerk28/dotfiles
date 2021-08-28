@@ -219,6 +219,8 @@ lsp_config.bashls.setup {filetypes = {"bash", "sh", "zsh"}}
 
 lsp_config.solargraph.setup {}
 
+-- lsp_config.emmet_ls.setup {}
+
 if vim.fn.has("win64") == 1 then
   local jdt_base = expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"

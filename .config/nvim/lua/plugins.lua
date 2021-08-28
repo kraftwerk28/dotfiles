@@ -2,7 +2,7 @@ local function load(use)
   use {"wbthomason/packer.nvim", opt = true}
 
   use {
-    "~/projects/neovim/gtranslate.nvim",
+    "kraftwerk28/gtranslate.nvim",
     requires = {"nvim-lua/plenary.nvim"},
   }
 
@@ -21,9 +21,9 @@ local function load(use)
     "tpope/vim-surround",
     config = function()
       local char2nr = vim.fn.char2nr
-      vim.g["surround_" .. char2nr('r')] = "{'\r'}"
-      vim.g["surround_" .. char2nr('j')] = "{/* \r */}"
-      vim.g["surround_" .. char2nr('c')] = "/* \r */"
+      vim.g["surround_"..char2nr('r')] = "{'\r'}"
+      vim.g["surround_"..char2nr('j')] = "{/* \r */}"
+      vim.g["surround_"..char2nr('c')] = "/* \r */"
     end,
   }
 
@@ -40,92 +40,29 @@ local function load(use)
   use {
     "nvim-telescope/telescope.nvim",
     requires = {
-      "kyazdani42/nvim-web-devicons", "nvim-lua/popup.nvim",
+      "kyazdani42/nvim-web-devicons",
+      "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
     },
-    config = function()
-      -- local pickers = require('telescope.pickers')
-      -- local finders = require('telescope.finders')
-      -- local sorters = require('telescope.sorters')
-      -- _G.base16 = function(opts)
-      --   local results = {}
-      --   for i = 1, 50 do
-      --     table.insert(results, 'Result #' .. i)
-      --   end
-      --   pickers:new(opts, {
-      --     prompt_title = "base16 themes",
-      --     finder = finders.new_table {
-      --       results = results,
-      --     },
-      --     sorter = sorters.fuzzy_with_index_bias(),
-      --   }):find()
-      -- end
-
-      local telescope = require("telescope")
-      local actions = require("telescope.actions")
-      local u = require("utils").u
-
-      telescope.setup {
-        defaults = {
-          sorting_strategy = "ascending",
-          prompt_prefix = u"f002" .. " ",
-          layout_strategy = "horizontal",
-          layout_config = {prompt_position = "top"},
-          selection_caret = u"f054" .. ' ',
-          color_devicons = true,
-          scroll_strategy = "cycle",
-          mappings = {
-            i = {
-              ["<C-K>"] = actions.move_selection_previous,
-              ["<C-J>"] = actions.move_selection_next,
-              ["<Esc>"] = actions.close,
-            },
-          },
-        },
-        pickers = {
-          find_files = {previewer = false, theme = "dropdown"},
-        },
-      }
-    end,
+    config = function() require("cfg.telescope") end,
   }
 
-  use {'wellle/targets.vim'} -- More useful text objects (e.g. function arguments)
+  use {"wellle/targets.vim"} -- More useful text objects (e.g. function arguments)
 
-  use {'tpope/vim-fugitive'} -- Git helper
-  -- use {
-  --   'TimUntersberger/neogit',
-  --   requires = 'nvim-lua/plenary.nvim',
-  --   config = function() require('neogit').setup {} end,
-  -- }
+  use {"tpope/vim-fugitive"} -- Git helper
 
   use {
-    'airblade/vim-gitgutter',
+    "airblade/vim-gitgutter",
     config = function()
-      local u = require'utils'.u
-      local gutter = u '2595'
+      local u = require("utils").u
+      local gutter = u"2595"
       vim.g.gitgutter_sign_added = gutter
       vim.g.gitgutter_sign_modified = gutter
       vim.g.gitgutter_sign_removed = gutter
     end,
   }
 
-  -- if
-  --   vim.fn.executable('xkb-switch') > 0
-  --   or vim.fn.executable('g3kb-switch') > 0
-  -- then
-  --   use {
-  --     "lyokha/vim-xkbswitch",
-  --     config = function()
-  --       vim.g.XkbSwitchEnabled = 1
-  --       if vim.env["XDG_CURRENT_DESKTOP"] == "GNOME" then
-  --         vim.g.XkbSwitchLib = "/usr/local/lib/libg3kbswitch.so"
-  --       end
-  --     end,
-  --   }
-  -- end
-
   use {"chrisbra/Colorizer"}
-
   use {"mattn/emmet-vim"}
 
   -- Missing languages in tree-sitter
@@ -173,59 +110,26 @@ local function load(use)
 
   use {
     "hrsh7th/nvim-cmp",
-    disable = true,
     requires = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "onsails/lspkind-nvim",
+      "quangnguyen30192/cmp-nvim-ultisnips",
+      "SirVer/ultisnips",
+      "honza/vim-snippets",
     },
-    config = function()
-      local cmp = require("cmp")
-      local maps = cmp.mapping
-      cmp.setup {
-        mapping = {
-          -- Plugin errors when this is empty
-          ["<Tab>"] = function(fallback)
-            fallback()
-          end,
-          ["<S-Tab>"] = maps.select_prev_item(),
-          -- ["<Tab>"] = maps.select_next_item(),
-          ["<C-Space>"] = maps.complete(),
-        },
-        sources = {
-          {name = "nvim-lsp"},
-          {name = "buffer"},
-          {name = "path"},
-        },
-        completion = {
-          autocomplete = false,
-        },
-      }
-    end,
+    config = function() require("cfg.completion") end,
   }
 
   use {
     "hrsh7th/nvim-compe",
-    -- disable = true,
+    disable = true,
     requires = {
       "SirVer/ultisnips",
       "honza/vim-snippets",
     },
-    config = function()
-      local compe = require('compe')
-      compe.setup {
-        throttle_time = 200,
-        preselect = 'disable',
-        source = {
-          path = true,
-          buffer = true,
-          calc = true,
-          nvim_lsp = true,
-          ultisnips = true,
-        },
-        documentation = {border = vim.g.floatwin_border},
-      }
-    end,
+    config = function() require("cfg.completion") end,
   }
 
   use {
@@ -236,7 +140,7 @@ local function load(use)
       local u = utils.u
       utils.highlight {"NvimTreeFolderName", "Title"}
       utils.highlight {"NvimTreeFolderIcon", "Title"}
-      for k, v in pairs {
+      local opts = {
         auto_close = 1,
         indent_markers = 0,
         quit_on_open = 1,
@@ -251,12 +155,15 @@ local function load(use)
             symlink = u"f0c1",
           },
         },
-      } do vim.g["nvim_tree_"..k] = v end
+      }
+      for k, v in pairs(opts) do
+        vim.g["nvim_tree_"..k] = v
+      end
     end,
   }
 
   use {
-    'sbdchd/neoformat',
+    "sbdchd/neoformat",
     config = function() require("cfg.neoformat") end,
   }
 
@@ -264,23 +171,23 @@ local function load(use)
 end
 
 return function()
-  local sprintf = require('utils').sprintf
+  local sprintf = require("utils").sprintf
   local packer_install_path =
-    vim.fn.stdpath('data') ..
-    '/site/pack/packer/opt/packer.nvim'
+    vim.fn.stdpath("data") ..
+    "/site/pack/packer/opt/packer.nvim"
   local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) > 0
 
   if not_installed then
-    print('`packer.nvim` is not installed, installing...')
-    local repo = 'https://github.com/wbthomason/packer.nvim'
-    vim.cmd(sprintf('!git clone %s %s', repo, packer_install_path))
+    print("`packer.nvim` is not installed, installing...")
+    local repo = "https://github.com/wbthomason/packer.nvim"
+    vim.cmd(sprintf("!git clone %s %s", repo, packer_install_path))
   end
 
-  vim.cmd('packadd packer.nvim')
-  require('packer').startup {load, config = {git = {clone_timeout = 240}}}
-  vim.cmd('autocmd BufWritePost plugins.lua :PackerCompile')
+  vim.cmd("packadd packer.nvim")
+  require("packer").startup {load, config = {git = {clone_timeout = 240}}}
+  vim.cmd("autocmd BufWritePost plugins.lua PackerCompile")
 
   if not_installed then
-    vim.cmd('PackerSync')
+    vim.cmd("PackerSync")
   end
 end

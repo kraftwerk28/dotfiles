@@ -1,13 +1,8 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
+# Default config for sway Copy this to ~/.config/sway/config and edit it to your liking. Read `man 5 sway` for a complete reference.
 
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
-
 set {
 	$mod Mod4
 	$left h
@@ -111,11 +106,6 @@ bindsym {
 	--to-code $mod+$down focus down
 	--to-code $mod+$up focus up
 	--to-code $mod+$right focus right
-	# Or use $mod+[up|down|left|right]
-	# bindsym $mod+Left focus left
-	# bindsym $mod+Down focus down
-	# bindsym $mod+Up focus up
-	# bindsym $mod+Right focus right
 
 	# Move the focused window with the same, but add Shift
 	--to-code $mod+Shift+$left move left
@@ -267,7 +257,7 @@ input type:keyboard {
 	xkb_layout "us,ua"
 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
 	repeat_delay 300
-	repeat_rate 20
+	repeat_rate 25
 }
 
 input type:touchpad {
@@ -320,10 +310,13 @@ exec {
 	xsettingsd
 }
 
-workspace 4; exec firefox
-workspace 5; exec kotatogram-desktop
-workspace 6; exec slack
-workspace 1; exec alacritty
+workspace 4
+exec firefox
+workspace 5
+exec kotatogram-desktop
+workspace 6
+exec slack
+workspace 1
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \

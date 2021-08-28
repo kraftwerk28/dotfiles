@@ -17,6 +17,6 @@ END {
 	cpu_avg = cpu_sum / cpu_cnt
 	fan_avg = fan_sum / fan_cnt
 	gsub(/^\\n|\\n$/, "", lines)
-	fmt = "{\"text\": \" %.0f°C  %.0f rpm\", \"tooltip\": \"%s\"}\n"
+	fmt = "{\"text\": \" %.0f°C  %.0f\", \"tooltip\": \"%s\"}\n"
 	printf fmt, cpu_avg, fan_avg, lines
 }

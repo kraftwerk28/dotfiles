@@ -16,6 +16,7 @@
         "pulseaudio",
         "network",
         "cpu",
+        "memory",
         "custom/sensors",
         "backlight",
         // "keyboard-state",
@@ -97,12 +98,13 @@
         "format-alt": "{:%d.%m.%Y}"
     },
     "cpu": {
-        "format": " {usage:2}% {avg_frequency:1.2f} GHz",
+        "format": " {usage:2}% {avg_frequency:1.2f}GHz",
         "tooltip": false,
         "interval": 1
     },
     "memory": {
-        "format": "{}% "
+        "format": " {percentage}%",
+        "interval": 5
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -115,7 +117,7 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
+        "format": "{icon} {percent}%",
         "format-icons": ["", ""],
         "on-scroll-up": "brightnessctl set +5%",
         "on-scroll-down": "[[ $(brightnessctl g) -gt 6000 ]] && brightnessctl set 5%-"
@@ -126,7 +128,7 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
+        "format": "{icon} {capacity}%",
         "format-charging": "{capacity}% ",
         "format-plugged": "{capacity}%  ",
         "format-alt": "{time} {icon}",
@@ -139,7 +141,7 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%)  ",
+        "format-wifi": "  {signalStrength}%",
         "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
@@ -147,16 +149,16 @@
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
+        "format": "{icon} {volume}% {format_source}",
+        "format-bluetooth": "{icon}  {volume}% {format_source}",
+        "format-bluetooth-muted": " {icon}  {format_source}",
         "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
+        "format-source": " {volume}%",
         "format-source-muted": "",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
-            "headset": "",
+            "headset": "",
             "phone": "",
             "portable": "",
             "car": "",
