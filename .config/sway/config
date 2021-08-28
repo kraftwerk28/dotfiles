@@ -282,6 +282,8 @@ bindsym {
 
 	Shift+Print exec grimshot copy window
 	Print exec grimshot copy area
+	Control+Print exec grimshot copy screen && \
+		notify-send "Whole damn screen is in buffer"
 }
 
 smart_borders on
