@@ -7,12 +7,13 @@ local function load(use)
   }
 
   -- Themes
-  use {"ayu-theme/ayu-vim", opt = true, disable = true}
+  use {"ayu-theme/ayu-vim"}
   use {"romgrk/doom-one.vim", disable = true}
-  use {"joshdick/onedark.vim", disable = true}
-  use {"morhetz/gruvbox", disable = true}
-  use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+  use {"joshdick/onedark.vim"}
+  use {"morhetz/gruvbox"}
+  use {"npxbr/gruvbox.nvim", disable = true, requires = {"rktjmp/lush.nvim"}}
   use {"RRethy/nvim-base16"}
+  use {"projekt0n/github-nvim-theme"}
 
   use {"kyazdani42/nvim-web-devicons"}
 
@@ -168,6 +169,7 @@ local function load(use)
   }
 
   use {"equalsraf/neovim-gui-shim", opt = true}
+
 end
 
 return function()

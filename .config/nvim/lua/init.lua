@@ -5,7 +5,6 @@ local highlight = require("vim.highlight")
 local load = utils.load
 local fn = vim.fn
 
-vim.g.base16_theme = "default-dark"
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
@@ -18,6 +17,8 @@ load("opts")
 load("plugins")
 load("tabline")
 load("statusline")
+
+vim.o.statusline = "%!v:lua._stl()"
 
 if fn.has("unix") == 1 then
   -- Clicking any link pointing to neovim or vim docs site

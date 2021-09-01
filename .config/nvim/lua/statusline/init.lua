@@ -43,13 +43,9 @@ local function iswide()
   return vim.fn.winwidth(0) > 80
 end
 
-local count = 0
-
 -- Left
 local mode = component {
   function()
-    count = count+1
-    -- print(count .. " mode component")
     local mode = vim.fn.mode()
     local mode_label, mode_color = unpack(mode_map[mode])
     highlight {
@@ -76,7 +72,7 @@ local mode = component {
       return mode_label:sub(1, 1)
     end
   end,
-  hl = 'StatusLineModeInv',
+  highlight = "StatusLineModeInv",
   padding = {2, 1}
 }
 
@@ -84,7 +80,7 @@ local fileformat = component {
   function()
     return icons[vim.opt.fileformat:get()] or ""
   end,
-  hl = 'StatusLine',
+  highlight = "StatusLine",
   padding = {2, 0},
   condition = buf_nonempty,
 }
@@ -93,10 +89,10 @@ local ft = component {
   function()
     return vim.opt.filetype:get()
   end,
-  hl = 'StatusLine',
+  highlight = "StatusLine",
   condition = buf_nonempty,
   padding = {2, 1},
-  right_separator = {'|', hl = 'StatusLineMode'},
+  right_separator = {'|', highlight = "StatusLineMode"},
 }
 
 -- Center
@@ -110,18 +106,28 @@ local icon = component {
   on_focus_change = function()
     local filename = vim.fn.expand("%:t")
     local fileext = vim.fn.expand("%:e")
-    local _, icon_hl = devicons.get_icon(filename, fileext)
+    local _, icon_highlight = devicons.get_icon(filename, fileext)
     local fg = cl.fg
-    if icon_hl ~= nil then
-      fg = utils.hl_by_name(icon_hl).fg
+    if icon_highlight ~= nil then
+      fg = utils.hl_by_name(icon_highlight).fg
     end
     highlight {"StatusLineFileIcon", guifg = fg, guibg = cl.bg}
   end,
-  hl = "StatusLineFileIcon",
+  highlight = "StatusLineFileIcon",
   condition = buf_nonempty,
 }
 
-local filename = component {"%t", hl = "StatusLine"}
+local icon_inactive = component {
+  function()
+    local filename = vim.fn.expand("%:t")
+    local fileext = vim.fn.expand("%:e")
+    local icon = devicons.get_icon(filename, fileext)
+    return icon and (icon .. " ") or ""
+  end,
+  condition = buf_nonempty,
+}
+
+local filename = component {"%t", highlight = "StatusLine"}
 
 local fileattrs = component {
   function()
@@ -134,7 +140,7 @@ local fileattrs = component {
     end
     return result
   end,
-  hl = "StatusLine",
+  highlight = "StatusLine",
 }
 
 -- Right
@@ -147,37 +153,37 @@ local lsp_conn = component {
     highlight {"StatusLineLspConn", guifg = icon_cl, guibg = cl.bg}
     return icon .. ' '
   end,
-  hl = 'StatusLineLspConn',
+  highlight = "StatusLineLspConn",
 }
 
 local lsp_w = component {
   function() return lsp_count("Warning", icons.lsp_warn) end,
   padding = 1,
-  hl = "StatusLineWarning",
+  highlight = "StatusLineWarning",
 }
 
 local lsp_e = component {
   function() return lsp_count("Error", icons.lsp_error) end,
   padding = 1,
-  hl = "StatusLineError",
+  highlight = "StatusLineError",
 }
 
 local lsp_h = component {
   function() return lsp_count("Hint", icons.lsp_hint) end,
   padding = 1,
-  hl = "StatusLineHint",
+  highlight = "StatusLineHint",
 }
 
 local lsp_i = component {
   function() return lsp_count("Information", icons.lsp_information) end,
   padding = 1,
-  hl = "StatusLineInformation",
+  highlight = "StatusLineInformation",
 }
 
 local col_row = component {
   icons.line_num .. '%l ' .. icons.col_num .. '%c',
-  hl = "StatusLineModeInv",
-  left_separator = {u"2590", hl = 'StatusLineMode'},
+  highlight = "StatusLineModeInv",
+  left_separator = {u"2590", highlight = "StatusLineMode"},
 }
 
 local pos_percent = component {
@@ -194,11 +200,11 @@ local pos_percent = component {
     end
   end,
   condition = iswide,
-  left_separator = {'|', hl = "StatusLineModeInv"},
+  left_separator = {'|', highlight = "StatusLineModeInv"},
   padding = {0, 1},
 }
 
-local secondary_filename = component {'%f', hl = "StatusLine"}
+local secondary_filename = component {'%f', highlight = "StatusLine"}
 
 return function()
   cl = colors.from_base16(vim.g.base16_theme)
@@ -250,7 +256,7 @@ return function()
     },
     secondary = {
       {},
-      {icon, secondary_filename, fileattrs},
+      {icon_inactive, secondary_filename, fileattrs},
       {lsp_conn, lsp_w, lsp_e},
     },
   }

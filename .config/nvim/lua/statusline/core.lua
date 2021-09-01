@@ -41,7 +41,6 @@ function Builder:component(config)
     padl, padr = config.padding, config.padding
   end
 
-  local has_hl = type(config.hl) == "string"
   local has_condition = type(config.condition) == "function"
 
   local cond_fn
@@ -59,8 +58,8 @@ function Builder:component(config)
   -- Left separator
   local lsep = config.left_separator
   if lsep ~= nil then
-    if lsep.hl ~= nil then
-      result = result .. "%#" .. lsep.hl .. "#"
+    if lsep.highlight ~= nil then
+      result = result .. "%#" .. lsep.highlight .. "#"
     end
     local sep = lsep[1] or lsep
     if has_condition then
@@ -70,8 +69,8 @@ function Builder:component(config)
     end
   end
 
-  if has_hl then
-    result = result .. "%#" .. config.hl .. "#"
+  if type(config.highlight) == "string" then
+    result = result .. "%#" .. config.highlight .. "#"
   end
 
   local render = config[1] or config.render
@@ -92,7 +91,7 @@ function Builder:component(config)
     end
     result = result .. "v:lua." .. fn_name .. "()}"
   elseif type(render) == "string" then
-    result = result .. ("\\ "):rep(padl) .. config[1] .. ("\\ "):rep(padr)
+    result = result .. ("\\ "):rep(padl) .. render .. ("\\ "):rep(padr)
   else
     error("config[1] or config.render must be either function or string")
   end
@@ -100,8 +99,8 @@ function Builder:component(config)
   -- Right separator
   local rsep = config.right_separator
   if rsep ~= nil then
-    if rsep.hl ~= nil then
-      result = result .. "%#" .. rsep.hl .. "#"
+    if rsep.highlight ~= nil then
+      result = result .. "%#" .. rsep.highlight .. "#"
     end
     local sep = rsep[1] or rsep
     if has_condition then
@@ -124,7 +123,7 @@ function Builder:next_id()
   return self.id_count
 end
 
-function M.make_string(sections)
+local function concat_sections(sections)
   local section_str = {}
   for _, section in ipairs(sections) do
     table.insert(section_str, table.concat(section))
@@ -158,9 +157,9 @@ function M.setup(config)
     for _, callback in ipairs(on_focuschange_handlers) do
       callback()
     end
-    primary = M.make_string(config.primary)
+    primary = concat_sections(config.primary)
     if type(config.secondary) == "table" then
-      secondary = M.make_string(config.secondary)
+      secondary = concat_sections(config.secondary)
     end
     vim.opt.statusline = ("%%!v:lua.%s()"):format(get_cached_key)
   end

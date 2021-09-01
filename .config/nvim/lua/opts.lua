@@ -32,7 +32,8 @@ local opts = {
   secure = true,
 
   -- Vertical insert / cmdline-insert:
-  guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20",
+  -- guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20",
+  guicursor = "n-sm-c-i-ci:block,r-cr-o-v:hor20",
 
   -- guicursor = {
   --   ["n-sm-c"] = "block",

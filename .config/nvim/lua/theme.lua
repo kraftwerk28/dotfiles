@@ -1,14 +1,21 @@
 local utils = require("utils")
 
-local ok, base16 = pcall(require, "base16-colorscheme")
-if not ok then print("base16-colorscheme is not installed") end
--- if ok then base16.setup(vim.g.base16_theme) end
+vim.o.background = "dark"
+vim.g.base16_theme = vim.env.BASE16_THEME or "default-dark"
 
-local function set_theme(name)
-  vim.cmd("colorscheme base16-"..name)
+local ok, base16 = pcall(require, "base16-colorscheme")
+
+local function set_base16_theme(name)
+  local colors = vim.deepcopy(base16.colorschemes[name])
+  -- colors.base08 = colors.base06
+  base16.setup(colors)
 end
 
-set_theme(vim.g.base16_theme)
+if not ok then
+  print("base16-colorscheme is not installed")
+else
+  set_base16_theme(vim.g.base16_theme)
+end
 
 utils.nnoremap(
   "<F6>",
@@ -20,7 +27,7 @@ utils.nnoremap(
     local name = names[nameidx]
     vim.g.base16_theme = name
     print(("(%d/%d) %s"):format(nameidx, #names, name))
-    set_theme(name)
+    set_base16_theme(name)
     utils.load("statusline")
   end,
   {silent = true}
@@ -36,7 +43,7 @@ utils.nnoremap(
     local name = names[nameidx]
     vim.g.base16_theme = name
     print(("(%d/%d) %s"):format(nameidx, #names, name))
-    set_theme(name)
+    set_base16_theme(name)
     base16.setup(name)
     utils.load("statusline")
   end,

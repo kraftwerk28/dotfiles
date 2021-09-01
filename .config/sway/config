@@ -83,8 +83,8 @@ bindsym {
 	# Kill focused window
 	--to-code $mod+Shift+q kill
 
-	$mod+p exec wofi --show drun
-	# $mod+p exec rofi -show drun
+	# $mod+p exec wofi --show drun
+	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -show drun
 
 	# Reload the configuration file
 	--to-code $mod+Shift+c reload
@@ -309,7 +309,6 @@ exec {
 	blueman-applet
 	kdeconnect-indicator
 	$HOME/.config/sway/kbd_layout_per_window.py
-	xsettingsd
 }
 
 workspace 4
