@@ -8,21 +8,21 @@ local u = utils.u
 local function tab_label(i)
   local buflist = fn.tabpagebuflist(i)
   local winnr = fn.tabpagewinnr(i)
-  local result = fn.bufname(buflist[winnr])
-  local is_modified = false
+  local bufname = fn.bufname(buflist[winnr])
+  if bufname == "" then
+    return " ¯\\_(ツ)_/¯ "
+  end
+  local text = fn.fnamemodify(bufname, ":t")
+  if #buflist > 1 then
+    text = #buflist.." "..text
+  end
   for _, bufnr in ipairs(buflist) do
     if fn.getbufvar(bufnr, "&mod") == 1 then
-      is_modified = true
+      text = u"f693".." "..text
       break
     end
   end
-  if #result == 0 then
-    result = "¯\\_(ツ)_/¯"
-  end
-  if is_modified then
-    result = u"f693".." "..result
-  end
-  return " "..result.." "
+  return " "..text.." "
 end
 
 local function build_tabline()
