@@ -18,7 +18,7 @@ local function tab_label(i)
   end
   for _, bufnr in ipairs(buflist) do
     if fn.getbufvar(bufnr, "&mod") == 1 then
-      text = u"f693".." "..text
+      text = "•"..text
       break
     end
   end

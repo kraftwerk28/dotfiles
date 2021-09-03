@@ -85,6 +85,7 @@ bindsym {
 
 	# $mod+p exec wofi --show drun
 	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -show drun
+	$mod+i exec $HOME/.config/sway/rofi-window-switch.sh
 
 	# Reload the configuration file
 	--to-code $mod+Shift+c reload

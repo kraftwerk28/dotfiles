@@ -21,7 +21,6 @@
         "backlight",
         // "keyboard-state",
         "battery",
-        "battery#bat2",
         "sway/language",
         "clock"
     ],
