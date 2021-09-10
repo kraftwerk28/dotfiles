@@ -180,7 +180,7 @@
     "sway/language": {
         // "format": "<b>{long:.2}</b>",
         "format": "<b>{long:.2}</b>",
-        "on-click": "swaymsg input '*' xkb_switch_layout next"
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
     },
     "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",

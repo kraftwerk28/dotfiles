@@ -76,4 +76,14 @@ dump_cwd () {
 		echo $dir > /tmp/last_pwd
 	fi
 }
-precmd_functions+=(dump_cwd)
+
+set_window_title () {
+	echo -n -e "\e]0;$(basename $SHELL) (${PWD/$HOME/"~"})\007"
+}
+
+precmd_functions+=(dump_cwd set_window_title)
+
+noprompt () {
+	precmd_functions=${precmd_functions[@]/refresh_prompt}
+	PS1="$ "
+}

@@ -84,7 +84,7 @@ bindsym {
 	--to-code $mod+Shift+q kill
 
 	# $mod+p exec wofi --show drun
-	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -show drun
+	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
 	$mod+i exec $HOME/.config/sway/rofi-window-switch.sh
 
 	# Reload the configuration file
@@ -271,9 +271,9 @@ include /etc/sway/config.d/*
 
 # Various multimedia keys
 bindsym {
-	XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-	XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-	XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+	XF86AudioRaiseVolume exec $HOME/.config/sway/volume-control.sh up
+	XF86AudioLowerVolume exec $HOME/.config/sway/volume-control.sh down
+	XF86AudioMute exec $HOME/.config/sway/volume-control.sh toggle
 	XF86MonBrightnessDown exec \
 		[[ $(brightnessctl g) -gt 6000 ]] && brightnessctl set 5%-
 	XF86MonBrightnessUp exec brightnessctl set +5%
@@ -281,10 +281,9 @@ bindsym {
 	XF86AudioNext exec playerctl next
 	XF86AudioPrev exec playerctl previous
 
-	Shift+Print exec grimshot copy window
 	Print exec grimshot copy area
-	Control+Print exec grimshot copy screen && \
-		notify-send "Whole damn screen is in buffer"
+	Shift+Print exec grimshot copy window
+	Control+Print exec grimshot copy screen
 }
 
 smart_borders on
@@ -330,3 +329,7 @@ for_window [app_id="firefox" title="^Picture-in-Picture$"] \
 	floating enable, sticky enable, border pixel
 for_window [app_id="firefox" title="Sharing Indicator"] \
 	floating enable, sticky enable
+
+bindsym --release Alt+R exec notify-send foo
+
+bindsym $mod+Shift+r exec wf-recorder 

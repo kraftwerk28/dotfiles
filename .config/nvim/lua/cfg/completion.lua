@@ -30,6 +30,7 @@ cmp.setup {
       vim.fn["UltiSnips#Anon"](args.body)
     end,
   },
+  preselect = cmp.PreselectMode.None,
 }
 
 --[[

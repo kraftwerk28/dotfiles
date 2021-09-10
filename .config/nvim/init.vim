@@ -440,3 +440,15 @@ inoremap <C-H> <C-W>
 "                \ | else
 "                \ |   cd %:p:h
 "                \ | endif
+
+" let g:log_limit = 40
+" function TruncLog()
+"   let l:path = v:lua.vim.lsp.get_log_path()
+"   execute '!echo "$(tail -n '.g:log_limit.' '.l:path.')" > '.l:path
+" endfunction
+" autocmd VimEnter * call TruncLog()
+
+function Foo()
+  let l:c = getcharstr()
+endfunction
+nnoremap <Leader>l :call Foo()<CR>

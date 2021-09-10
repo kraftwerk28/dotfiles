@@ -12,7 +12,7 @@ index=$(echo $raw | jq -r '
 | ..
 | objects
 | select(has("app_id"))
-| "[\($wname)] - \(.name)"' | rofi -dmenu -format i)
+| "[\($wname)] - \(.name)"' | rofi -i -dmenu -format i)
 
 if [[ -n $index ]]; then
 	swaymsg "[con_id=${ids[$index]}]" focus

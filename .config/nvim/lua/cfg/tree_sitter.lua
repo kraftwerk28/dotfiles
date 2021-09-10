@@ -63,4 +63,5 @@ require("nvim-treesitter.configs").setup {
       node_decremental = "(",
     },
   },
+  -- indent = {enable = true},
 }
