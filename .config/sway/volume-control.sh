@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
 sink="@DEFAULT_SINK@"
+source="@DEFAULT_SOURCE@"
 limit=150
+
+if [[ $1 == "toggle-mic" ]]; then
+	pactl set-source-mute $source toggle
+	exit 0
+fi
 
 if [[ $1 = "toggle" ]]; then
 	pactl set-sink-mute $sink toggle

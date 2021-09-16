@@ -274,6 +274,7 @@ bindsym {
 	XF86AudioRaiseVolume exec $HOME/.config/sway/volume-control.sh up
 	XF86AudioLowerVolume exec $HOME/.config/sway/volume-control.sh down
 	XF86AudioMute exec $HOME/.config/sway/volume-control.sh toggle
+	Control+XF86AudioMute exec $HOME/.config/sway/volume-control.sh toggle-mic
 	XF86MonBrightnessDown exec \
 		[[ $(brightnessctl g) -gt 6000 ]] && brightnessctl set 5%-
 	XF86MonBrightnessUp exec brightnessctl set +5%
@@ -329,6 +330,9 @@ for_window [app_id="firefox" title="^Picture-in-Picture$"] \
 	floating enable, sticky enable, border pixel
 for_window [app_id="firefox" title="Sharing Indicator"] \
 	floating enable, sticky enable
+
+for_window [title="QjackCtl"] floating enable
+for_window [title="Guitarix"] floating enable
 
 bindsym --release Alt+R exec notify-send foo
 

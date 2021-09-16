@@ -1,63 +1,58 @@
 local o = vim.opt
 
-local opts = {
-  hidden = true,
-  expandtab = false,
-  softtabstop = 0,
-  tabstop = 4,
-  shiftwidth = 4,
-  autoindent = true,
-  smartindent = true,
-  list = true,
-  listchars = {tab = "⇥ ", trail = "·"},
-  cursorline = false,
-  colorcolumn = {80, 120},
-  mouse = "a",
-  clipboard = "unnamedplus",
-  completeopt = {"menu", "menuone", "noselect"},
-  incsearch = true,
-  hlsearch = false,
-  ignorecase = true,
-  smartcase = true,
-  wildmenu = true,
-  wildmode = "full",
-  signcolumn = "yes",
-  autoread = true,
-  autowrite = true,
-  autowriteall = true,
-  foldlevel = 99,
-  foldmethod = "indent",
-  foldopen = {"hor", "mark", "percent", "quickfix", "search", "tag", "undo"},
-  exrc = true,
-  secure = true,
+o.hidden = true
+o.expandtab = false
+o.softtabstop = 0
+o.tabstop = 4
+o.shiftwidth = 4
+o.autoindent = true
+o.smartindent = true
+o.list = true
+o.listchars = {tab = "» ", trail = "·"}
+-- o.listchars = {tab = "⇥ ", trail = "·"}
+o.cursorline = false
+o.colorcolumn = {80, 120}
+o.mouse = "a"
+o.clipboard = "unnamedplus"
+o.completeopt = {"menu", "menuone", "noselect"}
+o.incsearch = true
+o.hlsearch = false
+o.ignorecase = true
+o.smartcase = true
+o.wildmenu = true
+o.wildmode = "full"
+o.signcolumn = "yes"
+o.autoread = true
+o.autowrite = true
+o.autowriteall = true
+o.foldlevel = 99
+o.foldmethod = "indent"
+o.foldopen = {"hor", "mark", "percent", "quickfix", "search", "tag", "undo"}
+o.exrc = true
+o.secure = true
 
-  -- Vertical insert / cmdline-insert:
-  -- guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20",
-  guicursor = "n-sm-c-i-ci:block,r-cr-o-v:hor20",
+-- Vertical insert / cmdline-insert:
+-- o.guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20"
+o.guicursor = "n-sm-c-i-ci:block,r-cr-o-v:hor20"
 
-  -- guicursor = {
-  --   ["n-sm-c"] = "block",
-  --   ["i-ci"] = "ver25",
-  --   ["r-cr-o-v"] = "hor20",
-  -- },
-  -- Block insert / cmdline-insert:
+-- guicursor = {
+--   ["n-sm-c"] = "block",
+--   ["i-ci"] = "ver25",
+--   ["r-cr-o-v"] = "hor20",
+-- },
+-- Block insert / cmdline-insert:
 
-  -- guicursor = "n-sm-c:block,r-cr-o-v:hor20",
+-- guicursor = "n-sm-c:block,r-cr-o-v:hor20",
 
-  splitbelow = true,
-  splitright = true,
-  regexpengine = 0,
-  lazyredraw = true,
-  showmode = false,
-  undofile = true,
-  backupcopy = "yes",
-  inccommand = "nosplit",
-  title = true,
-}
-
-for k, v in pairs(opts) do
-  o[k] = v
-end
+o.splitbelow = true
+o.splitright = true
+o.regexpengine = 0
+o.lazyredraw = true
+o.showmode = false
+o.undofile = true
+o.backupcopy = "yes"
+o.inccommand = "nosplit"
+o.title = true
 
 o.shortmess:append("c")
 o.diffopt:append("vertical")

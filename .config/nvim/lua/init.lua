@@ -103,6 +103,54 @@ utils.nnoremap("<Leader>ar", function()
 
 end)
 
+local highlight_groups = {}
+local forbidden_patterns = {
+  "^DevIcon", "Debug",
+}
+do
+  local api = vim.api
+  local highlight_names = vim.fn.getcompletion("", "highlight")
+  for _, name in ipairs(highlight_names) do
+    for _, pat in ipairs(forbidden_patterns) do
+      if name:match(pat) then
+        goto continue
+      end
+    end
+    local hl = api.nvim_get_hl_by_name(name, true)
+    hl.name = name
+    table.insert(highlight_groups, hl)
+    ::continue::
+  end
+end
+
+local function color_distance(a, b)
+  return
+    math.abs(bit.rshift(a, 16) - bit.rshift(b, 16)) +
+    math.abs(bit.band(bit.rshift(a, 8), 0xff) - bit.band(bit.rshift(b, 8), 0xff)) +
+    math.abs(bit.band(a, 0xff) - bit.band(b, 0xff))
+end
+
+function _G.get_closest_highlight(hl)
+  local closest = 0xffffffff
+  local closest_hl_group = highlight_groups[1]
+  for _, group in ipairs(highlight_groups) do
+    local d = 0
+    for k, v in pairs(hl) do
+      if group[k] == nil then
+        d = d + 0xff
+      else
+        d = d + color_distance(v, group[k])
+      end
+    end
+    if d < closest then
+      closest = d
+      closest_hl_group = group
+    end
+  end
+  vim.cmd("hi "..closest_hl_group.name)
+  return closest_hl_group
+end
+
 -- local tm = vim.loop.new_timer()
 -- local count = 0
 -- tm:start(1000, 1000, vim.schedule_wrap(function()

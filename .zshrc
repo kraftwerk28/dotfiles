@@ -10,7 +10,9 @@ plug zsh-z/zsh-z.plugin.zsh
 plug zsh-extract/extract.plugin.zsh
 plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
-export BASE16_THEME="default-dark"
+# export BASE16_THEME="default-dark"
+# export BASE16_THEME="gruvbox-dark-medium"
+export BASE16_THEME="woodland"
 
 ZVM_CURSOR_STYLE_ENABLED=false
 ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK

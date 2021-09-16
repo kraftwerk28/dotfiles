@@ -75,8 +75,8 @@ local function load(use)
   use {"adimit/prolog.vim"}
 
   use {
-    "~/projects/neovim/nvim-treesitter",
-    -- "nvim-treesitter/nvim-treesitter",
+    -- "~/projects/neovim/nvim-treesitter",
+    "nvim-treesitter/nvim-treesitter",
     requires = {"nvim-treesitter/playground"},
     run = function() vim.cmd("TSUpdate") end,
     config = function() require('cfg.tree_sitter') end,

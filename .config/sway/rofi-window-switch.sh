@@ -1,12 +1,12 @@
 raw=$(swaymsg -t get_tree)
 
-IFS=$'\n' ids=($(jq -r '
-..
+IFS=$'\n' ids=($(jq -r \
+' ..
 | objects
 | select(has("app_id")).id' <<< $raw))
 
-index=$(echo $raw | jq -r '
-..
+index=$(echo $raw | jq -r \
+' ..
 | select(.type? == "workspace")
 | .name as $wname
 | ..

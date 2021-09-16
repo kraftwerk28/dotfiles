@@ -11,6 +11,8 @@ local function set_base16_theme(name)
   base16.setup(colors)
 end
 
+-- vim.g.ayucolor = "mirage"
+-- vim.cmd("colorscheme ayu")
 if not ok then
   print("base16-colorscheme is not installed")
 else

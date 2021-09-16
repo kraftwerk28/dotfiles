@@ -134,12 +134,21 @@ lsp_config.sumneko_lua.setup {
 
 -- lsp_config.lua_emmy.setup {}
 
-lsp_config.rust_analyzer.setup {}
+do
+  local cpb = lsp.protocol.make_client_capabilities()
+  cpb = require("cmp_nvim_lsp").update_capabilities(cpb)
+  -- cpb.textDocument.completion.completionItem.snippetSupport = true
+  lsp_config.rust_analyzer.setup {
+    capabilities = cpb,
+  }
+end
 
 lsp_config.gopls.setup {
   cmd = {"gopls", "serve"},
   filetypes = {"go", "gomod"},
-  root_dir = root_pattern("go.mod", ".git", vim.fn.getcwd()),
+  root_dir = function(name)
+    return root_pattern("go.mod", ".git")(name) or vim.fn.getcwd()
+  end,
 }
 
 lsp_config.hls.setup {

@@ -2,6 +2,9 @@ local cmp = require("cmp")
 local lspkind = require("lspkind")
 local maps = cmp.mapping
 
+-- local compare = require("cmp.config.compare")
+-- local types = require("cmp.types")
+
 cmp.setup {
   mapping = {
     -- Plugin errors when this is empty
@@ -21,9 +24,10 @@ cmp.setup {
   },
   formatting = {
     format = function(entry, vim_item)
-      vim_item.kind = lspkind.presets.default[vim_item.kind]
+      local icon = lspkind.presets.default[vim_item.kind]
+      vim_item.abbr = icon .. " " .. vim_item.abbr
       return vim_item
-    end
+    end,
   },
   snippet = {
     expand = function(args)
