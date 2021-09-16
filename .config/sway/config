@@ -90,9 +90,9 @@ bindsym {
 	# Reload the configuration file
 	--to-code $mod+Shift+c reload
 
-	$mod+f2 exec alacritty \
-		--working-directory "$HOME/.config/sway" \
-		--command nvim config
+	# $mod+f2 exec alacritty \
+	# 	--working-directory "$HOME/.config/sway" \
+	# 	--command "zsh -c 'nvim config'"
 
 	# Exit sway (logs you out of your Wayland session)
 	$mod+Shift+e exec swaynag \
@@ -137,7 +137,7 @@ bindsym {
 	--to-code $mod+Bracketleft workspace prev
 	--to-code $mod+Bracketright workspace next
 	--to-code $mod+Shift+Bracketleft \
-		exec $HOME/.config/sway/workspace_switch.sh prev
+		exec $HOME/.config/sway/workspace-switch.sh prev
 	--to-code $mod+Shift+Bracketright \
 		exec $HOME/.config/sway/workspace_switch.sh next
 
@@ -301,8 +301,7 @@ client.focused_inactive "#555555" "#555555" "#ffffff"
 client.unfocused "#555555" "#555555" "#ffffff"
 font "Hack Nerd Font 10"
 
-seat seat0 xcursor_theme $cursor_theme
-exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
+exec_always $HOME/.config/sway/set-cursor-theme.sh
 
 # Autostart
 exec {

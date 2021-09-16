@@ -3,7 +3,8 @@ raw=$(swaymsg -t get_tree)
 IFS=$'\n' ids=($(jq -r \
 ' ..
 | objects
-| select(has("app_id")).id' <<< $raw))
+| select(has("app_id")).id
+' <<< $raw))
 
 index=$(echo $raw | jq -r \
 ' ..
@@ -12,7 +13,8 @@ index=$(echo $raw | jq -r \
 | ..
 | objects
 | select(has("app_id"))
-| "[\($wname)] - \(.name)"' | rofi -i -dmenu -format i)
+| "[\($wname)] - \(.name)"
+' | rofi -i -dmenu -format i)
 
 if [[ -n $index ]]; then
 	swaymsg "[con_id=${ids[$index]}]" focus
