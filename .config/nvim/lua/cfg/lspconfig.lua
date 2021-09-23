@@ -2,49 +2,43 @@ local utils = require("utils")
 local lsp_config = require("lspconfig")
 local root_pattern = require("lspconfig.util").root_pattern
 
-local lsp = vim.lsp
+local lsp, fn = vim.lsp, vim.fn
 local highlight = utils.highlight
 local u = utils.u
 local expand = vim.fn.expand
 
-highlight {"LspDiagnosticsUnderlineHint", gui = "undercurl"}
-highlight {"LspDiagnosticsUnderlineInformation", gui = "undercurl"}
+highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
+highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
 highlight {
-  "LspDiagnosticsUnderlineWarning",
+  "DiagnosticUnderlineWarning",
   gui = "undercurl",
   -- guisp = "Orange",
 }
--- highlight {"LspDiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
-highlight {"LspDiagnosticsUnderlineError", gui = "undercurl"}
+-- highlight {"DiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
+highlight {"DiagnosticUnderlineError", gui = "undercurl"}
 
--- highlight {"LspDiagnosticsDefaultHint", fg = "Yellow"}
--- highlight {"LspDiagnosticsDefaultInformation", fg = "LightBlue"}
-highlight {"LspDiagnosticsDefaultWarning", fg = "Orange"}
--- highlight {"LspDiagnosticsDefaultError", fg = "Red"}
+-- highlight {"DiagnosticsHint", fg = "Yellow"}
+-- highlight {"DiagnosticsInformation", fg = "LightBlue"}
+highlight {"DiagnosticWarn", fg = "Orange"}
+-- highlight {"DiagnosticsError", fg = "Red"}
 highlight {"FloatBorder", fg = "gray"}
 
-local lsp_signs = {
-  LspDiagnosticsSignHint = {
-    text = u "f0eb",
-    texthl = "LspDiagnosticsSignHint",
-  },
-  LspDiagnosticsSignInformation = {
-    text = u "f129",
-    texthl = "LspDiagnosticsSignInformation",
-  },
-  LspDiagnosticsSignWarning = {
-    text = u "f071",
-    texthl = "LspDiagnosticsSignWarning",
-  },
-  LspDiagnosticsSignError = {
-    text = u "f46e",
-    texthl = "LspDiagnosticsSignError",
-  },
-}
-
-for hl_group, config in pairs(lsp_signs) do
-  vim.fn.sign_define(hl_group, config)
-end
+fn.sign_define("DiagnosticSignHint", {
+  text = u"f0eb",
+  texthl = "DiagnosticSignHint",
+})
+fn.sign_define("DiagnosticSignInfo", {
+  text = u"f129",
+  texthl = "DiagnosticSignInfo",
+})
+fn.sign_define("DiagnosticSignWarn", {
+  text = u"f071",
+  texthl = "DiagnosticSignWarn",
+})
+fn.sign_define("DiagnosticSignError", {
+  text = u"f46e",
+  texthl = "DiagnosticSignError",
+})
 
 lsp_config.tsserver.setup {
   cmd = {

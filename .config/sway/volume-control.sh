@@ -28,4 +28,4 @@ r=$(($r - ($r % 5)))
 if [[ $l -gt $limit ]]; then l=$limit; fi
 if [[ $r -gt $limit ]]; then r=$limit; fi
 
-exec pactl set-sink-volume $sink "$l%" "$r%"
+pactl set-sink-volume $sink "$l%" "$r%"

@@ -12,7 +12,8 @@ local function load(use)
   use {"joshdick/onedark.vim"}
   use {"morhetz/gruvbox"}
   use {"npxbr/gruvbox.nvim", disable = true, requires = {"rktjmp/lush.nvim"}}
-  use {"RRethy/nvim-base16"}
+  -- use {"RRethy/nvim-base16"}
+  use {"~/projects/neovim/nvim-base16"}
   use {"projekt0n/github-nvim-theme"}
 
   use {"kyazdani42/nvim-web-devicons"}
@@ -39,7 +40,8 @@ local function load(use)
   }
 
   use {
-    "nvim-telescope/telescope.nvim",
+    -- "nvim-telescope/telescope.nvim",
+    "~/projects/neovim/telescope.nvim",
     requires = {
       "kyazdani42/nvim-web-devicons",
       "nvim-lua/popup.nvim",

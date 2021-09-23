@@ -27,7 +27,7 @@ local enabled_linux = {
   "toml",
   "tsx",
   "typescript",
-  "yaml",
+  -- "yaml",
   -- "haskell",
 }
 

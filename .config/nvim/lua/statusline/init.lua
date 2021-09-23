@@ -227,25 +227,25 @@ return function()
       highlight {
         "StatusLineWarning",
         guibg = cl.bg,
-        override = "LspDiagnosticsDefaultWarning",
+        override = "DiagnosticWarn",
         gui = "bold",
       }
       highlight {
         "StatusLineError",
         guibg = cl.bg,
-        override = "LspDiagnosticsDefaultError",
+        override = "DiagnosticError",
         gui = "bold",
       }
       highlight {
         "StatusLineHint",
         guibg = cl.bg,
-        override = "LspDiagnosticsDefaultHint",
+        override = "DiagnosticHint",
         gui = "bold",
       }
       highlight {
         "StatusLineInformation",
         guibg = cl.bg,
-        override = "LspDiagnosticsDefaultInformation",
+        override = "DiagnosticInfo",
         gui = "bold",
       }
     end,

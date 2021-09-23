@@ -139,7 +139,7 @@ bindsym {
 	--to-code $mod+Shift+Bracketleft \
 		exec $HOME/.config/sway/workspace-switch.sh prev
 	--to-code $mod+Shift+Bracketright \
-		exec $HOME/.config/sway/workspace_switch.sh next
+		exec $HOME/.config/sway/workspace-switch.sh next
 
 	--to-code $mod+Control+Up \
 		exec $HOME/.config/sway/push-window.sh top
@@ -296,12 +296,18 @@ default_border pixel 1
 focus_wrapping off
 focus_follows_mouse no
 
-client.focused "#ff8800" "#ff8800" "#000000"
-client.focused_inactive "#555555" "#555555" "#ffffff"
-client.unfocused "#555555" "#555555" "#ffffff"
+client.focused          "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
+client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
 font "Hack Nerd Font 10"
+titlebar_padding 4
 
-exec_always $HOME/.config/sway/set-cursor-theme.sh
+set $cursor_theme "Breeze_Snow"
+seat seat0 xcursor_theme $cursor_theme
+exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
+exec_always sed -i -r \
+	's/^Inherits=.+/Inherits='$XCURSOR_THEME'/' \
+	~/.icons/default/index.theme
 
 # Autostart
 exec {
