@@ -12,8 +12,10 @@ local function load(use)
   use {"joshdick/onedark.vim"}
   use {"morhetz/gruvbox"}
   use {"npxbr/gruvbox.nvim", disable = true, requires = {"rktjmp/lush.nvim"}}
-  -- use {"RRethy/nvim-base16"}
-  use {"~/projects/neovim/nvim-base16"}
+  use {
+    -- "~/projects/neovim/nvim-base16"
+    "RRethy/nvim-base16"
+  }
   use {"projekt0n/github-nvim-theme"}
 
   use {"kyazdani42/nvim-web-devicons"}

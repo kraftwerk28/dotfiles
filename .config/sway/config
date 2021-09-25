@@ -188,6 +188,7 @@ bindsym {
 
 	# Move focus to the parent container
 	$mod+a focus parent
+	$mod+Control+a focus child
 #
 # Scratchpad:
 #
@@ -302,7 +303,7 @@ client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
 font "Hack Nerd Font 10"
 titlebar_padding 4
 
-set $cursor_theme "Breeze_Snow"
+set $cursor_theme "Adwaita"
 seat seat0 xcursor_theme $cursor_theme
 exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
 exec_always sed -i -r \
