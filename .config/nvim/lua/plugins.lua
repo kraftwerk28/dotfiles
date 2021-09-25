@@ -147,13 +147,13 @@ local function load(use)
       utils.highlight {"NvimTreeFolderName", "Title"}
       utils.highlight {"NvimTreeFolderIcon", "Title"}
       local opts = {
-        auto_close = 1,
-        indent_markers = 0,
-        quit_on_open = 1,
-        disable_netrw = 0,
-        hijack_netrw = 1,
-        highlight_opened_files = 1,
-        auto_resize = 0,
+        auto_close = true,
+        indent_markers = false,
+        quit_on_open = true,
+        disable_netrw = false,
+        hijack_netrw = true,
+        highlight_opened_files = true,
+        auto_resize = false,
         icons = {
           folder = {
             default = u"f07b",
@@ -162,9 +162,7 @@ local function load(use)
           },
         },
       }
-      for k, v in pairs(opts) do
-        vim.g["nvim_tree_"..k] = v
-      end
+      require("nvim-tree").setup(opts)
     end,
   }
 
