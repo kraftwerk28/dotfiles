@@ -42,8 +42,8 @@ local function load(use)
   }
 
   use {
-    -- "nvim-telescope/telescope.nvim",
-    "~/projects/neovim/telescope.nvim",
+    "nvim-telescope/telescope.nvim",
+    -- "~/projects/neovim/telescope.nvim",
     requires = {
       "kyazdani42/nvim-web-devicons",
       "nvim-lua/popup.nvim",
@@ -146,23 +146,22 @@ local function load(use)
       local u = utils.u
       utils.highlight {"NvimTreeFolderName", "Title"}
       utils.highlight {"NvimTreeFolderIcon", "Title"}
-      local opts = {
+      vim.g.nvim_tree_quit_on_open = 1
+      vim.g.nvim_tree_indent_markers = 0
+      vim.g.nvim_tree_icons = {
+        folder = {
+          default = u"f07b",
+          open = u"f07c",
+          symlink = u"f0c1",
+        },
+      }
+      require("nvim-tree").setup {
         auto_close = true,
-        indent_markers = false,
-        quit_on_open = true,
         disable_netrw = false,
         hijack_netrw = true,
         highlight_opened_files = true,
         auto_resize = false,
-        icons = {
-          folder = {
-            default = u"f07b",
-            open = u"f07c",
-            symlink = u"f0c1",
-          },
-        },
       }
-      require("nvim-tree").setup(opts)
     end,
   }
 
