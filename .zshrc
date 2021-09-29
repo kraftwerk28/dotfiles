@@ -11,7 +11,7 @@ plug zsh-extract/extract.plugin.zsh
 plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # export BASE16_THEME="default-dark"
-export BASE16_THEME="gruvbox-dark-medium"
+export BASE16_THEME="gruvbox-dark-hard"
 # export BASE16_THEME="woodland"
 
 ZVM_CURSOR_STYLE_ENABLED=true
@@ -39,7 +39,7 @@ setopt hist_verify
 setopt share_history
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
-SAVEHIST=10000
+SAVEHIST=50000
 
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1

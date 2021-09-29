@@ -3,8 +3,7 @@ export EDITOR="/usr/bin/nvim"
 export PAGER="less -i"
 export MANPAGER="nvim +Man!"
 
-# custom
-export PATH="$PATH:$HOME/.scripts"
+export PATH="$PATH:$HOME/bin"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"

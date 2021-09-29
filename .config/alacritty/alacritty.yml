@@ -105,7 +105,6 @@ window:
 # Font configuration
 font:
   # Normal (roman) font face
-  size: 12.5
   normal:
     # Font family
     #
@@ -116,14 +115,19 @@ font:
     # family: monospace
     family: "Hack Nerd Font"
     # family: "JetBrains Mono Nerd Font"
-    # family: "Iosevka"
+    # family: "Source Code Pro"
     # family: "DejaVu Sans Mono"
+    # family: "Iosevka Term"
+  # size: 13
+  size: 12.5
 
-    # The `style` can be specified to pick a specific face.
-    style: "Regular"
-  # bold: {style: "Extrabold Extended"}
-  # italic: {style: "Extended Italic"}
-  # bold_italic: {style: "Extrabold Extended Italic"}
+  # The `style` can be specified to pick a specific face.
+  # bold:
+  #   style: "Extrabold Extended"
+  # italic:
+  #   style: "Extended Italic"
+  # bold_italic:
+  #   style: "Extrabold Extended Italic"
 
   # Bold font face
   # bold:

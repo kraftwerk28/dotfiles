@@ -7,11 +7,11 @@ local function load(use)
   }
 
   -- Themes
-  use {"ayu-theme/ayu-vim"}
-  use {"romgrk/doom-one.vim", disable = true}
-  use {"joshdick/onedark.vim"}
-  use {"morhetz/gruvbox"}
-  use {"npxbr/gruvbox.nvim", disable = true, requires = {"rktjmp/lush.nvim"}}
+  use {"navarasu/onedark.nvim"}
+  use {
+    "npxbr/gruvbox.nvim",
+    requires = {"rktjmp/lush.nvim"},
+  }
   use {
     -- "~/projects/neovim/nvim-base16"
     "RRethy/nvim-base16"
@@ -172,6 +172,16 @@ local function load(use)
 
   use {"equalsraf/neovim-gui-shim", opt = true}
 
+  use {
+    "ray-x/lsp_signature.nvim",
+    config = function()
+      require("lsp_signature").setup {
+        floating_window = true,
+        floating_window_above_cur_line = false,
+        hint_enable = false,
+      }
+    end,
+  }
 end
 
 return function()

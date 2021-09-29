@@ -4,7 +4,9 @@ if type nvim > /dev/null; then
 	alias v="nvim"
 	alias im="nvim"
 	alias vin="nvim"
-	alias updatenvim="yay -S --needed --noconfirm neovim-git"
+	alias updatenvim="yay -S --needed \
+		--noconfirm --nodiffmenu --nocleanmenu --noeditmenu \
+		neovim-git"
 fi
 
 if type lsd > /dev/null; then
@@ -29,9 +31,9 @@ alias serves="serve \
 
 if [[ -d /usr/lib/jvm ]]; then
 	for dir in /usr/lib/jvm/*; do
-	  if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
-		eval "alias java${ver}=/usr/lib/jvm/${dir}bin/java"
-	  fi
+		if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
+			eval "alias java${ver}=/usr/lib/jvm/${dir}bin/java"
+		fi
 	done
 fi
 

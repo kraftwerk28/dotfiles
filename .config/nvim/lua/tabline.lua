@@ -10,7 +10,7 @@ local function tab_label(i)
   local winnr = fn.tabpagewinnr(i)
   local bufname = fn.bufname(buflist[winnr])
   if bufname == "" then
-    return " ¯\\_(ツ)_/¯ "
+    return [[ ¯\_(ツ)_/¯ ]]
   end
   local text = fn.fnamemodify(bufname, ":t")
   if #buflist > 1 then

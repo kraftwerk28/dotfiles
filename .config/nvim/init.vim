@@ -54,6 +54,7 @@ let s:additional_filetypes = {
 \   'rest': '*.http',
 \   'elixir': ['*.exs', '*.ex'],
 \   'prolog': '*pl',
+\   'html': '*.ejs',
 \ }
 
 augroup extra_filetypes

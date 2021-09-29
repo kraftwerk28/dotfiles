@@ -1,11 +1,10 @@
 set {
-	$mod Mod4 # Super
-	# $mod Mod1 # Left Alt
+	$mod Mod4
 	$left h
 	$down j
 	$up k
 	$right l
-	$cursor_theme "breeze_cursors"
+	$cursor_theme "Adwaita"
 }
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
@@ -193,10 +192,9 @@ focus_follows_mouse no
 client.focused          "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
 client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
-font "Hack Nerd Font 10"
-titlebar_padding 4
+font Hack Nerd Font Bold 10
+titlebar_padding 4 1
 
-set $cursor_theme "Adwaita"
 seat seat0 xcursor_theme $cursor_theme
 exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
 exec_always sed -i -r \
@@ -211,12 +209,15 @@ exec {
 	$HOME/.config/sway/kbd_layout_per_window.py
 }
 
-workspace 4
-exec firefox
-workspace 5
-exec kotatogram-desktop
-workspace 6
-exec slack
+workspace 4; exec {
+	firefox
+}
+workspace 5; tabbed; exec {
+	kotatogram-desktop
+	slack
+	discord
+	thunderbird
+}
 workspace 1
 
 # exec swayidle -w \
@@ -226,12 +227,17 @@ workspace 1
 # 	# before-sleep 'swaylock -f -c 000000'
 
 for_window [app_id="firefox" title="^Picture-in-Picture$"] \
-	floating enable, sticky enable, border pixel
+	floating enable; \
+	sticky enable; \
+	border pixel
 for_window [app_id="firefox" title="Sharing Indicator"] \
-	floating enable, sticky enable
-
+	floating enable; \
+	sticky enable
+for_window [app_id="pavucontrol"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="Guitarix"] floating enable
 
 # bindsym --release Alt+R exec notify-send foo
 # bindsym $mod+Shift+r exec wf-recorder
+
+# vim: ft=config
