@@ -1,9 +1,9 @@
 * {
 	border: none;
 	border-radius: 0;
-	/* `otf-font-awesome` is required to be installed for icons */
 	font-family: "Hack Nerd Font";
-	font-size: 16px;
+	font-weight: bold;
+	font-size: 15px;
 	min-height: 0;
 }
 
@@ -39,7 +39,7 @@ window#waybar.chromium {
 }
 
 #workspaces button {
-	padding: 0 5px;
+	padding: 0 4px;
 	background-color: transparent;
 	color: #ffffff;
 	/* Use box-shadow instead of border so the text isn't offset */

@@ -34,7 +34,8 @@ o.secure = true
 -- Vertical insert / cmdline-insert:
 -- o.guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20"
 -- o.guicursor = "n-sm-c-i-ci:block,r-cr-o-v:hor20"
-o.guicursor = "n-c-sm:block,i-ci:ver25,r-cr-o-v:hor20,a:blinkon1"
+-- o.guicursor = "n-c-sm:block,i-ci:ver25,r-cr-o-v:hor20,a:blinkon1"
+o.guicursor = {}
 
 -- guicursor = {
 --   ["n-sm-c"] = "block",

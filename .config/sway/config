@@ -9,10 +9,8 @@ set {
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
 
-output * bg $HOME/Pictures/hainin.jpg fill
-# output * bg $HOME/Pictures/scp_wallpaper_1.jpg fill
-# output * bg ~/projects/go/src/gopics/my_avatarka/avatar.png fill
-# output * bg ~/Pictures/voxel-island-wallpaper.jpg fill
+# output * bg "#000000" solid_color
+output * bg $HOME/Pictures/scp_wallpaper_1.jpg fill
 
 # output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
@@ -139,8 +137,15 @@ mode "resize" bindsym {
 bindsym $mod+r mode "resize"
 
 bar {
-	swaybar_command /home/kraftwerk28/projects/sway/Waybar/build/waybar
+	# status_command $HOME/.config/sway/mybar.sh
+	# status_command i3status-rs $HOME/.config/i3status-rust/config.toml
+	swaybar_command waybar
+	# swaybar_command swaybar
+	# swaybar_command /home/kraftwerk28/projects/sway/Waybar/build/waybar
+	# status_command while true; do date +"%x %X"; sleep 1; done
+	font Hack Bold 11
 	position top
+	icon_theme "Papirus"
 }
 
 input type:pointer {
@@ -209,14 +214,13 @@ exec {
 	$HOME/.config/sway/kbd_layout_per_window.py
 }
 
-workspace 4; exec {
-	firefox
-}
-workspace 5; tabbed; exec {
+workspace 4
+exec firefox
+workspace 5
+exec {
 	kotatogram-desktop
 	slack
 	discord
-	thunderbird
 }
 workspace 1
 

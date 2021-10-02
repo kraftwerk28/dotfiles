@@ -294,34 +294,24 @@ do
 end
 
 do
-  -- TODO: setop efm
-  local eslint = {
+  local eslint_config = {
     lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
     lintStdin = true,
-    lintFormats = {"%f:%l:%c: %m"},
+    lintFormats = {"%f:%l:%c: %m [%t%s/%s]"},
     lintIgnoreExitCode = true,
-    formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
-    formatStdin = true,
   }
   local languages = {
-    javascript = {eslint},
-    javascriptreact = {eslint},
-    typescript = {eslint},
-    typescriptreact = {eslint},
+    javascript = {eslint_config},
+    typescript = {eslint_config},
+    typescriptreact = {eslint_config},
+    javatypescriptreact = {eslint_config},
   }
   lsp_config.efm.setup {
-    cmd = {"efm-langserver"},
-    on_attach = function(client)
-      client.resolved_capabilities.document_formatting = true
-      client.resolved_capabilities.goto_definition = false
-    end,
-    setttings = {
-      languages = languages,
-      log_level = 1,
-      log_file = vim.fn.expand("~/.config/efm-langserver/efm.log"),
-    },
-    root_dir = root_pattern(".eslintrc.yml"),
     filetypes = vim.tbl_keys(languages),
+    settings = {
+      languages = languages,
+    },
+    root_dir = root_pattern(".eslintrc*"),
   }
 end
 

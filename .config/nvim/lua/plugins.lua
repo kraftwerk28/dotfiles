@@ -172,16 +172,16 @@ local function load(use)
 
   use {"equalsraf/neovim-gui-shim", opt = true}
 
-  use {
-    "ray-x/lsp_signature.nvim",
-    config = function()
-      require("lsp_signature").setup {
-        floating_window = true,
-        floating_window_above_cur_line = false,
-        hint_enable = false,
-      }
-    end,
-  }
+  -- use {
+  --   "ray-x/lsp_signature.nvim",
+  --   config = function()
+  --     require("lsp_signature").setup {
+  --       floating_window = true,
+  --       floating_window_above_cur_line = false,
+  --       hint_enable = false,
+  --     }
+  --   end,
+  -- }
 end
 
 return function()
