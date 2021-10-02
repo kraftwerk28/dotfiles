@@ -162,7 +162,8 @@
             "car": "",
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pavucontrol",
+        "on-click-right": "$HOME/.config/waybar/switch_audio_sink.py"
     },
     "custom/media": {
         "format": "{icon} {}",
