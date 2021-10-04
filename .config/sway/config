@@ -216,11 +216,12 @@ exec {
 
 workspace 4
 exec firefox
-workspace 5
+workspace 5; layout tabbed
 exec {
 	kotatogram-desktop
 	slack
 	discord
+	mattermost-desktop
 }
 workspace 1
 
@@ -243,5 +244,15 @@ for_window [title="Guitarix"] floating enable
 
 # bindsym --release Alt+R exec notify-send foo
 # bindsym $mod+Shift+r exec wf-recorder
+
+# bindswitch lid:toggle exec swaylock \
+# 	--image $HOME/Pictures/scp_wallpaper_1.jpg \
+# 	--font "Hack Bold" \
+# 	--indicator-radius 96 \
+# 	--indicator-thickness 16 \
+# 	--scaling fill \
+# 	--ring-color "00000000" \
+# 	--key-hl-color "ffffff" \
+# 	--inside-color "000000"
 
 # vim: ft=config

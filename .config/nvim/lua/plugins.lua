@@ -61,9 +61,9 @@ local function load(use)
     config = function()
       local u = require("utils").u
       local gutter = u"2595"
-      vim.g.gitgutter_sign_added = gutter
+      vim.g.gitgutter_sign_added    = gutter
       vim.g.gitgutter_sign_modified = gutter
-      vim.g.gitgutter_sign_removed = gutter
+      vim.g.gitgutter_sign_removed  = gutter
     end,
   }
 
@@ -94,6 +94,7 @@ local function load(use)
 
   use {
     "RRethy/vim-illuminate",
+    disable = true,
     config = function()
       local utils = require("utils")
       utils.highlight {"illuminatedWord", guibg = "#303030"}
@@ -107,9 +108,9 @@ local function load(use)
     use {
       "SirVer/ultisnips",
       config = function()
-        vim.g.UltiSnipsExpandTrigger = '<F10>'
-        vim.g.UltiSnipsJumpForwardTrigger = '<C-J>'
-        vim.g.UltiSnipsJumpBackwardTrigger = '<C-K>'
+        vim.g.UltiSnipsExpandTrigger       = "<F10>"
+        vim.g.UltiSnipsJumpForwardTrigger  = "<C-J>"
+        vim.g.UltiSnipsJumpBackwardTrigger = "<C-K>"
       end,
     }
   end
@@ -131,10 +132,7 @@ local function load(use)
   use {
     "hrsh7th/nvim-compe",
     disable = true,
-    requires = {
-      "SirVer/ultisnips",
-      "honza/vim-snippets",
-    },
+    requires = {"SirVer/ultisnips", "honza/vim-snippets"},
     config = function() require("cfg.completion") end,
   }
 
@@ -143,24 +141,25 @@ local function load(use)
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       local utils = require("utils")
-      local u = utils.u
-      utils.highlight {"NvimTreeFolderName", "Title"}
-      utils.highlight {"NvimTreeFolderIcon", "Title"}
+      local u, highlight = utils.u, utils.highlight
+      highlight {"NvimTreeFolderName", "Title"}
+      highlight {"NvimTreeFolderIcon", "Title"}
       vim.g.nvim_tree_quit_on_open = 1
       vim.g.nvim_tree_indent_markers = 0
       vim.g.nvim_tree_icons = {
         folder = {
           default = u"f07b",
-          open = u"f07c",
+          open    = u"f07c",
           symlink = u"f0c1",
         },
       }
       require("nvim-tree").setup {
-        auto_close = true,
-        disable_netrw = false,
-        hijack_netrw = true,
+        auto_close             = true,
+        disable_netrw          = false,
+        hijack_netrw           = true,
         highlight_opened_files = true,
-        auto_resize = false,
+        auto_resize            = false,
+        hijack_cursor          = true,
       }
     end,
   }

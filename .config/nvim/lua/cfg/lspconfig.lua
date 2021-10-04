@@ -87,31 +87,31 @@ lsp_config.pylsp.setup {
 
 -- lsp_config.pyright.setup {}
 
-lsp_config.sumneko_lua.setup {
-  cmd = {
-    "lua-language-server",
-    "-E", "/usr/share/lua-language-server/main.lua",
-    "--logpath",
-    vim.lsp.get_log_path():match("(.*[/\\])"),
-  },
-  settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-        path = vim.split(package.path, ";"),
-      },
-      diagnostics = {
-        globals = {"vim", "dump", "love"},
-      },
-      workspace = {
-        library = {
-          [expand("$VIMRUNTIME/lua")] = true,
-          [expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-        },
-      },
-    },
-  },
-}
+-- lsp_config.sumneko_lua.setup {
+--   cmd = {
+--     "lua-language-server",
+--     "-E", "/usr/share/lua-language-server/main.lua",
+--     "--logpath",
+--     vim.lsp.get_log_path():match("(.*[/\\])"),
+--   },
+--   settings = {
+--     Lua = {
+--       runtime = {
+--         version = "LuaJIT",
+--         path = vim.split(package.path, ";"),
+--       },
+--       diagnostics = {
+--         globals = {"vim", "dump", "love"},
+--       },
+--       workspace = {
+--         library = {
+--           [expand("$VIMRUNTIME/lua")] = true,
+--           [expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+--         },
+--       },
+--     },
+--   },
+-- }
 
 -- require('lspconfig/configs').lua_emmy = {
 --     default_config = {
@@ -300,18 +300,25 @@ do
     lintFormats = {"%f:%l:%c: %m [%t%s/%s]"},
     lintIgnoreExitCode = true,
   }
+  local luacheck_config = {
+    lintCommand = "luacheck --no-color --no-self -",
+    lintStdin = true,
+    lintFormats = {"    %f:%l:%c: %m"},
+    lintIgnoreExitCode = true,
+  }
   local languages = {
-    javascript = {eslint_config},
-    typescript = {eslint_config},
-    typescriptreact = {eslint_config},
+    javascript          = {eslint_config},
+    typescript          = {eslint_config},
+    typescriptreact     = {eslint_config},
     javatypescriptreact = {eslint_config},
+    lua                 = {luacheck_config},
   }
   lsp_config.efm.setup {
     filetypes = vim.tbl_keys(languages),
     settings = {
       languages = languages,
     },
-    root_dir = root_pattern(".eslintrc*"),
+    root_dir = root_pattern(".eslintrc*", "init.lua", ".git"),
   }
 end
 

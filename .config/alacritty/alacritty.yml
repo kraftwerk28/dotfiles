@@ -120,7 +120,7 @@ font:
     # family: "Iosevka Term"
     # family: "CaskaydiaCove Nerd Font"
   # size: 13
-  size: 12.5
+  size: 13
 
   # The `style` can be specified to pick a specific face.
   # bold:
@@ -465,7 +465,7 @@ colors:
 #
 # Terminal hints can be used to find text in the visible part of the terminal
 # and pipe it to other applications.
-#hints:
+hints:
   # Keys used for the hint labels.
   #alphabet: "jfkdls;ahgurieowpq"
 
@@ -493,7 +493,15 @@ colors:
   #       Select the hint's text.
   #   - MoveViModeCursor
   #       Move the vi mode cursor to the beginning of the hint.
-  #enabled:
+
+  enabled:
+    - regex: "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
+              [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+      command: "xdg-open"
+      mouse:
+        enabled: true
+        mods: "Control"
+
   # - regex: "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
   #           [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
   #   command: xdg-open
@@ -866,3 +874,5 @@ colors:
 
   # Print all received window events.
   #print_events: false
+
+# vim: foldmethod=indent foldignore=
