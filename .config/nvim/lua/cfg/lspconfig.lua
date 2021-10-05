@@ -137,13 +137,13 @@ do
   }
 end
 
-lsp_config.gopls.setup {
-  cmd = {"gopls", "serve"},
-  filetypes = {"go", "gomod"},
-  root_dir = function(name)
-    return root_pattern("go.mod", ".git")(name) or vim.fn.getcwd()
-  end,
-}
+-- lsp_config.gopls.setup {
+--   cmd = {"gopls", "serve"},
+--   filetypes = {"go", "gomod"},
+--   root_dir = function(name)
+--     return root_pattern("go.mod", ".git")(name) or vim.fn.getcwd()
+--   end,
+-- }
 
 lsp_config.hls.setup {
   settings = {haskell = {formattingProvider = "brittany"}},
@@ -301,17 +301,23 @@ do
     lintIgnoreExitCode = true,
   }
   local luacheck_config = {
-    lintCommand = "luacheck --no-color --no-self -",
+    lintCommand = "luacheck - --no-color --no-self --globals vim",
     lintStdin = true,
     lintFormats = {"    %f:%l:%c: %m"},
     lintIgnoreExitCode = true,
   }
+  -- local errcheck_config = {
+  --   lintCommand = [[echo ${INPUT}; errcheck -abspath | awk -F: '{sub(/.*/, "errcheck", $4); print}']],
+  --   lintFormats = {"%W%f %l %c %m"},
+  --   lintIgnoreExitCode = true,
+  -- }
   local languages = {
     javascript          = {eslint_config},
     typescript          = {eslint_config},
     typescriptreact     = {eslint_config},
     javatypescriptreact = {eslint_config},
     lua                 = {luacheck_config},
+    -- go                  = {errcheck_config},
   }
   lsp_config.efm.setup {
     filetypes = vim.tbl_keys(languages),

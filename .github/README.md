@@ -3,18 +3,18 @@
 ### A setup, that works on Archlinux & Windows NT
 
 ### In this repo:
-  - [Neovim config](../.config/nvim)
+  - [Alacritty config](../.config/alacritty/alacritty.yml)
   - [Kitty config](../.config/kitty/kitty.conf) (obsolette)
-  - [Tilix config](../.config/tilix/tilix.dconf) (obsolette)
+  - [Neovim config](../.config/nvim)
   - [OpenTTD config](../.openttd/openttd.cfg)
+  - [SwayWM configs](../.config/sway)
+  - [Systemd user units](../.config/systemd/user)
+  - [Tilix config](../.config/tilix/tilix.dconf) (obsolette)
+  - [VSCode config](../.config/Code/User/settings.json) (obsolette)
+  - [Waybar configs](../.config/waybar)
+  - [Wofi config](../.config/wofi/config)
   - [Yay config](../.config/yay/config.json)
   - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
-  - [VSCode config](../.config/Code/User/settings.json) (obsolette)
-  - [SwayWM configs](../.config/sway)
-  - [Wofi config](../.config/wofi/config)
-  - [Waybar configs](../.config/waybar)
-  - [Systemd user units](../.config/systemd/user)
-  - [Alacritty config](../.config/alacritty/alacritty.yml)
 
 Neovim (0.5) configs aren't completely in Lua, because not all APIs
 have alternative functions (at least native).

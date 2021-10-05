@@ -3,7 +3,7 @@ local M = {}
 local utils = require("utils")
 local highlight = require("vim.highlight")
 local load = utils.load
-local fn = vim.fn
+local fn, api = vim.fn, vim.api
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
@@ -108,7 +108,6 @@ local forbidden_patterns = {
   "^DevIcon", "Debug",
 }
 do
-  local api = vim.api
   local highlight_names = vim.fn.getcompletion("", "highlight")
   for _, name in ipairs(highlight_names) do
     for _, pat in ipairs(forbidden_patterns) do
@@ -150,6 +149,27 @@ function _G.get_closest_highlight(hl)
   vim.cmd("hi "..closest_hl_group.name)
   return closest_hl_group
 end
+
+-- filetype -> list of patterns that match it
+local additional_filetypes = {
+  zsh = {"*.zsh*"},
+  sh = {".env.*"},
+  bnf = {"*.bnf"},
+  json = {"*.webmanifest", ".eslintrc"},
+  jsonc = {"tsconfig.json"},
+  rest = {"*.http"},
+  elixir = {"*.exs", "*.ex"},
+  prolog = {"*pl"},
+  html = {"*.ejs"},
+}
+
+vim.cmd("augroup extra_filetypes")
+vim.cmd("autocmd!")
+for ft, patterns in pairs(additional_filetypes) do
+  local p = table.concat(patterns, ",")
+  vim.cmd(("autocmd BufNewFile,BufRead %s setlocal ft=%s"):format(p, ft))
+end
+vim.cmd("augroup END")
 
 -- local tm = vim.loop.new_timer()
 -- local count = 0

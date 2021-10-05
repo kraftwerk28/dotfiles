@@ -92,8 +92,8 @@
         "format": "{:%a %d.%m %H:%M:%S}",
         "interval": 1,
         // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%d.%m.%Y}"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        // "format-alt": "{:%d.%m.%Y}"
     },
     "cpu": {
         "format": " {usage:2}% {avg_frequency:1.2f}GHz",
@@ -151,7 +151,7 @@
         "format-bluetooth": "{icon}  {volume}% {format_source}",
         "format-bluetooth-muted": " {icon}  {format_source}",
         "format-muted": " {format_source}",
-        "format-source": " {volume}%",
+        "format-source": "{volume}%",
         "format-source-muted": "",
         "format-icons": {
             "headphone": "",

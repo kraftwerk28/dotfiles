@@ -44,38 +44,11 @@ autocmd CursorHold,CursorHoldI * if !bufexists('[Command Line]')
                              \ |   silent checktime
                              \ | endif
 
-" Helping nvim detect filetype
-let s:additional_filetypes = {
-\   'zsh': '*.zsh*',
-\   'sh': '.env.*',
-\   'bnf': '*.bnf',
-\   'json': '*.webmanifest',
-\   'jsonc': 'tsconfig.json',
-\   'rest': '*.http',
-\   'elixir': ['*.exs', '*.ex'],
-\   'prolog': '*pl',
-\   'html': '*.ejs',
-\ }
-
-augroup extra_filetypes
-  autocmd!
-  for [ft, ext] in items(s:additional_filetypes)
-    let s:fstr = 'autocmd BufNewFile,BufRead %s setlocal filetype=%s'
-    if type(ext) == v:t_list
-      for e in ext
-        execute printf(s:fstr, e, ft)
-      endfor
-    else
-      execute printf(s:fstr, ext, ft)
-    endif
-  endfor
-
-  autocmd FileType markdown setlocal conceallevel=2
-  autocmd FileType NvimTree setlocal signcolumn=no
-  autocmd WinEnter * if win_gettype() == 'popup'
-                 \ |   setlocal conceallevel=3
-                 \ | endif
-augroup END
+autocmd FileType markdown setlocal conceallevel=2
+autocmd FileType NvimTree setlocal signcolumn=no
+autocmd WinEnter * if win_gettype() == 'popup'
+               \ |   setlocal conceallevel=3
+               \ | endif
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'qf']
