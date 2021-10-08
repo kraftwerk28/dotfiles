@@ -8,7 +8,7 @@ local u = utils.u
 local expand = vim.fn.expand
 
 highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
-highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
+-- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
 highlight {
   "DiagnosticUnderlineWarning",
   gui = "undercurl",

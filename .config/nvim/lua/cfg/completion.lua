@@ -8,10 +8,10 @@ local maps = cmp.mapping
 cmp.setup {
   mapping = {
     -- Plugin errors when this is empty
-    ["<Tab>"] = maps.select_next_item(),
-    ["<S-Tab>"] = maps.select_prev_item(),
+    ["<Tab>"]     = maps.select_next_item(),
+    ["<S-Tab>"]   = maps.select_prev_item(),
     ["<C-Space>"] = maps.complete(),
-    ["<CR>"] = maps.confirm(),
+    ["<CR>"]      = maps.confirm(),
   },
   sources = {
     {name = "nvim_lsp"},
@@ -25,16 +25,19 @@ cmp.setup {
   formatting = {
     format = function(entry, vim_item)
       local icon = lspkind.presets.default[vim_item.kind]
-      vim_item.abbr = icon .. " " .. vim_item.abbr
+      vim_item.abbr = ("%s %s"):format(icon, vim_item.abbr)
       return vim_item
     end,
   },
-  snippet = {
-    expand = function(args)
-      vim.fn["UltiSnips#Anon"](args.body)
-    end,
-  },
+  -- snippet = {
+  --   expand = function(args)
+  --     vim.fn["UltiSnips#Anon"](args.body)
+  --   end,
+  -- },
   preselect = cmp.PreselectMode.None,
+  experimental = {
+    native_menu = true,
+  },
 }
 
 --[[

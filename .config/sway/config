@@ -4,7 +4,7 @@ set {
 	$down j
 	$up k
 	$right l
-	$cursor_theme "Adwaita"
+	$cursor_theme "breeze_cursors"
 }
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
@@ -189,13 +189,14 @@ smart_borders on
 smart_gaps on
 # gaps inner 4
 # gaps outer 0
-default_border pixel 1
+default_border pixel 2
 
 focus_wrapping off
 focus_follows_mouse no
 
 client.focused          "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
+client.focused_inactive "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+# client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
 client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
 font Hack Nerd Font Bold 10
 titlebar_padding 4 1
@@ -206,7 +207,6 @@ exec_always sed -i -r \
 	's/^Inherits=.+/Inherits='$XCURSOR_THEME'/' \
 	~/.icons/default/index.theme
 
-# Autostart
 exec {
 	mako
 	blueman-applet
@@ -214,16 +214,16 @@ exec {
 	$HOME/.config/sway/kbd_layout_per_window.py
 }
 
-workspace 4
-exec firefox
-workspace 5; layout tabbed
-exec {
-	kotatogram-desktop
-	slack
-	discord
-	mattermost-desktop
-}
-workspace 1
+# Autostart apps
+exec swaymsg "               \
+	workspace 4;             \
+	exec firefox;            \
+	workspace 5;             \
+	layout tabbed;           \
+	exec kotatogram-desktop; \
+	exec slack;              \
+	exec discord;            \
+	exec mattermost-desktop; "
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \

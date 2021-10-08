@@ -140,8 +140,8 @@
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "直 {signalStrength}%",
-        "format-ethernet": " {ifname}: {ipaddr}/{cidr}",
-        "format-linked": " {ifname} (No IP)",
+        "format-ethernet": " {ifname}: {ipaddr}/{cidr}",
+        "format-linked": " {ifname} (No IP)",
         "format-disconnected": "睊 ",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
@@ -179,8 +179,8 @@
     },
     "sway/language": {
         // "format": "<b>{long:.2}</b>",
-        "format": "<b>{long:.2}</b>",
-        "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
+        "format": "<b>{short}</b>",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next" // TODO
     },
     "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",

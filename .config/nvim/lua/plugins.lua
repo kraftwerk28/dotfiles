@@ -181,26 +181,39 @@ local function load(use)
   --     }
   --   end,
   -- }
+
+  use {
+    "junegunn/vim-easy-align",
+    config = function()
+      vim.api.nvim_set_keymap("v", "<Leader>ea", "<Plug>(EasyAlign)", {})
+    end,
+  }
 end
 
-return function()
-  local sprintf = require("utils").sprintf
+local function bootstrap()
+  local fn = vim.fn
   local packer_install_path =
-    vim.fn.stdpath("data") ..
-    "/site/pack/packer/opt/packer.nvim"
-  local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) > 0
+    fn.stdpath("data").."/site/pack/packer/opt/packer.nvim"
+  local not_installed = fn.empty(fn.glob(packer_install_path)) == 1
 
   if not_installed then
     print("`packer.nvim` is not installed, installing...")
     local repo = "https://github.com/wbthomason/packer.nvim"
-    vim.cmd(sprintf("!git clone %s %s", repo, packer_install_path))
+    vim.cmd(("!git clone %s %s"):format(repo, packer_install_path))
   end
 
   vim.cmd("packadd packer.nvim")
-  require("packer").startup {load, config = {git = {clone_timeout = 240}}}
-  vim.cmd("autocmd BufWritePost plugins.lua PackerCompile")
+  require("packer").startup {
+    load,
+    config = {
+      git = {clone_timeout = 240},
+    },
+  }
+  vim.cmd("autocmd BufWritePost plugins.lua source <afile> | PackerCompile")
 
   if not_installed then
     vim.cmd("PackerSync")
   end
 end
+
+return bootstrap

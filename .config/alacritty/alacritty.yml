@@ -116,9 +116,11 @@ font:
     family: "Hack Nerd Font"
     # family: "Ubuntu Mono"
     # family: "DejaVu Sans Mono"
-    # family: "Iosevka Nerd Font"
+    # family: "Iosevka Term"
     # style: "Medium Extended"
+    # family: "JetBrains Mono Nerd Font"
     # family: "CaskaydiaCove Nerd Font"
+    # family: "Fira Code Nerd Font"
   size: 12.5
 
   # The `style` can be specified to pick a specific face.
