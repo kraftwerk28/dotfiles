@@ -1,8 +1,9 @@
 * {
 	border: none;
 	border-radius: 0;
-	font-family: "Hack Nerd Font";
-	font-size: 16px;
+	font-family: "Iosevka Term", "Hack Nerd Font";
+	font-stretch: expanded;
+	font-size: 17px;
 	min-height: 0;
 }
 

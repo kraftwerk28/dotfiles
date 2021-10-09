@@ -113,15 +113,15 @@ font:
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
     # family: monospace
-    family: "Hack Nerd Font"
+    # family: "Hack Nerd Font"
+    family: "Iosevka Term"
     # family: "Ubuntu Mono"
     # family: "DejaVu Sans Mono"
-    # family: "Iosevka Term"
     # style: "Medium Extended"
     # family: "JetBrains Mono Nerd Font"
     # family: "CaskaydiaCove Nerd Font"
     # family: "Fira Code Nerd Font"
-  size: 12.5
+  size: 13.5
 
   # The `style` can be specified to pick a specific face.
 
