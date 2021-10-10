@@ -196,7 +196,7 @@ exec {
 	mako
 	blueman-applet
 	kdeconnect-indicator
-	$script/kbd_layout_per_window.py
+	$script/kbd_layout_per_window.lua
 }
 
 # Autostart apps
