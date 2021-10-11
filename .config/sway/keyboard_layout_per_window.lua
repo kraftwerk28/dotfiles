@@ -5,12 +5,9 @@ local prev_focused
 -- { con_id => { input_identifier => layout_index } }
 local windows = {}
 
-local function on_focus(conn, event)
-  if event.change ~= "focus" then
-    return
-  end
+local function on_focus(ipc, event)
   local con_id = event.container.id
-  local inputs = conn:get_keyboard_inputs(conn)
+  local inputs = ipc:get_keyboard_inputs()
   local input_layouting = {}
   for _, input in ipairs(inputs) do
     input_layouting[input.identifier] = input.xkb_active_layout_index
@@ -22,7 +19,7 @@ local function on_focus(conn, event)
   if cached_layouts ~= nil then
     for input_id, layout_index in pairs(cached_layouts) do
       if layout_index ~= input_layouting[input_id] then
-        conn:command(
+        ipc:command(
           ([[input "%s" xkb_switch_layout %d]]):format(input_id, layout_index)
         )
       end
@@ -30,7 +27,7 @@ local function on_focus(conn, event)
   else
     for _, input in ipairs(inputs) do
       if input.xkb_active_layout_index ~= 0 then
-        conn:command(
+        ipc:command(
           ([[input "%s" xkb_switch_layout %d]]):format(input.identifier, 0)
         )
       end
@@ -39,19 +36,15 @@ local function on_focus(conn, event)
   prev_focused = con_id
 end
 
-local function on_close(conn, event)
-  if event.change ~= "close" then
-    return
-  end
+local function on_close(_, event)
   windows[event.container.id] = nil
 end
 
-local function on_workspace_init(conn, event)
-  if event.change ~= "init" then
-    return
-  end
-  for _, input in ipairs(conn:get_keyboard_inputs(conn)) do
-    conn:command(([[input "%s" xkb_switch_layout %d]]):format(input.identifier, 0))
+local function on_workspace_init(ipc, _)
+  for _, input in ipairs(ipc:get_keyboard_inputs()) do
+    ipc:command(
+      ([[input "%s" xkb_switch_layout %d]]):format(input.identifier, 0)
+    )
   end
 end
 
@@ -66,7 +59,7 @@ i3.main(function(conn)
     return r
   end
 
-  conn:on(i3.EVENT.WINDOW, on_focus)
-  conn:on(i3.EVENT.WINDOW, on_close)
-  conn:on(i3.EVENT.WORKSPACE, on_workspace_init)
+  conn:on("window::focus", on_focus)
+  conn:on("window::close", on_close)
+  conn:on("workspace::init", on_workspace_init)
 end)
