@@ -85,9 +85,45 @@ set_window_title () {
 	echo -n -e "\e]0;$(basename $SHELL) (${PWD/$HOME/"~"})\007"
 }
 
-precmd_functions+=(dump_cwd set_window_title)
+add-zsh-hook precmd dump_cwd
+add-zsh-hook precmd set_window_title
 
 noprompt () {
-	precmd_functions=${precmd_functions[@]/refresh_prompt}
+	add-zsh-hook -d precmd refresh_prompt
 	PS1="$ "
 }
+
+is_shell_focused() {
+	local focused=$(
+	swaymsg -t get_tree \
+		| jq -r '.. | objects | select(.pid? =='$PPID').focused'
+	)
+	[[ $focused = "true" ]]
+}
+
+remember_time() {
+	PREEXEC_TIMESTAMP=$(date +%s)
+}
+
+notify_if_needed() {
+	local exit_code=$?
+	if [[ -z "$PREEXEC_TIMESTAMP" ]]; then
+		return
+	fi
+	local diff=$(($(date +%s) - $PREEXEC_TIMESTAMP))
+	if (( $diff >= 2 )) && ! is_shell_focused; then
+		if [[ $exit_code == 0 ]]; then
+			local title="Command succeeded"
+		else
+			local title="Command failed (code: $exit_code)"
+		fi
+		# local title="$title after ${diff}s."
+		local text=$(fc -nl -1)
+		notify-send $title $text
+	fi
+	PREEXEC_TIMESTAMP=
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook precmd notify_if_needed
+add-zsh-hook preexec remember_time

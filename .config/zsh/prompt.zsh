@@ -52,4 +52,4 @@ zle-keymap-select () {
 
 zle -N zle-keymap-select
 zle -N edit-command-line
-precmd_functions+=(refresh_prompt)
+add-zsh-hook precmd refresh_prompt

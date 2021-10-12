@@ -137,13 +137,13 @@ do
   }
 end
 
--- lsp_config.gopls.setup {
---   cmd = {"gopls", "serve"},
---   filetypes = {"go", "gomod"},
---   root_dir = function(name)
---     return root_pattern("go.mod", ".git")(name) or vim.fn.getcwd()
---   end,
--- }
+lsp_config.gopls.setup {
+  cmd = {"gopls", "serve"},
+  filetypes = {"go", "gomod"},
+  root_dir = function(name)
+    return root_pattern("go.mod", ".git")(name) or vim.fn.getcwd()
+  end,
+}
 
 lsp_config.hls.setup {
   settings = {haskell = {formattingProvider = "brittany"}},
