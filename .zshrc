@@ -15,6 +15,8 @@ plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
 # export BASE16_THEME="woodland"
 export BASE16_THEME="eighties"
 
+NOTIFY_COMMAND_COMPLETED_TRESHOLD=5
+
 ZVM_CURSOR_STYLE_ENABLED=true
 ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
@@ -92,38 +94,3 @@ noprompt () {
 	add-zsh-hook -d precmd refresh_prompt
 	PS1="$ "
 }
-
-is_shell_focused() {
-	local focused=$(
-	swaymsg -t get_tree \
-		| jq -r '.. | objects | select(.pid? =='$PPID').focused'
-	)
-	[[ $focused = "true" ]]
-}
-
-remember_time() {
-	PREEXEC_TIMESTAMP=$(date +%s)
-}
-
-notify_if_needed() {
-	local exit_code=$?
-	if [[ -z "$PREEXEC_TIMESTAMP" ]]; then
-		return
-	fi
-	local diff=$(($(date +%s) - $PREEXEC_TIMESTAMP))
-	if (( $diff >= 2 )) && ! is_shell_focused; then
-		if [[ $exit_code == 0 ]]; then
-			local title="Command succeeded"
-		else
-			local title="Command failed (code: $exit_code)"
-		fi
-		# local title="$title after ${diff}s."
-		local text=$(fc -nl -1)
-		notify-send $title $text
-	fi
-	PREEXEC_TIMESTAMP=
-}
-
-autoload -U add-zsh-hook
-add-zsh-hook precmd notify_if_needed
-add-zsh-hook preexec remember_time

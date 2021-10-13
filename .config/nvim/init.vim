@@ -22,6 +22,7 @@ augroup filetype_options
         \ setlocal shiftwidth=2 tabstop=2 expandtab
   autocmd FileType jess setlocal commentstring=;\ %s
   autocmd FileType json,jsonc,cjson setlocal commentstring=//\ %s
+  autocmd FileType asm setlocal shiftwidth=8 tabstop=8 noexpandtab
 augroup END
 
 function! s:restoreCursor()
