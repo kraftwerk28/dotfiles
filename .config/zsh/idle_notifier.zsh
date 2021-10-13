@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# Send a notification, if command is executing more than
+# NOTIFY_COMMAND_COMPLETED_TRESHOLD seconds and the shell isn't focused
+
 walk_parent_pids() {
 	local pids=($$)
 	local cur=$$
