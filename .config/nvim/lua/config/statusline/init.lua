@@ -1,7 +1,7 @@
-local colors = require('cfg.colors')
-local utils = require('utils')
+local colors = require('config.colors')
+local utils = require('config.utils')
 local devicons = require('nvim-web-devicons')
-local stl = require('statusline.core')
+local stl = require('config.statusline.core')
 
 local u = utils.u
 local sprintf = utils.sprintf
@@ -47,7 +47,9 @@ end
 local mode = component {
   function()
     local mode = vim.fn.mode()
-    local mode_label, mode_color = unpack(mode_map[mode])
+    local mode_label, mode_color = unpack(
+      mode_map[mode] or {"NORMAL", cl.normal}
+    )
     highlight {
       "StatusLine",
       guifg = cl.fg,

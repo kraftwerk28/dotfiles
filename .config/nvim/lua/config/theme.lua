@@ -1,4 +1,4 @@
-local utils = require("utils")
+local utils = require("config.utils")
 
 vim.o.background = "dark"
 vim.g.base16_theme = vim.env.BASE16_THEME or "default-dark"

@@ -1,44 +1,8 @@
-local utils = require("utils")
 local lsp_config = require("lspconfig")
 local root_pattern = require("lspconfig.util").root_pattern
 
 local lsp, fn = vim.lsp, vim.fn
-local highlight = utils.highlight
-local u = utils.u
-local expand = vim.fn.expand
-
-highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
--- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
-highlight {
-  "DiagnosticUnderlineWarning",
-  gui = "undercurl",
-  -- guisp = "Orange",
-}
--- highlight {"DiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
-highlight {"DiagnosticUnderlineError", gui = "undercurl"}
-
--- highlight {"DiagnosticsHint", fg = "Yellow"}
--- highlight {"DiagnosticsInformation", fg = "LightBlue"}
-highlight {"DiagnosticWarn", fg = "Orange"}
--- highlight {"DiagnosticsError", fg = "Red"}
-highlight {"FloatBorder", fg = "gray"}
-
-fn.sign_define("DiagnosticSignHint", {
-  text = u"f0eb",
-  texthl = "DiagnosticSignHint",
-})
-fn.sign_define("DiagnosticSignInfo", {
-  text = u"f129",
-  texthl = "DiagnosticSignInfo",
-})
-fn.sign_define("DiagnosticSignWarn", {
-  text = u"f071",
-  texthl = "DiagnosticSignWarn",
-})
-fn.sign_define("DiagnosticSignError", {
-  text = u"f46e",
-  texthl = "DiagnosticSignError",
-})
+local expand = fn.expand
 
 lsp_config.tsserver.setup {
   cmd = {
@@ -52,8 +16,18 @@ lsp_config.tsserver.setup {
     "tsconfig.json",
     "jsconfig.json",
     ".git",
-    vim.fn.getcwd()
+    fn.getcwd()
   ),
+}
+
+lsp_config.denols.setup {
+  autostart = false,
+  initializationOptions = {
+    enable = true,
+    lint = true,
+    unstable = false,
+  },
+  root_dir = root_pattern("deno.json"),
 }
 
 -- lsp_config.flow.setup {
@@ -80,6 +54,7 @@ lsp_config.pylsp.setup {
         mccabe = {enabled = false},
         preload = {enabled = false},
         rope_completion = {enabled = false},
+        pyflakes = {enabled = false},
       },
     },
   },
@@ -121,7 +96,7 @@ lsp_config.pylsp.setup {
 --             'com.tang.vscode.MainKt',
 --         },
 --         filetypes = {'lua'},
---         root_dir = root_pattern(vim.fn.getcwd()),
+--         root_dir = root_pattern(fn.getcwd()),
 --         settings = {},
 --     },
 -- }
@@ -141,7 +116,7 @@ lsp_config.gopls.setup {
   cmd = {"gopls", "serve"},
   filetypes = {"go", "gomod"},
   root_dir = function(name)
-    return root_pattern("go.mod", ".git")(name) or vim.fn.getcwd()
+    return root_pattern("go.mod", ".git")(name) or fn.getcwd()
   end,
 }
 
@@ -153,13 +128,13 @@ lsp_config.hls.setup {
     "cabal.project",
     "package.yaml",
     "hie.yaml",
-    vim.fn.getcwd()
+    fn.getcwd()
   ),
 }
 
 do
   local clangdcmd = {"clangd", "--background-index"}
-  if vim.fn.empty(vim.fn.glob("compile_commands.json")) == 1 then
+  if fn.empty(fn.glob("compile_commands.json")) == 1 then
     vim.tbl_extend("force", clangdcmd, {"--compile-commands-dir", "build"})
   end
 
@@ -170,7 +145,7 @@ do
       "CMakeLists.txt",
       "compile_flags.txt",
       ".git",
-      vim.fn.getcwd()
+      fn.getcwd()
     ),
   }
 end
@@ -200,7 +175,7 @@ do
     cmd = {"vscode-json-languageserver", "--stdio"},
     filetypes = {"json", "jsonc"},
     -- init_options = {provideFormatter = true},
-    root_dir = root_pattern(".git", vim.fn.getcwd()),
+    root_dir = root_pattern(".git", fn.getcwd()),
     settings = {json = {schemas = schemas}},
   }
 end
@@ -216,7 +191,9 @@ lsp_config.yamlls.setup {
   },
 }
 
-lsp_config.html.setup {}
+lsp_config.html.setup {
+  cmd = {"vscode-html-languageserver", "--stdio"}
+}
 
 lsp_config.bashls.setup {filetypes = {"bash", "sh", "zsh"}}
 
@@ -224,7 +201,7 @@ lsp_config.solargraph.setup {}
 
 -- lsp_config.emmet_ls.setup {}
 
-if vim.fn.has("win64") == 1 then
+if fn.has("win64") == 1 then
   local jdt_base = expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )
@@ -270,7 +247,7 @@ end
 
 do
   local cmd, cmd_env
-  if vim.fn.has("win64") == 1 then
+  if fn.has("win64") == 1 then
     cmd = {
       expand(
         "~/Projects/kotlin-language-server/server/build/install" ..
@@ -278,7 +255,7 @@ do
       ),
     }
   end
-  if vim.fn.has("unix") == 1 then
+  if fn.has("unix") == 1 then
     local jdk_home = "/usr/lib/jvm/java-11-openjdk"
     cmd_env = {
       PATH = jdk_home .. "/bin:" .. vim.env.PATH,
@@ -327,75 +304,3 @@ do
     root_dir = root_pattern(".eslintrc*", "init.lua", ".git"),
   }
 end
-
-local function setup_hover()
-  local method = "textDocument/hover"
-  lsp.handlers[method] = lsp.with(
-    lsp.handlers[method],
-    {border = vim.g.floatwin_border}
-  )
-end
-
-local USE_DIAGNOSTIC_QUICKFIX = false
-
-local function setup_diagnostics()
-  local method = "textDocument/publishDiagnostics"
-  local diagnostics_handler = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    virtual_text = true,
-    update_in_insert = false,
-    -- border = win_border,
-  })
-  lsp.handlers[method] = diagnostics_handler
-
-  if USE_DIAGNOSTIC_QUICKFIX then
-    lsp.handlers[method] = function(...)
-      diagnostics_handler(...)
-      local all_diagnostics = vim.lsp.diagnostic.get_all()
-      local qflist = {}
-      for bufnr, diagnostic in pairs(all_diagnostics) do
-        for _, diag in ipairs(diagnostic) do
-          local item = {
-            bufnr = bufnr,
-            lnum = diag.range.start.line + 1,
-            col = diag.range.start.character + 1,
-            text = diag.message,
-          }
-          if diag.severity == 1 then
-            item.type = 'E'
-          elseif diag.severity == 2 then
-            item.type = 'W'
-          end
-          table.insert(qflist, item)
-        end
-      end
-      vim.fn.setqflist(qflist)
-    end
-  end
-end
-
-local function setup_formatting()
-  local method = "textDocument/formatting"
-  local defaut_handler = lsp.handlers[method]
-  lsp.handlers[method] = function(...)
-    -- local err, method, result, client_id, bufnr, config = ...
-    -- dump {
-    --   err = err,
-    --   method = method,
-    --   result = result,
-    --   client_id = client_id,
-    --   bufnr = bufnr,
-    --   config = config,
-    -- }
-    local err = ...
-    if err == nil then
-      defaut_handler(...)
-    else
-      vim.cmd("Neoformat")
-    end
-  end
-end
-
-setup_diagnostics()
-setup_formatting()
-setup_hover()

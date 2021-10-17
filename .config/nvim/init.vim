@@ -6,7 +6,7 @@ set background=dark
 syntax enable
 syntax on
 
-lua init = require('init')
+lua init = require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
 augroup filetype_options

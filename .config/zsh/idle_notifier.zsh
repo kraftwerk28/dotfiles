@@ -4,15 +4,14 @@
 # NOTIFY_COMMAND_COMPLETED_TRESHOLD seconds and the shell isn't focused
 
 walk_parent_pids() {
-	local pids=($$)
+	local pids=()
 	local cur=$$
 	while true; do
-		local ppid=$(awk '{print $4}' /proc/$cur/stat)
-		pids+=($ppid)
-		cur=$ppid
-		if [[ $ppid = 0 ]]; then
+		cur=$(awk '{print $4}' /proc/$cur/stat)
+		if [[ $cur = 0 ]]; then
 			break
 		fi
+		pids+=($cur)
 	done
 	local IFS=", "
 	echo "${pids[*]}"
@@ -44,10 +43,10 @@ notify_if_needed() {
 		if [[ $exit_code == 0 ]]; then
 			local title="Command succeeded"
 		else
-			local title="Command failed (code: $exit_code)"
+			local title="Command failed with code $exit_code"
 		fi
-		local time_passed=$(date -d "@$diff" +"%Mm %Ss")
-		local title="$title ($time_passed)"
+		local time_passed=$(date -d "@$diff" +"%Mm %Ss" | sed 's/\s*00\w\s*//')
+		title="$title ($time_passed)"
 		local text=$(fc -nl -1)
 		notify-send $title $text
 	fi

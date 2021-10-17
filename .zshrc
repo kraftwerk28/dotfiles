@@ -1,14 +1,14 @@
 fpath=(~/.zfunc $fpath)
 
 plug () {
-	local plugfile=/usr/share/zsh/plugins/$1
+	local plugfile="/usr/share/zsh/plugins/${1}/${1}.plugin.zsh"
 	[[ -f $plugfile ]] && source $plugfile
 }
 
-plug zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-plug zsh-z/zsh-z.plugin.zsh
-plug zsh-extract/extract.plugin.zsh
-plug zsh-vi-mode/zsh-vi-mode.plugin.zsh
+plug zsh-autosuggestions
+plug zsh-z
+plug zsh-extract
+plug zsh-vi-mode
 
 # export BASE16_THEME="default-dark"
 # export BASE16_THEME="gruvbox-dark-hard"
@@ -71,9 +71,21 @@ bindkey -M viins "^H" backward-kill-word
 bindkey -s "^[l" "ls\n"
 bindkey -M viins "^I" complete-word
 
-export NVM_DIR="$HOME/.nvm"
-if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-	source "$NVM_DIR/nvm.sh" --no-use
+if [[ -d /usr/share/nvm ]]; then
+	nvm() {
+		echo "Warming up nvm..."
+		unset -f nvm
+		[[ -z $NVM_DIR ]] && export NVM_DIR="$HOME/.nvm"
+		source /usr/share/nvm/nvm.sh
+		source /usr/share/nvm/install-nvm-exec
+		if (( $# > 0 )); then
+			nvm $@
+		fi
+	}
+	nvm_on_change_working_dir() {
+		if [[ -f .nvmrc ]] && type nvm > /dev/null 2>&1 && nvm
+	}
+	add-zsh-hook chpwd nvm_on_change_working_dir
 fi
 
 dump_cwd () {

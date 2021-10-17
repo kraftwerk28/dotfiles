@@ -1,4 +1,4 @@
-local utils = require("utils")
+local utils = require("config.utils")
 
 local function delete_bufs(include_current)
   local cur = vim.api.nvim_get_current_buf()

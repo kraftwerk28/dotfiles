@@ -3,7 +3,7 @@ set $left  h
 set $down  j
 set $up    k
 set $right l
-set $cursor_theme "breeze_cursors"
+set $cursor_theme "Adwaita"
 set $script $HOME/.config/sway
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
@@ -186,17 +186,17 @@ font Iosevka Term Extended Bold 10
 # font Hack Nerd Font Bold 10
 titlebar_padding 4 1
 
-seat seat0 xcursor_theme $cursor_theme
-exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme 
+seat * xcursor_theme $cursor_theme
+exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
 exec_always sed -i -r \
-	's/^Inherits=.+/Inherits='$XCURSOR_THEME'/' \
+	's/^Inherits=.+/Inherits='$cursor_theme'/' \
 	~/.icons/default/index.theme
 
 exec {
 	mako
 	blueman-applet
 	kdeconnect-indicator
-	$script/kbd_layout_per_window.lua
+	$script/keyboard_layout_per_window.lua
 }
 
 # Autostart apps

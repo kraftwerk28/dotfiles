@@ -1,6 +1,6 @@
 local M = {}
 
-local utils = require("utils")
+local utils = require("config.utils")
 local sprintf = utils.sprintf
 local api, fn = vim.api, vim.fn
 
@@ -128,7 +128,7 @@ local function concat_sections(sections)
   for _, section in ipairs(sections) do
     table.insert(section_str, table.concat(section))
   end
-  return table.concat(section_str, '%=')
+  return "%#StatusLine#"..table.concat(section_str, '%=')
 end
 
 M.Builder = Builder

@@ -49,7 +49,7 @@ local function load(use)
       "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
     },
-    config = function() require("cfg.telescope") end,
+    config = function() require("plugin.telescope") end,
   }
 
   use {"wellle/targets.vim"} -- More useful text objects (e.g. function arguments)
@@ -59,7 +59,7 @@ local function load(use)
   use {
     "airblade/vim-gitgutter",
     config = function()
-      local u = require("utils").u
+      local u = require("config.utils").u
       local gutter = u"2595"
       vim.g.gitgutter_sign_added    = gutter
       vim.g.gitgutter_sign_modified = gutter
@@ -83,20 +83,20 @@ local function load(use)
     "nvim-treesitter/nvim-treesitter",
     requires = {"nvim-treesitter/playground"},
     run = function() vim.cmd("TSUpdate") end,
-    config = function() require('cfg.tree_sitter') end,
+    config = function() require("plugin.tree_sitter") end,
   }
 
   use {
     "neovim/nvim-lspconfig",
     -- "~/projects/neovim/nvim-lspconfig",
-    config = function() require("cfg.lspconfig") end,
+    config = function() require("plugin.lspconfig") end,
   }
 
   use {
     "RRethy/vim-illuminate",
     disable = true,
     config = function()
-      local utils = require("utils")
+      local utils = require("config.utils")
       utils.highlight {"illuminatedWord", guibg = "#303030"}
     end,
   }
@@ -126,21 +126,14 @@ local function load(use)
       "SirVer/ultisnips",
       "honza/vim-snippets",
     },
-    config = function() require("cfg.completion") end,
-  }
-
-  use {
-    "hrsh7th/nvim-compe",
-    disable = true,
-    requires = {"SirVer/ultisnips", "honza/vim-snippets"},
-    config = function() require("cfg.completion") end,
+    config = function() require("plugin.cmp") end,
   }
 
   use {
     "kyazdani42/nvim-tree.lua",
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
-      local utils = require("utils")
+      local utils = require("config.utils")
       local u, highlight = utils.u, utils.highlight
       highlight {"NvimTreeFolderName", "Title"}
       highlight {"NvimTreeFolderIcon", "Title"}
@@ -166,7 +159,7 @@ local function load(use)
 
   use {
     "sbdchd/neoformat",
-    config = function() require("cfg.neoformat") end,
+    config = function() require("plugin.neoformat") end,
   }
 
   use {"equalsraf/neovim-gui-shim", opt = true}

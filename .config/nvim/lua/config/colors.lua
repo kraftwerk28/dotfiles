@@ -59,74 +59,6 @@ M.onedark = {
   illuminate = {dark = '#3E4B59', mirage = '#3E4B59'},
 }
 
--- local ayu_dark = {
---   bg = '#0F1419',
---   fg = '#E6E1CF',
---   normal = '#B8CC52',
---   insert = '#36A3D9',
---   replace = '#F07178',
---   visual = '#E6B673',
---   command = '#FF7733',
---   terminal = '#95E6CB',
--- }
-
--- local ayu_mirage = {
---   bg = '#0F1419',
---   fg = '#E6E1CF',
---   normal = '#B8CC52',
---   insert = '#36A3D9',
---   replace = '#F07178',
---   visual = '#E6B673',
---   command = '#FF7733',
---   terminal = '#95E6CB',
--- }
-
--- -- Gruvbox
--- local colors = {
---   dark0_hard = '#1d2021',
---   dark0 = '#282828',
---   dark0_soft = '#32302f',
---   dark1 = '#3c3836',
---   dark2 = '#504945',
---   dark3 = '#665c54',
---   dark4 = '#7c6f64',
---   dark4_256 = '#7c6f64',
---   gray_245 = '#928374',
---   gray_244 = '#928374',
---   light0_hard = '#f9f5d7',
---   light0 = '#fbf1c7',
---   light0_soft = '#f2e5bc',
---   light1 = '#ebdbb2',
---   light2 = '#d5c4a1',
---   light3 = '#bdae93',
---   light4 = '#a89984',
---   light4_256 = '#a89984',
---   bright_red = '#fb4934',
---   bright_green = '#b8bb26',
---   bright_yellow = '#fabd2f',
---   bright_blue = '#83a598',
---   bright_purple = '#d3869b',
---   bright_aqua = '#8ec07c',
---   bright_orange = '#fe8019',
---   neutral_red = '#cc241d',
---   neutral_green = '#98971a',
---   neutral_yellow = '#d79921',
---   neutral_blue = '#458588',
---   neutral_purple = '#b16286',
---   neutral_aqua = '#689d6a',
---   neutral_orange = '#d65d0e',
---   faded_red = '#9d0006',
---   faded_green = '#79740e',
---   faded_yellow = '#b57614',
---   faded_blue = '#076678',
---   faded_purple = '#8f3f71',
---   faded_aqua = '#427b58',
---   faded_orange = '#af3a03',
---   none = 'NONE',
--- }
--- colors.bg = vim.fn.synIDattr(vim.fn.hlID('StatusLine'), 'bg') -- Default background
--- colors.fg = colors.light0 -- Default foreground
-
 function M.from_base16(name)
   local base64 = require('base16-colorscheme')
   local theme = base64.colorschemes[name]
@@ -144,7 +76,7 @@ function M.from_base16(name)
   }
   local colors = {}
   for key, index in pairs(base_indexes) do
-    colors[key] = theme['base' .. string.format('%02X', index)]
+    colors[key] = theme["base"..string.format("%02X", index)]
   end
   return colors
 end

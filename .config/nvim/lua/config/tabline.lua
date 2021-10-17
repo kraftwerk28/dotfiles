@@ -1,9 +1,8 @@
-local utils = require("utils")
+local utils = require("config.utils")
 local highlight = utils.highlight
-local colors = require("cfg.colors")
+local colors = require("config.colors")
 
 local fn = vim.fn
-local u = utils.u
 
 local function tab_label(i)
   local buflist = fn.tabpagebuflist(i)

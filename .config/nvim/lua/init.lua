@@ -1,6 +1,6 @@
 local M = {}
 
-local utils = require("utils")
+local utils = require("config.utils")
 local highlight = require("vim.highlight")
 local load = utils.load
 local fn, api = vim.fn, vim.api
@@ -9,16 +9,16 @@ vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 
-require('lsp_handlers').patch_lsp_handlers()
+-- require('lsp_handlers').patch_lsp_handlers()
 
-load("theme")
-load("mappings")
-load("opts")
-load("plugins")
-load("tabline")
-load("statusline")
+load("config.theme")
+load("config.mappings")
+load("config.opts")
+load("config.plugins")
+load("config.tabline")
+load("config.statusline")
 
-vim.o.statusline = "%!v:lua._stl()"
+-- vim.o.statusline = "%!v:lua._stl()"
 
 if fn.has("unix") == 1 then
   -- Clicking any link pointing to neovim or vim docs site

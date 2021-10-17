@@ -17,7 +17,7 @@
 
 local telescope = require("telescope")
 local actions = require("telescope.actions")
-local u = require("utils").u
+local u = require("config.utils").u
 
 telescope.setup {
   defaults = {
