@@ -14,7 +14,7 @@ vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 load("config.theme")
 load("config.mappings")
 load("config.opts")
-load("config.plugins")
+load("plugins")
 load("config.tabline")
 load("config.statusline")
 

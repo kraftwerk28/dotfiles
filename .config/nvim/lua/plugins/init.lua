@@ -49,7 +49,7 @@ local function load(use)
       "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
     },
-    config = function() require("plugin.telescope") end,
+    config = function() require("plugins.telescope") end,
   }
 
   use {"wellle/targets.vim"} -- More useful text objects (e.g. function arguments)
@@ -83,13 +83,13 @@ local function load(use)
     "nvim-treesitter/nvim-treesitter",
     requires = {"nvim-treesitter/playground"},
     run = function() vim.cmd("TSUpdate") end,
-    config = function() require("plugin.tree_sitter") end,
+    config = function() require("plugins.tree_sitter") end,
   }
 
   use {
     "neovim/nvim-lspconfig",
     -- "~/projects/neovim/nvim-lspconfig",
-    config = function() require("plugin.lspconfig") end,
+    config = function() require("plugins.lspconfig") end,
   }
 
   use {
@@ -126,7 +126,7 @@ local function load(use)
       "SirVer/ultisnips",
       "honza/vim-snippets",
     },
-    config = function() require("plugin.cmp") end,
+    config = function() require("plugins.cmp") end,
   }
 
   use {
@@ -159,7 +159,7 @@ local function load(use)
 
   use {
     "sbdchd/neoformat",
-    config = function() require("plugin.neoformat") end,
+    config = function() require("plugins.neoformat") end,
   }
 
   use {"equalsraf/neovim-gui-shim", opt = true}

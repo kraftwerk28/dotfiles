@@ -4,7 +4,7 @@ local lsp, fn = vim.lsp, vim.fn
 local highlight = utils.highlight
 local u = utils.u
 
-require("plugin.lsp_servers")
+require("plugins.lsp_servers")
 
 highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
 -- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
