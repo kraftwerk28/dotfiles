@@ -174,7 +174,7 @@ smart_gaps on
 # gaps outer 0
 default_border pixel 2
 
-focus_wrapping off
+focus_wrapping yes
 focus_follows_mouse no
 
 # client.focused_inactive "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
@@ -224,6 +224,7 @@ for_window [app_id="firefox" title="Sharing Indicator"] \
 	floating enable; \
 	sticky enable
 for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="Guitarix"] floating enable
 

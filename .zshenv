@@ -45,8 +45,9 @@ export PATH="$PATH:$HOME/.luarocks/bin/"
 
 # npm global modules
 export NODE_PATH="$HOME/.npm-global/lib/node_modules"
-export PATH="$PATH:$HOME/.npm-global/bin"
+# export PATH="$PATH:$HOME/.npm-global/bin"
 export NVS_HOME="$HOME/.nvs"
+export PATH="$PATH:$HOME/.nvm/versions/node/v16.11.1/bin"
 
 # Haskell stuff
 export PATH="$PATH:$HOME/.cabal/bin/"

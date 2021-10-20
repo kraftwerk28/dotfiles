@@ -30,7 +30,10 @@ cmp.setup {
     native_menu = true,
   },
   enabled = function()
-    return vim.bo.buftype ~= "prompt" and vim.bo.filetype ~= "asm"
+    return
+      vim.bo.buftype ~= "prompt"
+      and vim.bo.filetype ~= "asm"
+      and vim.fn.win_gettype() == ""
   end,
   snippet = {
     expand = function(args)

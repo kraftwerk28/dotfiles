@@ -28,6 +28,8 @@ local function load(use)
       vim.g["surround_"..char2nr('r')] = "{'\r'}"
       vim.g["surround_"..char2nr('j')] = "{/* \r */}"
       vim.g["surround_"..char2nr('c')] = "/* \r */"
+      vim.g["surround_"..char2nr('l')] = "[[\r]]"
+      vim.g["surround_"..char2nr('i')] = "\1before: \1\r\2after: \2"
     end,
   }
 
@@ -202,7 +204,9 @@ local function bootstrap()
       git = {clone_timeout = 240},
     },
   }
-  vim.cmd("autocmd BufWritePost plugins.lua source <afile> | PackerCompile")
+  vim.cmd[[
+    autocmd BufWritePost */plugins/init.lua source <afile> | PackerCompile
+  ]]
 
   if not_installed then
     vim.cmd("PackerSync")
