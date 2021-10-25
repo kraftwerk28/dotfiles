@@ -85,7 +85,7 @@ utils.nnoremap("<Leader>ar", function()
     end
   end
 
-  local child_count= arguments_node:named_child_count()
+  local child_count = arguments_node:named_child_count()
   for i = 0, child_count - 1 do
     local child = arguments_node:named_child(i)
     local line, col, e_line, e_col = child:range()

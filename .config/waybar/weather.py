@@ -26,13 +26,9 @@ def get_weather_string(app_id, location=None):
     resp = get_response(app_id, location)
     data = resp.json()
     temperature = int(data["main"]["temp"])
-    if temperature > 0:
-        temperature = f"+{temperature}"
-    else:
-        temperature = f"{temperature}"
     condition = data["weather"][0]["main"]
     location_icon = "\uf450 " if location is None else ""
-    return f"{location_icon}{temperature}°C {condition}"
+    return f"{location_icon}{temperature}° {condition}"
 
 
 def get_browser_url(app_id, location=None):

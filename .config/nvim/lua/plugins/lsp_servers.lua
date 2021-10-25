@@ -283,18 +283,12 @@ do
     lintFormats = {"    %f:%l:%c: %m"},
     lintIgnoreExitCode = true,
   }
-  -- local errcheck_config = {
-  --   lintCommand = [[echo ${INPUT}; errcheck -abspath | awk -F: '{sub(/.*/, "errcheck", $4); print}']],
-  --   lintFormats = {"%W%f %l %c %m"},
-  --   lintIgnoreExitCode = true,
-  -- }
   local languages = {
-    javascript          = {eslint_config},
-    typescript          = {eslint_config},
-    typescriptreact     = {eslint_config},
-    javatypescriptreact = {eslint_config},
-    lua                 = {luacheck_config},
-    -- go                  = {errcheck_config},
+    javascript      = {eslint_config},
+    typescript      = {eslint_config},
+    typescriptreact = {eslint_config},
+    javascriptreact = {eslint_config},
+    lua             = {luacheck_config},
   }
   lsp_config.efm.setup {
     filetypes = vim.tbl_keys(languages),

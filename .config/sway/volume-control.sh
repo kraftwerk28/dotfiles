@@ -2,7 +2,7 @@
 
 sink="@DEFAULT_SINK@"
 source="@DEFAULT_SOURCE@"
-limit=150
+LIMIT=150
 
 if [[ $1 == "toggle-mic" ]]; then
 	pactl set-source-mute $source toggle
@@ -25,7 +25,7 @@ elif [[ $1 = "down" ]]; then
 fi
 l=$(($l - ($l % 5)))
 r=$(($r - ($r % 5)))
-if [[ $l -gt $limit ]]; then l=$limit; fi
-if [[ $r -gt $limit ]]; then r=$limit; fi
+if (($l > $LIMIT)); then l=$LIMIT; fi
+if (($r > $LIMIT)); then r=$LIMIT; fi
 
 pactl set-sink-volume $sink "$l%" "$r%"

@@ -57,6 +57,7 @@ bindsym --to-code {
 bindsym {
 	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
 	$mod+i exec $script/rofi-window-switch.sh
+	$mod+o exec $script/rename-workspace.sh
 
 	$mod+Shift+e exec swaynag \
 		-t warning \
@@ -118,13 +119,13 @@ mode "resize" bindsym {
 }
 
 bar {
-	# status_command $HOME/.config/sway/mybar.sh
+	# status_command node $HOME/.config/sway/mybar.mjs
 	# status_command i3status-rs $HOME/.config/i3status-rust/config.toml
 	swaybar_command waybar
 	# swaybar_command swaybar
 	# swaybar_command /home/kraftwerk28/projects/sway/Waybar/build/waybar
 	# status_command while true; do date +"%x %X"; sleep 1; done
-	font Hack Bold 11
+	font Iosevka Term Extended Bold 11
 	position top
 	icon_theme "Papirus"
 }
@@ -181,9 +182,9 @@ focus_follows_mouse no
 client.focused          "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
 client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
+client.parent           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 
 font Iosevka Term Extended Bold 10
-# font Hack Nerd Font Bold 10
 titlebar_padding 4 1
 
 seat * xcursor_theme $cursor_theme
@@ -227,6 +228,7 @@ for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="Guitarix"] floating enable
+for_window [title="xeyes"] floating enable; sticky enable
 
 # bindsym --release Alt+R exec notify-send foo
 # bindsym $mod+Shift+r exec wf-recorder

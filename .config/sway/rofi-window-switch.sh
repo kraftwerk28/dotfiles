@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 raw=$(swaymsg -t get_tree)
 
 IFS=$'\n' ids=($(jq -r \
@@ -6,15 +7,16 @@ IFS=$'\n' ids=($(jq -r \
 | select(has("app_id")).id
 ' <<< $raw))
 
-index=$(echo $raw | jq -r \
-' ..
-| select(.type? == "workspace")
-| .name as $wname
-| ..
-| objects
-| select(has("app_id"))
-| "[\($wname)] - \(.name)"
-' | rofi -i -dmenu -format i)
+index=$(echo $raw \
+	| jq -r ' ..
+	| select(.type? == "workspace")
+	| .name as $wname
+	| ..
+	| objects
+	| select(has("app_id"))
+	| "[\($wname)] - \(.name)"
+	' \
+	| rofi -i -dmenu -p "Select window" -format i)
 
 if [[ -n $index ]]; then
 	swaymsg "[con_id=${ids[$index]}]" focus
