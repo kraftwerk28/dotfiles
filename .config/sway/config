@@ -156,9 +156,8 @@ bindsym {
 	XF86AudioMute         exec $script/volume-control.sh toggle
 	Control+XF86AudioMute exec $script/volume-control.sh toggle-mic
 
-	XF86MonBrightnessDown exec \
-		[[ $(brightnessctl g) -gt 6000 ]] && brightnessctl set 5%-
-	XF86MonBrightnessUp exec brightnessctl set +5%
+	XF86MonBrightnessDown exec $script/backlight-control.sh down
+	XF86MonBrightnessUp   exec $script/backlight-control.sh up
 
 	XF86AudioPlay exec playerctl play-pause
 	XF86AudioNext exec playerctl next
@@ -184,7 +183,7 @@ client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
 client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
 client.parent           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 
-font Iosevka Term Extended Bold 10
+font Iosevka Term Extended Bold 11
 titlebar_padding 4 1
 
 seat * xcursor_theme $cursor_theme
@@ -201,6 +200,7 @@ exec {
 }
 
 # Autostart apps
+# TODO: consider NO_AUTOSTART variable
 exec swaymsg "               \
 	workspace 4;             \
 	exec firefox;            \
@@ -229,9 +229,6 @@ for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="Guitarix"] floating enable
 for_window [title="xeyes"] floating enable; sticky enable
-
-# bindsym --release Alt+R exec notify-send foo
-# bindsym $mod+Shift+r exec wf-recorder
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \

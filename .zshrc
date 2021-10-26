@@ -95,6 +95,14 @@ dump_cwd () {
 	fi
 }
 
+c () {
+	local dname="$HOME/.config/$1"
+	if [[ ! -d $dname ]]; then
+		return
+	fi
+	cd $dname
+}
+
 set_window_title () {
 	echo -n -e "\e]0;$(basename $SHELL) (${PWD/$HOME/"~"})\007"
 }
