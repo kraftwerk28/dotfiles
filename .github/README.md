@@ -5,6 +5,7 @@
 ### In this repo:
   - [Alacritty config](../.config/alacritty/alacritty.yml)
   - [Kitty config](../.config/kitty/kitty.conf) (obsolette)
+  - [Mako config](../.config/mako/config)
   - [Neovim config](../.config/nvim)
   - [OpenTTD config](../.openttd/openttd.cfg)
   - [SwayWM configs](../.config/sway)
