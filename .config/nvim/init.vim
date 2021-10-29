@@ -9,21 +9,6 @@ syntax on
 lua init = require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
-augroup filetype_options
-  autocmd!
-  autocmd FileType
-        \ go,make,c,cpp,python
-        \ setlocal shiftwidth=4 tabstop=4 noexpandtab
-  autocmd FileType
-        \ java,kotlin,groovy,csharp,cabal
-        \ setlocal shiftwidth=4 tabstop=4 expandtab
-  autocmd FileType
-        \ javascript,typescript,javascriptreact,typescriptreact,svelte,json,vim,yaml,haskell,lisp,lua
-        \ setlocal shiftwidth=2 tabstop=2 expandtab
-  autocmd FileType jess setlocal commentstring=;\ %s
-  autocmd FileType json,jsonc,cjson setlocal commentstring=//\ %s
-  autocmd FileType asm setlocal shiftwidth=8 tabstop=8 noexpandtab
-augroup END
 
 function! s:restoreCursor()
   echom 'Restoring cursor'

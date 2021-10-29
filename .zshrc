@@ -1,8 +1,27 @@
 fpath=(~/.zfunc $fpath)
 
+requires () {
+	local banner="$(basename $0): please install:"
+	local failed=false
+	for cmd in $@; do
+		if ! command -v $cmd 2>&1 > /dev/null; then
+			banner="$banner $cmd"
+			failed=true
+		fi
+	done
+	if $failed; then
+		echo $banner 1>&2
+		return 1
+	fi
+}
+
 plug () {
 	local plugfile="/usr/share/zsh/plugins/${1}/${1}.plugin.zsh"
-	[[ -f $plugfile ]] && source $plugfile
+	if [[ -f $plugfile ]]; then
+		source $plugfile
+	else
+		echo "Plugin $1 not found" 1>&2
+	fi
 }
 
 plug zsh-autosuggestions

@@ -1,4 +1,4 @@
-if type nvim > /dev/null; then
+if requires nvim; then
 	alias vim="nvim"
 	alias vi="nvim"
 	alias v="nvim"
@@ -9,7 +9,7 @@ if type nvim > /dev/null; then
 		neovim-git"
 fi
 
-if type lsd > /dev/null; then
+if requires lsd; then
 	alias ls="lsd -F"
 	alias la="lsd -Fah"
 	alias ll="lsd -Flh"
@@ -21,7 +21,7 @@ fi
 # fi
 alias less="less -i"
 
-if type bat > /dev/null; then
+if requires bat; then
 	alias cat="bat -p --color never --paging never"
 fi
 

@@ -1,3 +1,4 @@
+requires curl || return
 if [[ -z $BASE16_THEME ]]; then
 	return 0
 fi

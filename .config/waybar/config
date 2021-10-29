@@ -1,9 +1,9 @@
 {
     // "layer": "top", // Waybar at top layer
-    // "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 26, // Waybar height (to be removed for auto height)
+    "position": "top", // Waybar position (top|bottom|left|right)
+    // "height": 20, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
-    // Choose the order of the modules
+
     "modules-left": [
         "sway/workspaces",
         "sway/mode",
@@ -17,28 +17,26 @@
         "network",
         "cpu",
         "custom/sensors",
-        // "backlight",
-        // "keyboard-state",
         "battery",
         "sway/language",
         "clock"
     ],
-    // Modules configuration
-    // "sway/workspaces": {
-    //     "disable-scroll": true,
-    //     "all-outputs": true,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
+
+    "sway/workspaces": {
+        "smooth-scrolling-threshold": 2.0,
+        "all-outputs": true,
+        "format": "{name}"
+        // "format-icons": {
+        //     "1": "",
+        //     "2": "",
+        //     "3": "",
+        //     "4": "",
+        //     "5": "",
+        //     "urgent": "",
+        //     "focused": "",
+        //     "default": ""
+        // }
+    },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
         "format-disconnected": "Disconnected ",
@@ -132,7 +130,7 @@
         "format-alt": "{icon} {time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": ["", "", "", "", ""]
     },
     "battery#bat2": {
         "bat": "BAT2"
@@ -179,9 +177,8 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "sway/language": {
-        // "format": "<b>{long:.2}</b>",
         "format": "<b>{short}</b>",
-        "on-click": "swaymsg input type:keyboard xkb_switch_layout next" // TODO
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
     },
     "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",
@@ -189,9 +186,13 @@
         "interval": 1800
     },
     "custom/sensors": {
-        "exec": "sensors | awk -f ~/.config/waybar/cputemp.awk",
+        "exec": "awk -f ~/.config/waybar/cputemp.awk <(sensors)",
         "return-type": "json",
         "interval": 5
+    },
+    "custom/mpris": {
+        "exec": "waybar-mpris",
+        "return-type": "json",
     }
 }
 // vim: ft=jsonc: sw=4: et

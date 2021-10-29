@@ -255,4 +255,13 @@ function M.index_of(t, v, eqfn)
   return -1
 end
 
+local globalfn_counter = 0
+function M.defglobalfn(func)
+  assert(type(func) == "function")
+  local name = "_lua_fn_" .. globalfn_counter
+  _G[name] = func
+  globalfn_counter = globalfn_counter + 1
+  return name
+end
+
 return M

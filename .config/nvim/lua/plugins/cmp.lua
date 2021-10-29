@@ -1,17 +1,22 @@
 local cmp = require("cmp")
 local lspkind = require("lspkind")
-local maps = cmp.mapping
+local m = cmp.mapping
 
 cmp.setup {
   mapping = {
-    ["<Tab>"]     = maps.select_next_item(),
-    ["<S-Tab>"]   = maps.select_prev_item(),
-    ["<C-Space>"] = maps.complete(),
-    ["<CR>"]      = maps.confirm(),
+    ["<Tab>"]     = m.select_next_item(),
+    ["<S-Tab>"]   = m.select_prev_item(),
+    ["<C-Space>"] = cmp.mapping(m.complete(), {"i", "c"}),
+    ["<CR>"]      = m.confirm({select = false}),
   },
   sources = {
     {name = "nvim_lsp" },
-    {name = "buffer"   },
+    {
+      name = "buffer",
+      opts = {
+        keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%([\-.]\w*\)*\|[а-яА-ЯеёЕЁ]*\)]],
+      }
+    },
     {name = "path"     },
     {name = "ultisnips"},
   },
@@ -19,16 +24,19 @@ cmp.setup {
     border = vim.g.floatwin_border,
   },
   preselect = cmp.PreselectMode.None,
+  confirmation = {
+    default_behavior = cmp.ConfirmBehavior.Insert,
+  },
   formatting = {
-    format = function(entry, vim_item)
+    format = function(_ --[[entry]], vim_item)
       local icon = lspkind.presets.default[vim_item.kind]
       vim_item.abbr = icon.." "..vim_item.abbr
       return vim_item
     end,
   },
-  experimental = {
-    native_menu = true,
-  },
+  -- experimental = {
+  --   native_menu = true,
+  -- },
   enabled = function()
     return
       vim.bo.buftype ~= "prompt"

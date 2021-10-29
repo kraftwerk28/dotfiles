@@ -7,9 +7,9 @@ perc () {
 report () {
 	local p=$(perc)
 	notify-send \
-		-h "string:x-canonical-private-synchronous:bri" \
+		-h "string:x-canonical-private-synchronous:backlight" \
 		-h "int:value:${p}" \
-		-t 1000 \
+		-t 2000 \
 		" ${p}%"
 }
 

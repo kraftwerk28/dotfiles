@@ -1,6 +1,6 @@
 # [@krafterk28](https://github.com/kraftwerk28)'s dotfiles
 
-### A setup, that works on Archlinux & Windows NT
+### A setup, that sometimes breaks, but it works on my machine ©
 
 ### In this repo:
   - [Alacritty config](../.config/alacritty/alacritty.yml)

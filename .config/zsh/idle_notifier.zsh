@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+requires jq swaymsg notify-send || return
+
 # Send a notification, if command is executing more than
 # NOTIFY_COMMAND_COMPLETED_TRESHOLD seconds and the shell isn't focused
 

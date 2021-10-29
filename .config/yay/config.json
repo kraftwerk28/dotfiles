@@ -27,7 +27,7 @@
 	"requestsplitn": 150,
 	"sortmode": 0,
 	"completionrefreshtime": 7,
-	"sudoloop": false,
+	"sudoloop": true,
 	"timeupdate": false,
 	"devel": false,
 	"cleanAfter": false,

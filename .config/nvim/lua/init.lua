@@ -17,6 +17,7 @@ load("config.opts")
 load("plugins")
 load("config.tabline")
 load("config.statusline")
+load("config.filetypes")
 
 -- vim.o.statusline = "%!v:lua._stl()"
 
