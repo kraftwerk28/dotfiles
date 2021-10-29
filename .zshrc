@@ -1,16 +1,18 @@
-fpath=(~/.zfunc $fpath)
+#!/usr/env/bin zsh
+
+fpath+=("$HOME/.zfunc")
 
 requires () {
-	local banner="$(basename $0): please install:"
+	local banner="$(basename "$0"): please install:"
 	local failed=false
-	for cmd in $@; do
+	for cmd in "$@"; do
 		if ! command -v $cmd 2>&1 > /dev/null; then
 			banner="$banner $cmd"
 			failed=true
 		fi
 	done
 	if $failed; then
-		echo $banner 1>&2
+		echo "$banner" 1>&2
 		return 1
 	fi
 }
@@ -18,7 +20,7 @@ requires () {
 plug () {
 	local plugfile="/usr/share/zsh/plugins/${1}/${1}.plugin.zsh"
 	if [[ -f $plugfile ]]; then
-		source $plugfile
+		source "$plugfile"
 	else
 		echo "Plugin $1 not found" 1>&2
 	fi
@@ -26,7 +28,7 @@ plug () {
 
 plug zsh-autosuggestions
 plug zsh-z
-plug zsh-extract
+# plug zsh-extract
 plug zsh-vi-mode
 
 # export BASE16_THEME="default-dark"
@@ -70,11 +72,11 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 tabs -4
 
 if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
-	source /etc/profile.d/vte.sh
+	source "/etc/profile.d/vte.sh"
 fi
 
 for cfg in ~/.config/zsh/*.zsh; do
-	source $cfg
+	source "$cfg"
 done
 
 bindkey -v
@@ -90,11 +92,11 @@ bindkey -M viins "^H" backward-kill-word
 bindkey -s "^[l" "ls\n"
 bindkey -M viins "^I" complete-word
 
-if [[ -d /usr/share/nvm ]]; then
+if [[ -d "/usr/share/nvm" ]]; then
 	nvm() {
 		echo "Warming up nvm..."
 		unset -f nvm
-		[[ -z $NVM_DIR ]] && export NVM_DIR="$HOME/.nvm"
+		[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
 		source /usr/share/nvm/nvm.sh
 		source /usr/share/nvm/install-nvm-exec
 		if (( $# > 0 )); then
@@ -109,17 +111,17 @@ fi
 
 dump_cwd () {
 	dir=$(pwd)
-	if [[ $dir != $HOME ]]; then
+	if [[ $dir != "$HOME" ]]; then
 		echo $dir > /tmp/last_pwd
 	fi
 }
 
 c () {
 	local dname="$HOME/.config/$1"
-	if [[ ! -d $dname ]]; then
+	if [[ ! -d "$dname" ]]; then
 		return
 	fi
-	cd $dname
+	cd "$dname"
 }
 
 set_window_title () {
