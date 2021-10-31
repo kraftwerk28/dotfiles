@@ -13,9 +13,9 @@ cmp.setup {
     {name = "nvim_lsp" },
     {
       name = "buffer",
-      opts = {
-        keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%([\-.]\w*\)*\|[а-яА-ЯеёЕЁ]*\)]],
-      }
+      -- opts = {
+      --   keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%([\-.]\w*\)*\|[а-яА-ЯеёЕЁ]*\)]],
+      -- }
     },
     {name = "path"     },
     {name = "ultisnips"},

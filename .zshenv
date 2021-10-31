@@ -7,16 +7,16 @@ export PATH="$PATH:$HOME/bin"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
-export RUSTC_WRAPPER=sccache
+export RUSTC_WRAPPER="sccache"
 
 export JAVA_HOME="/usr/lib/jvm/default"
 
 # android
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$PATH:$ANDROID_HOME/emulator"
+export PATH="$PATH:$ANDROID_HOME/tools"
+export PATH="$PATH:$ANDROID_HOME/tools/bin"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
 
 # GO
 export GOPATH="$HOME/projects/go"
