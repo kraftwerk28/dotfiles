@@ -197,6 +197,8 @@ local function load(use)
       vim.api.nvim_set_keymap("v", "<Leader>ea", "<Plug>(EasyAlign)", {})
     end,
   }
+
+  use {"digitaltoad/vim-pug"}
 end
 
 local function bootstrap()

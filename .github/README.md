@@ -8,7 +8,7 @@
   - [Mako config](../.config/mako/config)
   - [Neovim config](../.config/nvim)
   - [OpenTTD config](../.openttd/openttd.cfg)
-  - [SwayWM configs](../.config/sway)
+  - [Sway configs](../.config/sway)
   - [Systemd user units](../.config/systemd/user)
   - [Tilix config](../.config/tilix/tilix.dconf) (obsolette)
   - [VSCode config](../.config/Code/User/settings.json) (obsolette)
@@ -23,7 +23,7 @@ Autocommands and mappings are in
 [Vimscript](../.config/nvim/init.vim),
 everything else - in [Lua](../.config/nvim/lua).
 
-### SwayWM setup:
+### Sway setup:
 ![Sway #1](assets/sway-1.png)
 ![Sway #2](assets/sway-2.png)
 ![Sway #3](assets/sway-3.png)

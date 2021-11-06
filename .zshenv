@@ -1,9 +1,14 @@
+if [[ $- != *i* ]]; then
+	# Do not source for login shell
+	return
+fi
+
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export EDITOR="/usr/bin/nvim"
 export PAGER="less -i"
 export MANPAGER="nvim +Man!"
 
-export PATH="$PATH:$HOME/bin"
+export PATH="$HOME/bin:$PATH"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"

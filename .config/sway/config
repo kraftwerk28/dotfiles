@@ -6,8 +6,6 @@ set $right l
 set $cursor_theme "Adwaita"
 set $script $HOME/.config/sway
 
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
-
 # output * bg "#ff8800" solid_color
 # output * bg $HOME/Pictures/scp_wallpaper_1.jpg fill
 output * bg $HOME/Pictures/pink_floyd_wish_you_were_here.png fit "#0f1111"
@@ -26,6 +24,9 @@ bindsym --to-code {
 	$mod+Return exec alacritty
 	$mod+Shift+Return exec alacritty \
 		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$mod+f2 exec alacritty \
+		--working-directory $HOME/.config/sway \
+		--command $SHELL -ic "nvim config"
 
 	$mod+Shift+q kill
 	$mod+Shift+c reload
@@ -121,10 +122,6 @@ mode "resize" bindsym {
 
 bar {
 	swaybar_command waybar
-	# swaybar_command $HOME/projects/sway/Waybar/build/waybar
-
-	# status_command node $HOME/.config/sway/mybar.mjs
-	# status_command i3status-rs $HOME/.config/i3status-rust/config.toml
 	font Iosevka Term Extended Bold 11
 	position top
 	icon_theme "Papirus"
@@ -178,11 +175,12 @@ focus_wrapping yes
 focus_follows_mouse no
 
 # client.focused_inactive "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-client.focused          "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-client.focused_inactive "#666666" "#222222" "#ffffff" "#444444" "#666666"
-client.unfocused        "#666666" "#222222" "#ffffff" "#444444" "#666666"
+client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
+client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
+
 # NOTE: supported only in kraftwerk28's fork:
-client.parent           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 
 font Iosevka Term Extended Bold 11
 titlebar_padding 4 1
@@ -203,12 +201,12 @@ exec {
 # TODO: consider NO_AUTOSTART variable
 exec [[ -z $NO_AUTOSTART ]] && \
 	swaymsg "                \
-	workspace 5;             \
-	layout tabbed;           \
-	exec kotatogram-desktop; \
-	exec slack;              \
-	exec discord;            \
-	exec mattermost-desktop; "
+	workspace 5,             \
+	layout tabbed,           \
+	exec kotatogram-desktop, \
+	exec slack,              \
+	exec discord,            \
+	exec mattermost-desktop  "
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
@@ -216,18 +214,14 @@ exec [[ -z $NO_AUTOSTART ]] && \
 # 	resume 'swaymsg "output * dpms on"'
 # 	# before-sleep 'swaylock -f -c 000000'
 
-for_window [app_id="firefox" title="^Picture-in-Picture$"] \
-	floating enable; \
-	sticky enable; \
-	border pixel
-for_window [app_id="firefox" title="Sharing Indicator"] \
-	floating enable; \
-	sticky enable
+for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
+for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky enable
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="Guitarix"] floating enable
 for_window [title="xeyes"] floating enable; sticky enable
+for_window [app_id="Alacritty"] border pixel 2
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \
@@ -238,5 +232,7 @@ for_window [title="xeyes"] floating enable; sticky enable
 # 	--ring-color "00000000" \
 # 	--key-hl-color "ffffff" \
 # 	--inside-color "000000"
+
+exec "systemctl --user import-environment; systemctl --user start sway-session.target"
 
 # vim: ft=config

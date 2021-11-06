@@ -179,4 +179,19 @@ vim.cmd("augroup END")
 --   dump{count, fn.getpos("'<"), fn.getpos("'>")}
 -- end))
 
+do
+  local api = {}
+  local api_mt = {}
+  function api_mt:__index(k)
+    local t = {unpack(self)}
+    table.insert(t, k)
+    return setmetatable(t, api_mt)
+  end
+  function api_mt:__call(...)
+    return vim.api["nvim_"..table.concat(self, "_")](...)
+  end
+  setmetatable(api, api_mt)
+  _G.api = api
+end
+
 return M

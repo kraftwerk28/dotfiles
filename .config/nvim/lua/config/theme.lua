@@ -32,7 +32,7 @@ utils.nnoremap(
     vim.g.base16_theme = name
     print(("(%d/%d) %s"):format(nameidx, #names, name))
     set_base16_theme(name)
-    utils.load("statusline")
+    utils.load("config.statusline")
   end,
   {silent = true}
 )
@@ -49,7 +49,7 @@ utils.nnoremap(
     print(("(%d/%d) %s"):format(nameidx, #names, name))
     set_base16_theme(name)
     base16.setup(name)
-    utils.load("statusline")
+    utils.load("config.statusline")
   end,
   {silent = true}
 )

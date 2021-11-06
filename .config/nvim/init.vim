@@ -277,6 +277,12 @@ nnoremap <silent> tj :tablast<CR>
 nnoremap <silent> tk :tabfirst<CR>
 nnoremap <silent> tl :tabnext<CR>
 nnoremap <silent> tt :tabnew<CR>
+nnoremap <silent> t1 :1tabnext<CR>
+nnoremap <silent> t2 :2tabnext<CR>
+nnoremap <silent> t3 :3tabnext<CR>
+nnoremap <silent> t4 :4tabnext<CR>
+nnoremap <silent> t5 :5tabnext<CR>
+nnoremap <silent> t6 :6tabnext<CR>
 nnoremap <silent> td :tabclose<CR>
 nnoremap <silent> tH :-tabmove<CR>
 nnoremap <silent> tL :+tabmove<CR>
