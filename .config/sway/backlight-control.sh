@@ -1,11 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-perc () {
+percentage () {
 	brightnessctl info | grep -oP "\d+(?=%)"
 }
 
 report () {
-	local p=$(perc)
+	local p=$(percentage)
 	notify-send \
 		-h "string:x-canonical-private-synchronous:backlight" \
 		-h "int:value:${p}" \
@@ -19,7 +19,7 @@ case ${1:-up} in
 		report
 		;;
 	down)
-		if (( $(perc) > 5 )); then
+		if (( $(percentage) > 5 )); then
 			brightnessctl set "5%-" > /dev/null
 			report
 		fi

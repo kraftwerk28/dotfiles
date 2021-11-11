@@ -4,13 +4,12 @@ local root_pattern = require("lspconfig.util").root_pattern
 local lsp, fn = vim.lsp, vim.fn
 local expand = fn.expand
 
+-- Setup lspconfig.
+local cmp_cap = require('cmp_nvim_lsp').update_capabilities(lsp.protocol.make_client_capabilities())
+-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+
 lsp_config.tsserver.setup {
-  cmd = {
-    "typescript-language-server",
-    "--stdio",
-    "tsserver-log-verbosity",
-    "off",
-  },
+  cmd = {"typescript-language-server", "--stdio"},
   root_dir = root_pattern(
     "package.json",
     "tsconfig.json",
@@ -18,6 +17,7 @@ lsp_config.tsserver.setup {
     ".git",
     fn.getcwd()
   ),
+  -- capabilities = cmp_cap,
 }
 
 lsp_config.denols.setup {

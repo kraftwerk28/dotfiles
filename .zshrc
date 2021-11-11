@@ -26,9 +26,16 @@ plug () {
 	fi
 }
 
+zvm_config () {
+	ZVM_CURSOR_STYLE_ENABLED=true
+	ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+	ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+	ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+}
+
 plug zsh-autosuggestions
 plug zsh-z
-# plug zsh-extract
 plug zsh-vi-mode
 
 # export BASE16_THEME="default-dark"
@@ -38,12 +45,6 @@ export BASE16_THEME="eighties"
 
 NOTIFY_COMMAND_COMPLETED_TRESHOLD=10
 
-ZVM_CURSOR_STYLE_ENABLED=true
-ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-
 # Change cursor shape depending on vi mode
 # CHANGE_CURSOR_SHAPE=false
 # Show a character depending on vi mode
@@ -52,16 +53,10 @@ KEYTIMEOUT=true
 
 autoload -U select-word-style
 select-word-style bash
-setopt appendhistory autocd
-setopt auto_pushd
-setopt pushd_ignore_dups
-setopt pushdminus
-setopt extended_history
-setopt hist_expire_dups_first
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_verify
-setopt share_history
+setopt \
+	appendhistory autocd auto_pushd pushd_ignore_dups pushdminus \
+	extended_history hist_expire_dups_first hist_ignore_dups hist_ignore_space \
+	hist_verify share_history nonomatch
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000

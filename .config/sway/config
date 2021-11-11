@@ -152,6 +152,8 @@ bindsym {
 	XF86AudioLowerVolume  exec $script/volume-control.sh down
 	XF86AudioMute         exec $script/volume-control.sh toggle
 	Control+XF86AudioMute exec $script/volume-control.sh toggle-mic
+	--to-code --no-repeat $mod+m exec $script/volume-control.sh unmute-down
+	--to-code --release   $mod+m exec $script/volume-control.sh unmute-up
 
 	XF86MonBrightnessDown exec $script/backlight-control.sh down
 	XF86MonBrightnessUp   exec $script/backlight-control.sh up
@@ -167,7 +169,7 @@ bindsym {
 
 smart_borders on
 smart_gaps on
-# gaps inner 4
+gaps inner 4
 # gaps outer 0
 default_border pixel 2
 
@@ -219,9 +221,14 @@ for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
-for_window [title="Guitarix"] floating enable
 for_window [title="xeyes"] floating enable; sticky enable
 for_window [app_id="Alacritty"] border pixel 2
+
+# DAW + guitar = <3
+bindsym $mod+F3 \
+	workspace 7, \
+	layout splith, \
+	exec "swaymsg exec pw-jack guitarix; sleep 1; swaymsg exec helvum"
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \

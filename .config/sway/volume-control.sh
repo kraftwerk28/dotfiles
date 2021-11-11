@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 SINK="@DEFAULT_SINK@"
 SOURCE="@DEFAULT_SOURCE@"
@@ -25,13 +25,23 @@ adjust () {
 	(( r > $LIMIT )) && (( r = $LIMIT ))
 }
 
-if [[ "$1" == "toggle-mic" ]]; then
+if [[ $1 == "toggle-mic" ]]; then
 	pactl set-source-mute $SOURCE toggle
 	exit 0
 fi
 
-if [[ "$1" == "toggle" ]]; then
+if [[ $1 == "toggle" ]]; then
 	pactl set-sink-mute $SINK toggle
+	exit 0
+fi
+
+if [[ $1 == "unmute-down" ]]; then
+	pactl set-source-mute $SOURCE 0
+	exit 0
+fi
+
+if [[ $1 == "unmute-up" ]]; then
+	pactl set-source-mute $SOURCE 1
 	exit 0
 fi
 
