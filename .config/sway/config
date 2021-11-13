@@ -41,7 +41,6 @@ bindsym --to-code {
 	$mod+Shift+$up    move up
 	$mod+Shift+$right move right
 
-
 	$mod+Bracketleft  workspace prev
 	$mod+Bracketright workspace next
 

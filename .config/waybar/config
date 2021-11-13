@@ -159,7 +159,9 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", "", ""]
+            "hifi": "",
+            // "default": ["", "", ""],
+            "default": ["奄", "奔", "墳"]
         },
         "on-click": "pavucontrol",
         "on-click-right": "$HOME/.config/waybar/switch_audio_sink.py"

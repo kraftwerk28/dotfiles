@@ -107,15 +107,15 @@ local function load(use)
   --   vim.fn.system([[python -c "import pynvim"]])
   --   local disable = vim.v.shell_error ~= 0
   --   if disable then print("Please install python's pynvim package") end
-  --   use {
-  --     "SirVer/ultisnips",
-  --     config = function()
-  --       vim.g.UltiSnipsExpandTrigger       = "<F10>"
-  --       vim.g.UltiSnipsJumpForwardTrigger  = "<C-J>"
-  --       vim.g.UltiSnipsJumpBackwardTrigger = "<C-K>"
-  --     end,
-  --   }
   -- end
+  use {
+    "SirVer/ultisnips",
+    config = function()
+      vim.g.UltiSnipsExpandTrigger       = "<F10>"
+      vim.g.UltiSnipsJumpForwardTrigger  = "<C-J>"
+      vim.g.UltiSnipsJumpBackwardTrigger = "<C-K>"
+    end,
+  }
 
   use {
     "hrsh7th/nvim-cmp",
@@ -125,12 +125,12 @@ local function load(use)
       "hrsh7th/cmp-path",
       "onsails/lspkind-nvim",
 
-      -- "quangnguyen30192/cmp-nvim-ultisnips",
-      -- "SirVer/ultisnips",
-      -- "honza/vim-snippets",
+      "quangnguyen30192/cmp-nvim-ultisnips",
+      "SirVer/ultisnips",
+      "honza/vim-snippets",
 
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
+      -- "L3MON4D3/LuaSnip",
+      -- "saadparwaiz1/cmp_luasnip",
     },
     config = function() require("plugins.cmp") end,
   }
