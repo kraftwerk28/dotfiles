@@ -55,6 +55,7 @@ o.undofile = true
 o.backupcopy = "yes"
 o.inccommand = "nosplit"
 o.title = true
+-- o.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"
 
 o.shortmess:append("c")
 o.diffopt:append("vertical")

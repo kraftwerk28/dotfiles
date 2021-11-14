@@ -205,7 +205,6 @@ exec [[ -z $NO_AUTOSTART ]] && \
 	workspace 5,             \
 	layout tabbed,           \
 	exec kotatogram-desktop, \
-	exec slack,              \
 	exec discord,            \
 	exec mattermost-desktop  "
 
