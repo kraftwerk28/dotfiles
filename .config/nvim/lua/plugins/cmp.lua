@@ -41,8 +41,8 @@ cmp.setup {
       -- },
     },
     {name = "path"},
-    -- {name = "ultisnips"},
-    {name = 'luasnip'},
+    {name = "ultisnips"},
+    -- {name = "luasnip"},
   },
   documentation = {
     border = vim.g.floatwin_border,

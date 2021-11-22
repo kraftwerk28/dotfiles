@@ -12,22 +12,6 @@ git_info () {
 	echo $result
 }
 
-# vimode () {
-# 	if [[ "$KEYMAP" == "vicmd" ]] || [[ "$1" == "block" ]]; then
-# 		# NORMAL
-# 		[[ $CHANGE_CURSOR_SHAPE = true ]] && echo -ne "\e[1 q"
-# 		[[ $SHOW_VIMODE = true ]] && echo " %B%F{green}N"
-# 	elif [[ "$KEYMAP" =~ ^(main|viins|)$ ]] || [[ "$1" == "beam" ]]; then
-# 		# INSERT
-# 		[[ $CHANGE_CURSOR_SHAPE = true ]] && echo -ne "\e[5 q"
-# 		[[ $SHOW_VIMODE = true ]] && echo " %B%F{cyan}I"
-# 	elif [[ "$KEYMAP" == "visual" ]]; then
-# 		# VISUAL
-# 		[[ $CHANGE_CURSOR_SHAPE = true ]] && echo -ne "\e[3 q"
-# 		[[ $SHOW_VIMODE = true ]] && echo " %B%F{orange}V"
-# 	fi
-# }
-
 vimode () {
 	case $ZVM_MODE in
 		$ZVM_MODE_NORMAL) echo " %B%F{green}N";;
@@ -52,4 +36,5 @@ zle-keymap-select () {
 
 zle -N zle-keymap-select
 zle -N edit-command-line
-add-zsh-hook precmd refresh_prompt
+# add-zsh-hook precmd refresh_prompt
+zvm_after_select_vi_mode_commands+=(refresh_prompt)

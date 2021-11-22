@@ -8,14 +8,14 @@
 #waybar {
 	font-family: "Iosevka Term", "Hack Nerd Font";
 	font-stretch: expanded;
-	font-size: 16px;
+	font-size: 15px;
 	font-weight: bold;
 	background-color: rgba(0, 0, 0, 0);
 	color: #ffffff;
 }
 
 #waybar > box {
-	border-bottom: 2px solid transparent;
+	border-top: 2px solid transparent;
 }
 
 #waybar.hidden {
@@ -35,8 +35,8 @@
 	padding: 0 0.4em;
 	background-color: transparent;
 	border-color: transparent;
-	border-top-width: 2px;
-	border-top-style: solid;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
 }
 
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
@@ -97,8 +97,8 @@
 	padding: 0 4px;
 	margin: 0 4px;
 	color: #ffffff;
-	border-top-width: 2px;
-	border-top-style: solid;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
 }
 
 window#waybar.empty #window {
@@ -135,8 +135,16 @@ window#waybar.empty #window {
 }
 
 #battery.charging, #battery.plugged {
-	color: #ffffff;
+	color: #26A65B;
 	border-color: #26A65B;
+}
+
+#battery.good {
+	color: #26A65B;
+}
+
+#battery.warning {
+	color: #f1c40f;
 }
 
 @keyframes blink {
@@ -148,7 +156,7 @@ window#waybar.empty #window {
 
 #battery.critical:not(.charging) {
 	border-color: #f53c3c;
-	color: #ffffff;
+	color: #f53c3c;
 	animation-name: blink;
 	animation-duration: 0.5s;
 	animation-timing-function: linear;

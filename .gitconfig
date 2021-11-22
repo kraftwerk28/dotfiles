@@ -12,4 +12,3 @@
 	repull = pull --rebase origin
 [pull]
 	rebase = false
-# vim: noet sw=0

@@ -1,6 +1,6 @@
 {
     // "layer": "top", // Waybar at top layer
-    "position": "top", // Waybar position (top|bottom|left|right)
+    "position": "bottom", // Waybar position (top|bottom|left|right)
     // "height": 20, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
 
@@ -120,14 +120,14 @@
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 100,
             "warning": 30,
             "critical": 10
         },
-        "format": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-alt": "{icon} {time}",
+        "format": "{icon}  {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": "  {capacity}%",
+        // "format-alt": "{icon} {time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
@@ -194,7 +194,7 @@
     },
     "custom/mpris": {
         "exec": "waybar-mpris",
-        "return-type": "json",
+        "return-type": "json"
     }
 }
 // vim: ft=jsonc: sw=4: et

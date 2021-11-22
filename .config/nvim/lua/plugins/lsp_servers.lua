@@ -4,10 +4,6 @@ local root_pattern = require("lspconfig.util").root_pattern
 local lsp, fn = vim.lsp, vim.fn
 local expand = fn.expand
 
--- Setup lspconfig.
-local cmp_cap = require('cmp_nvim_lsp').update_capabilities(lsp.protocol.make_client_capabilities())
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-
 lsp_config.tsserver.setup {
   cmd = {"typescript-language-server", "--stdio"},
   root_dir = root_pattern(
@@ -17,7 +13,6 @@ lsp_config.tsserver.setup {
     ".git",
     fn.getcwd()
   ),
-  -- capabilities = cmp_cap,
 }
 
 lsp_config.denols.setup {
@@ -39,25 +34,25 @@ lsp_config.denols.setup {
 lsp_config.pylsp.setup {
   cmd = {"pyls"},
   filetypes = {"python"},
-  settings = {
-    pyls = {
-      plugins = {
-        jedi_completion = {enabled = true},
-        jedi_hover = {enabled = true},
-        jedi_references = {enabled = true},
-        jedi_signature_help = {enabled = true},
-        jedi_symbols = {enabled = true, all_scopes = true},
-        yapf = {enabled = false},
-        pylint = {enabled = false},
-        pycodestyle = {enabled = false},
-        pydocstyle = {enabled = false},
-        mccabe = {enabled = false},
-        preload = {enabled = false},
-        rope_completion = {enabled = false},
-        pyflakes = {enabled = false},
-      },
-    },
-  },
+  -- settings = {
+  --   pyls = {
+  --     plugins = {
+  --       jedi_completion = {enabled = true},
+  --       jedi_hover = {enabled = true},
+  --       jedi_references = {enabled = true},
+  --       jedi_signature_help = {enabled = true},
+  --       jedi_symbols = {enabled = true, all_scopes = true},
+  --       yapf = {enabled = false},
+  --       pylint = {enabled = false},
+  --       pycodestyle = {enabled = false},
+  --       pydocstyle = {enabled = false},
+  --       mccabe = {enabled = false},
+  --       preload = {enabled = false},
+  --       rope_completion = {enabled = false},
+  --       pyflakes = {enabled = false},
+  --     },
+  --   },
+  -- },
 }
 
 -- lsp_config.pyright.setup {}
@@ -283,12 +278,17 @@ do
     lintFormats = {"    %f:%l:%c: %m"},
     lintIgnoreExitCode = true,
   }
+  -- local svelte_check = {
+  --   lintCommand = "./node_modules/.bin/svelte-check",
+  --   lintStdin = false,
+  -- }
   local languages = {
     javascript      = {eslint_config},
     typescript      = {eslint_config},
     typescriptreact = {eslint_config},
     javascriptreact = {eslint_config},
     lua             = {luacheck_config},
+    -- svelte          = {svelte_check},
   }
   lsp_config.efm.setup {
     filetypes = vim.tbl_keys(languages),

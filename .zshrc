@@ -74,16 +74,20 @@ for cfg in ~/.config/zsh/*.zsh; do
 	source "$cfg"
 done
 
-bindkey -v
-bindkey "^[OA" up-line-or-history
-bindkey "^[OB" down-line-or-history
-bindkey "^ " autosuggest-accept
-bindkey "^[[Z" reverse-menu-complete
-bindkey -M viins "^?" backward-delete-char
-bindkey -M viins "^W" backward-kill-word
-bindkey -M viins "^P" up-history
-bindkey -M viins "^N" down-history
-bindkey -M viins "^H" backward-kill-word
+# bindkey -v
+bindkey -r "^[OA"
+bindkey -r "^[OB"
+bindkey -M viins "^[[A" history-search-backward
+bindkey -M viins "^[[B" history-search-forward
+# bindkey "^[OA" up-line-or-history
+# bindkey "^[OB" down-line-or-history
+bindkey "^ " autosuggest-accept # Control+Space
+bindkey "^[[Z" reverse-menu-complete # Shift+Tab
+# bindkey -M viins "^?" backward-delete-char
+# bindkey -M viins "^W" backward-kill-word
+# bindkey -M viins "^P" up-history
+# bindkey -M viins "^N" down-history
+bindkey -M viins "^H" backward-kill-word # Shift+Backspace
 bindkey -s "^[l" "ls\n"
 bindkey -M viins "^I" complete-word
 

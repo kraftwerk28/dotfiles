@@ -1,6 +1,7 @@
 local M = {}
 
 local utils = require("config.utils")
+local formatting = require("config.formatting")
 local highlight = require("vim.highlight")
 local load = utils.load
 local fn, api = vim.fn, vim.api
@@ -28,7 +29,7 @@ if fn.has("unix") == 1 then
   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 end
 
-M.format_code = utils.format_code
+M.format_code = formatting.format_code
 
 function M.save_session()
   vim.cmd("mks")
@@ -58,6 +59,7 @@ function M.yank_highlight()
   end
 end
 
+-- Below are just a messy experiments that doesn't make any sense
 utils.nnoremap("<Leader>ar", function()
   local _, line_num, col_num, _, _ = unpack(fn.getcurpos())
   line_num = line_num - 1
@@ -108,6 +110,7 @@ local highlight_groups = {}
 local forbidden_patterns = {
   "^DevIcon", "Debug",
 }
+
 do
   local highlight_names = vim.fn.getcompletion("", "highlight")
   for _, name in ipairs(highlight_names) do
@@ -150,27 +153,6 @@ function _G.get_closest_highlight(hl)
   vim.cmd("hi "..closest_hl_group.name)
   return closest_hl_group
 end
-
--- filetype -> list of patterns that match it
-local additional_filetypes = {
-  zsh = {"*.zsh*"},
-  sh = {".env.*"},
-  bnf = {"*.bnf"},
-  json = {"*.webmanifest", ".eslintrc"},
-  jsonc = {"tsconfig.json"},
-  rest = {"*.http"},
-  elixir = {"*.exs", "*.ex"},
-  prolog = {"*pl"},
-  html = {"*.ejs"},
-}
-
-vim.cmd("augroup extra_filetypes")
-vim.cmd("autocmd!")
-for ft, patterns in pairs(additional_filetypes) do
-  local p = table.concat(patterns, ",")
-  vim.cmd(("autocmd BufNewFile,BufRead %s setlocal ft=%s"):format(p, ft))
-end
-vim.cmd("augroup END")
 
 -- local tm = vim.loop.new_timer()
 -- local count = 0

@@ -194,17 +194,6 @@ do
   end
 end
 
-function M.format_code()
-  if
-    vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype)
-    or vim.tbl_isempty(vim.lsp.buf_get_clients(0))
-  then
-    vim.cmd('Neoformat')
-  else
-    vim.lsp.buf.formatting()
-  end
-end
-
 function M.id_generator(start)
   local cnt = start or 0
   return function()

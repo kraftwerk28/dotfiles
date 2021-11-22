@@ -413,3 +413,4 @@ inoremap <C-H> <C-W>
 "   execute '!echo "$(tail -n '.g:log_limit.' '.l:path.')" > '.l:path
 " endfunction
 " autocmd VimEnter * call TruncLog()
+

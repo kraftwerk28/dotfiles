@@ -5,6 +5,7 @@ set $up    k
 set $right l
 set $cursor_theme "Adwaita"
 set $script $HOME/.config/sway
+set $border_width 3
 
 # output * bg "#ff8800" solid_color
 # output * bg $HOME/Pictures/scp_wallpaper_1.jpg fill
@@ -27,6 +28,8 @@ bindsym --to-code {
 	$mod+f2 exec alacritty \
 		--working-directory $HOME/.config/sway \
 		--command $SHELL -ic "nvim config"
+	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
+	XF86Search exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
 
 	$mod+Shift+q kill
 	$mod+Shift+c reload
@@ -56,7 +59,6 @@ bindsym --to-code {
 }
 
 bindsym {
-	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
 	$mod+i exec $script/rofi-window-switch.sh
 	$mod+o exec $script/rename-workspace.sh
 
@@ -122,7 +124,7 @@ mode "resize" bindsym {
 bar {
 	swaybar_command waybar
 	font Iosevka Term Extended Bold 11
-	position top
+	position bottom
 	icon_theme "Papirus"
 }
 
@@ -170,18 +172,19 @@ smart_borders on
 # smart_gaps on
 # gaps inner 4
 # gaps outer 0
-default_border pixel 2
+default_border pixel $border_width
 
 focus_wrapping yes
 focus_follows_mouse no
 
 # client.focused_inactive "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
-client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
+# client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+# client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
+# client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
 
 # NOTE: supported only in kraftwerk28's fork:
-client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+# client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
 font Iosevka Term Extended Bold 11
 titlebar_padding 4 1
@@ -206,7 +209,8 @@ exec [[ -z $NO_AUTOSTART ]] && \
 	layout tabbed,           \
 	exec kotatogram-desktop, \
 	exec discord,            \
-	exec mattermost-desktop  "
+	exec mattermost-desktop, \
+	exec thunderbird         "
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
@@ -220,7 +224,7 @@ for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="xeyes"] floating enable; sticky enable
-for_window [app_id="Alacritty"] border pixel 2
+for_window [app_id="Alacritty"] border pixel $border_width
 
 # DAW + guitar = <3
 bindsym $mod+F3 \

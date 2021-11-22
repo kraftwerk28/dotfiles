@@ -56,8 +56,7 @@ local function load(use)
 
   use {"wellle/targets.vim"} -- More useful text objects (e.g. function arguments)
 
-  use {"tpope/vim-fugitive"} -- Git helper
-
+  use {"tpope/vim-fugitive"}
   use {
     "airblade/vim-gitgutter",
     config = function()
@@ -68,6 +67,27 @@ local function load(use)
       vim.g.gitgutter_sign_removed  = gutter
     end,
   }
+  -- use {
+  --   "TimUntersberger/neogit",
+  --   requires = {"nvim-lua/plenary.nvim"},
+  --   config = function()
+  --     local neogit = require("neogit")
+  --     local opts = {
+  --       -- commit_popup = {kind = "vsplit"},
+  --       kind = "vsplit",
+  --       mappings = {
+  --         status = {
+  --           ["="] = "Toggle",
+  --           ["X"] = "Discard",
+  --           ["<tab>"] = "",
+  --           ["x"] = "",
+  --         },
+  --       },
+  --     }
+  --     dump(opts)
+  --     neogit.setup(opts)
+  --   end,
+  -- }
 
   use {"chrisbra/Colorizer"}
   use {"mattn/emmet-vim"}
