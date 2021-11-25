@@ -122,7 +122,8 @@ mode "resize" bindsym {
 }
 
 bar {
-	swaybar_command waybar
+	# swaybar_command waybar
+	swaybar_command /home/kraftwerk28/projects/sway/Waybar/build/waybar
 	font Iosevka Term Extended Bold 11
 	position bottom
 	icon_theme "Papirus"
@@ -143,6 +144,7 @@ input type:touchpad {
 	tap enabled
 	natural_scroll enabled
 	click_method clickfinger
+	dwt enabled
 }
 
 include /etc/sway/config.d/*
@@ -184,6 +186,7 @@ focus_follows_mouse no
 
 # NOTE: supported only in kraftwerk28's fork:
 # client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+client.focused_inactive  "#333333" "#222222" "#888888" "#292d2e" "#222222"
 client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
 font Iosevka Term Extended Bold 11
