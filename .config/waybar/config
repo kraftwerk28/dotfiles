@@ -25,7 +25,7 @@
     "sway/workspaces": {
         "smooth-scrolling-threshold": 2.0,
         "all-outputs": true,
-        "format": "{name}"
+        "format": "{value}"
         // "format-icons": {
         //     "1": "",
         //     "2": "",

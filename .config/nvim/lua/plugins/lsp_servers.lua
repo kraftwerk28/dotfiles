@@ -15,6 +15,10 @@ lsp_config.tsserver.setup {
   ),
 }
 
+lsp_config.graphql.setup {
+  cmd = {"graphql-lsp", "server", "--method=stream"},
+}
+
 lsp_config.denols.setup {
   autostart = false,
   initializationOptions = {

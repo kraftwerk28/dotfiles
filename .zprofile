@@ -1,6 +1,8 @@
-if [[ $- != *i* ]]; then
-	# Do not source for login shell
-	return
+local env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
+if [[ -x "$env_gen" ]]; then
+	while read -r line; do
+		eval export "$line"
+	done < <("$env_gen")
 fi
 
 export QT_QPA_PLATFORMTHEME="qt5ct"
@@ -59,3 +61,7 @@ export PATH="$PATH:$HOME/.cabal/bin/"
 export PATH="$PATH:$HOME/.ghcup/bin/"
 
 export NVIM_LISTEN_PORT=6969
+
+if [[ -z "$DISPLAY" ]] && [[ $(tty) = "/dev/tty1" ]]; then
+	exec sway --unsupported-gpu
+fi

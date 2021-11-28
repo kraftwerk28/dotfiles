@@ -122,8 +122,8 @@ mode "resize" bindsym {
 }
 
 bar {
-	# swaybar_command waybar
-	swaybar_command /home/kraftwerk28/projects/sway/Waybar/build/waybar
+	swaybar_command waybar
+	# swaybar_command /home/kraftwerk28/bin/waybar
 	font Iosevka Term Extended Bold 11
 	position bottom
 	icon_theme "Papirus"
