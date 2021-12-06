@@ -1,4 +1,4 @@
-#!/usr/env/bin zsh
+#!/bin/zsh
 
 fpath+=("$HOME/.zfunc")
 
@@ -56,7 +56,7 @@ select-word-style bash
 setopt \
 	appendhistory autocd auto_pushd pushd_ignore_dups pushdminus \
 	extended_history hist_expire_dups_first hist_ignore_dups hist_ignore_space \
-	hist_verify share_history nonomatch
+	hist_verify share_history nonomatch BASH_REMATCH
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000

@@ -121,9 +121,21 @@ mode "resize" bindsym {
 	Escape mode "default"
 }
 
+bindsym $mod+t mode "tabswitch"
+mode "tabswitch" bindsym {
+	h exec $script/tab-switch.sh prev, mode default
+	l exec $script/tab-switch.sh next, mode default
+	1 exec $script/tab-switch.sh 1, mode default
+	2 exec $script/tab-switch.sh 2, mode default
+	3 exec $script/tab-switch.sh 3, mode default
+	4 exec $script/tab-switch.sh 4, mode default
+	5 exec $script/tab-switch.sh 5, mode default
+	Return mode "default"
+	Escape mode "default"
+}
+
 bar {
 	swaybar_command waybar
-	# swaybar_command /home/kraftwerk28/bin/waybar
 	font Iosevka Term Extended Bold 11
 	position bottom
 	icon_theme "Papirus"

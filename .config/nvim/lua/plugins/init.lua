@@ -2,7 +2,8 @@ local function load(use)
   use {"wbthomason/packer.nvim", opt = true}
 
   use {
-    "kraftwerk28/gtranslate.nvim",
+    "~/projects/neovim/gtranslate.nvim",
+    -- "kraftwerk28/gtranslate.nvim",
     requires = {"nvim-lua/plenary.nvim"},
   }
 
@@ -223,6 +224,8 @@ local function load(use)
   }
 
   use {"digitaltoad/vim-pug"}
+
+  use {"mfussenegger/nvim-dap"}
 end
 
 local function bootstrap()

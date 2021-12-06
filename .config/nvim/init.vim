@@ -412,4 +412,4 @@ inoremap <C-H> <C-W>
 "   let l:path = v:lua.vim.lsp.get_log_path()
 "   execute '!echo "$(tail -n '.g:log_limit.' '.l:path.')" > '.l:path
 " endfunction
-" autocmd VimEnter * call TruncLog()
+" autocmd VimВведіть * call TruncLog()

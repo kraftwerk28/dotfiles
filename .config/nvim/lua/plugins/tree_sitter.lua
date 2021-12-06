@@ -39,11 +39,17 @@ local enabled_windows = {
 }
 
 local ensure_installed
+
 if vim.fn.has("unix") == 1 then
   ensure_installed = enabled_linux
-else
+elseif vim.fn.has("win64") == 1 then
   ensure_installed = enabled_windows
+else
+  error("tree_sitter.lua: Unsupported OS")
 end
+
+local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+parser_configs.bash.used_by = {"zsh", "PKGBUILD"}
 
 require("nvim-treesitter.configs").setup {
   ensure_installed = ensure_installed,
