@@ -123,17 +123,17 @@ function! s:nvimTreeToggle(find)
   endif
 endfunction
 
-augroup formatprgs
-  autocmd!
-  autocmd FileType haskell setlocal formatprg=brittany
-  autocmd FileType
-        \ typescript,typescriptreact
-        \ setlocal formatprg=prettier\ --parser\ typescript
-  autocmd FileType
-        \ javascript,javascriptreact
-        \ setlocal formatprg=prettier\ --parser\ babel
-  autocmd FileType cabal setlocal formatprg=cabal-fmt
-augroup END
+" augroup formatprgs
+"   autocmd!
+"   autocmd FileType haskell setlocal formatprg=brittany
+"   autocmd FileType
+"         \ typescript,typescriptreact
+"         \ setlocal formatprg=prettier\ --parser\ typescript
+"   autocmd FileType
+"         \ javascript,javascriptreact
+"         \ setlocal formatprg=prettier\ --parser\ babel
+"   autocmd FileType cabal setlocal formatprg=cabal-fmt
+" augroup END
 
 " autocmd BufEnter * lua require('lsp_signature').on_attach()
 

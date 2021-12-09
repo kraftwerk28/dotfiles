@@ -145,11 +145,9 @@ local function load(use)
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "onsails/lspkind-nvim",
-
       "quangnguyen30192/cmp-nvim-ultisnips",
       "SirVer/ultisnips",
       "honza/vim-snippets",
-
       -- "L3MON4D3/LuaSnip",
       -- "saadparwaiz1/cmp_luasnip",
     },
@@ -200,7 +198,15 @@ local function load(use)
 
   use {
     "sbdchd/neoformat",
-    config = function() require("plugins.neoformat") end,
+    config = function()
+      -- for _, ft in ipairs(vim.g.force_neoformat_filetypes) do
+      --   vim.g['neoformat_enabled_'..ft] = {}
+      -- end
+      vim.g.neoformat_enabled_python          = {"autopep8"}
+      vim.g.neoformat_enabled_typescript      = {"eslint_d"}
+      vim.g.neoformat_enabled_typescriptreact = {"eslint_d"}
+      vim.g.neoformat_run_all_formatters = 1
+    end,
   }
 
   use {"equalsraf/neovim-gui-shim", opt = true}

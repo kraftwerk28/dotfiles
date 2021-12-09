@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 requires jq swaymsg notify-send || return
 
 # Send a notification, if command is executing more than
@@ -20,13 +18,9 @@ walk_parent_pids() {
 }
 
 is_shell_focused() {
-	local focused=$(
-	swaymsg -t get_tree \
-		| jq -r \
-		' ..
-		| objects
-		| select(.pid? as $p | ['$(walk_parent_pids)'] | index($p)).focused'
-	)
+	local focused=$(swaymsg -t get_tree 2>/dev/null | jq -r '
+	recurse(.nodes[]?)
+	| select(.pid? as $p | ['$(walk_parent_pids)'] | index($p)).focused')
 	[[ $focused = "true" ]]
 }
 

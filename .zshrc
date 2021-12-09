@@ -56,7 +56,8 @@ select-word-style bash
 setopt \
 	appendhistory autocd auto_pushd pushd_ignore_dups pushdminus \
 	extended_history hist_expire_dups_first hist_ignore_dups hist_ignore_space \
-	hist_verify share_history nonomatch BASH_REMATCH
+	hist_verify share_history nonomatch
+# FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000

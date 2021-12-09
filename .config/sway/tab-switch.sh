@@ -3,18 +3,34 @@ if [[ -z $1 ]]; then
 	exit 1
 fi
 
-tab_con=$(swaymsg -t get_tree | jq -r '
-last(
-	recurse(.nodes[]?)
-	| select(.layout == "tabbed" and (recurse(.nodes[]?) | select(.focused)))
-)
-')
-focused=$(jq -r '
-.nodes
-| map(recurse(.nodes[]?).focused // false)
-| index(true)
-' <<< "$tab_con")
-total=$(jq -r '.nodes | length' <<< "$tab_con")
+IFS=$'\n' read -r -d '' tab_con focused total < \
+	<(swaymsg -t get_tree | jq -r '
+	last(
+		recurse(.nodes[]?)
+		| select(
+			.layout == "tabbed" and (recurse(.nodes[]?)
+			| select(.focused))
+		)
+	) as $tc
+	| ($tc
+		| .nodes
+		| map(recurse(.nodes[]?).focused // false)
+		| index(true)) as $fc
+	| ($tc | .nodes | length) as $cnt
+	| "\($tc)\n\($fc)\n\($cnt)"')
+
+# tab_con=$(swaymsg -t get_tree | jq -r '
+# last(
+# 	recurse(.nodes[]?)
+# 	| select(.layout == "tabbed" and (recurse(.nodes[]?) | select(.focused)))
+# )
+# ')
+# focused=$(jq -r '
+# .nodes
+# | map(recurse(.nodes[]?).focused // false)
+# | index(true)
+# ' <<< "$tab_con")
+# total=$(jq -r '.nodes | length' <<< "$tab_con")
 
 focus () {
 	local con_id=$(jq '
