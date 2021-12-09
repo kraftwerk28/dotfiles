@@ -19,19 +19,6 @@ IFS=$'\n' read -r -d '' tab_con focused total < \
 	| ($tc | .nodes | length) as $cnt
 	| "\($tc)\n\($fc)\n\($cnt)"')
 
-# tab_con=$(swaymsg -t get_tree | jq -r '
-# last(
-# 	recurse(.nodes[]?)
-# 	| select(.layout == "tabbed" and (recurse(.nodes[]?) | select(.focused)))
-# )
-# ')
-# focused=$(jq -r '
-# .nodes
-# | map(recurse(.nodes[]?).focused // false)
-# | index(true)
-# ' <<< "$tab_con")
-# total=$(jq -r '.nodes | length' <<< "$tab_con")
-
 focus () {
 	local con_id=$(jq '
 		.nodes['$1'] | first(recurse(.nodes[]?) | select(has("app_id"))).id
