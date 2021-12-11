@@ -19,6 +19,8 @@ IFS=$'\n' read -r -d '' tab_con focused total < \
 	| ($tc | .nodes | length) as $cnt
 	| "\($tc)\n\($fc)\n\($cnt)"')
 
+(( total == 0 )) && exit 0
+
 focus () {
 	local con_id=$(jq '
 	.nodes['$1']
