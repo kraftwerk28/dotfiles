@@ -5,11 +5,11 @@ fi
 
 IFS=$'\n' read -r -d '' tab_con focused total < \
 	<(swaymsg -t get_tree | jq -r '
-	last(
+	first(
 		recurse(.nodes[]?)
 		| select(
-			.layout == "tabbed" and (recurse(.nodes[]?)
-			| select(.focused))
+			.layout == "tabbed"
+			and (recurse(.nodes[]?) | select(.focused))
 		)
 	) as $tc
 	| ($tc
@@ -21,7 +21,8 @@ IFS=$'\n' read -r -d '' tab_con focused total < \
 
 focus () {
 	local con_id=$(jq '
-		.nodes['$1'] | first(recurse(.nodes[]?) | select(has("app_id"))).id
+	.nodes['$1']
+	| last(recurse(.focus[0] as $f | .nodes[] | select(.id == $f)).id)
 	' <<< "$tab_con")
 	swaymsg "[con_id=${con_id}] focus"
 }

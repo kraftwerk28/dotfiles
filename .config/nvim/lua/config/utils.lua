@@ -50,28 +50,28 @@ end
 
 -- Convert UTF-8 hex code to character
 function M.u(code)
-  if type(code) == 'string' then
-    code = tonumber('0x' .. code)
+  if type(code) == "string" then
+    code = tonumber("0x" .. code)
   end
   local c = string.char
   if code <= 0x7f then
     return c(code)
   end
-  local t = {}
+  local x, y, z, w = "", "", "", ""
   if code <= 0x07ff then
-    t[1] = c(bit.bor(0xc0, bit.rshift(code, 6)))
-    t[2] = c(bit.bor(0x80, bit.band(code, 0x3f)))
+    x = c(bit.bor(0xc0, bit.rshift(code, 6)))
+    y = c(bit.bor(0x80, bit.band(code, 0x3f)))
   elseif code <= 0xffff then
-    t[1] = c(bit.bor(0xe0, bit.rshift(code, 12)))
-    t[2] = c(bit.bor(0x80, bit.band(bit.rshift(code, 6), 0x3f)))
-    t[3] = c(bit.bor(0x80, bit.band(code, 0x3f)))
+    x = c(bit.bor(0xe0, bit.rshift(code, 12)))
+    y = c(bit.bor(0x80, bit.band(bit.rshift(code, 6), 0x3f)))
+    z = c(bit.bor(0x80, bit.band(code, 0x3f)))
   else
-    t[1] = c(bit.bor(0xf0, bit.rshift(code, 18)))
-    t[2] = c(bit.bor(0x80, bit.band(bit.rshift(code, 12), 0x3f)))
-    t[3] = c(bit.bor(0x80, bit.band(bit.rshift(code, 6), 0x3f)))
-    t[4] = c(bit.bor(0x80, bit.band(code, 0x3f)))
+    x = c(bit.bor(0xf0, bit.rshift(code, 18)))
+    y = c(bit.bor(0x80, bit.band(bit.rshift(code, 12), 0x3f)))
+    z = c(bit.bor(0x80, bit.band(bit.rshift(code, 6), 0x3f)))
+    w = c(bit.bor(0x80, bit.band(code, 0x3f)))
   end
-  return table.concat(t)
+  return x..y..z..w
 end
 
 function _G.dump(...)
@@ -191,6 +191,17 @@ do
       cursor_pos = cursor_pos2
       debounced()
     end
+  end
+end
+
+function M.format_code()
+  if
+    vim.tbl_contains(vim.g.force_neoformat_filetypes, vim.bo.filetype)
+    or vim.tbl_isempty(vim.lsp.buf_get_clients(0))
+  then
+    vim.cmd('Neoformat')
+  else
+    vim.lsp.buf.formatting()
   end
 end
 

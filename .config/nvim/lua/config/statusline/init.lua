@@ -7,6 +7,7 @@ local u = utils.u
 local sprintf = utils.sprintf
 local highlight = utils.highlight
 local component = stl.component
+local severity = vim.diagnostic.severity
 
 local mode_map -- mode labels & colors
 local cl -- colors
@@ -27,8 +28,8 @@ local icons = {
   line_num = u"e0a1",
 }
 
-local function lsp_count(kind, icon)
-  local n = vim.lsp.diagnostic.get_count(0, kind)
+local function lsp_count(severity, icon)
+  local n = #vim.diagnostic.get(0, {severity = severity})
   if n == 0 then
     return nil
   end
@@ -159,25 +160,25 @@ local lsp_conn = component {
 }
 
 local lsp_w = component {
-  function() return lsp_count("Warning", icons.lsp_warn) end,
+  function() return lsp_count(severity.WARNING, icons.lsp_warn) end,
   padding = 1,
   highlight = "StatusLineWarning",
 }
 
 local lsp_e = component {
-  function() return lsp_count("Error", icons.lsp_error) end,
+  function() return lsp_count(severity.ERROR, icons.lsp_error) end,
   padding = 1,
   highlight = "StatusLineError",
 }
 
 local lsp_h = component {
-  function() return lsp_count("Hint", icons.lsp_hint) end,
+  function() return lsp_count(severity.HINT, icons.lsp_hint) end,
   padding = 1,
   highlight = "StatusLineHint",
 }
 
 local lsp_i = component {
-  function() return lsp_count("Information", icons.lsp_information) end,
+  function() return lsp_count(severity.INFO, icons.lsp_information) end,
   padding = 1,
   highlight = "StatusLineInformation",
 }

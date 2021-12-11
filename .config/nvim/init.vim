@@ -322,6 +322,9 @@ vmap <silent> <Leader>pc <Leader>cc`<vU
 nmap <silent> <Leader>sc viw<Leader>sc
 vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
 
+" camelCase -> snake_case
+" TODO:
+
 " snake_case -> kebab-case
 " TODO: implement
 
@@ -351,7 +354,7 @@ nnoremap <silent> <C-P> :Telescope find_files<CR>
 nnoremap <silent> <Leader>rg :Telescope live_grep<CR>
 nnoremap <silent> <Leader>b :Telescope buffers<CR>
 nnoremap <silent> <C-B> :Telescope buffers<CR>
-nnoremap <silent> <Leader>ad :Telescope lsp_workspace_diagnostics<CR>
+nnoremap <silent> <Leader>ad :Telescope diagnostics<CR>
 
 " Git
 nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
@@ -377,6 +380,7 @@ nnoremap <silent> <Leader>qj :cnext<CR>
 nnoremap <silent> <Leader>qk :cprevious<CR>
 nnoremap <silent> <Leader>qc :cprevious<CR>
 
+" Control+Backspace erases a whole word
 inoremap <C-H> <C-W>
 
 " let s:pairs = ['{}', '()', '[]']
