@@ -173,9 +173,9 @@ bindsym {
 	XF86AudioNext         exec playerctl next
 	XF86AudioPrev         exec playerctl previous
 
-	Print                 exec grimshot --notify copy area
-	Shift+Print           exec grimshot --notify copy window
-	Control+Print         exec grimshot --notify copy screen
+	Print                 exec $script/screenshot.sh area
+	Shift+Print           exec $script/screenshot.sh window
+	Control+Print         exec $script/screenshot.sh screen
 }
 
 smart_borders on

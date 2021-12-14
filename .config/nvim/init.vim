@@ -246,10 +246,8 @@ endfunction
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
 if has("nvim")
-  nnoremap <silent> j gj
-  nnoremap <silent> k gk
-  nnoremap <silent> gj j
-  nnoremap <silent> gk k
+  nnoremap <expr> j v:count1 > 1 ? "j" : "gj"
+  nnoremap <expr> k v:count1 > 1 ? "k" : "gk"
 endif
 
 " Arrow movement mappings
@@ -381,7 +379,10 @@ nnoremap <silent> <Leader>qk :cprevious<CR>
 nnoremap <silent> <Leader>qc :cprevious<CR>
 
 " Control+Backspace erases a whole word
-inoremap <C-H> <C-W>
+imap <C-H> <C-W>
+
+" Ditto, in Telescope prompt
+autocmd FileType TelescopePrompt inoremap <C-W> <C-S-W>
 
 " let s:pairs = ['{}', '()', '[]']
 " function! s:autoPair()

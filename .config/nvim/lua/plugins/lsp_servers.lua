@@ -275,12 +275,18 @@ do
     lintStdin = true,
     lintFormats = {"%f:%l:%c: %m [%t%s/%s]"},
     lintIgnoreExitCode = true,
+    -- formatCommand = "eslint_d --fix",
   }
   local luacheck_config = {
     lintCommand = "luacheck - --no-color --no-self --globals vim",
     lintStdin = true,
     lintFormats = {"    %f:%l:%c: %m"},
     lintIgnoreExitCode = true,
+  }
+  -- TODO:
+  local python_config = {
+    formatCommand = "black --line-length 80 --stdin-filename ${INPUT} -",
+    formatStdin = true,
   }
   -- local svelte_check = {
   --   lintCommand = "./node_modules/.bin/svelte-check",
@@ -293,6 +299,7 @@ do
     javascriptreact = {eslint_config},
     lua             = {luacheck_config},
     -- svelte          = {svelte_check},
+    -- python = {python_config},
   }
   lsp_config.efm.setup {
     filetypes = vim.tbl_keys(languages),

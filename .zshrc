@@ -38,10 +38,10 @@ plug zsh-autosuggestions
 plug zsh-z
 plug zsh-vi-mode
 
-# export BASE16_THEME="default-dark"
+export BASE16_THEME="default-dark"
 # export BASE16_THEME="gruvbox-dark-hard"
 # export BASE16_THEME="woodland"
-export BASE16_THEME="eighties"
+# export BASE16_THEME="eighties"
 
 NOTIFY_COMMAND_COMPLETED_TRESHOLD=10
 

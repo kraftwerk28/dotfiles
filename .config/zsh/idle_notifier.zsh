@@ -19,7 +19,7 @@ walk_parent_pids() {
 
 is_shell_focused() {
 	local focused=$(swaymsg -t get_tree 2>/dev/null | jq -r '
-	recurse(.nodes[]?)
+	recurse(.nodes[]?, .floating_nodes[]?)
 	| select(.pid? as $p | ['$(walk_parent_pids)'] | index($p)).focused')
 	[[ $focused = "true" ]]
 }
