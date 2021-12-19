@@ -181,16 +181,18 @@ end
 function M.glob_exists(path) return fn.empty(fn.glob(path)) == 0 end
 
 do
-  local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
-  local cursor_pos = M.get_cursor_pos()
-  local debounced = M.debounce(show_diagnostics, 300)
+  -- TODO: open diagnostic on hover
+  -- local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
+  -- local cursor_pos = M.get_cursor_pos()
+  -- local debounced = M.debounce(show_diagnostics, 300)
   M.show_lsp_diagnostics = function()
-    local cursor_pos2 = M.get_cursor_pos()
-    -- TODO: doesn't work when both diagnostics and popup is shown
-    if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
-      cursor_pos = cursor_pos2
-      debounced()
-    end
+    vim.diagnostic.open_float({border = vim.g.floatwin_border})
+    -- local cursor_pos2 = M.get_cursor_pos()
+    -- -- TODO: doesn't work when both diagnostics and popup is shown
+    -- if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
+    --   cursor_pos = cursor_pos2
+    --   debounced()
+    -- end
   end
 end
 

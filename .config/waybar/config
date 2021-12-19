@@ -195,6 +195,10 @@
     "custom/mpris": {
         "exec": "waybar-mpris",
         "return-type": "json"
+    },
+    "custom/recording": {
+        "exec": "~/.config/waybar/wf-indicator.sh",
+        "return-type": "json"
     }
 }
 // vim: ft=jsonc: sw=4: et

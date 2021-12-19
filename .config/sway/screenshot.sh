@@ -1,10 +1,14 @@
 #!/bin/sh
 WHAT=${1:-output}
+if [[ $WHAT = "area" && $(pgrep slurp) ]]; then
+	exit 0
+fi
 img_name () {
 	echo "$HOME/Pictures/grimshot-$(date +"%x-%X").png"
 }
 fname=$(mktemp -u --suffix .png)
 grimshot save "$WHAT" "$fname" > /dev/null
+[[ $? == 1 ]] && exit 0 # Cancelled
 case $(swaynag \
 	-t warning \
 	-m "What to do with the screenshot?" \

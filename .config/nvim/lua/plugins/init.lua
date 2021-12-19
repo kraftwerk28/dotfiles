@@ -9,19 +9,14 @@ local function load(use)
 
   -- Themes
   use {"navarasu/onedark.nvim"}
-  use {
-    "npxbr/gruvbox.nvim",
-    requires = {"rktjmp/lush.nvim"},
-  }
+  use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   use {
     -- "~/projects/neovim/nvim-base16"
     "RRethy/nvim-base16"
   }
   use {"projekt0n/github-nvim-theme"}
-
   use {"kyazdani42/nvim-web-devicons"}
 
-  -- Tools
   use {
     "tpope/vim-surround",
     config = function()
@@ -68,6 +63,8 @@ local function load(use)
       vim.g.gitgutter_sign_removed  = gutter
     end,
   }
+
+  -- Still missing some features
   -- use {
   --   "TimUntersberger/neogit",
   --   requires = {"nvim-lua/plenary.nvim"},
@@ -137,7 +134,6 @@ local function load(use)
       vim.g.UltiSnipsJumpBackwardTrigger = "<C-K>"
     end,
   }
-
   use {
     "hrsh7th/nvim-cmp",
     requires = {
@@ -153,7 +149,6 @@ local function load(use)
     },
     config = function() require("plugins.cmp") end,
   }
-
   use {
     "kyazdani42/nvim-tree.lua",
     requires = {"kyazdani42/nvim-web-devicons", opt = true},
@@ -192,10 +187,12 @@ local function load(use)
         highlight_opened_files = true,
         auto_resize            = false,
         hijack_cursor          = true,
+        git = {
+          ignore = false,
+        },
       }
     end,
   }
-
   use {
     "sbdchd/neoformat",
     config = function()
@@ -208,9 +205,7 @@ local function load(use)
       vim.g.neoformat_run_all_formatters = 1
     end,
   }
-
   use {"equalsraf/neovim-gui-shim", opt = true}
-
   -- use {
   --   "ray-x/lsp_signature.nvim",
   --   config = function()
@@ -221,16 +216,13 @@ local function load(use)
   --     }
   --   end,
   -- }
-
   use {
     "junegunn/vim-easy-align",
     config = function()
       vim.api.nvim_set_keymap("v", "<Leader>ea", "<Plug>(EasyAlign)", {})
     end,
   }
-
   use {"digitaltoad/vim-pug"}
-
   use {"mfussenegger/nvim-dap"}
 end
 

@@ -374,9 +374,10 @@ tnoremap tl <C-\><C-N>tl
 tnoremap <ScrollWheelUp> <C-X><C-Y>
 tnoremap <ScrollWheelDown> <C-X><C-E>
 
-nnoremap <silent> <Leader>qj :cnext<CR>
-nnoremap <silent> <Leader>qk :cprevious<CR>
-nnoremap <silent> <Leader>qc :cprevious<CR>
+autocmd FileType qf
+      \ nnoremap <buffer><silent> <Leader>qj :cnext<CR> |
+      \ nnoremap <buffer><silent> <Leader>qk :cprevious<CR> |
+      \ nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
 
 " Control+Backspace erases a whole word
 imap <C-H> <C-W>

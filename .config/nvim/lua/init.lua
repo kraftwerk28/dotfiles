@@ -59,6 +59,10 @@ function M.yank_highlight()
   end
 end
 
+function M.show_line_diagnostics()
+  vim.diagnostic.open_float({border = vim.g.floatwin_border})
+end
+
 -- Below are just a messy experiments that doesn't make any sense
 utils.nnoremap("<Leader>ar", function()
   local _, line_num, col_num, _, _ = unpack(fn.getcurpos())
@@ -103,7 +107,6 @@ utils.nnoremap("<Leader>ar", function()
   --     print(child:range())
   --   end
   -- end
-
 end)
 
 local highlight_groups = {}

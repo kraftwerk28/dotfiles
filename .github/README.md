@@ -8,6 +8,7 @@
   - [Mako config](../.config/mako/config)
   - [Neovim config](../.config/nvim)
   - [OpenTTD config](../.openttd/openttd.cfg)
+  - [Pipewire & ALSA configs](../.config/pipewire)
   - [Sway configs](../.config/sway)
   - [Systemd user units](../.config/systemd/user)
   - [Tilix config](../.config/tilix/tilix.dconf) (obsolette)
