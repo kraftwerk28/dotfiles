@@ -7,7 +7,8 @@ set $cursor_theme "Adwaita"
 set $script $HOME/.config/sway
 set $border_width 3
 
-output * bg "$HOME/Pictures/pink_floyd_wish_you_were_here.png" fit "#0f1111"
+# output * bg "$HOME/Pictures/pink_floyd_wish_you_were_here.png" fit "#0f1111"
+output * bg "$HOME/Pictures/pink_floyd_animals.png" fit
 
 floating_modifier $mod
 
@@ -210,14 +211,15 @@ exec {
 
 # Autostart apps
 # TODO: consider NO_AUTOSTART variable
-exec [[ -z $NO_AUTOSTART ]] && \
-	swaymsg "                \
-	workspace 5,             \
-	layout tabbed,           \
-	exec kotatogram-desktop, \
-	exec discord,            \
-	exec mattermost-desktop, \
-	exec thunderbird         "
+exec [[ -z $NO_AUTOSTART ]] &&                \
+	swaymsg "                                 \
+	workspace 5,                              \
+	layout tabbed,                            \
+	exec kotatogram-desktop,                  \
+	exec discord,                             \
+	exec mattermost-desktop,                  \
+	exec foot weechat -r '/connect myserver', \
+	exec thunderbird                          "
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
@@ -239,6 +241,8 @@ bindsym $mod+F3 \
 	workspace 7, \
 	layout splith, \
 	exec "swaymsg exec pw-jack guitarix; sleep 1; swaymsg exec helvum"
+
+focus_on_window_activation smart
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \

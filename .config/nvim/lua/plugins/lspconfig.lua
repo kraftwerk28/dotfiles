@@ -108,5 +108,5 @@ local function setup_formatting()
 end
 
 setup_diagnostics()
-setup_formatting()
+-- setup_formatting()
 setup_hover()

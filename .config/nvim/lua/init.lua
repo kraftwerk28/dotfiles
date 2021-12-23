@@ -1,7 +1,6 @@
 local M = {}
 
 local utils = require("config.utils")
-local formatting = require("config.formatting")
 local highlight = require("vim.highlight")
 local load = utils.load
 local fn, api = vim.fn, vim.api
@@ -29,7 +28,9 @@ if fn.has("unix") == 1 then
   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 end
 
-M.format_code = formatting.format_code
+M.format_code = function()
+  vim.lsp.buf.formatting()
+end
 
 function M.save_session()
   vim.cmd("mks")

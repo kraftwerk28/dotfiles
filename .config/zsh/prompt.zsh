@@ -36,5 +36,4 @@ zle-keymap-select () {
 
 zle -N zle-keymap-select
 zle -N edit-command-line
-# add-zsh-hook precmd refresh_prompt
 zvm_after_select_vi_mode_commands+=(refresh_prompt)

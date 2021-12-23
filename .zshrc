@@ -2,6 +2,11 @@
 
 fpath+=("$HOME/.zfunc")
 
+if [[ $TERM == "foot" ]]; then
+	# Disable reverse wrapping mode
+	echo -n "\e[?45l"
+fi
+
 requires () {
 	local banner="$(basename "$0"): please install:"
 	local failed=false
@@ -11,8 +16,8 @@ requires () {
 			failed=true
 		fi
 	done
-	if $failed; then
-		echo "$banner" 1>&2
+	if [[ $failed == true && $REQUIRES_VERBOSE == 1 ]]; then
+		echo "$banner" >&2
 		return 1
 	fi
 }
@@ -38,10 +43,10 @@ plug zsh-autosuggestions
 plug zsh-z
 plug zsh-vi-mode
 
-export BASE16_THEME="default-dark"
+# export BASE16_THEME="default-dark"
 # export BASE16_THEME="gruvbox-dark-hard"
 # export BASE16_THEME="woodland"
-# export BASE16_THEME="eighties"
+export BASE16_THEME="eighties"
 
 NOTIFY_COMMAND_COMPLETED_TRESHOLD=10
 
@@ -110,9 +115,8 @@ if [[ -d "/usr/share/nvm" ]]; then
 fi
 
 dump_cwd () {
-	dir=$(pwd)
-	if [[ $dir != "$HOME" ]]; then
-		echo $dir > /tmp/last_pwd
+	if [[ $PWD != $HOME ]]; then
+		echo $PWD > /tmp/last_pwd
 	fi
 }
 

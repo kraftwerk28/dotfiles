@@ -12,9 +12,10 @@ grimshot save "$WHAT" "$fname" > /dev/null
 case $(swaynag \
 	-t warning \
 	-m "What to do with the screenshot?" \
-	-Z "Copy" "echo copy" \
-	-Z "Save" "echo save" \
-	-Z "Edit" "echo edit")
+	-y overlay \
+	-Z Copy "echo copy" \
+	-Z Save "echo save" \
+	-Z Edit "echo edit")
 in
 	copy)
 		wl-copy -n < "$fname"

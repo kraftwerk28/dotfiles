@@ -31,20 +31,16 @@ o.foldopen = {"hor", "mark", "percent", "quickfix", "search", "tag", "undo"}
 o.exrc = true
 o.secure = true
 
--- Vertical insert / cmdline-insert:
--- o.guicursor = "n-sm-c:block,i-ci:ver25,r-cr-o-v:hor20"
--- o.guicursor = "n-sm-c-i-ci:block,r-cr-o-v:hor20"
--- o.guicursor = "n-c-sm:block,i-ci:ver25,r-cr-o-v:hor20,a:blinkon1"
+-- default:
+-- o.guicursor = {"n-v-c-sm:block", "i-ci-ve:ver25", "r-cr-o:hor20"}
+
 o.guicursor = {"a:blinkon1"}
-
--- guicursor = {
---   ["n-sm-c"] = "block",
---   ["i-ci"] = "ver25",
---   ["r-cr-o-v"] = "hor20",
--- },
--- Block insert / cmdline-insert:
-
--- guicursor = "n-sm-c:block,r-cr-o-v:hor20",
+-- o.guicursor = {
+--   "a:blinkon1",
+--   "n-sm:block",
+--   "i-c-ci-ve:ver25",
+--   "r-cr-o-v:hor50",
+-- }
 
 o.splitbelow = true
 o.splitright = true

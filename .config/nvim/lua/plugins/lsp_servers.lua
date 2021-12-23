@@ -13,6 +13,11 @@ lsp_config.tsserver.setup {
     ".git",
     fn.getcwd()
   ),
+  on_attach = function(client)
+    -- Formatting is handled by efm
+    client.resolved_capabilities.document_formatting = false
+    client.resolved_capabilities.document_range_formatting = false
+  end,
 }
 
 lsp_config.graphql.setup {
@@ -35,28 +40,34 @@ lsp_config.denols.setup {
 --   root_dir = root_pattern('.flowconfig'),
 -- }
 
+-- local pyls_settings = {
+--   plugins = {
+--     jedi_completion = {enabled = true},
+--     jedi_hover = {enabled = true},
+--     jedi_references = {enabled = true},
+--     jedi_signature_help = {enabled = true},
+--     jedi_symbols = {enabled = true, all_scopes = true},
+--     yapf = {enabled = false},
+--     pylint = {enabled = false},
+--     pycodestyle = {enabled = false},
+--     pydocstyle = {enabled = false},
+--     mccabe = {enabled = false},
+--     preload = {enabled = false},
+--     rope_completion = {enabled = false},
+--     pyflakes = {enabled = false},
+--   },
+-- }
+
+-- lsp_config.pyre.setup {
+--   root_dir = root_pattern(
+--     ".git",
+--     fn.getcwd()
+--   ),
+-- }
 lsp_config.pylsp.setup {
   cmd = {"pyls"},
   filetypes = {"python"},
-  -- settings = {
-  --   pyls = {
-  --     plugins = {
-  --       jedi_completion = {enabled = true},
-  --       jedi_hover = {enabled = true},
-  --       jedi_references = {enabled = true},
-  --       jedi_signature_help = {enabled = true},
-  --       jedi_symbols = {enabled = true, all_scopes = true},
-  --       yapf = {enabled = false},
-  --       pylint = {enabled = false},
-  --       pycodestyle = {enabled = false},
-  --       pydocstyle = {enabled = false},
-  --       mccabe = {enabled = false},
-  --       preload = {enabled = false},
-  --       rope_completion = {enabled = false},
-  --       pyflakes = {enabled = false},
-  --     },
-  --   },
-  -- },
+  -- settings = {pyls = pyls_settings},
 }
 
 -- lsp_config.pyright.setup {}
@@ -275,7 +286,9 @@ do
     lintStdin = true,
     lintFormats = {"%f:%l:%c: %m [%t%s/%s]"},
     lintIgnoreExitCode = true,
-    -- formatCommand = "eslint_d --fix",
+    formatCommand =
+      "eslint_d --fix-to-stdout --stdin --stdin-filename ${INPUT}",
+    formatStdin = true,
   }
   local luacheck_config = {
     lintCommand = "luacheck - --no-color --no-self --globals vim",
@@ -283,14 +296,9 @@ do
     lintFormats = {"    %f:%l:%c: %m"},
     lintIgnoreExitCode = true,
   }
-  -- TODO:
-  local python_config = {
-    formatCommand = "black --line-length 80 --stdin-filename ${INPUT} -",
-    formatStdin = true,
-  }
-  -- local svelte_check = {
-  --   lintCommand = "./node_modules/.bin/svelte-check",
-  --   lintStdin = false,
+  -- local python_config = {
+  --   formatCommand = "black --line-length 80 --stdin-filename ${INPUT} -",
+  --   formatStdin = true,
   -- }
   local languages = {
     javascript      = {eslint_config},
@@ -298,11 +306,16 @@ do
     typescriptreact = {eslint_config},
     javascriptreact = {eslint_config},
     lua             = {luacheck_config},
-    -- svelte          = {svelte_check},
-    -- python = {python_config},
   }
   lsp_config.efm.setup {
     filetypes = vim.tbl_keys(languages),
+    init_options = {
+      documentFormatting = true,
+      -- hover = false,
+      -- documentSymbol = false,
+      -- codeAction = false,
+      -- completion = false,
+    },
     settings = {
       languages = languages,
     },
