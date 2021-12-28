@@ -183,6 +183,7 @@ default_border pixel $border_width
 
 focus_wrapping yes
 focus_follows_mouse no
+mouse_resizing_mode eight_direction
 
 # client.focused_inactive "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 # client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
@@ -191,7 +192,7 @@ focus_follows_mouse no
 # client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 
 client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
-client.focused_inactive  "#333333" "#222222" "#888888" "#292d2e" "#222222"
+client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
 client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
 font Iosevka Term Extended Bold 11
@@ -210,16 +211,13 @@ exec {
 }
 
 # Autostart apps
-# TODO: consider NO_AUTOSTART variable
-exec [[ -z $NO_AUTOSTART ]] &&                \
-	swaymsg "                                 \
-	workspace 5,                              \
-	layout tabbed,                            \
-	exec kotatogram-desktop,                  \
-	exec discord,                             \
-	exec mattermost-desktop,                  \
-	exec foot weechat -r '/connect myserver', \
-	exec thunderbird                          "
+exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "\
+	workspace 5,                            \
+	layout tabbed,                          \
+	exec kotatogram-desktop,                \
+	exec mattermost-desktop,                \
+	exec foot weechat,                      \
+	exec thunderbird                        "
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
@@ -255,5 +253,3 @@ focus_on_window_activation smart
 # 	--inside-color "000000"
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
-
-# vim: ft=config

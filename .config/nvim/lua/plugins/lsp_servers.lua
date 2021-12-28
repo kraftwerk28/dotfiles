@@ -144,7 +144,7 @@ lsp_config.hls.setup {
 
 do
   local clangdcmd = {"clangd", "--background-index"}
-  if fn.empty(fn.glob("compile_commands.json")) == 1 then
+  if fn.glob("build/compile_commands.json") ~= "" then
     vim.tbl_extend("force", clangdcmd, {"--compile-commands-dir", "build"})
   end
 
@@ -193,10 +193,15 @@ end
 lsp_config.yamlls.setup {
   settings = {
     yaml = {
+      format = {
+        enable = true,
+      },
       schemaStore = {
         enable = true,
         url = "https://www.schemastore.org/json",
       },
+      hover = true,
+      completion = true,
     },
   },
 }

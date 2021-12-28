@@ -50,10 +50,6 @@ function M.restore_session()
   end
 end
 
-function M.show_line_diagnostics()
-  vim.lsp.diagnostic.show_line_diagnostics({ border = vim.g.floatwin_border })
-end
-
 function M.yank_highlight()
   if highlight ~= nil then
     highlight.on_yank {timeout = 1000}
@@ -61,7 +57,7 @@ function M.yank_highlight()
 end
 
 function M.show_line_diagnostics()
-  vim.diagnostic.open_float({border = vim.g.floatwin_border})
+  vim.diagnostic.open_float {border = vim.g.floatwin_border}
 end
 
 -- Below are just a messy experiments that doesn't make any sense

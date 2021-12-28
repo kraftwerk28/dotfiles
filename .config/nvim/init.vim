@@ -382,8 +382,12 @@ autocmd FileType qf
 " Control+Backspace erases a whole word
 imap <C-H> <C-W>
 
+vnoremap / "vy/<C-R>v<CR>
+
 " Ditto, in Telescope prompt
 autocmd FileType TelescopePrompt inoremap <C-W> <C-S-W>
+
+nnoremap <Leader>m :Man 
 
 " let s:pairs = ['{}', '()', '[]']
 " function! s:autoPair()

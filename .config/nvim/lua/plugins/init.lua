@@ -97,6 +97,7 @@ local function load(use)
   use {"chr4/nginx.vim"}
   use {"tpope/vim-markdown"}
   use {"adimit/prolog.vim"}
+  use {"terminalnode/sway-vim-syntax"}
 
   use {
     -- "~/projects/neovim/nvim-treesitter",
@@ -121,19 +122,6 @@ local function load(use)
     end,
   }
 
-  -- do
-  --   vim.fn.system([[python -c "import pynvim"]])
-  --   local disable = vim.v.shell_error ~= 0
-  --   if disable then print("Please install python's pynvim package") end
-  -- end
-  use {
-    "SirVer/ultisnips",
-    config = function()
-      vim.g.UltiSnipsExpandTrigger       = "<F10>"
-      vim.g.UltiSnipsJumpForwardTrigger  = "<C-J>"
-      vim.g.UltiSnipsJumpBackwardTrigger = "<C-K>"
-    end,
-  }
   use {
     "hrsh7th/nvim-cmp",
     requires = {
@@ -141,11 +129,11 @@ local function load(use)
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "onsails/lspkind-nvim",
-      "quangnguyen30192/cmp-nvim-ultisnips",
-      "SirVer/ultisnips",
-      "honza/vim-snippets",
       -- "L3MON4D3/LuaSnip",
       -- "saadparwaiz1/cmp_luasnip",
+      "dcampos/nvim-snippy",
+      "honza/vim-snippets",
+      "dcampos/cmp-snippy",
     },
     config = function() require("plugins.cmp") end,
   }

@@ -15,7 +15,8 @@ case $(swaynag \
 	-y overlay \
 	-Z Copy "echo copy" \
 	-Z Save "echo save" \
-	-Z Edit "echo edit")
+	-Z Edit "echo edit" \
+	--no-dock)
 in
 	copy)
 		wl-copy -n < "$fname"
