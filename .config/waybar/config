@@ -179,8 +179,7 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "sway/language": {
-        "format": "{short}",
-        "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
+        "format": "{short}"
     },
     "custom/openweather": {
         "exec": "~/.config/waybar/weather.py",

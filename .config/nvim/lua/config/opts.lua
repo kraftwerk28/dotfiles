@@ -34,13 +34,13 @@ o.secure = true
 -- default:
 -- o.guicursor = {"n-v-c-sm:block", "i-ci-ve:ver25", "r-cr-o:hor20"}
 
-o.guicursor = {"a:blinkon1"}
--- o.guicursor = {
---   "a:blinkon1",
---   "n-sm:block",
---   "i-c-ci-ve:ver25",
---   "r-cr-o-v:hor50",
--- }
+-- o.guicursor = {"a:blinkon1"}
+o.guicursor = {
+  "a:blinkon1",
+  "n-sm:block",
+  "i-c-ci-ve:ver25",
+  "r-cr-o-v:hor50",
+}
 
 o.splitbelow = true
 o.splitright = true
@@ -51,6 +51,7 @@ o.undofile = true
 o.backupcopy = "yes"
 o.inccommand = "nosplit"
 o.title = true
+
 -- o.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"
 
 o.shortmess:append("c")

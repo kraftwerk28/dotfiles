@@ -62,6 +62,7 @@ setopt \
 	appendhistory autocd auto_pushd pushd_ignore_dups pushdminus \
 	extended_history hist_expire_dups_first hist_ignore_dups hist_ignore_space \
 	hist_verify share_history nonomatch
+unsetopt PROMPT_SP
 # FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
@@ -129,7 +130,8 @@ c () {
 }
 
 set_window_title () {
-	echo -n -e "\e]0;$(basename $SHELL) (${PWD/$HOME/"~"})\007"
+	local title="$(basename $SHELL) (${PWD/$HOME/"~"})"
+	echo -n -e "\e]2;${title}\e\\"
 }
 
 add-zsh-hook precmd dump_cwd
@@ -139,3 +141,6 @@ noprompt () {
 	add-zsh-hook -d precmd refresh_prompt
 	PS1="$ "
 }
+
+# fn () notify-send "columns: $COLUMNS"
+# trap fn WINCH

@@ -159,6 +159,20 @@ augroup END
 
 autocmd FocusGained * silent !pwd > /tmp/last_pwd
 
+" Autoclose tag
+autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
+
+autocmd FileType qf
+      \ nnoremap <buffer><silent> <Leader>qj :cnext<CR> |
+      \ nnoremap <buffer><silent> <Leader>qk :cprevious<CR> |
+      \ nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
+
+" Erase word with <C-W> in floating window, like before
+autocmd FileType TelescopePrompt inoremap <C-W> <C-S-W>
+
+" `i3config` doesn't work properly for sway's config
+autocmd BufNewFile,BufRead *config/sway/config set filetype=
+
 "------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
 let s:filetype_executables = {'javascript': 'node'}
@@ -361,9 +375,6 @@ nnoremap <silent> <Leader>gp :Git --paginate push origin HEAD<CR>
 nnoremap <silent> <Leader>m[ :diffget //2<CR>
 nnoremap <silent> <Leader>m] :diffget //3<CR>
 
-" Autoclose tag
-autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
-
 " tnoremap <Esc> <C-\><C-N>
 " Window/tab switch when in terminal-insert
 tnoremap <C-W>j <C-\><C-N><C-W>j
@@ -374,20 +385,12 @@ tnoremap tl <C-\><C-N>tl
 tnoremap <ScrollWheelUp> <C-X><C-Y>
 tnoremap <ScrollWheelDown> <C-X><C-E>
 
-autocmd FileType qf
-      \ nnoremap <buffer><silent> <Leader>qj :cnext<CR> |
-      \ nnoremap <buffer><silent> <Leader>qk :cprevious<CR> |
-      \ nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
-
 " Control+Backspace erases a whole word
 imap <C-H> <C-W>
 
 vnoremap / "vy/<C-R>v<CR>
 
-" Ditto, in Telescope prompt
-autocmd FileType TelescopePrompt inoremap <C-W> <C-S-W>
-
-nnoremap <Leader>m :Man 
+nnoremap <Leader>m :vertical Man 
 
 " let s:pairs = ['{}', '()', '[]']
 " function! s:autoPair()

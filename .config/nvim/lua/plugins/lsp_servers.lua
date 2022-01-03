@@ -13,6 +13,12 @@ lsp_config.tsserver.setup {
     ".git",
     fn.getcwd()
   ),
+  initializationOptions = {
+    preferences = {
+      importModuleSpecifierPreference = "relative",
+      importModuleSpecifier = "relative",
+    },
+  },
   on_attach = function(client)
     -- Formatting is handled by efm
     client.resolved_capabilities.document_formatting = false
@@ -312,18 +318,18 @@ do
     javascriptreact = {eslint_config},
     lua             = {luacheck_config},
   }
-  lsp_config.efm.setup {
-    filetypes = vim.tbl_keys(languages),
-    init_options = {
-      documentFormatting = true,
-      -- hover = false,
-      -- documentSymbol = false,
-      -- codeAction = false,
-      -- completion = false,
-    },
-    settings = {
-      languages = languages,
-    },
-    root_dir = root_pattern(".eslintrc*", "init.lua", ".git"),
-  }
+  -- lsp_config.efm.setup {
+  --   filetypes = vim.tbl_keys(languages),
+  --   init_options = {
+  --     documentFormatting = true,
+  --     hover = false,
+  --     documentSymbol = false,
+  --     codeAction = false,
+  --     completion = false,
+  --   },
+  --   settings = {
+  --     languages = languages,
+  --   },
+  --   root_dir = root_pattern(".eslintrc*", "init.lua", ".git"),
+  -- }
 end

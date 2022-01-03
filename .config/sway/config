@@ -19,17 +19,18 @@ bindsym --to-code {
 	# $mod+f2 exec alacritty \
 	# 	--working-directory $HOME/.config/sway \
 	# 	--command $SHELL -ic "nvim config"
+	# Foot is my friend now.
 	$mod+Return exec foot
 	$mod+Shift+Return exec foot \
 		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	$mod+f2 exec foot \
 		--working-directory $HOME/.config/sway \
-		$SHELL -ic "nvim config"
-	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
-	XF86Search exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun
-
-	$mod+Shift+q kill
-	$mod+Shift+c reload
+		$SHELL -i -c "nvim config"
+	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
+	# based on this variable
+	$mod+p \
+		exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun, \
+		input type:keyboard xkb_switch_layout 0
 
 	$mod+$left  focus left
 	$mod+$down  focus down
@@ -61,7 +62,19 @@ bindsym --to-code {
 	$mod+Control+Down  exec $script/push-window.sh bottom
 	$mod+Control+Left  exec $script/push-window.sh left
 
+	$mod+s layout stacking
+	$mod+w layout tabbed
+	$mod+e layout toggle split
+
+	$mod+Shift+q kill
+	$mod+Shift+c reload
 	$mod+c move position center
+	$mod+b splith
+	$mod+v splitv
+	$mod+f fullscreen
+	$mod+Shift+f floating toggle
+	$mod+a focus parent
+	$mod+Control+a focus child
 }
 
 bindsym {
@@ -97,20 +110,6 @@ bindsym {
 	$mod+Shift+9 move container to workspace number 9
 	$mod+Shift+0 move container to workspace number 10
 
-	$mod+b splith
-	$mod+v splitv
-
-	$mod+s layout stacking
-	$mod+w layout tabbed
-	$mod+e layout toggle split
-
-	--release $mod+f fullscreen
-
-	$mod+Shift+f floating toggle
-
-	$mod+a focus parent
-	$mod+Control+a focus child
-
 	$mod+Shift+minus move scratchpad
 	$mod+minus scratchpad show
 }
@@ -121,7 +120,6 @@ mode "resize" bindsym {
 	$down  resize grow   height 20px
 	$up    resize shrink height 20px
 	$right resize grow   width  20px
-
 	# Return to default mode
 	Return mode "default"
 	Escape mode "default"
@@ -192,7 +190,7 @@ mouse_resizing_mode eight_direction
 # client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 
 client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
-client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
+client.focused_inactive  "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
 client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
 font Iosevka Term Extended Bold 11
@@ -240,7 +238,7 @@ bindsym $mod+F3 \
 	layout splith, \
 	exec "swaymsg exec pw-jack guitarix; sleep 1; swaymsg exec helvum"
 
-focus_on_window_activation smart
+focus_on_window_activation urgent
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \

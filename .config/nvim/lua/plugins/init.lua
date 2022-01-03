@@ -54,13 +54,13 @@ local function load(use)
 
   use {"tpope/vim-fugitive"}
   use {
-    "airblade/vim-gitgutter",
+    "lewis6991/gitsigns.nvim",
+    requires = {"nvim-lua/plenary.nvim"},
     config = function()
-      local u = require("config.utils").u
-      local gutter = u"2595"
-      vim.g.gitgutter_sign_added    = gutter
-      vim.g.gitgutter_sign_modified = gutter
-      vim.g.gitgutter_sign_removed  = gutter
+      require("gitsigns").setup {
+        keymaps = {
+        },
+      }
     end,
   }
 
@@ -97,7 +97,7 @@ local function load(use)
   use {"chr4/nginx.vim"}
   use {"tpope/vim-markdown"}
   use {"adimit/prolog.vim"}
-  use {"terminalnode/sway-vim-syntax"}
+  use {"digitaltoad/vim-pug"}
 
   use {
     -- "~/projects/neovim/nvim-treesitter",
@@ -198,8 +198,13 @@ local function load(use)
       vim.api.nvim_set_keymap("v", "<Leader>ea", "<Plug>(EasyAlign)", {})
     end,
   }
-  use {"digitaltoad/vim-pug"}
   use {"mfussenegger/nvim-dap"}
+
+  use {
+    "jose-elias-alvarez/null-ls.nvim",
+    requires = {"nvim-lua/plenary.nvim"},
+    config = function() require("plugins.null_ls") end,
+  }
 end
 
 local function bootstrap()
