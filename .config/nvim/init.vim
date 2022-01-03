@@ -75,8 +75,8 @@ endfunction
 
 augroup line_numbers
   autocmd!
-  autocmd BufEnter,Winenter,FocusGained * call s:setNumber(1)
-  autocmd BufLeave,Winleave,FocusLost * call s:setNumber(0)
+  autocmd BufEnter,WinEnter,FocusGained * call s:setNumber(1)
+  autocmd BufLeave,WinLeave,FocusLost * call s:setNumber(0)
 augroup END
 
 "----------------------------- Mapping functions ------------------------------"
