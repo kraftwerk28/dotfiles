@@ -134,6 +134,7 @@ local function load(use)
       "dcampos/nvim-snippy",
       "honza/vim-snippets",
       "dcampos/cmp-snippy",
+      "hrsh7th/cmp-calc",
     },
     config = function() require("plugins.cmp") end,
   }

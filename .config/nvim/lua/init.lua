@@ -61,4 +61,18 @@ function M.show_line_diagnostics()
   }
 end
 
+do
+  local no_line_number_ft = {"help", "man", "list", "TelescopePrompt"}
+  local f = utils.defglobalfn(function(relative)
+    if
+      fn.win_gettype() == "popup"
+      or vim.tbl_contains(no_line_number_ft, vim.bo.filetype)
+    then return end
+    vim.wo.number = true
+    vim.wo.relativenumber = relative
+  end)
+  vim.cmd(("autocmd BufEnter,WinEnter,FocusGained * lua %s(true)"):format(f))
+  vim.cmd(("autocmd BufLeave,WinLeave,FocusLost * lua %s(false)"):format(f))
+end
+
 return M

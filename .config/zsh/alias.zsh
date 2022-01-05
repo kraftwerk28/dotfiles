@@ -41,10 +41,10 @@ alias gst="git status"
 alias gco="git checkout"
 alias gcb="git checkout -b"
 
-alias ...="../.."
-alias ....="../../.."
-alias .....="../../../.."
-alias ......="../../../../.."
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
 
 mkcd () {
 	if [[ -z "$1" ]]; then

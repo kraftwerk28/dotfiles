@@ -21,16 +21,11 @@ cmp.setup {
   },
   sources = cmp.config.sources {
     {name = "nvim_lsp"},
-    {
-      name = "buffer",
-      -- opts = {
-      --   keyword_pattern =
-      --     [[\%(-\?\d\+\%(\.\d\+\)\?\|\h\w*\%([\-.]\w*\)*\|[а-яА-ЯеёЕЁ]*\)]]
-      -- },
-    },
+    {name = "buffer"},
     {name = "path"},
     -- {name = "luasnip"},
     {name = "snippy"},
+    {name = "calc"},
   },
   documentation = {
     border = vim.g.floatwin_border,

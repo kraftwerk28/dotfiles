@@ -3,7 +3,7 @@ set $left  h
 set $down  j
 set $up    k
 set $right l
-set $cursor_theme "Adwaita"
+set $cursor_theme "breeze_cursors"
 set $script $HOME/.config/sway
 set $border_width 3
 
@@ -75,6 +75,7 @@ bindsym --to-code {
 	$mod+Shift+f floating toggle
 	$mod+a focus parent
 	$mod+Control+a focus child
+	$mod+Shift+a focus mode_toggle
 }
 
 bindsym {
@@ -86,7 +87,7 @@ bindsym {
 		-m "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
 		-b "Yes, exit sway" \
 		"swaymsg exit"
-#
+
 	$mod+1 workspace number 1
 	$mod+2 workspace number 2
 	$mod+3 workspace number 3

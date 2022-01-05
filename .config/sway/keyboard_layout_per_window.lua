@@ -16,24 +16,35 @@ local function on_focus(ipc, event)
     windows[prev_focused] = input_layouting
   end
   local cached_layouts = windows[con_id]
+  local commands = {}
   if cached_layouts ~= nil then
     for input_id, layout_index in pairs(cached_layouts) do
       if layout_index ~= input_layouting[input_id] then
-        ipc:command(
-          ([[input "%s" xkb_switch_layout %d]]):format(input_id, layout_index)
+        table.insert(
+          commands,
+          ('input "%s" xkb_switch_layout %d'):format(input_id, layout_index)
         )
       end
     end
   else
     for _, input in ipairs(inputs) do
       if input.xkb_active_layout_index ~= 0 then
-        ipc:command(
-          ([[input "%s" xkb_switch_layout %d]]):format(input.identifier, 0)
+        table.insert(
+          commands,
+          ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)
         )
       end
     end
   end
+  if #commands > 0 then
+    ipc:command(table.concat(commands, ", "))
+  end
   prev_focused = con_id
+end
+
+-- TODO: utilize this function
+local function focus_back_and_forth(ipc)
+  ipc:command(("[con_id=%d] focus"):format(prev_focused))
 end
 
 local function on_close(_, event)
@@ -43,7 +54,7 @@ end
 local function on_workspace_init(ipc, _)
   for _, input in ipairs(ipc:get_keyboard_inputs()) do
     ipc:command(
-      ([[input "%s" xkb_switch_layout %d]]):format(input.identifier, 0)
+      ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)
     )
   end
 end

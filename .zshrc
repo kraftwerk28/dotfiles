@@ -144,3 +144,7 @@ noprompt () {
 
 # fn () notify-send "columns: $COLUMNS"
 # trap fn WINCH
+
+# Make `null` values bold red instead of dim dark in jq colored output
+# https://github.com/stedolan/jq/issues/1972#issuecomment-721667377
+export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'

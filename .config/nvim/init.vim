@@ -59,25 +59,25 @@ augroup END
 "                \ | endif
 
 "------------------------- Line numbers configuration -------------------------"
-let g:no_line_numbers_ft = ['help', 'list', 'clap_input', 'TelescopePrompt']
+" let g:no_line_numbers_ft = ['help', 'list', 'clap_input', 'TelescopePrompt', 'man']
 
-function! s:setNumber(alsoRelative)
-  if win_gettype() == 'popup' || index(g:no_line_numbers_ft, &filetype) > -1
-    return
-  endif
-  setlocal number
-  if a:alsoRelative
-    setlocal relativenumber
-  else
-    setlocal norelativenumber
-  endif
-endfunction
+" function! s:setNumber(alsoRelative)
+"   if win_gettype() == 'popup' || index(g:no_line_numbers_ft, &filetype) > -1
+"     return
+"   endif
+"   setlocal number
+"   if a:alsoRelative
+"     setlocal relativenumber
+"   else
+"     setlocal norelativenumber
+"   endif
+" endfunction
 
-augroup line_numbers
-  autocmd!
-  autocmd BufEnter,WinEnter,FocusGained * call s:setNumber(1)
-  autocmd BufLeave,WinLeave,FocusLost * call s:setNumber(0)
-augroup END
+" augroup line_numbers
+"   autocmd!
+"   autocmd BufEnter,WinEnter,FocusGained * call s:setNumber(1)
+"   autocmd BufLeave,WinLeave,FocusLost * call s:setNumber(0)
+" augroup END
 
 "----------------------------- Mapping functions ------------------------------"
 function RevStr(str)
