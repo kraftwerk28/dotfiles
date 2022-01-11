@@ -2,10 +2,8 @@
 
 fpath+=("$HOME/.zfunc")
 
-if [[ $TERM == "foot" ]]; then
-	# Disable reverse wrapping mode
-	echo -n "\e[?45l"
-fi
+# Disable reverse wrapping mode in foot terminal
+echo -n "\e[?45l"
 
 requires () {
 	local banner="$(basename "$0"): please install:"

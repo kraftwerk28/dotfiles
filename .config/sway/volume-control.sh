@@ -6,23 +6,24 @@ LIMIT=150
 STEP=5
 
 report () {
+	local v=$(( $1 > 100 ? 100 : $1 ))
 	notify-send \
 		-h "string:x-canonical-private-synchronous:volume" \
-		-h "int:value:${1}" \
+		-h "int:value:${v}" \
 		-t 2000 \
 		"墳 ${1}%"
 }
 
 adjust () {
 	if [[ "$1" = "up" ]]; then
-		(( l += (l % $STEP) ? ($STEP - l % $STEP) : $STEP ))
-		(( r += (r % $STEP) ? ($STEP - r % $STEP) : $STEP ))
+		(( l += (l % STEP) ? (STEP - l % STEP) : STEP ))
+		(( r += (r % STEP) ? (STEP - r % STEP) : STEP ))
 	elif [[ "$1" = "down" ]]; then
-		(( l -= (l % $STEP) ? (l % $STEP) : $STEP ))
-		(( r -= (r % $STEP) ? (r % $STEP) : $STEP ))
+		(( l -= (l % STEP) ? (l % STEP) : STEP ))
+		(( r -= (r % STEP) ? (r % STEP) : STEP ))
 	fi
-	(( l > $LIMIT )) && (( l = $LIMIT ))
-	(( r > $LIMIT )) && (( r = $LIMIT ))
+	(( l > LIMIT )) && (( l = LIMIT ))
+	(( r > LIMIT )) && (( r = LIMIT ))
 }
 
 if [[ $1 == "toggle-mic" ]]; then
@@ -45,7 +46,8 @@ if [[ $1 == "unmute-up" ]]; then
 	exit 0
 fi
 
-read l r < <(pactl get-sink-volume $SINK | grep -oP "[0-9]+(?=%)" | xargs echo)
+read -r l r \
+	< <(pactl get-sink-volume $SINK | grep -oP "[0-9]+(?=%)" | xargs echo)
 adjust "$1"
-report "$(( ($l + $r) / 2 ))"
+report "$(( (l + r) / 2 ))"
 pactl set-sink-volume $SINK "$l%" "$r%"

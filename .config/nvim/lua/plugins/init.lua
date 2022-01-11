@@ -8,13 +8,11 @@ local function load(use)
   }
 
   -- Themes
-  use {"navarasu/onedark.nvim"}
-  use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
-  use {
-    -- "~/projects/neovim/nvim-base16"
-    "RRethy/nvim-base16"
-  }
-  use {"projekt0n/github-nvim-theme"}
+  -- use {"navarasu/onedark.nvim"}
+  -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+  -- use {"~/projects/neovim/nvim-base16"}
+  use {"RRethy/nvim-base16"}
+  -- use {"projekt0n/github-nvim-theme"}
   use {"kyazdani42/nvim-web-devicons"}
 
   use {
@@ -49,8 +47,6 @@ local function load(use)
     },
     config = function() require("plugins.telescope") end,
   }
-
-  use {"wellle/targets.vim"} -- More useful text objects (e.g. function arguments)
 
   use {"tpope/vim-fugitive"}
   use {
@@ -102,7 +98,10 @@ local function load(use)
   use {
     -- "~/projects/neovim/nvim-treesitter",
     "nvim-treesitter/nvim-treesitter",
-    requires = {"nvim-treesitter/playground"},
+    requires = {
+      "nvim-treesitter/playground",
+      "nvim-treesitter/nvim-treesitter-textobjects",
+    },
     run = function() vim.cmd("TSUpdate") end,
     config = function() require("plugins.tree_sitter") end,
   }
@@ -205,6 +204,27 @@ local function load(use)
     "jose-elias-alvarez/null-ls.nvim",
     requires = {"nvim-lua/plenary.nvim"},
     config = function() require("plugins.null_ls") end,
+  }
+
+  use {
+    "nvim-neorg/neorg",
+    requires = {"nvim-lua/plenary.nvim"},
+    after = {"nvim-treesitter"},
+    config = function()
+      require("neorg").setup {
+        load = {
+          ["core.defaults"] = {},
+          ["core.norg.concealer"] = {},
+          ["core.norg.dirman"] = {
+            config = {
+              workspaces = {
+                my_workspace = "~/notes"
+              },
+            },
+          }
+        },
+      }
+    end,
   }
 end
 

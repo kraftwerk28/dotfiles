@@ -4,6 +4,8 @@ local root_pattern = require("lspconfig.util").root_pattern
 local lsp, fn = vim.lsp, vim.fn
 local expand = fn.expand
 
+lsp_config.als.setup {}
+
 lsp_config.tsserver.setup {
   cmd = {"typescript-language-server", "--stdio"},
   root_dir = root_pattern(
@@ -15,12 +17,13 @@ lsp_config.tsserver.setup {
   ),
   initializationOptions = {
     preferences = {
-      importModuleSpecifierPreference = "relative",
-      importModuleSpecifier = "relative",
+      -- TODO: doesn't work
+      -- importModuleSpecifierPreference = "relative",
+      -- importModuleSpecifier = "relative",
     },
   },
   on_attach = function(client)
-    -- Formatting is handled by efm
+    -- Formatting is handled by null-ls
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
   end,
@@ -70,6 +73,7 @@ lsp_config.denols.setup {
 --     fn.getcwd()
 --   ),
 -- }
+
 lsp_config.pylsp.setup {
   cmd = {"pyls"},
   filetypes = {"python"},
@@ -103,21 +107,6 @@ lsp_config.pylsp.setup {
 --     },
 --   },
 -- }
-
--- require('lspconfig/configs').lua_emmy = {
---     default_config = {
---         cmd = {
---             'java', '-cp',
---             '/usr/lib/lua-emmy-language-server/EmmyLua-LS-all.jar',
---             'com.tang.vscode.MainKt',
---         },
---         filetypes = {'lua'},
---         root_dir = root_pattern(fn.getcwd()),
---         settings = {},
---     },
--- }
-
--- lsp_config.lua_emmy.setup {}
 
 do
   local cpb = lsp.protocol.make_client_capabilities()
@@ -153,7 +142,8 @@ do
   if fn.glob("build/compile_commands.json") ~= "" then
     vim.tbl_extend("force", clangdcmd, {"--compile-commands-dir", "build"})
   end
-
+  local capabilities = lsp.protocol.make_client_capabilities()
+  capabilities.offsetEncoding = {"utf-16"}
   lsp_config.clangd.setup {
     cmd = clangdcmd,
     filetypes = {"c", "cpp", "objc", "objcpp"},
@@ -163,6 +153,7 @@ do
       ".git",
       fn.getcwd()
     ),
+    capabilities = capabilities,
   }
 end
 

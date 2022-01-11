@@ -10,7 +10,7 @@ o.smartindent = true
 o.list = true
 o.listchars = {tab = "» ", trail = "·"}
 -- o.listchars = {tab = "⇥ ", trail = "·"}
-o.cursorline = false
+o.cursorline = true
 o.colorcolumn = {80, 120}
 o.mouse = "a"
 o.clipboard = "unnamedplus"
@@ -27,11 +27,13 @@ o.autowrite = true
 o.autowriteall = true
 o.foldlevel = 99
 o.foldmethod = "indent"
+-- o.foldexpr = "nvim_treesitter#foldexpr()"
+-- o.foldmethod = "expr"
 o.foldopen = {"hor", "mark", "percent", "quickfix", "search", "tag", "undo"}
 o.exrc = true
 o.secure = true
 
--- default:
+-- default 'guicursor':
 -- o.guicursor = {"n-v-c-sm:block", "i-ci-ve:ver25", "r-cr-o:hor20"}
 
 -- o.guicursor = {"a:blinkon1"}

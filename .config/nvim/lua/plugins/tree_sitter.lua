@@ -29,6 +29,10 @@ local enabled_linux = {
   "typescript",
   -- "yaml",
   -- "haskell",
+
+  "norg",
+  "norg_meta",
+  "norg_table",
 }
 
 local enabled_windows = {
@@ -39,17 +43,38 @@ local enabled_windows = {
 }
 
 local ensure_installed
-
 if vim.fn.has("unix") == 1 then
   ensure_installed = enabled_linux
 elseif vim.fn.has("win64") == 1 then
   ensure_installed = enabled_windows
-else
-  error("tree_sitter.lua: Unsupported OS")
 end
 
 local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
-parser_configs.bash.used_by = {"zsh", "PKGBUILD"}
+
+-- parser_configs.bash.used_by = {"zsh", "PKGBUILD"}
+
+-- Neorg parsers
+parser_configs.norg = {
+  install_info = {
+    url = "https://github.com/nvim-neorg/tree-sitter-norg",
+    files = {"src/parser.c", "src/scanner.cc"},
+    branch = "main"
+  },
+}
+parser_configs.norg_meta = {
+  install_info = {
+    url = "https://github.com/nvim-neorg/tree-sitter-norg-meta",
+    files = {"src/parser.c"},
+    branch = "main"
+  },
+}
+parser_configs.norg_table = {
+  install_info = {
+    url = "https://github.com/nvim-neorg/tree-sitter-norg-table",
+    files = {"src/parser.c"},
+    branch = "main"
+  },
+}
 
 require("nvim-treesitter.configs").setup {
   ensure_installed = ensure_installed,
@@ -70,4 +95,14 @@ require("nvim-treesitter.configs").setup {
     },
   },
   -- indent = {enable = true},
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+      },
+    },
+  },
 }

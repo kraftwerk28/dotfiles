@@ -23,7 +23,7 @@ IFS=$'\n' read -r -d '' tab_con focused total < \
 
 focus () {
 	local con_id=$(jq '
-	.nodes['$1']
+	.nodes['"$1"']
 	| last(recurse(.focus[0] as $f | .nodes[] | select(.id == $f)).id)
 	' <<< "$tab_con")
 	swaymsg "[con_id=${con_id}] focus"
