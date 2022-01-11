@@ -9,7 +9,7 @@ local highlight = utils.highlight
 local component = stl.component
 local severity = vim.diagnostic.severity
 
-local mode_map -- mode labels & colors
+local mode_labels -- mode labels & colors
 local cl -- colors
 
 local icons = {
@@ -48,9 +48,16 @@ end
 local mode = component {
   function()
     local mode = vim.fn.mode()
-    local mode_label, mode_color = unpack(
-      mode_map[mode] or {"NORMAL", cl.normal}
-    )
+    local mode_label, mode_color
+    for _, mm in ipairs(mode_labels) do
+      if vim.tbl_contains(mm[1], mode) then
+        mode_label, mode_color = mm[2], mm[3]
+        break
+      end
+    end
+    -- local mode_label, mode_color = unpack(
+    --   mode_map[mode] or {"NORMAL", cl.normal}
+    -- )
     highlight {
       "StatusLine",
       guifg = cl.fg,
@@ -211,18 +218,18 @@ local secondary_filename = component {'%f', highlight = "StatusLine"}
 
 return function()
   cl = colors.from_base16(vim.g.base16_theme)
-  mode_map = {
-    ['n'] = {"NORMAL", cl.normal},
-    ['i'] = {"INSERT", cl.insert},
-    ['R'] = {"REPLACE", cl.replace},
-    ['v'] = {"VISUAL", cl.visual},
-    ['V'] = {"V-LINE", cl.visual},
-    ['c'] = {"COMMAND", cl.command},
-    ['s'] = {"SELECT", cl.visual},
-    ['S'] = {"S-LINE", cl.visual},
-    ['t'] = {"TERMINAL", cl.terminal},
-    [''] = {"V-BLOCK", cl.visual},
-    [''] = {"S-BLOCK", cl.visual},
+  mode_labels = {
+    {{"n"},  "NORMAL", cl.normal},
+    {{"i"},  "INSERT", cl.insert},
+    {{"R"},  "REPLACE", cl.replace},
+    {{"v"},  "VISUAL", cl.visual},
+    {{"V"},  "V-LINE", cl.visual},
+    {{"c"},  "COMMAND", cl.command},
+    {{"s"},  "SELECT", cl.visual},
+    {{"S"},  "S-LINE", cl.visual},
+    {{"t"},  "TERMINAL", cl.terminal},
+    {{""}, "V-BLOCK", cl.visual},
+    {{""}, "S-BLOCK", cl.visual},
   }
 
   stl.setup {

@@ -6,6 +6,7 @@ set background=dark
 syntax enable
 syntax on
 
+runtime opts.vim
 lua init = require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
@@ -162,10 +163,9 @@ autocmd FocusGained * silent !pwd > /tmp/last_pwd
 " Autoclose tag
 autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
 
-autocmd FileType qf
-      \ nnoremap <buffer><silent> <Leader>qj :cnext<CR> |
-      \ nnoremap <buffer><silent> <Leader>qk :cprevious<CR> |
-      \ nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
+nnoremap <buffer><silent> <Leader>qj :cnext<CR>
+nnoremap <buffer><silent> <Leader>qk :cprevious<CR>
+nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
 
 " Erase word with <C-W> in floating window, like before
 autocmd FileType TelescopePrompt inoremap <C-W> <C-S-W>
@@ -390,7 +390,24 @@ imap <C-H> <C-W>
 
 vnoremap / "vy/<C-R>v<CR>
 
-nnoremap <Leader>m :vertical Man 
+" nnoremap <Leader>ma :vertical Man 
+
+let $MANWIDTH = 80
+" Move the window to the right and set it's appropriate width
+autocmd BufWinEnter * if index(["man", "help"], &ft) >= 0 |
+                    \   wincmd L |
+                    \   execute "82wincmd |" |
+                    \ endif
+
+nnoremap <Leader>ma :Man 
+nnoremap <Leader>he :help 
+
+" Do not pollute register on paste
+xnoremap p "_dP
+xnoremap P "_dhP
+
+" inoremap <C-BS> <C-W>
+" inoremap <C-S-BS> <C-O>diW
 
 " let s:pairs = ['{}', '()', '[]']
 " function! s:autoPair()

@@ -13,7 +13,7 @@ vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
 
 load("config.theme")
 load("config.mappings")
-load("config.opts")
+-- load("config.opts")
 load("plugins")
 load("config.tabline")
 load("config.statusline")
@@ -27,7 +27,7 @@ load("config.filetypes")
 --   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 -- end
 
-function M.format_code()
+function M.format_code(lorem, ipsum, dolor, sit, amet)
   vim.lsp.buf.formatting()
 end
 

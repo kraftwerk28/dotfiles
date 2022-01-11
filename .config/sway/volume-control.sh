@@ -6,14 +6,14 @@ LIMIT=150
 STEP=5
 
 report () {
+	local v=$(( $1 > 100 ? 100 : $1 ))
 	notify-send \
 		-h "string:x-canonical-private-synchronous:volume" \
-		-h "int:value:${1}" \
+		-h "int:value:${v}" \
 		-t 2000 \
 		"墳 ${1}%"
 }
 
-read l r < <(pactl get-sink-volume $SINK | grep -oP "[0-9]+(?=%)" | xargs echo)
 
 case $1 in
     up)   if [ $l < $LIMIT -a $r < $LIMIT ]; then
@@ -45,4 +45,3 @@ case $1 in
           exit 0
           ;;
 esac
-
