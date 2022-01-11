@@ -13,39 +13,36 @@ report () {
 		"墳 ${1}%"
 }
 
-adjust () {
-	if [[ "$1" = "up" ]]; then
-		(( l += (l % $STEP) ? ($STEP - l % $STEP) : $STEP ))
-		(( r += (r % $STEP) ? ($STEP - r % $STEP) : $STEP ))
-	elif [[ "$1" = "down" ]]; then
-		(( l -= (l % $STEP) ? (l % $STEP) : $STEP ))
-		(( r -= (r % $STEP) ? (r % $STEP) : $STEP ))
-	fi
-	(( l > $LIMIT )) && (( l = $LIMIT ))
-	(( r > $LIMIT )) && (( r = $LIMIT ))
-}
-
-if [[ $1 == "toggle-mic" ]]; then
-	pactl set-source-mute $SOURCE toggle
-	exit 0
-fi
-
-if [[ $1 == "toggle" ]]; then
-	pactl set-sink-mute $SINK toggle
-	exit 0
-fi
-
-if [[ $1 == "unmute-down" ]]; then
-	pactl set-source-mute $SOURCE 0
-	exit 0
-fi
-
-if [[ $1 == "unmute-up" ]]; then
-	pactl set-source-mute $SOURCE 1
-	exit 0
-fi
-
 read l r < <(pactl get-sink-volume $SINK | grep -oP "[0-9]+(?=%)" | xargs echo)
-adjust "$1"
-report "$(( ($l + $r) / 2 ))"
-pactl set-sink-volume $SINK "$l%" "$r%"
+
+case $1 in
+    up)   if [ $l < $LIMIT -a $r < $LIMIT ]; then
+              pactl set-sink-volume $SINK +$STEP%
+              read l r < <(pactl get-sink-volume $SINK | grep -oP "[0-9]+(?=%)" | xargs echo)
+              report "$(( ($l + $r) / 2 ))"
+          fi
+          ;;
+    down) if [ $l < $LIMIT -a $r < $LIMIT ]; then
+              pactl set-sink-volume $SINK -$STEP%
+              read l r < <(pactl get-sink-volume $SINK | grep -oP "[0-9]+(?=%)" | xargs echo)
+              report "$(( ($l + $r) / 2 ))"
+          fi
+          ;;
+    toggle-mic)
+          pactl set-source-mute $SOURCE toggle
+          exit 0
+          ;;
+    toggle)
+          pactl set-sink-mute $SINK toggle
+          exit 0
+          ;;
+    unmute-down)
+          pactl set-source-mute $SOURCE 0
+          exit 0
+          ;;
+    unmute-up)
+          pactl set-source-mute $SOURCE 1
+          exit 0
+          ;;
+esac
+
