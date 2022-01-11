@@ -1,9 +1,10 @@
 #!/bin/bash
 
 report () {
+	value=$(brightnessctl set "$1" | grep -oP "\d+(?=%)")
 	notify-send \
 		-h "string:x-canonical-private-synchronous:backlight" \
-		-h "int:value:$(brightnessctl set "$1" | grep -oP "\d+(?=%)")" \
+		-h "int:value:$value" \
 		-t 2000 \
 		" ${p}%"
 }
