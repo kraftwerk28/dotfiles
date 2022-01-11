@@ -406,6 +406,8 @@ nnoremap <Leader>he :help
 xnoremap p "_dP
 xnoremap P "_dhP
 
+" autocmd CmdwinEnter * noremap <buffer> <CR> <CR>q:
+
 " inoremap <C-BS> <C-W>
 " inoremap <C-S-BS> <C-O>diW
 

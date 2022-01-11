@@ -86,7 +86,7 @@ local function load(use)
   use {"chrisbra/Colorizer"}
   use {"mattn/emmet-vim"}
 
-  -- Missing languages in tree-sitter
+  -- Missing / not ready to use languages in tree-sitter
   use {"neovimhaskell/haskell-vim"}
   use {"editorconfig/editorconfig-vim"}
   use {"elixir-editors/vim-elixir"}
