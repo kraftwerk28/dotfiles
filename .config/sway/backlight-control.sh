@@ -1,27 +1,21 @@
 #!/bin/bash
 
-percentage () {
-	brightnessctl info | grep -oP "\d+(?=%)"
-}
-
 report () {
-	local p=$(percentage)
+	value=$(brightnessctl set "$1" | grep -oP "\d+(?=%)")
 	notify-send \
 		-h "string:x-canonical-private-synchronous:backlight" \
-		-h "int:value:${p}" \
+		-h "int:value:$value" \
 		-t 2000 \
 		" ${p}%"
 }
 
 case ${1:-up} in
 	up)
-		brightnessctl set "+5%" > /dev/null
-		report
+		report "5%+"
 		;;
 	down)
-		if (( $(percentage) > 5 )); then
-			brightnessctl set "5%-" > /dev/null
-			report
+		if (( $(brightnessctl info | grep -oP "\d+(?=%)") > 5 )); then
+            report "5%-"
 		fi
 		;;
 esac

@@ -29,15 +29,12 @@ focus () {
 	swaymsg "[con_id=${con_id}] focus"
 }
 
-if [[ $1 == next ]]; then
-	(( focused = (focused + 1) % total ))
-	focus "$focused"
-elif [[ $1 == prev ]]; then
-	(( focused = (focused == 0) ? total - 1 : focused - 1 ))
-	focus "$focused"
-else
-	if (( $1 < 1 || $1 > total )); then
-		exit 1
-	fi
-	focus "$(( $1 - 1 ))"
-fi
+case "$1" in
+    next)   focus "$(( focused = (focused + 1) % total ))"                      ;;
+    prev)   focus "$(( focused = (focused == 0) ? total - 1 : focused - 1 ))"   ;;
+    *)      if (( $1 < 1 || $1 > total )); then
+                exit 1
+            fi
+            focus "$(( $1 - 1 ))"
+            ;;
+esac

@@ -3,33 +3,23 @@ WHAT=${1:-output}
 if [[ $WHAT = "area" && $(pgrep slurp) ]]; then
 	exit 0
 fi
-img_name () {
-	echo "$HOME/Pictures/grimshot-$(date +"%x-%X").png"
-}
+img_name="$HOME/Pictures/grimshot-$(date +"%x-%X").png"
 fname=$(mktemp -u --suffix .png)
-grimshot save "$WHAT" "$fname" > /dev/null
-[[ $? == 1 ]] && exit 0 # Cancelled
-case $(swaynag \
-	-t warning \
-	-m "What to do with the screenshot?" \
-	-y overlay \
-	-Z Copy "echo copy" \
-	-Z Save "echo save" \
-	-Z Edit "echo edit" \
-	--no-dock)
-in
-	copy)
-		wl-copy -n < "$fname"
-		notify-send "Screenshot copied to clipboard"
-		;;
-	save)
-		name="$(img_name)"
-		mv "$fname" "$name"
-		notify-send "Screenshot saved to $name"
-		;;
-	edit)
-		swappy -f "$fname"
-		;;
-	*)
-		exit 0;;
-esac
+
+copy="wl-copy -n < \"$fname\";\
+      notify-send \"Screenshot copied to clipboard\""
+save="mv \"$fname\" \"$img_name\";\
+      notify-send \"Screenshot saved to $img_name\""
+
+if grimshot save "$WHAT" "$fname"; then
+     swaynag 				     \
+        -t warning 			     \
+        -m "What to do with the screenshot?" \
+        -y overlay 			     \
+        -Z Copy "$copy" 		     \
+        -Z Save "$save" 		     \
+        -Z Edit "swappy -f "$fname"" 	     \
+        --no-dock
+else
+        exit 0
+fi
