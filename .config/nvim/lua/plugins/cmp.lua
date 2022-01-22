@@ -32,11 +32,13 @@ cmp.setup {
   },
   preselect = cmp.PreselectMode.None,
   formatting = {
-    format = function(_ --[[entry]], vim_item)
-      local icon = lspkind.presets.default[vim_item.kind]
-      vim_item.abbr = icon.." "..vim_item.abbr
-      return vim_item
-    end,
+    format = lspkind.cmp_format(),
+    -- format = function(entry, vim_item)
+    --   return lspkind.cmp_format()
+    --   -- local icon = lspkind.presets.default[vim_item.kind]
+    --   -- vim_item.abbr = icon.." "..vim_item.abbr
+    --   -- return vim_item
+    -- end,
   },
   enabled = function()
     return vim.bo.buftype ~= "prompt"
@@ -48,6 +50,9 @@ cmp.setup {
       snippy.expand_snippet(args.body)
       -- luasnip.lsp_expand(args.body)
     end,
+  },
+  experimental = {
+    native_menu = true,
   },
 }
 

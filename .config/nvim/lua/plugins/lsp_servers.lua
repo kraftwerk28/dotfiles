@@ -2,9 +2,17 @@ local lsp_config = require("lspconfig")
 local root_pattern = require("lspconfig.util").root_pattern
 
 local lsp, fn = vim.lsp, vim.fn
-local expand = fn.expand
 
 lsp_config.als.setup {}
+
+lsp_config.arduino_language_server.setup {
+  cmd = {
+    "arduino-language-server",
+    "-clangd", fn.exepath("clangd"),
+    "-cli", fn.exepath("arduino-cli"),
+    "-cli-config", fn.expand("~/.arduino15/arduino-cli.yaml"),
+  },
+}
 
 lsp_config.tsserver.setup {
   cmd = {"typescript-language-server", "--stdio"},
@@ -75,7 +83,6 @@ lsp_config.denols.setup {
 -- }
 
 lsp_config.pylsp.setup {
-  cmd = {"pyls"},
   filetypes = {"python"},
   -- settings = {pyls = pyls_settings},
 }
@@ -100,8 +107,8 @@ lsp_config.pylsp.setup {
 --       },
 --       workspace = {
 --         library = {
---           [expand("$VIMRUNTIME/lua")] = true,
---           [expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+--           [fn.expand("$VIMRUNTIME/lua")] = true,
+--           [fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
 --         },
 --       },
 --     },
@@ -214,14 +221,14 @@ lsp_config.solargraph.setup {}
 -- lsp_config.emmet_ls.setup {}
 
 if fn.has("win64") == 1 then
-  local jdt_base = expand(
+  local jdt_base = fn.expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )
-  local java_home = expand("C:/Program Files/Java/jdk-11.0.11")
+  local java_home = fn.expand("C:/Program Files/Java/jdk-11.0.11")
 
   lsp_config.jdtls.setup {
     cmd = {
-      expand(java_home .. "/bin/java.exe"),
+      fn.expand(java_home .. "/bin/java.exe"),
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
       "-Dosgi.bundles.defaultStartLevel=4",
       "-Declipse.product=org.eclipse.jdt.ls.core.product",
@@ -229,14 +236,14 @@ if fn.has("win64") == 1 then
       "-Dlog.level=ALL",
       "-Xmx1G",
       "-jar",
-      expand(
+      fn.expand(
         jdt_base ..
         "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
       ),
       "-configuration",
-      expand(jdt_base .. "/config_win"),
+      fn.expand(jdt_base .. "/config_win"),
       "-data",
-      expand("~/Projects/jdt-ls-data"),
+      fn.expand("~/Projects/jdt-ls-data"),
       "--add-modules=ALL-SYSTEM",
       "--add-opens", "java.base/java.util=ALL-UNNAMED",
       "--add-opens", "java.base/java.lang=ALL-UNNAMED",
@@ -249,7 +256,7 @@ if fn.has("win64") == 1 then
     cmd = {
       "java",
       "-jar",
-      expand(
+      fn.expand(
         "~/Projects/groovy-language-server" ..
         "/build/libs/groovy-language-server-all.jar"
       ),
@@ -258,10 +265,11 @@ if fn.has("win64") == 1 then
 end
 
 do
+  -- OBSOLETTE: kotlin is much better with Jetbrains software...
   local cmd, cmd_env
   if fn.has("win64") == 1 then
     cmd = {
-      expand(
+      fn.expand(
         "~/Projects/kotlin-language-server/server/build/install" ..
         "/server/bin/kotlin-language-server.bat"
       ),
@@ -280,47 +288,4 @@ do
     settings = {kotlin = {compiler = {jvm = {target = "1.8"}}}},
     root_dir = root_pattern("build.gradle", "build.gradle.kts"),
   }
-end
-
-do
-  local eslint_config = {
-    lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
-    lintStdin = true,
-    lintFormats = {"%f:%l:%c: %m [%t%s/%s]"},
-    lintIgnoreExitCode = true,
-    formatCommand =
-      "eslint_d --fix-to-stdout --stdin --stdin-filename ${INPUT}",
-    formatStdin = true,
-  }
-  local luacheck_config = {
-    lintCommand = "luacheck - --no-color --no-self --globals vim",
-    lintStdin = true,
-    lintFormats = {"    %f:%l:%c: %m"},
-    lintIgnoreExitCode = true,
-  }
-  -- local python_config = {
-  --   formatCommand = "black --line-length 80 --stdin-filename ${INPUT} -",
-  --   formatStdin = true,
-  -- }
-  local languages = {
-    javascript      = {eslint_config},
-    typescript      = {eslint_config},
-    typescriptreact = {eslint_config},
-    javascriptreact = {eslint_config},
-    lua             = {luacheck_config},
-  }
-  -- lsp_config.efm.setup {
-  --   filetypes = vim.tbl_keys(languages),
-  --   init_options = {
-  --     documentFormatting = true,
-  --     hover = false,
-  --     documentSymbol = false,
-  --     codeAction = false,
-  --     completion = false,
-  --   },
-  --   settings = {
-  --     languages = languages,
-  --   },
-  --   root_dir = root_pattern(".eslintrc*", "init.lua", ".git"),
-  -- }
 end

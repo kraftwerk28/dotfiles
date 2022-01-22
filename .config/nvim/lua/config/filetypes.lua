@@ -15,9 +15,9 @@ local additional_filetypes = {
 
 -- Set options for filetypes
 local ftconfig = {
-  {{"go", "make", "c", "cpp", "python"},
+  {{"go", "make", "c", "cpp"},
    {shiftwidth = 4, tabstop = 4, expandtab = false}},
-  {{"java", "kotlin", "groovy", "csharp", "cabal"},
+  {{"java", "kotlin", "groovy", "csharp", "cabal", "python"},
    {shiftwidth = 4, tabstop = 4, expandtab = true}},
   {{"javascript", "typescript", "javascriptreact",
     "typescriptreact", "svelte",
@@ -32,28 +32,26 @@ local ftconfig = {
 }
 
 return function()
-  vim.cmd[[augroup extra_filetypes]]
-  vim.cmd[[autocmd!]]
+  vim.cmd "augroup extra_filetypes"
+  vim.cmd "autocmd!"
   for ft, patterns in pairs(additional_filetypes) do
-    vim.cmd(([[autocmd BufNewFile,BufRead %s setlocal ft=%s]]):format(
-      table.concat(patterns, ","),
-      ft
-    ))
+    local p = table.concat(patterns, ",")
+    vim.cmd(("autocmd BufNewFile,BufRead %s setlocal ft=%s"):format(p, ft))
   end
-  vim.cmd[[augroup END]]
+  vim.cmd "augroup END"
 
-  vim.cmd[[augroup filetype_options]]
-  vim.cmd[[autocmd!]]
+  vim.cmd "augroup extra_filetypes"
+  vim.cmd "autocmd!"
   for _, cfg in ipairs(ftconfig) do
-    local filetypes, opts = cfg[1], cfg[2]
-    vim.cmd(([[autocmd Filetype %s call v:lua.%s()]]):format(
-      table.concat(filetypes, ","),
-      utils.defglobalfn(function()
-        for name, value in pairs(opts) do
-          vim.bo[name] = value
-        end
-      end)
-    ))
+    local filetypes, opts = unpack(cfg)
+    local fn = utils.defglobalfn(function()
+      for name, value in pairs(opts) do
+        print(("%s => %s"):format(name, value))
+        vim.bo[name] = value
+      end
+    end)
+    local p = table.concat(filetypes, ",")
+    vim.cmd(("autocmd Filetype %s call v:lua.%s()"):format(p , fn))
   end
-  vim.cmd[[augroup END]]
+  vim.cmd "augroup END"
 end

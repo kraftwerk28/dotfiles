@@ -91,13 +91,15 @@ local function load(use)
   use {"editorconfig/editorconfig-vim"}
   use {"elixir-editors/vim-elixir"}
   use {"chr4/nginx.vim"}
-  use {"tpope/vim-markdown"}
+  -- use {"tpope/vim-markdown"}
   use {"adimit/prolog.vim"}
   use {"digitaltoad/vim-pug"}
+  use {"bfrg/vim-jq"}
 
   use {
     -- "~/projects/neovim/nvim-treesitter",
     "nvim-treesitter/nvim-treesitter",
+    -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
     requires = {
       "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",

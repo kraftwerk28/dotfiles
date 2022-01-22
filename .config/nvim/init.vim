@@ -403,8 +403,23 @@ nnoremap <Leader>ma :Man
 nnoremap <Leader>he :help 
 
 " Do not pollute register on paste
-xnoremap p "_dP
-xnoremap P "_dhP
+xnoremap p <Cmd>let @a = @+ \|
+         \ execute ':normal! ' . v:count1 . 'p' \|
+         \ let @+ = @a<CR>
+xnoremap P <Cmd>let @a = @+ \|
+         \ execute ':normal! ' . v:count1 . 'p' \|
+         \ let @+ = @a<CR>
+
+" Because it is annoying
+nnoremap H <Nop>
+
+" Doesn't work with system buffer
+" xnoremap p p<Cmd>let @+ = @0<CR>
+" xnoremap P P<Cmd>let @+ = @0<CR>
+
+" xnoremap p <Cmd>let @a = @"<CR>"ap<Cmd>let @" = @a<CR>
+
+" xnoremap <silent> p p:call setreg('*', getreg('0'), getregtype('0'))<CR>
 
 " autocmd CmdwinEnter * noremap <buffer> <CR> <CR>q:
 

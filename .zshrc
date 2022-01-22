@@ -79,11 +79,14 @@ for cfg in ~/.config/zsh/*.zsh; do
 	source "$cfg"
 done
 
+# NB: Some of these are handled by zsh-vi-mode.
 # bindkey -v
 bindkey -r "^[OA"
 bindkey -r "^[OB"
 bindkey -M viins "^[[A" history-search-backward
 bindkey -M viins "^[[B" history-search-forward
+bindkey -M viins "^R" history-incremental-search-backward-end
+bindkey -M viins "^S" history-incremental-search-forward-end
 # bindkey "^[OA" up-line-or-history
 # bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept # Control+Space

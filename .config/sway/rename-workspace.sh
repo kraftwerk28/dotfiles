@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if ! name=$(rofi -dmenu \
-	-p "New workspace name" \
+	-p "Set workspace name" \
 	-theme-str "listview {enabled: false;}"); then
 	exit 1
 fi

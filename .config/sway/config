@@ -3,7 +3,7 @@ set $left  h
 set $down  j
 set $up    k
 set $right l
-set $cursor_theme "breeze_cursors"
+set $cursor_theme "Adwaita"
 set $script $HOME/.config/sway
 set $border_width 3
 
@@ -127,6 +127,7 @@ mode "resize" bindsym {
 }
 
 bar {
+	id bar-1
 	swaybar_command waybar
 	font Iosevka Term Extended Bold 11
 	position bottom
@@ -226,7 +227,7 @@ exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "\
 
 for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
 for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky enable
-for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="pavucontrol"] floating enable, opacity set 0.8
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="xeyes"] floating enable; sticky enable

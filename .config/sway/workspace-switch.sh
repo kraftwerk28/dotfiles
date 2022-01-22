@@ -1,15 +1,15 @@
 #!/bin/bash
 # Switch to N±1 workspace, where N is current workspace
-if [[ -z "$1" ]]; then
-	exit 1
-fi
-cur=$(swaymsg -rt get_workspaces | jq -r '.[] | select(.focused == true).num')
-if [[ $cur -le 1 ]] && [[ $1 = "prev" ]]; then
-	exit 0
-fi
-if [[ $1 = "next" ]]; then
-	((cur++))
-elif [[ $1 = "prev" ]]; then
-	((cur--))
-fi
-swaymsg "workspace ${cur}"
+cur=$(swaymsg -rt get_workspaces | jq -r '.[] | select(.focused).num')
+case "$1" in
+	prev)
+		if (( cur <= 1 )); then exit 0; fi
+		swaymsg "workspace $(( cur - 1 ))"
+		;;
+	next)
+		swaymsg "workspace $(( cur + 1 ))"
+		;;
+	*)
+		echo "Usage $0 prev|next" >&2
+		exit 1
+esac

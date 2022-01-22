@@ -29,6 +29,7 @@ local enabled_linux = {
   "typescript",
   -- "yaml",
   -- "haskell",
+  "markdown",
 
   "norg",
   "norg_meta",
@@ -99,6 +100,7 @@ require("nvim-treesitter.configs").setup {
     select = {
       enable = true,
       lookahead = true,
+      lookbehind = true,
       keymaps = {
         ["aa"] = "@parameter.outer",
         ["ia"] = "@parameter.inner",

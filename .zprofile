@@ -54,7 +54,12 @@ export PATH="$PATH:$HOME/.luarocks/bin/"
 export NODE_PATH="$HOME/.npm-global/lib/node_modules"
 # export PATH="$PATH:$HOME/.npm-global/bin"
 export NVS_HOME="$HOME/.nvs"
-export PATH="$HOME/.nvm/versions/node/v16.11.1/bin:$PATH"
+
+NVM_VERSIONS="$HOME/.nvm/versions/node"
+LATEST_NODE_VER="$(/bin/ls -v "$NVM_VERSIONS" 2>/dev/null | tail -1)"
+if [[ -n $LATEST_NODE_VER ]]; then
+	export PATH="${NVM_VERSIONS}/${LATEST_NODE_VER}/bin:${PATH}"
+fi
 
 # Haskell stuff
 export PATH="$PATH:$HOME/.cabal/bin/"
@@ -62,6 +67,6 @@ export PATH="$PATH:$HOME/.ghcup/bin/"
 
 export NVIM_LISTEN_PORT=6969
 
-if [[ -z "$DISPLAY" ]] && [[ $(tty) = "/dev/tty1" ]]; then
+if [[ -z "$DISPLAY" && $(tty) = "/dev/tty1" ]]; then
 	exec sway --unsupported-gpu
 fi

@@ -63,6 +63,7 @@ local iwyu_diagnostics = h.make_builtin {
   factory = h.generator_factory,
 }
 
+
 local iwyu_format = h.make_builtin {
   filetypes = {"cpp", "c"},
   method = m.internal.FORMATTING,
@@ -70,25 +71,55 @@ local iwyu_format = h.make_builtin {
     name = "iwyu-fix-includes",
     command = "sh",
     args = function(params)
-      local cmd =
+      return {
+        "-c",
         ("iwyu-tool -p %s/compile_commands.json %s | iwyu-fix-includes")
-          :format(params.root, params.bufname)
-      return {"-c", cmd}
+          :format(params.temp_path, params.root, params.temp_path),
+          -- :format(params.root, params.bufname),
+      }
     end,
     to_temp_file = true,
-    check_exit_code = {1},
-    -- from_stderr = true,
-    -- on_output = on_iwyu_output,
-    -- format = "line",
-    -- on_output = h.diagnostics.from_pattern(
-    --   [[(%d+):(%d+): (%w+): (.+)]],
-    --   {"row", "col", "severity", "message"}
-    -- ),
-    -- on_output = function()
-    --   return {title = "Fix includes", action = iwyu_fix_includes}
-    -- end,
+    from_temp_file = true,
+    check_exit_code = function() return true end,
   },
   factory = h.formatter_factory,
+}
+
+local hoogle_hover = h.make_builtin {
+  name = "hoogle-search",
+  method = m.internal.HOVER,
+  filetypes = {"haskell"},
+  generator = {
+    fn = function(_, done)
+      local cword = vim.fn.expand("<cword>")
+      require("plenary.curl").request({
+        url = "https://hoogle.haskell.org?mode=json&count=1&hoogle=" .. cword,
+        method = "get",
+        callback = vim.schedule_wrap(function(data)
+          if not (data and data.body) then
+            done {"no definition available"}
+            return
+          end
+          local ok, decoded = pcall(vim.json.decode, data.body)
+          if not ok or not (decoded and decoded[1]) then
+            done {"no definition available"}
+            return
+          end
+          local item = decoded[1]
+          local title = item.item
+            :gsub("</?span[^>]*>", "")
+            :gsub("</?b>", "**")
+            :gsub("</?s0>", "_")
+          local body = item.docs:gsub("</?%w+>", "")
+          local misc = ("**Module**: [%s](%s)")
+            :format(item.module.name, item.module.url)
+          local more = ("**More**: %s"):format(item.url)
+          done {title, body, misc, more}
+        end),
+      })
+    end,
+    async = true,
+  },
 }
 
 require("null-ls").setup {
@@ -114,6 +145,8 @@ require("null-ls").setup {
     b.code_actions.eslint_d,
     b.diagnostics.shellcheck,
     b.code_actions.shellcheck,
+    hoogle_hover,
+    -- iwyu_format,
   },
   root_dir = u.root_pattern(
     ".null-ls-root",
