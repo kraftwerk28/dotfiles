@@ -46,7 +46,6 @@ return function()
     local filetypes, opts = unpack(cfg)
     local fn = utils.defglobalfn(function()
       for name, value in pairs(opts) do
-        print(("%s => %s"):format(name, value))
         vim.bo[name] = value
       end
     end)

@@ -1,4 +1,4 @@
-local env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
+env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
 if [[ -x "$env_gen" ]]; then
 	while read -r line; do
 		eval export "$line"

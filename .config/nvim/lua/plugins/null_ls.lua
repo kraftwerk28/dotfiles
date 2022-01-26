@@ -145,8 +145,9 @@ require("null-ls").setup {
     b.code_actions.eslint_d,
     b.diagnostics.shellcheck,
     b.code_actions.shellcheck,
-    hoogle_hover,
+    -- hoogle_hover,
     -- iwyu_format,
+    -- b.diagnostics.tsc,
   },
   root_dir = u.root_pattern(
     ".null-ls-root",
