@@ -6,13 +6,16 @@ set background=dark
 syntax enable
 syntax on
 
-runtime opts.vim
+if has("win64")
+  set runtimepath+=$HOME/dotfiles/.config/nvim
+endif
+
+verbose runtime opts.vim
 lua init = require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
 
 function! s:restoreCursor()
-  echom 'Restoring cursor'
   let l:last_pos = line("'\"")
   if l:last_pos > 0 && l:last_pos <= line('$')
     exe 'normal! g`"'
