@@ -12,16 +12,16 @@ local function load(use)
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   -- use {"~/projects/neovim/nvim-base16"}
   use {"RRethy/nvim-base16"}
-  use {
-    disable = true,
-    "projekt0n/github-nvim-theme",
-    config = function()
-      require("github-theme").setup {
-        theme_style = "dark_default",
-        hide_inactive_statusline = false,
-      }
-    end,
-  }
+  -- use {
+  --   disable = true,
+  --   "projekt0n/github-nvim-theme",
+  --   config = function()
+  --     require("github-theme").setup {
+  --       theme_style = "dark_default",
+  --       hide_inactive_statusline = false,
+  --     }
+  --   end,
+  -- }
   use {"kyazdani42/nvim-web-devicons"}
 
   use {
@@ -51,7 +51,7 @@ local function load(use)
     -- "~/projects/neovim/telescope.nvim",
     requires = {
       "kyazdani42/nvim-web-devicons",
-      "nvim-lua/popup.nvim",
+      -- "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
     },
     config = function() require("plugins.telescope") end,

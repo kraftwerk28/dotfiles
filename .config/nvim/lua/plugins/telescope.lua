@@ -22,11 +22,13 @@ local u = require("config.utils").u
 telescope.setup {
   defaults = {
     sorting_strategy = "ascending",
-    prompt_prefix = u"f002" .. " ",
+    prompt_prefix = " ",
     layout_strategy = "horizontal",
-    layout_config = {prompt_position = "top"},
-    selection_caret = u"f054" .. ' ',
-    color_devicons = true,
+    layout_config = {
+      prompt_position = "top",
+    },
+    selection_caret = " ",
+    -- color_devicons = true,
     scroll_strategy = "cycle",
     mappings = {
       i = {
@@ -40,7 +42,7 @@ telescope.setup {
     find_files = {
       previewer = false,
       theme = "dropdown",
-      hidden = true,
+      hidden = true, -- show hidden files
     },
   },
 }
