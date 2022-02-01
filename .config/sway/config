@@ -208,7 +208,7 @@ exec_always sed -i -r \
 exec {
 	blueman-applet
 	kdeconnect-indicator
-	$script/keyboard_layout_per_window.lua
+	$script/enhance.lua
 }
 
 # Autostart apps
