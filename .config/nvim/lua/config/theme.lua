@@ -1,21 +1,17 @@
-local utils = require("config.utils")
+-- local utils = require("config.utils")
 
 vim.o.background = "dark"
 vim.g.base16_theme = vim.env.BASE16_THEME or "default-dark"
-
-local ok, base16 = pcall(require, "base16-colorscheme")
-
-local function set_base16_theme(name)
-  local colors = vim.deepcopy(base16.colorschemes[name])
-  -- colors.base08 = colors.base06
-  base16.setup(colors)
+do
+  local ok, base16 = pcall(require, "base16-colorscheme")
+  local function set_base16_theme(name)
+    local colors = vim.deepcopy(base16.colorschemes[name])
+    base16.setup(colors)
+  end
+  if not ok then print("base16-colorscheme is not installed")
+  else set_base16_theme(vim.g.base16_theme) end
 end
 
-if not ok then
-  print("base16-colorscheme is not installed")
-else
-  set_base16_theme(vim.g.base16_theme)
-end
 
 -- vim.g.ayucolor = "mirage"
 -- vim.g.onedark_style = "darker"

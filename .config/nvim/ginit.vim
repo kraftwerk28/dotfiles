@@ -1,6 +1,6 @@
 " Settings for neovim-qt
 packadd neovim-gui-shim
-GuiFont! JetBrainsMono NF:h12
+GuiFont! Iosevka Term:h13.5
 GuiTabline 0
 GuiPopupmenu 0
 nmap <silent> <C-/> gcc

@@ -219,25 +219,28 @@ local secondary_filename = component {'%f', highlight = "StatusLine"}
 return function()
   cl = colors.from_base16(vim.g.base16_theme)
   mode_labels = {
-    {{"n"},  "NORMAL", cl.normal},
-    {{"i"},  "INSERT", cl.insert},
-    {{"R"},  "REPLACE", cl.replace},
-    {{"v"},  "VISUAL", cl.visual},
-    {{"V"},  "V-LINE", cl.visual},
-    {{"c"},  "COMMAND", cl.command},
+    {{"n", "niI", "niR", "niV",	"nt"},  "NORMAL", cl.normal},
+    {{"no", "nov", "noV", "no"},  "OPERATOR", cl.normal},
+    {{"v", "vs"},  "VISUAL", cl.visual},
+    {{"V", "Vs"},  "V-LINE", cl.visual},
+    {{"", "s"}, "V-BLOCK", cl.visual},
     {{"s"},  "SELECT", cl.visual},
     {{"S"},  "S-LINE", cl.visual},
-    {{"t"},  "TERMINAL", cl.terminal},
-    {{""}, "V-BLOCK", cl.visual},
     {{""}, "S-BLOCK", cl.visual},
+    {{"i", "ic", "ix"},  "INSERT", cl.insert},
+    {{"R", "Rc", "Rx", "Rv", "Rvc", "Rvx"},  "REPLACE", cl.replace},
+    {{"c", "cv"},  "COMMAND", cl.command},
+    {{"t"},  "TERMINAL", cl.terminal},
+    {{"r"}, "HIT-ENTER", cl.terminal},
+    {{"rm"}, "MORE", cl.normal},
   }
 
   stl.setup {
     on_update = function()
       highlight {
         "StatusLineWarning",
-        guibg = cl.bg,
         override = "DiagnosticWarn",
+        guibg = cl.bg,
         gui = "bold",
       }
       highlight {

@@ -12,7 +12,16 @@ local function load(use)
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   -- use {"~/projects/neovim/nvim-base16"}
   use {"RRethy/nvim-base16"}
-  -- use {"projekt0n/github-nvim-theme"}
+  use {
+    disable = true,
+    "projekt0n/github-nvim-theme",
+    config = function()
+      require("github-theme").setup {
+        theme_style = "dark_default",
+        hide_inactive_statusline = false,
+      }
+    end,
+  }
   use {"kyazdani42/nvim-web-devicons"}
 
   use {

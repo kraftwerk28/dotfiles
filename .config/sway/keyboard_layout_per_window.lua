@@ -1,76 +1,98 @@
 #!/usr/bin/env luajit
-local i3 = require"i3ipc"
+local i3 = require("i3ipc")
 
-local prev_focused
+local current_focused, previous_focused
 -- { con_id => { input_identifier => layout_index } }
 local windows = {}
 
-local function on_focus(ipc, event)
-  local con_id = event.container.id
-  local inputs = ipc:get_keyboard_inputs()
-  local input_layouting = {}
+local ipc = i3.Connection:new { cmd = true }
+
+function ipc:get_keyboard_inputs()
+  local inputs, r = self:get_inputs(), {}
   for _, input in ipairs(inputs) do
-    input_layouting[input.identifier] = input.xkb_active_layout_index
+    if input.type == "keyboard" and input.xkb_active_layout_index ~= nil then
+      table.insert(r, input)
+    end
   end
-  if prev_focused ~= nil and prev_focused ~= con_id then
-    windows[prev_focused] = input_layouting
-  end
-  local cached_layouts = windows[con_id]
-  local commands = {}
-  if cached_layouts ~= nil then
-    for input_id, layout_index in pairs(cached_layouts) do
-      if layout_index ~= input_layouting[input_id] then
-        table.insert(
-          commands,
-          ('input "%s" xkb_switch_layout %d'):format(input_id, layout_index)
-        )
+  return r
+end
+
+ipc:main(function()
+  ipc.cmd:on("tab", function(_, arg)
+    local tabbed_node = ipc:get_tree():walk_focus(function(n)
+      return n.layout == "tabbed"
+    end)
+    if not tabbed_node then return end
+    local focused_index
+    for index, node in ipairs(tabbed_node.nodes) do
+      if node.id == tabbed_node.focus[1] then
+        focused_index = index
       end
     end
-  else
+    if arg == "prev" then
+      focused_index =
+        (focused_index - 2 + #tabbed_node.nodes) % #tabbed_node.nodes + 1
+    else
+      focused_index = focused_index % #tabbed_node.nodes + 1
+    end
+    local to_be_focused =
+      i3.wrap_node(tabbed_node.nodes[focused_index]):walk_focus()
+    ipc:command(("[con_id=%d] focus"):format(to_be_focused.id))
+  end)
+
+  ipc.cmd:on("focus_prev", function()
+    if not previous_focused then return end
+    ipc:command(("[con_id=%d] focus"):format(previous_focused))
+  end)
+
+  ipc:on("window::focus", function (ipc, event)
+    previous_focused = current_focused
+    local con_id = event.container.id
+    local inputs = ipc:get_keyboard_inputs()
+    local input_layouting = {}
     for _, input in ipairs(inputs) do
-      if input.xkb_active_layout_index ~= 0 then
-        table.insert(
-          commands,
-          ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)
-        )
+      input_layouting[input.identifier] = input.xkb_active_layout_index
+    end
+    if previous_focused ~= nil and previous_focused ~= con_id then
+      windows[previous_focused] = input_layouting
+    end
+    local cached_layouts = windows[con_id]
+    local commands = {}
+    if cached_layouts ~= nil then
+      for input_id, layout_index in pairs(cached_layouts) do
+        if layout_index ~= input_layouting[input_id] then
+          table.insert(
+            commands,
+            ('input "%s" xkb_switch_layout %d'):format(input_id, layout_index)
+          )
+        end
+      end
+    else
+      for _, input in ipairs(inputs) do
+        if input.xkb_active_layout_index ~= 0 then
+          table.insert(
+            commands,
+            ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)
+          )
+        end
       end
     end
-  end
-  if #commands > 0 then
-    ipc:command(table.concat(commands, ", "))
-  end
-  prev_focused = con_id
-end
-
--- TODO: utilize this function
-local function focus_back_and_forth(ipc)
-  ipc:command(("[con_id=%d] focus"):format(prev_focused))
-end
-
-local function on_close(_, event)
-  windows[event.container.id] = nil
-end
-
-local function on_workspace_init(ipc, _)
-  for _, input in ipairs(ipc:get_keyboard_inputs()) do
-    ipc:command(
-      ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)
-    )
-  end
-end
-
-i3.main(function(conn)
-  function conn:get_keyboard_inputs()
-    local inputs, r = self:get_inputs(), {}
-    for _, input in ipairs(inputs) do
-      if input.type == "keyboard" and input.xkb_active_layout_index ~= nil then
-        table.insert(r, input)
-      end
+    if #commands > 0 then
+      ipc:command(table.concat(commands, ", "))
     end
-    return r
-  end
+    current_focused = con_id
+  end)
 
-  conn:on("window::focus", on_focus)
-  conn:on("window::close", on_close)
-  conn:on("workspace::init", on_workspace_init)
+  ipc:on("window::close", function(_, event)
+    windows[event.container.id] = nil
+  end)
+
+  ipc:on("workspace::init", function()
+    for _, input in ipairs(ipc:get_keyboard_inputs()) do
+      ipc:command(
+        ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)
+      )
+    end
+  end)
+
 end)

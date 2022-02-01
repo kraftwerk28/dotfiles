@@ -20,6 +20,20 @@ load("config.statusline")
 load("config.filetypes")
 -- load("config.experiments")
 
+-- local function lsp_count(severity, label, hl_group)
+--   local count_fn = utils.defglobalfn(function()
+--     local count = #vim.diagnostic.get(0, {severity = severity})
+--     return label .. count
+--     -- if count > 0 then
+--     --   return label .. count
+--     -- end
+--   end)
+--   return ("%#"..hl_group.."#%{v:lua."..count_fn.."()}%#StatusLine#")
+-- end
+-- vim.opt.statusline:append("%f%=")
+-- local sev = vim.diagnostic.severity
+-- vim.opt.statusline:append(lsp_count(sev.E, "E: ", "TSError") .. " " .. lsp_count(sev.W, "W: ", "TSWarning"))
+
 -- if fn.has("unix") == 1 then
 --   -- Clicking any link pointing to neovim or vim docs site
 --   -- will open :help split in existing neovim session, if any

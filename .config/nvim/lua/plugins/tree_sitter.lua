@@ -77,6 +77,20 @@ parser_configs.norg_table = {
   },
 }
 
+
+require("nvim-treesitter.configs").setup {
+  -- ...
+  textobjects = {
+    -- ...
+    move = {
+      enable = true,
+      goto_previous_start = {
+        ["[b"] = "@block.inner",
+      },
+    },
+  },
+}
+
 require("nvim-treesitter.configs").setup {
   ensure_installed = ensure_installed,
   highlight = {
@@ -104,6 +118,14 @@ require("nvim-treesitter.configs").setup {
       keymaps = {
         ["aa"] = "@parameter.outer",
         ["ia"] = "@parameter.inner",
+        ["ib"] = "@block.inner",
+        ["ab"] = "@block.outer",
+      },
+    },
+    move = {
+      enable = true,
+      goto_previous_start = {
+        ["[b"] = "@block.outer",
       },
     },
   },

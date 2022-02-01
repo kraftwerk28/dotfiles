@@ -31,7 +31,7 @@
 	border: none;
 }
 
-#workspaces > button {
+#workspaces button {
 	padding: 0 0.4em;
 	background-color: transparent;
 	border-color: transparent;
@@ -55,15 +55,14 @@
 
 @keyframes ws-urgent {
 	from {
-		border-color: #ff0000;
+		background: #ff0000;
 	}
 	to {
-		border-color: #ffffff;
+		background: transparent;
 	}
 }
 
 #workspaces button.urgent {
-	border-color: #eb4d4b;
 	animation-name: ws-urgent;
 	animation-duration: 0.5s;
 	animation-timing-function: linear;

@@ -16,13 +16,13 @@ lsp_config.arduino_language_server.setup {
 
 lsp_config.tsserver.setup {
   cmd = {"typescript-language-server", "--stdio"},
-  root_dir = root_pattern(
+  root_dir = root_pattern {
     "package.json",
     "tsconfig.json",
     "jsconfig.json",
     ".git",
-    fn.getcwd()
-  ),
+    fn.getcwd(),
+  },
   initializationOptions = {
     preferences = {
       -- TODO: doesn't work
@@ -48,7 +48,7 @@ lsp_config.denols.setup {
     lint = true,
     unstable = false,
   },
-  root_dir = root_pattern("deno.json"),
+  root_dir = root_pattern {"deno.json"},
 }
 
 -- lsp_config.flow.setup {
@@ -76,10 +76,10 @@ lsp_config.denols.setup {
 -- }
 
 -- lsp_config.pyre.setup {
---   root_dir = root_pattern(
+--   root_dir = root_pattern {
 --     ".git",
 --     fn.getcwd()
---   ),
+--   },
 -- }
 
 lsp_config.pylsp.setup {
@@ -127,21 +127,23 @@ end
 lsp_config.gopls.setup {
   cmd = {"gopls", "serve"},
   filetypes = {"go", "gomod"},
-  root_dir = function(name)
-    return root_pattern("go.mod", ".git")(name) or fn.getcwd()
-  end,
+  root_dir = root_pattern {
+    "go.mod",
+    ".git",
+    fn.getcwd(),
+  },
 }
 
 lsp_config.hls.setup {
   settings = {haskell = {formattingProvider = "brittany"}},
-  root_dir = root_pattern(
+  root_dir = root_pattern {
     "*.cabal",
     "stack.yaml",
     "cabal.project",
     "package.yaml",
     "hie.yaml",
-    fn.getcwd()
-  ),
+    fn.getcwd(),
+  },
 }
 
 do
@@ -154,12 +156,12 @@ do
   lsp_config.clangd.setup {
     cmd = clangdcmd,
     filetypes = {"c", "cpp", "objc", "objcpp"},
-    root_dir = root_pattern(
+    root_dir = root_pattern {
       "CMakeLists.txt",
       "compile_flags.txt",
       ".git",
-      fn.getcwd()
-    ),
+      fn.getcwd(),
+    },
     capabilities = capabilities,
   }
 end
@@ -189,7 +191,7 @@ do
     cmd = {"vscode-json-languageserver", "--stdio"},
     filetypes = {"json", "jsonc"},
     -- init_options = {provideFormatter = true},
-    root_dir = root_pattern(".git", fn.getcwd()),
+    root_dir = root_pattern {".git", fn.getcwd()},
     settings = {json = {schemas = schemas}},
   }
 end
@@ -249,7 +251,7 @@ if fn.has("win64") == 1 then
       "--add-opens", "java.base/java.lang=ALL-UNNAMED",
     },
     filetypes = {"java"},
-    root_dir = root_pattern(".git", "build.gradle", "build.gradle.kts"),
+    root_dir = root_pattern {".git", "build.gradle", "build.gradle.kts"},
   }
 
   lsp_config.groovyls.setup {
@@ -286,6 +288,6 @@ do
     cmd = cmd,
     cmd_env = cmd_env,
     settings = {kotlin = {compiler = {jvm = {target = "1.8"}}}},
-    root_dir = root_pattern("build.gradle", "build.gradle.kts"),
+    root_dir = root_pattern {"build.gradle", "build.gradle.kts"},
   }
 end

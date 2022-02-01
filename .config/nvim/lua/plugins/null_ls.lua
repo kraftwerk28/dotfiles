@@ -143,8 +143,12 @@ require("null-ls").setup {
       filetypes = {"graphql"},
     },
     b.code_actions.eslint_d,
-    b.diagnostics.shellcheck,
-    b.code_actions.shellcheck,
+    b.diagnostics.shellcheck.with {
+      filetypes = {"sh", "PKGBUILD"},
+    },
+    b.code_actions.shellcheck.with {
+      filetypes = {"sh", "PKGBUILD"},
+    },
     -- hoogle_hover,
     -- iwyu_format,
     -- b.diagnostics.tsc,

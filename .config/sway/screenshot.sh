@@ -1,14 +1,12 @@
 #!/bin/sh
-WHAT=${1:-output}
-if [[ $WHAT = "area" && $(pgrep slurp) ]]; then
+WHAT=${1:-"output"}
+if [[ $WHAT == "area" && $(pgrep grimshot) ]]; then
 	exit 0
 fi
-img_name () {
-	echo "$HOME/Pictures/grimshot-$(date +"%x-%X").png"
-}
 fname=$(mktemp -u --suffix .png)
-grimshot save "$WHAT" "$fname" > /dev/null
-[[ $? == 1 ]] && exit 0 # Cancelled
+if ! grimshot save "$WHAT" "$fname" > /dev/null; then
+	exit 0
+fi
 case $(swaynag \
 	-t warning \
 	-m "What to do with the screenshot?" \
@@ -21,15 +19,19 @@ in
 	copy)
 		wl-copy -n < "$fname"
 		notify-send "Screenshot copied to clipboard"
+		rm "$fname"
 		;;
 	save)
-		name="$(img_name)"
+		name="$HOME/Pictures/grimshot-$(date +"%x-%X").png"
 		mv "$fname" "$name"
-		notify-send "Screenshot saved to $name"
+		notify-send "Screenshot saved" "$name"
 		;;
 	edit)
 		swappy -f "$fname"
+		rm "$fname"
 		;;
 	*)
-		exit 0;;
+		notify-send "Screenshot cancelled"
+		exit 0
+		;;
 esac
