@@ -1,6 +1,10 @@
 " Settings for neovim-qt
 packadd neovim-gui-shim
-GuiFont! Iosevka Term:h13.5
+if has("win64")
+  GuiFont! Iosevka NF:h12
+elseif has("unix")
+  GuiFont! Iosevka Term:h12
+endif
 GuiTabline 0
 GuiPopupmenu 0
 nmap <silent> <C-/> gcc

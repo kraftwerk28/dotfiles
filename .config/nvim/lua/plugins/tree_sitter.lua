@@ -41,6 +41,7 @@ local enabled_windows = {
   "kotlin",
   "javascript",
   "lua",
+  "python",
 }
 
 local ensure_installed
