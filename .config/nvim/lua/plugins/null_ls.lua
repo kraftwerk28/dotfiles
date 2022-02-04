@@ -2,6 +2,7 @@ local b = require("null-ls.builtins")
 local u = require("null-ls.utils")
 local h = require("null-ls.helpers")
 local m = require("null-ls.methods")
+local sev = h.diagnostics.severities
 
 local iwyu_diagnostics = h.make_builtin {
   name = "include-what-you-use",
@@ -122,9 +123,40 @@ local hoogle_hover = h.make_builtin {
   },
 }
 
+local porth_diagnostic = h.make_builtin {
+  name = "porth-diagnostic",
+  filetypes = {"porth"},
+  method = m.internal.DIAGNOSTICS,
+  generator_opts = {
+    command = vim.env.HOME.."/projects/porth/porth",
+    args = function(p)
+      return {"com", p.temp_path}
+    end,
+    from_stderr = true,
+    format = "line",
+    to_temp_file = true,
+    on_output = h.diagnostics.from_pattern(
+      [[(%d+):(%d+): (%w+): (.*)]],
+      {"row", "col", "severity", "message"},
+      {
+        severities = {
+          ERROR = sev.error,
+          NOTE = sev.hint,
+          DEBUG = sev.information,
+        },
+      }
+    ),
+  },
+  factory = h.generator_factory,
+}
+
 require("null-ls").setup {
   sources = {
-    b.diagnostics.eslint_d,
+    b.diagnostics.eslint_d.with {
+      cwd = function(params)
+        return u.root_pattern(".eslintrc*")(params.bufname)
+      end
+    },
     b.formatting.eslint_d,
     b.diagnostics.luacheck.with {
       args = {
@@ -151,12 +183,6 @@ require("null-ls").setup {
     },
     -- hoogle_hover,
     -- iwyu_format,
-    -- b.diagnostics.tsc,
+    porth_diagnostic,
   },
-  root_dir = u.root_pattern(
-    ".null-ls-root",
-    "Makefile",
-    ".git",
-    ".eslintrc*"
-  ),
 }

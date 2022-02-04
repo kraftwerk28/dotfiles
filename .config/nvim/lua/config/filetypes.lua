@@ -19,9 +19,8 @@ local ftconfig = {
    {shiftwidth = 4, tabstop = 4, expandtab = false}},
   {{"java", "kotlin", "groovy", "csharp", "cabal", "python"},
    {shiftwidth = 4, tabstop = 4, expandtab = true}},
-  {{"javascript", "typescript", "javascriptreact",
-    "typescriptreact", "svelte",
-    "json", "vim", "yaml", "haskell", "lisp", "lua", "graphql"},
+  {{"javascript", "typescript", "javascriptreact", "typescriptreact", "svelte",
+    "json", "vim", "yaml", "haskell", "lisp", "lua", "graphql", "markdown"},
    {shiftwidth = 2, tabstop = 2, expandtab = true}},
   {{"jess"},
    {commentstring = "; %s"}},
@@ -40,13 +39,13 @@ return function()
   end
   vim.cmd "augroup END"
 
-  vim.cmd "augroup extra_filetypes"
+  vim.cmd "augroup filetype_opts"
   vim.cmd "autocmd!"
   for _, cfg in ipairs(ftconfig) do
     local filetypes, opts = unpack(cfg)
     local fn = utils.defglobalfn(function()
       for name, value in pairs(opts) do
-        vim.bo[name] = value
+        vim.api.nvim_buf_set_option(0, name, value)
       end
     end)
     local p = table.concat(filetypes, ",")

@@ -5,6 +5,7 @@ set background=dark
 
 syntax enable
 syntax on
+execute "colorscheme base16-" . $BASE16_THEME
 
 if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim

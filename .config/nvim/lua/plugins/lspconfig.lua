@@ -18,9 +18,9 @@ highlight {"DiagnosticUnderlineError", gui = "undercurl"}
 
 -- highlight {"DiagnosticsHint", fg = "Yellow"}
 -- highlight {"DiagnosticsInformation", fg = "LightBlue"}
-highlight {"DiagnosticWarn", fg = "Orange"}
+highlight {"DiagnosticWarn", guifg = "Orange"}
 -- highlight {"DiagnosticsError", fg = "Red"}
-highlight {"FloatBorder", fg = "gray"}
+highlight {"FloatBorder", guifg = "gray"}
 
 fn.sign_define("DiagnosticSignHint", {
   text = u"f0eb",

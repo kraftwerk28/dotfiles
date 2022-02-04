@@ -32,11 +32,8 @@ set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set exrc
 set secure
 
-" default 'guicursor':
-" set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
-
-" set guicursor=a:blinkon1
-set guicursor=a:blinkon1,n-sm:block,i-c-ci-ve:ver25,r-cr-o-v:hor50
+set guicursor=a:blinkon1
+" set guicursor=a:blinkon1,n-sm:block,i-c-ci-ve:ver25,r-cr-o-v:hor50
 
 set splitbelow
 set splitright

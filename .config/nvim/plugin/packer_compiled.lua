@@ -276,10 +276,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: nvim-treesitter
-time([[Config for nvim-treesitter]], true)
-try_loadstring("\27LJ\1\0023\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\24plugins.tree_sitter\frequire\0", "config", "nvim-treesitter")
-time([[Config for nvim-treesitter]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+try_loadstring("\27LJ\1\0021\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\22plugins.telescope\frequire\0", "config", "telescope.nvim")
+time([[Config for telescope.nvim]], false)
 -- Config for: nvim-cmp
 time([[Config for nvim-cmp]], true)
 try_loadstring("\27LJ\1\2+\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\16plugins.cmp\frequire\0", "config", "nvim-cmp")
@@ -296,26 +296,26 @@ time([[Config for vim-easy-align]], false)
 time([[Config for gitsigns.nvim]], true)
 try_loadstring("\27LJ\1\2M\0\0\3\0\5\0\t4\0\0\0%\1\1\0>\0\2\0027\0\2\0003\1\3\0002\2\0\0:\2\4\1>\0\2\1G\0\1\0\fkeymaps\1\0\0\nsetup\rgitsigns\frequire\0", "config", "gitsigns.nvim")
 time([[Config for gitsigns.nvim]], false)
--- Config for: nvim-lspconfig
-time([[Config for nvim-lspconfig]], true)
-try_loadstring("\27LJ\1\0021\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\22plugins.lspconfig\frequire\0", "config", "nvim-lspconfig")
-time([[Config for nvim-lspconfig]], false)
--- Config for: vim-surround
-time([[Config for vim-surround]], true)
-try_loadstring("\27LJ\1\2£\2\0\0\5\0\15\00014\0\0\0007\0\1\0007\0\2\0004\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\5\0>\3\2\2$\2\3\2%\3\6\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\a\0>\3\2\2$\2\3\2%\3\b\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\t\0>\3\2\2$\2\3\2%\3\n\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\v\0>\3\2\2$\2\3\2%\3\f\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\r\0>\3\2\2$\2\3\2%\3\14\0009\3\2\1G\0\1\0\25\1before: \1\r\2after: \2\6i\n[[\r]]\6l\f/* \r */\6c\14{/* \r */}\6j\n{'\r'}\6r\14surround_\6g\fchar2nr\afn\bvim\0", "config", "vim-surround")
-time([[Config for vim-surround]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
-try_loadstring("\27LJ\1\0021\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\22plugins.telescope\frequire\0", "config", "telescope.nvim")
-time([[Config for telescope.nvim]], false)
--- Config for: null-ls.nvim
-time([[Config for null-ls.nvim]], true)
-try_loadstring("\27LJ\1\2/\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\20plugins.null_ls\frequire\0", "config", "null-ls.nvim")
-time([[Config for null-ls.nvim]], false)
 -- Config for: kommentary
 time([[Config for kommentary]], true)
 try_loadstring("\27LJ\1\2|\0\0\3\0\5\0\b4\0\0\0%\1\1\0>\0\2\0027\0\2\0%\1\3\0003\2\4\0>\0\3\1G\0\1\0\1\0\1 prefer_single_line_comments\2\fdefault\23configure_language\22kommentary.config\frequire\0", "config", "kommentary")
 time([[Config for kommentary]], false)
+-- Config for: vim-surround
+time([[Config for vim-surround]], true)
+try_loadstring("\27LJ\1\2£\2\0\0\5\0\15\00014\0\0\0007\0\1\0007\0\2\0004\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\5\0>\3\2\2$\2\3\2%\3\6\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\a\0>\3\2\2$\2\3\2%\3\b\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\t\0>\3\2\2$\2\3\2%\3\n\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\v\0>\3\2\2$\2\3\2%\3\f\0009\3\2\0014\1\0\0007\1\3\1%\2\4\0\16\3\0\0%\4\r\0>\3\2\2$\2\3\2%\3\14\0009\3\2\1G\0\1\0\25\1before: \1\r\2after: \2\6i\n[[\r]]\6l\f/* \r */\6c\14{/* \r */}\6j\n{'\r'}\6r\14surround_\6g\fchar2nr\afn\bvim\0", "config", "vim-surround")
+time([[Config for vim-surround]], false)
+-- Config for: nvim-lspconfig
+time([[Config for nvim-lspconfig]], true)
+try_loadstring("\27LJ\1\0021\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\22plugins.lspconfig\frequire\0", "config", "nvim-lspconfig")
+time([[Config for nvim-lspconfig]], false)
+-- Config for: null-ls.nvim
+time([[Config for null-ls.nvim]], true)
+try_loadstring("\27LJ\1\2/\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\20plugins.null_ls\frequire\0", "config", "null-ls.nvim")
+time([[Config for null-ls.nvim]], false)
+-- Config for: nvim-treesitter
+time([[Config for nvim-treesitter]], true)
+try_loadstring("\27LJ\1\0023\0\0\2\0\2\0\0044\0\0\0%\1\1\0>\0\2\1G\0\1\0\24plugins.tree_sitter\frequire\0", "config", "nvim-treesitter")
+time([[Config for nvim-treesitter]], false)
 -- Load plugins in order defined by `after`
 time([[Sequenced loading]], true)
 vim.cmd [[ packadd neorg ]]

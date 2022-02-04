@@ -4,7 +4,9 @@ set $down  j
 set $up    k
 set $right l
 # set $cursor_theme "Adwaita"
+# set $cursor_theme BreezeX-Black
 set $cursor_theme "breeze_cursors"
+set $cursor_size 24
 set $script $HOME/.config/sway
 set $border_width 3
 
@@ -199,11 +201,14 @@ client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
 font Iosevka Term Extended Bold 11
 
-seat * xcursor_theme $cursor_theme
-exec_always gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
-exec_always sed -i -r \
-	's/^Inherits=.+/Inherits='$cursor_theme'/' \
-	~/.icons/default/index.theme 2>/dev/null
+seat * xcursor_theme $cursor_theme $cursor_size
+exec_always {
+	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
+	gsettings set org.gnome.desktop.interface cursor-size $cursor_size
+	sed -i -r \
+		's/^Inherits=.+/Inherits='$cursor_theme'/' \
+		~/.icons/default/index.theme 2>/dev/null
+}
 
 exec {
 	blueman-applet

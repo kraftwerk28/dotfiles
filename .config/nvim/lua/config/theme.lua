@@ -2,19 +2,18 @@
 
 vim.o.background = "dark"
 vim.g.base16_theme = vim.env.BASE16_THEME or "default-dark"
-do
-  local ok, base16 = pcall(require, "base16-colorscheme")
-  -- local function set_base16_theme(name)
-  --   local colors = vim.deepcopy(base16.colorschemes[name])
-  --   base16.setup(colors)
-  -- end
-  if not ok then
-    print("base16-colorscheme is not installed")
-  else
-    vim.cmd("colorscheme base16-" .. vim.g.base16_theme)
-    -- set_base16_theme(vim.g.base16_theme)
-  end
-end
+-- do
+--   local ok, base16 = pcall(require, "base16-colorscheme")
+--   -- local function set_base16_theme(name)
+--   --   local colors = vim.deepcopy(base16.colorschemes[name])
+--   --   base16.setup(colors)
+--   -- end
+--   if not ok then
+--     print("base16-colorscheme is not installed")
+--   else
+--     base16.setup(vim.g.base16_theme)
+--   end
+-- end
 
 -- for _, name in ipairs {
 --   "TelescopeBorder",

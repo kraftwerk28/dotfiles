@@ -1,3 +1,4 @@
+local utils = require("config.utils")
 local M = {}
 
 M.ayu_dark, M.ayu_mirage = (function()
@@ -79,6 +80,16 @@ function M.from_base16(name)
     colors[key] = theme["base"..string.format("%02X", index)]
   end
   return colors
+end
+
+function M.define_highlights()
+  local hl, get_hl = utils.highlight, utils.get_highlight
+  local stl = get_hl("StatusLine")
+  local tserror = get_hl("TSError")
+  local tswarning = get_hl("TSWarning")
+
+  hl { "StatusLineLspError", guibg = stl.guibg, guifg = tserror.guifg }
+  hl { "StatusLineLspWarning", guibg = stl.guibg, guifg = tswarning.guifg }
 end
 
 return M

@@ -168,6 +168,33 @@ end
 --   vim.cmd(command)
 -- end
 
+function last_falsy(t)
+  for i, v in ipairs(t) do
+    if not v then
+      return t[i - 1]
+    end
+  end
+end
+
+local hl_special_names = {
+  "bold", "underline", "undercurl", "strikethrough", "reverse", "inverse",
+  "italic", "standout", "nocombine",
+}
+
+function M.get_highlight(name)
+  local hl = api.nvim_get_hl_by_name(name, true)
+  local special = {}
+  for _, spname in ipairs(hl_special_names) do
+    if hl[spname] then table.insert(special, spname) end
+  end
+  local gui = #special > 0 and table.concat(special, ",") or nil
+  return {
+    guifg = hl.foreground and ("#%x"):format(hl.foreground),
+    guibg = hl.background and ("#%x"):format(hl.background),
+    guisp = hl.special and ("#%x"):format(hl.special),
+    gui   = gui,
+  }
+end
 
 function M.highlight(cfg)
   local command = "highlight"
@@ -184,26 +211,19 @@ function M.highlight(cfg)
   --   vim.cmd(command.." link "..cfg[1].." "..cfg[2])
   --   return
   -- end
-  local guifg = cfg.fg or cfg.guifg
-  local guibg = cfg.bg or cfg.guibg
-  local gui, guisp = cfg.gui, cfg.guisp
+  local guibg, guifg, gui, guisp
   if type(cfg.override) == "string" then
-    local existing = api.nvim_get_hl_by_name(cfg.override, true)
-    if existing.foreground ~= nil then
-      guifg = ("#%x"):format(existing.foreground)
-    end
-    if existing.background ~= nil then
-      guibg = ("#%x"):format(existing.background)
-    end
-    if existing.special ~= nil then
-      guibg = ("#%x"):format(existing.background)
-    end
-    if existing.undercurl then
-      gui = "undercurl"
-    elseif existing.underline then
-      gui = "underline"
-    end
+    local existing = M.get_highlight(cfg.override)
+    guifg = existing.guifg
+    guibg = existing.guibg
+    guisp = existing.guisp
+    gui   = existing.gui
   end
+  -- TODO: remove fg/bg
+  guifg = cfg.fg or cfg.guifg or guifg
+  guibg = cfg.bg or cfg.guibg or guibg
+  guisp = cfg.guisp or guisp
+  gui   = cfg.gui or gui
   command = command .. " " .. cfg[1]
   if guifg then
     command = command .. " guifg=" .. guifg
