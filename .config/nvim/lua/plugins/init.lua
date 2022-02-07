@@ -120,7 +120,7 @@ local function load(use)
   use {
     "neovim/nvim-lspconfig",
     -- "~/projects/neovim/nvim-lspconfig",
-    config = function() require("plugins.lspconfig") end,
+    config = function() require("plugins.lsp_servers") end,
   }
 
   use {

@@ -99,22 +99,22 @@ bindkey -M viins "^H" backward-kill-word # Shift+Backspace
 bindkey -s "^[l" "ls\n"
 bindkey -M viins "^I" complete-word
 
-if [[ -d "/usr/share/nvm" ]]; then
-	nvm() {
-		echo "Warming up nvm..."
-		unset -f nvm
-		[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
-		source /usr/share/nvm/nvm.sh
-		source /usr/share/nvm/install-nvm-exec
-		if (( $# > 0 )); then
-			nvm $@
-		fi
-	}
-	nvm_on_change_working_dir() {
-		if [[ -f .nvmrc ]] && type nvm > /dev/null 2>&1 && nvm
-	}
-	add-zsh-hook chpwd nvm_on_change_working_dir
-fi
+# if [[ -d "/usr/share/nvm" ]]; then
+# 	nvm() {
+# 		echo "Warming up nvm..."
+# 		unset -f nvm
+# 		[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
+# 		source /usr/share/nvm/nvm.sh
+# 		source /usr/share/nvm/install-nvm-exec
+# 		if (( $# > 0 )); then
+# 			nvm $@
+# 		fi
+# 	}
+# 	nvm_on_change_working_dir() {
+# 		if [[ -f .nvmrc ]] && type nvm > /dev/null 2>&1 && nvm
+# 	}
+# 	add-zsh-hook chpwd nvm_on_change_working_dir
+# fi
 
 dump_cwd () {
 	if [[ $PWD != $HOME ]]; then
@@ -149,3 +149,5 @@ noprompt () {
 # Make `null` values bold red instead of dim dark in jq colored output
 # https://github.com/stedolan/jq/issues/1972#issuecomment-721667377
 export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
+
+eval "$(fnm env --use-on-cd)"

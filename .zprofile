@@ -55,11 +55,11 @@ export NODE_PATH="$HOME/.npm-global/lib/node_modules"
 # export PATH="$PATH:$HOME/.npm-global/bin"
 export NVS_HOME="$HOME/.nvs"
 
-NVM_VERSIONS="$HOME/.nvm/versions/node"
-LATEST_NODE_VER="$(/bin/ls -v "$NVM_VERSIONS" 2>/dev/null | tail -1)"
-if [[ -n $LATEST_NODE_VER ]]; then
-	export PATH="${NVM_VERSIONS}/${LATEST_NODE_VER}/bin:${PATH}"
-fi
+# NVM_VERSIONS="$HOME/.nvm/versions/node"
+# LATEST_NODE_VER="$(/bin/ls -v "$NVM_VERSIONS" 2>/dev/null | tail -1)"
+# if [[ -n $LATEST_NODE_VER ]]; then
+# 	export PATH="${NVM_VERSIONS}/${LATEST_NODE_VER}/bin:${PATH}"
+# fi
 
 # Haskell stuff
 export PATH="$PATH:$HOME/.cabal/bin/"

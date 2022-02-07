@@ -8,17 +8,19 @@ local fn = vim.fn
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
+vim.g.diagnostic_signs = {
+  ERROR = " ", WARN  = " ", INFO  = " ", HINT  = " ",
+}
 
--- require('lsp_handlers').patch_lsp_handlers()
+-- require('config.lsp_handlers').patch_lsp_handlers()
 
-load("config.theme")
 load("config.mappings")
 -- load("config.opts")
-load("plugins")
+load("config.lsp")
 load("config.tabline")
-load("config.statusline")
--- load("config.statusline-wip")
+load("config.statusline-wip")
 load("config.filetypes")
+load("plugins")
 -- load("config.experiments")
 
 -- if fn.has("unix") == 1 then

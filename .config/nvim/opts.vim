@@ -39,7 +39,7 @@ set splitbelow
 set splitright
 set regexpengine=0
 set lazyredraw
-set noshowmode
+" set noshowmode
 set undofile
 set backupcopy=yes
 set inccommand=nosplit

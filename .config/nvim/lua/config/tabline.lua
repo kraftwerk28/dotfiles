@@ -41,21 +41,20 @@ local function build_tabline()
 end
 
 return function()
-  local cl = colors.from_base16(vim.g.base16_theme)
   local fnname = "tabline_build_tabline"
   _G[fnname] = build_tabline
   vim.o.tabline = "%!v:lua."..fnname.."()"
   -- TabLine - tab pages line, not active tab page label
   -- TabLineFill - tab pages line, where there are no labels
   -- TabLineSel - tab pages line, active tab page label
-  highlight {"TabLine", guibg = "bg", gui = "NONE", bang = true}
-  highlight {"TabLineFill", guibg = "bg", gui = "NONE", bang = true}
-  highlight {
-    "TabLineSel",
-    bg = cl.normal,
-    fg = cl.bg,
-    gui = "bold",
-    bang = true,
-  }
+  -- highlight {"TabLine", guibg = "bg", gui = "NONE", bang = true}
+  -- highlight {"TabLineFill", guibg = "bg", gui = "NONE", bang = true}
+  -- highlight {
+  --   "TabLineSel",
+  --   guibg = cl.normal,
+  --   guifg = cl.bg,
+  --   gui   = "bold",
+  --   bang  = true,
+  -- }
   -- highlight {'TabLineSel', 'StatusLineModeInv', bang = true}
 end

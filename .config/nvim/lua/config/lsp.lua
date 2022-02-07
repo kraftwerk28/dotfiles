@@ -2,40 +2,37 @@ local utils = require("config.utils")
 
 local lsp, fn = vim.lsp, vim.fn
 local highlight = utils.highlight
-local u = utils.u
 
-require("plugins.lsp_servers")
-
-highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
+-- highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
 -- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
-highlight {
-  "DiagnosticUnderlineWarning",
-  gui = "undercurl",
-  -- guisp = "Orange",
-}
+-- highlight {
+--   "DiagnosticUnderlineWarning",
+--   gui = "undercurl",
+--   -- guisp = "Orange",
+-- }
 -- highlight {"DiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
-highlight {"DiagnosticUnderlineError", gui = "undercurl"}
+-- highlight {"DiagnosticUnderlineError", gui = "undercurl"}
 
 -- highlight {"DiagnosticsHint", fg = "Yellow"}
--- highlight {"DiagnosticsInformation", fg = "LightBlue"}
+highlight {"DiagnosticInfo", guifg = "LightBlue"}
 highlight {"DiagnosticWarn", guifg = "Orange"}
 -- highlight {"DiagnosticsError", fg = "Red"}
 highlight {"FloatBorder", guifg = "gray"}
 
 fn.sign_define("DiagnosticSignHint", {
-  text = u"f0eb",
+  text = vim.g.diagnostic_signs.HINT,
   texthl = "DiagnosticSignHint",
 })
 fn.sign_define("DiagnosticSignInfo", {
-  text = u"f129",
+  text = vim.g.diagnostic_signs.INFO,
   texthl = "DiagnosticSignInfo",
 })
 fn.sign_define("DiagnosticSignWarn", {
-  text = u"f071",
+  text = vim.g.diagnostic_signs.WARN,
   texthl = "DiagnosticSignWarn",
 })
 fn.sign_define("DiagnosticSignError", {
-  text = u"f46e",
+  text = vim.g.diagnostic_signs.ERROR,
   texthl = "DiagnosticSignError",
 })
 
