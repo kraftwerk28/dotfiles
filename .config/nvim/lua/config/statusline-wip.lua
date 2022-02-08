@@ -115,6 +115,7 @@ local function make_stl(focused)
 
   stl:sep()
 
+  stl:space()
   stl:add {function()
     local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
     local icon, icon_highlight = devicons.get_icon(filename, fileext)

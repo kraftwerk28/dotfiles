@@ -1,6 +1,7 @@
 local cmp = require"cmp"
 local lspkind = require"lspkind"
 local snippy = require"snippy"
+local api = vim.api
 -- local luasnip = require('luasnip')
 
 snippy.setup {
@@ -24,8 +25,18 @@ cmp.setup {
     {
       name = "buffer",
       -- option = {
-      --   get_bufnrs = function() return vim.api.nvim_list_bufs() end,
+      --   keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\%(\h\w*\|[А-Яа-я]*\)\%([\-.]\w*\)*\)]],
       -- },
+      option = {
+        get_bufnrs = function()
+          return vim.tbl_map(
+            function(w)
+              return api.nvim_win_get_buf(w)
+            end,
+            api.nvim_tabpage_list_wins(0)
+          )
+        end,
+      },
     },
     {name = "path"},
     -- {name = "luasnip"},
