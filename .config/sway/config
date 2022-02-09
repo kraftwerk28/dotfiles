@@ -82,6 +82,7 @@ bindsym --to-code {
 }
 
 # Mouse movement keyboard control:
+# TODO: rewrite so it uses i3ipc-cmd
 set $cursor_lg_delta 50
 set $cursor_sm_delta 10
 bindsym --to-code {
@@ -90,10 +91,10 @@ bindsym --to-code {
 	$mod+Control+Alt+Down  seat * cursor move 0  $cursor_lg_delta
 	$mod+Control+Alt+Left  seat * cursor move -$cursor_lg_delta 0
 
-	$mod+Alt+Up    seat * cursor move 0 -$cursor_sm_delta
-	$mod+Alt+Right seat * cursor move $cursor_sm_delta  0
-	$mod+Alt+Down  seat * cursor move 0  $cursor_sm_delta
-	$mod+Alt+Left  seat * cursor move -$cursor_sm_delta 0
+	$mod+Alt+Up            seat * cursor move 0 -$cursor_sm_delta
+	$mod+Alt+Right         seat * cursor move $cursor_sm_delta  0
+	$mod+Alt+Down          seat * cursor move 0  $cursor_sm_delta
+	$mod+Alt+Left          seat * cursor move -$cursor_sm_delta 0
 
 	# Mouse button control (doesn't work well though):
 	--no-repeat $mod+Alt+Period seat * cursor press   button1

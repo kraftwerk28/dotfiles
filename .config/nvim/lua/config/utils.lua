@@ -184,16 +184,17 @@ local hl_special_names = {
 function M.get_highlight(name)
   local hl = api.nvim_get_hl_by_name(name, true)
   local special = {}
+  local res = { [1] = name }
   for _, spname in ipairs(hl_special_names) do
     if hl[spname] then table.insert(special, spname) end
   end
-  local gui = #special > 0 and table.concat(special, ",") or nil
-  return {
-    guifg = hl.foreground and ("#%x"):format(hl.foreground),
-    guibg = hl.background and ("#%x"):format(hl.background),
-    guisp = hl.special and ("#%x"):format(hl.special),
-    gui   = gui,
-  }
+  if #special > 0 then
+    res.gui = table.concat(special, ",")
+  end
+  if hl.foreground then res.guifg = ("#%x"):format(hl.foreground) end
+  if hl.background then res.guibg = ("#%x"):format(hl.background) end
+  if hl.special then res.guisp = ("#%x"):format(hl.special) end
+  return res
 end
 
 function M.highlight(cfg)

@@ -1,0 +1,5 @@
+[screencast]
+max_fps = 60
+chooser_type = simple
+chooser_cmd = slurp -f %o -ro
+; vim: ft=dosini

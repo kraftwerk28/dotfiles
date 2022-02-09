@@ -1,16 +1,9 @@
 local utils = require("config.utils")
-local api, fn = vim.api, vim.fn
+local fn = vim.fn
 local devicons = require("nvim-web-devicons")
 local ts = require("nvim-treesitter")
 
--- local devicon_hl = setmetatable({}, {
---   __index = function(t, key)
---     local devicon_highlight = rawget(t, key)
---     if devicon_highlight then return devicon_highlight end
---     local hl = utils.get_highlight(key)
---   end,
--- });
-
+-- Who needs mode label in statusline?
 -- local mode_labels = {
 --   {{"n", "niI", "niR", "niV",	"nt"},  "NORMAL"},
 --   {{"no", "nov", "noV", "no"},  "OPERATOR"},
@@ -73,7 +66,7 @@ end
 local Statusline = {}
 Statusline.__index = Statusline
 function Statusline:new(focused)
-  return setmetatable({ parts = {}, focused = focused }, self)
+  return setmetatable({ parts = {}, focused = focused, groups = {} }, self)
 end
 function Statusline:add(opts)
   local body = opts[1]
@@ -86,7 +79,10 @@ function Statusline:add(opts)
     res = body
   end
   if opts.highlight then
-    res = "%#"..stl_hl:get(opts.highlight, self.focused).."#"..res.."%*"
+    res = "%#"..stl_hl:get(opts.highlight, self.focused).."#"..res
+    if #self.groups == 0 then
+      res = res.."%*" -- Reset highlight
+    end
   end
   table.insert(self.parts, res)
 end
@@ -94,9 +90,11 @@ function Statusline:sep()
   table.insert(self.parts, "%=")
 end
 function Statusline:group(f)
+  table.insert(self.groups, true)
   table.insert(self.parts, "%(")
   f()
-  table.insert(self.parts, "%)")
+  table.insert(self.parts, "%)%*")
+  table.remove(self.groups)
 end
 function Statusline:space(n)
   table.insert(self.parts, (" "):rep(n or 1))
@@ -145,9 +143,9 @@ local function make_stl(focused)
     stl:space()
     stl:add {function()
       if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-        return "%#"..stl_hl:get("NvimIdentifier", focused).."# %*"
+        return "%#"..stl_hl:get("Identifier", focused).."# "
       else
-        return "%#"..stl_hl:get("NvimString", focused).."# %*"
+        return "%#"..stl_hl:get("NvimString", focused).."# "
       end
     end, eval = true}
     for _, it in ipairs {
@@ -177,99 +175,15 @@ local function make_stl(focused)
   return stl:render()
 end
 
---[[
-local make_stl_ = utils.defglobalfn(function(focused)
-  local stl = Statusline:new(focused)
-
-  -- if focused then
-  --   local cur_mode, mode_label = fn.mode()
-  --   for _, moddef in ipairs(mode_labels) do
-  --     if vim.tbl_contains(moddef[1], cur_mode) then
-  --       mode_label = moddef[2]
-  --       break
-  --     end
-  --   end
-  --   stl:add(mode_label)
-  -- end
-  -- stl:sep()
-
-  stl:add(format_icons[vim.bo.fileformat])
-  stl:add(#vim.bo.filetype > 0 and vim.bo.filetype or "-")
-
-  stl:sep()
-
-  local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
-  local icon, icon_highlight = devicons.get_icon(filename, fileext)
-  if icon then stl:add(icon, icon_highlight) end
-  stl:add("%f")
-  if vim.bo.modified then
-    stl:add("  ")
-  end
-  if vim.bo.readonly then
-    stl:add("  ")
-  end
-
-  -- *nvim_treesitter#statusline()*
-  -- nvim_treesitter#statusline(opts)~
-  -- Returns a string describing the current position in the file. This
-  -- could be used as a statusline indicator.
-  -- Default options (lua syntax):
-  --   {
-  --     indicator_size = 100,
-  --     type_patterns = {'class', 'function', 'method'},
-  --     transform_fn = function(line) return line:gsub('%s*[%[%(%{]*%s*$', '') end,
-  --     separator = ' -> '
-  --   }
-  -- - `indicator_size` - How long should the string be. If longer, it is cut from
-  --   the beginning.
-  -- - `type_patterns` - Which node type patterns to match.
-  -- - `transform_fn` - Function used to transform the single item in line. By
-  --   default removes opening brackets and spaces from end.
-  -- - `separator` - Separator between nodes.
-
-  stl:sep()
-
-  if focused then
-    local ts_stl = ts.statusline()
-    if ts_stl and #ts_stl > 0 then
-      stl:add(" %<%#User2#" .. ts_stl .. "%* ")
-    end
-  end
-
-  if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-    stl:add(" ", "NvimIdentifier")
-  else
-    stl:add(" ", "NvimString")
-  end
-  local lsp_nerr = #vim.diagnostic.get(0, {
-    severity = vim.diagnostic.severity.E
-  })
-  if lsp_nerr > 0 then
-    stl:add(" "..lsp_nerr, "LspDiagnosticsDefaultError")
-  end
-  local lsp_nwarn = #vim.diagnostic.get(0, {
-    severity = vim.diagnostic.severity.W
-  })
-  if lsp_nwarn > 0 then
-    stl:add(" "..lsp_nwarn, "LspDiagnosticsDefaultWarning")
-  end
-
-  if focused then
-    stl:add("(0x%04.B) %4.l/%-4.L:%3.c")
-  end
-
-  return stl:render()
-end)
-]]
-
 local stl1 = make_stl(true)
 local stl2 = make_stl(false)
-local stl_fn_name = utils.defglobalfn(function()
+
+local function stl()
   if vim.g.statusline_winid == fn.win_getid(fn.winnr()) then
     return stl1
   else
     return stl2
   end
-end)
+end
 
-vim.opt.statusline = "%!v:lua."..stl_fn_name.."()"
+vim.opt.statusline = "%!v:lua."..utils.defglobalfn(stl).."()"

@@ -1,6 +1,4 @@
 local utils = require("config.utils")
-local highlight = utils.highlight
-local colors = require("config.colors")
 
 local fn, api = vim.fn, vim.api
 local EMPTY_TAB_LABEL = [[ ¯\_(ツ)_/¯ ]]
@@ -40,21 +38,8 @@ local function build_tabline()
   return str
 end
 
-return function()
-  local fnname = "tabline_build_tabline"
-  _G[fnname] = build_tabline
-  vim.o.tabline = "%!v:lua."..fnname.."()"
-  -- TabLine - tab pages line, not active tab page label
-  -- TabLineFill - tab pages line, where there are no labels
-  -- TabLineSel - tab pages line, active tab page label
-  -- highlight {"TabLine", guibg = "bg", gui = "NONE", bang = true}
-  -- highlight {"TabLineFill", guibg = "bg", gui = "NONE", bang = true}
-  -- highlight {
-  --   "TabLineSel",
-  --   guibg = cl.normal,
-  --   guifg = cl.bg,
-  --   gui   = "bold",
-  --   bang  = true,
-  -- }
-  -- highlight {'TabLineSel', 'StatusLineModeInv', bang = true}
-end
+local tabline_sel = utils.get_highlight("TabLineSel")
+tabline_sel.gui = "reverse,bold"
+utils.highlight(tabline_sel)
+
+vim.o.tabline = "%!v:lua."..utils.defglobalfn(build_tabline).."()"
