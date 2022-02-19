@@ -7,19 +7,28 @@ local function load(use)
     requires = {"nvim-lua/plenary.nvim"},
   }
 
+  -- use {
+  --   disable = true,
+  --   "~/projects/neovim/wpm.nvim",
+  --   config = function()
+  --     require("wpm").setup()
+  --   end,
+  -- }
+
   -- Themes
   -- use {"navarasu/onedark.nvim"}
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
-  -- use {"~/projects/neovim/nvim-base16"}
-  use {"RRethy/nvim-base16"}
   use {
-    disable = true,
+    -- "~/projects/neovim/nvim-base16",
+    "RRethy/nvim-base16",
+  }
+  use {
     "projekt0n/github-nvim-theme",
     config = function()
-      require("github-theme").setup {
-        theme_style = "dark_default",
-        hide_inactive_statusline = false,
-      }
+      -- require("github-theme").setup {
+      --   theme_style = "dark_default",
+      --   hide_inactive_statusline = false,
+      -- }
     end,
   }
   use {"kyazdani42/nvim-web-devicons"}
@@ -186,9 +195,8 @@ local function load(use)
         highlight_opened_files = true,
         auto_resize            = false,
         hijack_cursor          = true,
-        git = {
-          ignore = false,
-        },
+        git                    = { ignore = false },
+        number                 = true,
       }
     end,
   }

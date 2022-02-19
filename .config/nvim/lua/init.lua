@@ -13,6 +13,11 @@ vim.g.diagnostic_signs = {
 }
 
 -- require('config.lsp_handlers').patch_lsp_handlers()
+require("github-theme").setup {
+  theme_style = "dark_default",
+  hide_inactive_statusline = false,
+}
+
 
 load("config.mappings")
 -- load("config.opts")
@@ -30,7 +35,7 @@ load("plugins")
 --   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 -- end
 
-function M.format_code(lorem, ipsum, dolor, sit, amet)
+function M.format_code()
   vim.lsp.buf.formatting()
 end
 

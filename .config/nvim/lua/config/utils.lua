@@ -182,25 +182,29 @@ local hl_special_names = {
 }
 
 function M.get_highlight(name)
-  local hl = api.nvim_get_hl_by_name(name, true)
-  local special = {}
+  local hl  = api.nvim_get_hl_by_name(name, true)  -- gui*
+  local chl = api.nvim_get_hl_by_name(name, false) -- cterm*
   local res = { [1] = name }
+  local special, cspecial = {}, {}
   for _, spname in ipairs(hl_special_names) do
     if hl[spname] then table.insert(special, spname) end
+    if chl[spname] then table.insert(cspecial, spname) end
   end
-  if #special > 0 then
-    res.gui = table.concat(special, ",")
-  end
-  if hl.foreground then res.guifg = ("#%x"):format(hl.foreground) end
-  if hl.background then res.guibg = ("#%x"):format(hl.background) end
-  if hl.special then res.guisp = ("#%x"):format(hl.special) end
+  if #special  > 0  then res.gui     = table.concat(special, ",")     end
+  if #cspecial > 0  then res.cterm   = table.concat(cspecial, ",")    end
+  if hl.foreground  then res.guifg   = ("#%x"):format(hl.foreground)  end
+  if hl.background  then res.guibg   = ("#%x"):format(hl.background)  end
+  if hl.special     then res.guisp   = ("#%x"):format(hl.special)     end
+  if chl.foreground then res.ctermfg = chl.foreground end
+  if chl.background then res.ctermbg = chl.background end
   return res
 end
 
 function M.highlight(cfg)
+  local hidef = vim.tbl_extend("force", {}, cfg)
   local command = "highlight"
   if cfg.bang == true then
-    command = command .. '!'
+    command = command .. "!"
   end
   local link = cfg.link or cfg[2]
   if link then
@@ -212,32 +216,35 @@ function M.highlight(cfg)
   --   vim.cmd(command.." link "..cfg[1].." "..cfg[2])
   --   return
   -- end
-  local guibg, guifg, gui, guisp
+  -- local guibg, guifg, gui, guisp
   if type(cfg.override) == "string" then
-    local existing = M.get_highlight(cfg.override)
-    guifg = existing.guifg
-    guibg = existing.guibg
-    guisp = existing.guisp
-    gui   = existing.gui
+    hidef = vim.tbl_extend("force", hidef, M.get_highlight(cfg.override))
+  end
+  hidef.bang = nil
+  hidef.override = nil
+  hidef[1] = nil
+  command = command .. " " .. cfg[1]
+  for k, v in pairs(hidef) do
+    command = command .. " " .. k .. "=" .. v
   end
   -- TODO: remove fg/bg
-  guifg = cfg.fg or cfg.guifg or guifg
-  guibg = cfg.bg or cfg.guibg or guibg
-  guisp = cfg.guisp or guisp
-  gui   = cfg.gui or gui
-  command = command .. " " .. cfg[1]
-  if guifg then
-    command = command .. " guifg=" .. guifg
-  end
-  if guibg then
-    command = command .. " guibg=" .. guibg
-  end
-  if gui then
-    command = command .. " gui=" .. gui
-  end
-  if guisp then
-    command = command .. " guisp=" .. guisp
-  end
+  -- guifg = cfg.fg or cfg.guifg or guifg
+  -- guibg = cfg.bg or cfg.guibg or guibg
+  -- guisp = cfg.guisp or guisp
+  -- gui   = cfg.gui or gui
+  -- command = command .. " " .. cfg[1]
+  -- if guifg then
+  --   command = command .. " guifg=" .. guifg
+  -- end
+  -- if guibg then
+  --   command = command .. " guibg=" .. guibg
+  -- end
+  -- if gui then
+  --   command = command .. " gui=" .. gui
+  -- end
+  -- if guisp then
+  --   command = command .. " guisp=" .. guisp
+  -- end
   vim.cmd(command)
 end
 

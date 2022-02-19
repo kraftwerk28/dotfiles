@@ -4,13 +4,10 @@ set $down  j
 set $up    k
 set $right l
 set $cursor_theme "Adwaita"
-# set $cursor_theme "breeze_cursors"
-# set $cursor_theme BreezeX-Black
 set $cursor_size 24
 set $script $HOME/.config/sway
 set $border_width 3
 
-# output * bg "$HOME/Pictures/pink_floyd_wish_you_were_here.png" fit "#0f1111"
 output * bg "$HOME/Pictures/pink_floyd_animals.png" fit
 
 floating_modifier $mod
@@ -22,7 +19,6 @@ bindsym --to-code {
 	# $mod+f2 exec alacritty \
 	# 	--working-directory $HOME/.config/sway \
 	# 	--command $SHELL -ic "nvim config"
-	# Foot is my friend now.
 	$mod+Return exec foot
 	$mod+Shift+Return exec foot \
 		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
@@ -82,7 +78,6 @@ bindsym --to-code {
 }
 
 # Mouse movement keyboard control:
-# TODO: rewrite so it uses i3ipc-cmd
 set $cursor_lg_delta 50
 set $cursor_sm_delta 10
 bindsym --to-code {
@@ -152,12 +147,16 @@ mode "resize" bindsym {
 }
 
 bar {
-	id bar-1
 	swaybar_command waybar
-	font Iosevka Term Extended Bold 11
-	position bottom
-	icon_theme "Papirus"
 }
+
+# bar {
+# 	status_command i3status-rs
+# 	font Iosevka Term Slab Extended Bold 10.5
+# 	position bottom
+# 	icon_theme "Papirus"
+# 	status_padding 0
+# }
 
 input type:pointer {
 	accel_profile flat
@@ -239,12 +238,7 @@ exec {
 }
 
 # Autostart apps
-exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "\
-	workspace 5,                            \
-	layout tabbed,                          \
-	exec kotatogram-desktop,                \
-	exec foot weechat,                      \
-	exec thunderbird                        "
+exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "workspace 5, layout tabbed, exec telegram-desktop, exec foot weechat, exec thunderbird"
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
@@ -252,14 +246,17 @@ exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "\
 # 	resume 'swaymsg "output * dpms on"'
 # 	# before-sleep 'swaylock -f -c 000000'
 
-for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
-for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky enable
-for_window [app_id="pavucontrol"] floating enable, opacity set 0.8
+for_window [app_id="firefox" title="^Picture-in-Picture$"] \
+	floating enable, sticky enable, border pixel
+for_window [app_id="firefox" title="Sharing Indicator$"] \
+	floating enable, sticky enable
+for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="xeyes"] floating enable; sticky enable
 for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
+for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
 
 # DAW + guitar = <3
 bindsym $mod+F3 \
@@ -279,4 +276,13 @@ focus_on_window_activation urgent
 # 	--key-hl-color "ffffff" \
 # 	--inside-color "000000"
 
+bindswitch lid:on \
+	input type:keyboard events disabled, \
+	input type:pointer  events disabled
+bindswitch lid:off \
+	input type:keyboard events enabled, \
+	input type:pointer  events enabled
+
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+
+# vim: cms=#\ %s

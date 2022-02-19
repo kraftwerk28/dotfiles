@@ -38,23 +38,19 @@ do
   end)
   vim.cmd("autocmd ColorScheme * call v:lua."..on_colors_load.."()")
 end
+
 function stl_hl:load(name)
   local hl = utils.get_highlight(name)
-  utils.highlight {
-    "Stl"..name,
+  utils.highlight(vim.tbl_extend("force", self.stl, {
+    [1] = "Stl"..name,
     guifg = hl.guifg,
-    guibg = self.stl.guibg,
-    guisp = hl.guisp,
-    gui   = hl.gui,
-  }
-  utils.highlight {
-    "Stl"..name.."NC",
+  }))
+  utils.highlight(vim.tbl_extend("force", self.stl_nc, {
+    [1] = "Stl"..name.."NC",
     guifg = hl.guifg,
-    guibg = self.stl_nc.guibg,
-    guisp = hl.guisp,
-    gui   = hl.gui,
-  }
+  }))
 end
+
 function stl_hl:get(name, focused)
   if not self.cache[name] then
     self:load(name)
@@ -114,13 +110,17 @@ local function make_stl(focused)
   stl:sep()
 
   stl:space()
-  stl:add {function()
-    local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
-    local icon, icon_highlight = devicons.get_icon(filename, fileext)
-    if icon then
-      return "%#"..stl_hl:get(icon_highlight, focused).."#"..icon.."%*"
-    end
-  end, eval = true}
+  stl:add {
+    function()
+      local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
+      local icon, icon_highlight = devicons.get_icon(filename, fileext)
+      return icon
+      -- if icon then
+      --   return "%#"..stl_hl:get(icon_highlight, focused).."#"..icon.."%*"
+      -- end
+    end,
+    -- eval = true,
+  }
   stl:space()
   stl:add {"%f"}
   stl:group(function()
@@ -131,37 +131,48 @@ local function make_stl(focused)
   stl:sep()
 
   if focused then
-    stl:add {function()
-      local ts_stl = ts.statusline()
-      if ts_stl and #ts_stl > 0 then
-        return " %<%#User2#" .. ts_stl .. "%*"
-      end
-    end, eval = true}
+    stl:add {
+      function()
+        local ts_stl = ts.statusline()
+        if ts_stl and #ts_stl > 0 then
+          return " %<%#User2#" .. ts_stl .. "%*"
+        end
+      end,
+      eval = true,
+    }
   end
 
   stl:group(function()
     stl:space()
-    stl:add {function()
-      if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-        return "%#"..stl_hl:get("Identifier", focused).."# "
-      else
-        return "%#"..stl_hl:get("NvimString", focused).."# "
-      end
-    end, eval = true}
+    stl:add {
+      function()
+        if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+          return " "
+          -- return "%#"..stl_hl:get("Error", focused).."# "
+        else
+          return " "
+          -- return "%#"..stl_hl:get("NvimString", focused).."# "
+        end
+      end,
+      -- eval = true,
+    }
     for _, it in ipairs {
       { "DiagnosticError", "ERROR" },
       { "DiagnosticWarn",  "WARN"  },
       { "DiagnosticInfo",  "INFO"  },
       { "DiagnosticHint",  "HINT"  },
     } do
-      stl:add {function()
-        local count = #vim.diagnostic.get(0, {
-          severity = vim.diagnostic.severity[it[2]]
-        })
-        if count > 0 then
-          return vim.g.diagnostic_signs[it[2]]..count.." "
-        end
-      end, highlight = it[1]}
+      stl:add {
+        function()
+          local count = #vim.diagnostic.get(0, {
+            severity = vim.diagnostic.severity[it[2]]
+          })
+          if count > 0 then
+            return vim.g.diagnostic_signs[it[2]]..count.." "
+          end
+        end,
+        -- highlight = it[1],
+      }
     end
   end)
 

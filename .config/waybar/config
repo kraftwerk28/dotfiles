@@ -142,7 +142,8 @@
 		"format-ethernet": " {ifname}: {ipaddr}/{cidr}",
 		"format-linked": " {ifname} (No IP)",
 		"format-disconnected": "睊 ",
-		"format-alt": "{ifname}: {ipaddr}/{cidr}"
+		"format-alt": "{ifname}: {ipaddr}/{cidr}",
+		"on-click-right": "notify-send bruh"
 	},
 	"pulseaudio": {
 		// "scroll-step": 1, // %, can be a float

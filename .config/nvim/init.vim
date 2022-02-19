@@ -5,7 +5,7 @@ set background=dark
 
 syntax enable
 syntax on
-execute "colorscheme base16-" . $BASE16_THEME
+" execute "colorscheme base16-".$BASE16_THEME
 
 if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim
@@ -323,20 +323,27 @@ nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 inoremap <silent> <C-S> <Cmd>lua vim.lsp.buf.signature_help()<CR>
 
-vnoremap <Leader>rev :s/\%V.\+\%V./\=RevStr(submatch(0))<CR>gv
+vnoremap <Leader>rev <Cmd>s#\%V.\+\%V.#\=join(reverse(split(submatch(0), '\zs')), '')#<CR>
 
-" Case-conversion tools
 " shake_case -> camelCase
-nmap <silent> <Leader>cc viw<Leader>cc
-vnoremap <silent> <Leader>cc :s/\%V_\(.\)/\U\1/g<CR>
+vnoremap <silent> <Leader>csc :s#\%V\@<=_\(.\)#\u\1#g<CR><Esc>
+nmap     <silent> <Leader>csc viw<Leader>csc
 
 " snake_case -> PascalCase
-nmap <silent> <Leader>pc viw<Leader>pc
-vmap <silent> <Leader>pc <Leader>cc`<vU
+vmap     <silent> <Leader>csp <Leader>csc`<gUl
+nmap     <silent> <Leader>csp viw<Leader>csp
 
 " camelCase/PascalCase -> snake_case
-nmap <silent> <Leader>sc viw<Leader>sc
-vnoremap <silent> <Leader>sc :s/\%V\(\l\)\(\u\)/\1_\l\2/g<CR>`<vu
+vnoremap <silent> <Leader>ccs :s#\%V\(\l\)\(\u\)#\1_\l\2#g<CR><Esc>`<gul
+nmap     <silent> <Leader>ccs viw<Leader>ccs
+
+" kebab-case -> snake_case
+vnoremap <silent> <Leader>cks :s/\%V-/_/<CR><Esc>
+nmap     <silent> <Leader>cks viw<Leader>cks
+
+" kebab-case -> camelCase
+vnoremap <silent> <Leader>ckc :s/\%V-\(.\)/\u\1/<CR><Esc>
+nmap     <silent> <Leader>ckc viw<Leader>cks
 
 " camelCase -> snake_case
 " TODO:
@@ -403,8 +410,12 @@ autocmd BufWinEnter * if index(["man", "help"], &ft) >= 0 |
                     \   execute "82wincmd |" |
                     \ endif
 
-nnoremap <Leader>ma :Man 
-nnoremap <Leader>he :help 
+" nnoremap <Leader>ma :Man 
+" nnoremap <Leader>he :help 
+nnoremap <Leader>ma <Cmd>lua
+       \ require"telescope.builtin".man_pages({ sections = {"ALL"} })<CR>
+nnoremap <Leader>he <Cmd>lua
+       \ require "telescope.builtin".help_tags()<CR>
 
 " Do not pollute register on paste
 xnoremap p <Cmd>let @a = @+ \|

@@ -67,6 +67,7 @@ export PATH="$PATH:$HOME/.ghcup/bin/"
 
 export NVIM_LISTEN_PORT=6969
 
+echo -e "\n\n\n$(date)\n" >> ~/sway.log
 if [[ -z "$DISPLAY" && $(tty) = "/dev/tty1" ]]; then
-	exec sway --unsupported-gpu
+	exec sway --unsupported-gpu &>> ~/sway.log
 fi

@@ -67,8 +67,8 @@ cmp.setup {
       -- luasnip.lsp_expand(args.body)
     end,
   },
-  experimental = {
-    native_menu = true,
+  view = {
+    entries = "native",
   },
 }
 

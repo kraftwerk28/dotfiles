@@ -14,6 +14,76 @@ lsp_config.arduino_language_server.setup {
   },
 }
 
+lsp_config.awk_ls.setup {}
+
+lsp_config.denols.setup {
+  autostart = false,
+  initializationOptions = {
+    enable = true,
+    lint = true,
+    unstable = false,
+  },
+  root_dir = root_pattern {"deno.json"},
+}
+
+lsp_config.gopls.setup {
+  cmd = {"gopls", "serve"},
+  filetypes = {"go", "gomod"},
+  root_dir = root_pattern {
+    "go.mod",
+    ".git",
+    fn.getcwd(),
+  },
+}
+
+lsp_config.graphql.setup {
+  cmd = {"graphql-lsp", "server", "--method=stream"},
+}
+
+lsp_config.hls.setup {
+  settings = {
+    haskell = { formattingProvider = "brittany" },
+  },
+  root_dir = root_pattern {
+    "*.cabal",
+    "stack.yaml",
+    "cabal.project",
+    "package.yaml",
+    "hie.yaml",
+    fn.getcwd(),
+  },
+}
+
+do
+  -- local pyls_settings = {
+  --   plugins = {
+  --     jedi_completion = {enabled = true},
+  --     jedi_hover = {enabled = true},
+  --     jedi_references = {enabled = true},
+  --     jedi_signature_help = {enabled = true},
+  --     jedi_symbols = {enabled = true, all_scopes = true},
+  --     yapf = {enabled = false},
+  --     pylint = {enabled = false},
+  --     pycodestyle = {enabled = false},
+  --     pydocstyle = {enabled = false},
+  --     mccabe = {enabled = false},
+  --     preload = {enabled = false},
+  --     rope_completion = {enabled = false},
+  --     pyflakes = {enabled = false},
+  --   },
+  -- }
+  lsp_config.pylsp.setup {}
+end
+
+do
+  local cpb = lsp.protocol.make_client_capabilities()
+  cpb = require("cmp_nvim_lsp").update_capabilities(cpb)
+  -- cpb.textDocument.completion.completionItem.snippetSupport = true
+  lsp_config.rust_analyzer.setup {
+    capabilities = cpb,
+  }
+end
+
 lsp_config.tsserver.setup {
   cmd = {"typescript-language-server", "--stdio"},
   root_dir = root_pattern {
@@ -37,42 +107,10 @@ lsp_config.tsserver.setup {
   end,
 }
 
-lsp_config.graphql.setup {
-  cmd = {"graphql-lsp", "server", "--method=stream"},
-}
-
-lsp_config.denols.setup {
-  autostart = false,
-  initializationOptions = {
-    enable = true,
-    lint = true,
-    unstable = false,
-  },
-  root_dir = root_pattern {"deno.json"},
-}
-
 -- lsp_config.flow.setup {
 --   cmd = {'flow', 'lsp'},
 --   filetypes = {'javascript', 'javascriptreact'},
 --   root_dir = root_pattern('.flowconfig'),
--- }
-
--- local pyls_settings = {
---   plugins = {
---     jedi_completion = {enabled = true},
---     jedi_hover = {enabled = true},
---     jedi_references = {enabled = true},
---     jedi_signature_help = {enabled = true},
---     jedi_symbols = {enabled = true, all_scopes = true},
---     yapf = {enabled = false},
---     pylint = {enabled = false},
---     pycodestyle = {enabled = false},
---     pydocstyle = {enabled = false},
---     mccabe = {enabled = false},
---     preload = {enabled = false},
---     rope_completion = {enabled = false},
---     pyflakes = {enabled = false},
---   },
 -- }
 
 -- lsp_config.pyre.setup {
@@ -81,11 +119,6 @@ lsp_config.denols.setup {
 --     fn.getcwd()
 --   },
 -- }
-
-lsp_config.pylsp.setup {
-  filetypes = {"python"},
-  -- settings = {pyls = pyls_settings},
-}
 
 -- lsp_config.pyright.setup {}
 
@@ -114,37 +147,6 @@ lsp_config.pylsp.setup {
 --     },
 --   },
 -- }
-
-do
-  local cpb = lsp.protocol.make_client_capabilities()
-  cpb = require("cmp_nvim_lsp").update_capabilities(cpb)
-  -- cpb.textDocument.completion.completionItem.snippetSupport = true
-  lsp_config.rust_analyzer.setup {
-    capabilities = cpb,
-  }
-end
-
-lsp_config.gopls.setup {
-  cmd = {"gopls", "serve"},
-  filetypes = {"go", "gomod"},
-  root_dir = root_pattern {
-    "go.mod",
-    ".git",
-    fn.getcwd(),
-  },
-}
-
-lsp_config.hls.setup {
-  settings = {haskell = {formattingProvider = "brittany"}},
-  root_dir = root_pattern {
-    "*.cabal",
-    "stack.yaml",
-    "cabal.project",
-    "package.yaml",
-    "hie.yaml",
-    fn.getcwd(),
-  },
-}
 
 do
   local clangdcmd = {"clangd", "--background-index"}
@@ -212,9 +214,11 @@ lsp_config.yamlls.setup {
   },
 }
 
-lsp_config.html.setup {
-  cmd = {"vscode-html-languageserver", "--stdio"}
-}
+lsp_config.cssls.setup {}
+
+-- lsp_config.html.setup {
+--   cmd = {"vscode-html-languageserver", "--stdio"}
+-- }
 
 lsp_config.bashls.setup {filetypes = {"bash", "sh", "zsh"}}
 
