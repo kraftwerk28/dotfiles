@@ -15,7 +15,7 @@ local highlight = utils.highlight
 
 -- highlight {"DiagnosticsHint", fg = "Yellow"}
 highlight {"DiagnosticInfo", guifg = "LightBlue"}
-highlight {"DiagnosticWarn", guifg = "Orange"}
+-- highlight {"DiagnosticWarn", guifg = "Orange"}
 -- highlight {"DiagnosticsError", fg = "Red"}
 highlight {"FloatBorder", guifg = "gray"}
 

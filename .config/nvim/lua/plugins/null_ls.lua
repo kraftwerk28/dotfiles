@@ -150,6 +150,18 @@ local porth_diagnostic = h.make_builtin {
   factory = h.generator_factory,
 }
 
+local jq_format = h.make_builtin {
+  name = "jq",
+  method = m.internal.FORMATTING,
+  filetypes = {"json"},
+  generator_opts = {
+    command = "jq",
+    args = {"-M", "."},
+    to_stdin = true,
+  },
+  factory = h.formatter_factory,
+}
+
 require("null-ls").setup {
   sources = {
     b.diagnostics.eslint_d.with {
@@ -184,5 +196,6 @@ require("null-ls").setup {
     -- hoogle_hover,
     -- iwyu_format,
     porth_diagnostic,
+    -- jq_format,
   },
 }

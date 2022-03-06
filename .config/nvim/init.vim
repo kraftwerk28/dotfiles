@@ -6,6 +6,7 @@ set background=dark
 syntax enable
 syntax on
 " execute "colorscheme base16-".$BASE16_THEME
+colorscheme kanagawa
 
 if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim
@@ -315,12 +316,13 @@ nnoremap <silent> <Leader>w :wall<CR>
 " inoremap <expr> <S-Tab> <SID>compShiftTab()
 " inoremap <silent><expr> <C-Space> compe#complete()
 " inoremap <silent><expr> <CR> <SID>compEnter()
-nnoremap <silent> <Leader>f :lua init.format_code()<CR>
-nnoremap <silent> <Leader>ah :lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> <Leader>aj :lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <Leader>ae :lua init.show_line_diagnostics()<CR>
-nnoremap <silent> <Leader>aa :lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <Leader>f <Cmd>lua init.format_code()<CR>
+nnoremap <silent> <Leader>ah <Cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <Leader>aj <Cmd>Telescope lsp_definitions<CR>
+nnoremap <silent> <Leader>ae <Cmd>lua init.show_line_diagnostics()<CR>
+nnoremap <silent> <Leader>aa <Cmd>Telescope lsp_code_actions<CR>
+nnoremap <silent> <Leader>as <Cmd>Telescope lsp_document_symbols<CR>
+nnoremap <silent> <F2> <Cmd>lua vim.lsp.buf.rename()<CR>
 inoremap <silent> <C-S> <Cmd>lua vim.lsp.buf.signature_help()<CR>
 
 vnoremap <Leader>rev <Cmd>s#\%V.\+\%V.#\=join(reverse(split(submatch(0), '\zs')), '')#<CR>
@@ -405,17 +407,29 @@ vnoremap / "vy/<C-R>v<CR>
 
 let $MANWIDTH = 80
 " Move the window to the right and set it's appropriate width
-autocmd BufWinEnter * if index(["man", "help"], &ft) >= 0 |
-                    \   wincmd L |
-                    \   execute "82wincmd |" |
-                    \ endif
+autocmd BufWinEnter *
+  \   if "help" == &ft
+  \ |   wincmd L
+  \ |   execute "82wincmd |"
+  \ | endif
 
-" nnoremap <Leader>ma :Man 
-" nnoremap <Leader>he :help 
+autocmd BufWinEnter *
+  \   if "man" == &ft
+  \ |   if empty(filter(
+  \       tabpagebuflist(),
+  \       { b -> index(["man", "help", ""], getbufvar(b, "&ft")) == -1 }
+  \     ))
+  \ |     wincmd o
+  \ |   else
+  \ |     wincmd L
+  \ |     execute "82wincmd |"
+  \ |   endif
+  \ | endif
+
 nnoremap <Leader>ma <Cmd>lua
-       \ require"telescope.builtin".man_pages({ sections = {"ALL"} })<CR>
+       \ require("telescope.builtin").man_pages({ sections = {"ALL"} })<CR>
 nnoremap <Leader>he <Cmd>lua
-       \ require "telescope.builtin".help_tags()<CR>
+       \ require("telescope.builtin").help_tags()<CR>
 
 " Do not pollute register on paste
 xnoremap p <Cmd>let @a = @+ \|
@@ -427,6 +441,10 @@ xnoremap P <Cmd>let @a = @+ \|
 
 " Because it is annoying
 nnoremap H <Nop>
+
+nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
+nnoremap <silent> dba <Cmd>%bd<CR>
+nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
 
 " Doesn't work with system buffer
 " xnoremap p p<Cmd>let @+ = @0<CR>

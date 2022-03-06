@@ -1,4 +1,5 @@
 local M = {}
+local api, fn = vim.api, vim.fn
 
 local utils = require("config.utils")
 local highlight = require("vim.highlight")
@@ -13,10 +14,13 @@ vim.g.diagnostic_signs = {
 }
 
 -- require('config.lsp_handlers').patch_lsp_handlers()
-require("github-theme").setup {
-  theme_style = "dark_default",
-  hide_inactive_statusline = false,
-}
+
+-- NB: The theme must *not* be set in the packer's `config` function to
+-- and load theme immediately instead of lazily
+-- require("github-theme").setup {
+--   theme_style = "dark_default",
+--   hide_inactive_statusline = false,
+-- }
 
 
 load("config.mappings")
@@ -81,6 +85,20 @@ do
   end)
   vim.cmd(("autocmd BufEnter,WinEnter,FocusGained * lua %s(true)"):format(f))
   vim.cmd(("autocmd BufLeave,WinLeave,FocusLost * lua %s(false)"):format(f))
+end
+
+do
+  function _G.go_rescope()
+    local word = fn.expand("<cword>")
+    local fst = word:sub(1, 1)
+    if fst:match("[A-Z]") then
+      word = fst:lower()..word:sub(2)
+    else
+      word = fst:upper()..word:sub(2)
+    end
+    vim.lsp.buf.rename(word)
+  end
+  api.nvim_add_user_command("GoChangeScope", "call v:lua.go_rescope()", {})
 end
 
 return M

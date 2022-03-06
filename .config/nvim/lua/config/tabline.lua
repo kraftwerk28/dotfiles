@@ -4,7 +4,7 @@ local fn, api = vim.fn, vim.api
 local EMPTY_TAB_LABEL = [[ ¯\_(ツ)_/¯ ]]
 local UNSAVED_MARK = "•"
 
-local function tab_label(tabnr)
+local function tab_label(tabnr, nparts)
   local focused_win = api.nvim_tabpage_get_win(tabnr)
   local focused_buf = api.nvim_win_get_buf(focused_win)
   local bufname = api.nvim_buf_get_name(focused_buf)

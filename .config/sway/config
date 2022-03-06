@@ -246,6 +246,11 @@ exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "workspace 5, layout tabbed, exec tel
 # 	resume 'swaymsg "output * dpms on"'
 # 	# before-sleep 'swaylock -f -c 000000'
 
+# swaylock ... && swaymsg output "*" dpms off
+# swayidle \
+# 	timeout 300 'if pgrep swaylock; then swaymsg output "*" dpms off' \
+# 	resume 'then swaymsg output "*" dpms on'
+
 for_window [app_id="firefox" title="^Picture-in-Picture$"] \
 	floating enable, sticky enable, border pixel
 for_window [app_id="firefox" title="Sharing Indicator$"] \

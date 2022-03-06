@@ -75,7 +75,9 @@ if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
 	source "/etc/profile.d/vte.sh"
 fi
 
+NO_THEME=1
 for cfg in ~/.config/zsh/*.zsh; do
+	[[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]] && continue
 	source "$cfg"
 done
 

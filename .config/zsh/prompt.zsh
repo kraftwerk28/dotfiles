@@ -1,9 +1,9 @@
 git_info () {
-	if [[ ! -d ".git" ]] || ! git rev-parse --git-dir 2>&1 > /dev/null; then
+	if [[ ! -d ".git" ]] || ! git rev-parse --git-dir &>/dev/null; then
 		return
 	fi
 	result=" %B%F{blue}\ue0a0%b%F{yellow}$(git branch --show-current)"
-	if command git diff-index --quiet HEAD > /dev/null 2>&1 ; then
+	if git diff-index --quiet HEAD &>/dev/null; then
 		result="${result}%B%F{green}✔"
 	else
 		result="${result}%B%F{red}✗"

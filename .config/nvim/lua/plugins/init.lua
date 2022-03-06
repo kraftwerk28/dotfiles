@@ -1,5 +1,5 @@
 local function load(use)
-  use {"wbthomason/packer.nvim", opt = true}
+  use { "wbthomason/packer.nvim", opt = true }
 
   use {
     "~/projects/neovim/gtranslate.nvim",
@@ -22,16 +22,9 @@ local function load(use)
     -- "~/projects/neovim/nvim-base16",
     "RRethy/nvim-base16",
   }
-  use {
-    "projekt0n/github-nvim-theme",
-    config = function()
-      -- require("github-theme").setup {
-      --   theme_style = "dark_default",
-      --   hide_inactive_statusline = false,
-      -- }
-    end,
-  }
+  use {"projekt0n/github-nvim-theme"}
   use {"kyazdani42/nvim-web-devicons"}
+  use {"rebelot/kanagawa.nvim"}
 
   use {
     "tpope/vim-surround",
@@ -162,10 +155,8 @@ local function load(use)
     requires = {"kyazdani42/nvim-web-devicons", opt = true},
     config = function()
       local utils = require("config.utils")
-      local highlight = utils.highlight
-      highlight {"NvimTreeFolderName", "Title"}
-      highlight {"NvimTreeFolderIcon", "Title"}
-      vim.g.nvim_tree_quit_on_open = 1
+      utils.highlight {"NvimTreeFolderName", "Title"}
+      utils.highlight {"NvimTreeFolderIcon", "Title"}
       vim.g.nvim_tree_indent_markers = 0
       vim.g.nvim_tree_icons = {
         folder = {
@@ -189,14 +180,22 @@ local function load(use)
         },
       }
       require("nvim-tree").setup {
-        auto_close             = true,
-        disable_netrw          = false,
-        hijack_netrw           = true,
-        highlight_opened_files = true,
-        auto_resize            = false,
-        hijack_cursor          = true,
-        git                    = { ignore = false },
-        number                 = true,
+        disable_netrw = false,
+        hijack_netrw = true,
+        auto_close = true,
+        hijack_cursor = true,
+        git = {
+          ignore = false
+        },
+        view = {
+          number = true,
+        },
+        actions = {
+          open_file = {
+            quit_on_open = false,
+            resize_window = false,
+          },
+        },
       }
     end,
   }
