@@ -192,7 +192,7 @@ local function load(use)
         },
         actions = {
           open_file = {
-            quit_on_open = false,
+            quit_on_open = true,
             resize_window = false,
           },
         },

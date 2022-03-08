@@ -132,8 +132,9 @@
 		// "format-full": "",
 		"format-icons": ["", "", "", "", ""]
 	},
-	"battery#bat2": {
-		"bat": "BAT2"
+	"battery#kbd": {
+		"bat": "hid-dc:2c:26:0c:73:0b-battery",
+		"format": " {capacity}%",
 	},
 	"network": {
 		// "interface": "wlp2*", // (Optional) To force the use of this interface
@@ -199,6 +200,6 @@
 	"custom/recording": {
 		"exec": "~/.config/waybar/wf-indicator.sh",
 		"return-type": "json"
-	}
+	},
 }
 // vim: ft=jsonc
