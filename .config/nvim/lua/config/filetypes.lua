@@ -1,4 +1,4 @@
-local utils = require"config.utils"
+local api = vim.api
 
 -- filetype -> list of patterns that match it
 local additional_filetypes = {
@@ -16,40 +16,47 @@ local additional_filetypes = {
 -- Set options for filetypes
 local ftconfig = {
   {{"go", "make", "c", "cpp"},
-   {shiftwidth = 4, tabstop = 4, expandtab = false}},
+   { shiftwidth = 4, tabstop = 4, expandtab = false }},
   {{"java", "kotlin", "groovy", "csharp", "cabal", "python"},
-   {shiftwidth = 4, tabstop = 4, expandtab = true}},
+   { shiftwidth = 4, tabstop = 4, expandtab = true }},
   {{"javascript", "typescript", "javascriptreact", "typescriptreact", "svelte",
     "json", "vim", "yaml", "haskell", "lisp", "lua", "graphql", "markdown"},
-   {shiftwidth = 2, tabstop = 2, expandtab = true}},
+   { shiftwidth = 2, tabstop = 2, expandtab = true }},
   {{"jess"},
    {commentstring = "; %s"}},
   {{"json", "jsonc", "cjson"},
-   {commentstring = "// %s" }},
+   { commentstring = "// %s" }},
   {{"asm"},
-   {shiftwidth = 8, tabstop=8, expandtab = false}},
+   { shiftwidth = 8, tabstop=8, expandtab = false }},
 }
 
 return function()
-  vim.cmd "augroup extra_filetypes"
-  vim.cmd "autocmd!"
+  local ftgroup = api.nvim_create_augroup("extra_filetypes", {})
   for ft, patterns in pairs(additional_filetypes) do
-    local p = table.concat(patterns, ",")
-    vim.cmd(("autocmd BufNewFile,BufRead %s setlocal ft=%s"):format(p, ft))
+    api.nvim_create_autocmd(
+      {"BufNewFile", "BufRead"},
+      {
+        pattern = patterns,
+        callback = function() vim.bo.filetype = ft end,
+        group = ftgroup,
+      }
+    )
   end
-  vim.cmd "augroup END"
 
-  vim.cmd "augroup filetype_opts"
-  vim.cmd "autocmd!"
+  local optgroup = api.nvim_create_augroup("filetype_opts", {})
   for _, cfg in ipairs(ftconfig) do
-    local filetypes, opts = unpack(cfg)
-    local fn = utils.defglobalfn(function()
-      for name, value in pairs(opts) do
-        vim.api.nvim_buf_set_option(0, name, value)
-      end
-    end)
-    local p = table.concat(filetypes, ",")
-    vim.cmd(("autocmd Filetype %s call v:lua.%s()"):format(p , fn))
+    local filetypes, opts = cfg[1], cfg[2]
+    api.nvim_create_autocmd(
+      "FileType",
+      {
+        pattern = filetypes,
+        callback = function()
+          for name, value in pairs(opts) do
+            api.nvim_buf_set_option(0, name, value)
+          end
+        end,
+        group = optgroup,
+      }
+    )
   end
-  vim.cmd "augroup END"
 end

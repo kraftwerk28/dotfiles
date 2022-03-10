@@ -18,6 +18,7 @@
 		"cpu",
 		"custom/sensors",
 		"battery",
+		// "battery#kbd",
 		"sway/language",
 		"clock"
 	],

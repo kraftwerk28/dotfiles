@@ -226,6 +226,7 @@ local function load(use)
 
   use {
     "nvim-neorg/neorg",
+    disable = true,
     requires = {"nvim-lua/plenary.nvim"},
     after = {"nvim-treesitter"},
     config = function()
@@ -242,6 +243,15 @@ local function load(use)
           }
         },
       }
+    end,
+  }
+
+  use {
+    "iamcco/markdown-preview.nvim",
+    run = "cd app && npm install",
+    ft = {"markdown"},
+    config = function()
+      vim.g.mkdp_filetypes = {"markdown"}
     end,
   }
 end

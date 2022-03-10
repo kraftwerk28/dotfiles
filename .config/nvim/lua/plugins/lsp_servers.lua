@@ -85,7 +85,6 @@ do
 end
 
 lsp_config.tsserver.setup {
-  cmd = {"typescript-language-server", "--stdio"},
   root_dir = root_pattern {
     "package.json",
     "tsconfig.json",
@@ -170,33 +169,33 @@ end
 
 lsp_config.svelte.setup {}
 
-do
-  local schemas = {
-    {
-      fileMatch = {"tsconfig.json", "tsconfig.*.json"},
-      url = "http://json.schemastore.org/tsconfig",
-    },
-    {
-      fileMatch = {"jsconfig.json", "jsconfig.*.json"},
-      url = "http://json.schemastore.org/jsconfig",
-    },
-    {
-      fileMatch = {".eslintrc*"},
-      url = "http://json.schemastore.org/eslintrc",
-    },
-    {
-      fileMatch = {".babelrc*"},
-      url = "http://json.schemastore.org/babelrc",
-    },
-  }
-  lsp_config.jsonls.setup {
-    cmd = {"vscode-json-languageserver", "--stdio"},
-    filetypes = {"json", "jsonc"},
-    -- init_options = {provideFormatter = true},
-    root_dir = root_pattern {".git", fn.getcwd()},
-    settings = {json = {schemas = schemas}},
-  }
-end
+-- do
+--   local schemas = {
+--     {
+--       fileMatch = {"tsconfig.json", "tsconfig.*.json"},
+--       url = "http://json.schemastore.org/tsconfig",
+--     },
+--     {
+--       fileMatch = {"jsconfig.json", "jsconfig.*.json"},
+--       url = "http://json.schemastore.org/jsconfig",
+--     },
+--     {
+--       fileMatch = {".eslintrc*"},
+--       url = "http://json.schemastore.org/eslintrc",
+--     },
+--     {
+--       fileMatch = {".babelrc*"},
+--       url = "http://json.schemastore.org/babelrc",
+--     },
+--   }
+--   lsp_config.jsonls.setup {
+--     cmd = {"vscode-json-languageserver", "--stdio"},
+--     filetypes = {"json", "jsonc"},
+--     -- init_options = {provideFormatter = true},
+--     root_dir = root_pattern {".git", fn.getcwd()},
+--     settings = {json = {schemas = schemas}},
+--   }
+-- end
 
 lsp_config.yamlls.setup {
   settings = {

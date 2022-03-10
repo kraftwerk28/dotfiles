@@ -417,7 +417,7 @@ autocmd BufWinEnter *
   \   if "man" == &ft
   \ |   if empty(filter(
   \       tabpagebuflist(),
-  \       { b -> index(["man", "help", ""], getbufvar(b, "&ft")) == -1 }
+  \       { b -> index(["man", "help", ""], bufname(b)) == -1 }
   \     ))
   \ |     wincmd o
   \ |   else
@@ -425,19 +425,6 @@ autocmd BufWinEnter *
   \ |     execute "82wincmd |"
   \ |   endif
   \ | endif
-
-nnoremap <Leader>ma <Cmd>lua
-       \ require("telescope.builtin").man_pages({ sections = {"ALL"} })<CR>
-nnoremap <Leader>he <Cmd>lua
-       \ require("telescope.builtin").help_tags()<CR>
-
-" Do not pollute register on paste
-xnoremap p <Cmd>let @a = @+ \|
-         \ execute ':normal! ' . v:count1 . 'p' \|
-         \ let @+ = @a<CR>
-xnoremap P <Cmd>let @a = @+ \|
-         \ execute ':normal! ' . v:count1 . 'p' \|
-         \ let @+ = @a<CR>
 
 " Because it is annoying
 nnoremap H <Nop>
@@ -447,12 +434,6 @@ nnoremap <silent> dba <Cmd>%bd<CR>
 nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
 
 " Doesn't work with system buffer
-" xnoremap p p<Cmd>let @+ = @0<CR>
-" xnoremap P P<Cmd>let @+ = @0<CR>
-
-" xnoremap p <Cmd>let @a = @"<CR>"ap<Cmd>let @" = @a<CR>
-
-" xnoremap <silent> p p:call setreg('*', getreg('0'), getregtype('0'))<CR>
 
 " autocmd CmdwinEnter * noremap <buffer> <CR> <CR>q:
 

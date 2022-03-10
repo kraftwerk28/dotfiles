@@ -203,7 +203,9 @@ smart_borders on
 # smart_gaps on
 # gaps inner 4
 # gaps outer 4
-default_border pixel $border_width
+# default_border pixel $border_width
+default_border          normal $border_width
+default_floating_border normal $border_width
 titlebar_padding 8 1
 
 focus_wrapping yes
@@ -262,6 +264,7 @@ for_window [title="xeyes"] floating enable; sticky enable
 for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
+for_window [app_id="^firefox$"] border pixel $border_width
 
 # DAW + guitar = <3
 bindsym $mod+F3 \

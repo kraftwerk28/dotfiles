@@ -1,37 +1,23 @@
--- local utils = require("config.utils")
--- local api = vim.api
+local fn = vim.fn
 
--- utils.nnoremap(
---   "dbb",
---   function()
---     vim.cmd("wincmd v")
---     api.nvim_buf_delete(0, {})
---   end,
---   {silent = true}
--- )
+vim.keymap.set("n", "<Leader>ma", function()
+  require("telescope.builtin").man_pages {
+    sections = {"ALL"}
+  }
+end)
 
--- utils.nnoremap(
---   "dbo",
---   function()
---     local cur = api.nvim_get_current_buf()
---     vim.cmd("wall")
---     for _, h in ipairs(api.nvim_list_bufs()) do
---       if h ~= cur and api.nvim_buf_is_loaded(h) then
---         api.nvim_buf_delete(h)
---       end
---     end
---   end,
---   { silent = true }
--- )
+vim.keymap.set("n", "<Leader>he", function()
+  require("telescope.builtin").help_tags()
+end)
 
--- utils.nnoremap(
---   "dba",
---   function()
---     local cur = api.nvim_get_current_buf()
---     vim.cmd("wall")
---     for _, h in ipairs(api.nvim_list_bufs()) do
---       api.nvim_buf_delete(h)
---     end
---   end,
---   { silent = true }
--- )
+vim.keymap.set("x", "p", function()
+  fn.setreg("a", fn.getreg("+"))
+  vim.cmd("normal! "..vim.v.count1.."p")
+  fn.setreg("+", fn.getreg("a"))
+end)
+
+vim.keymap.set("x", "P", function()
+  fn.setreg("a", fn.getreg("+"))
+  vim.cmd("normal! "..vim.v.count1.."p")
+  fn.setreg("+", fn.getreg("a"))
+end)
