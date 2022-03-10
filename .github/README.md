@@ -19,8 +19,5 @@
   - [Yay config](../.config/yay/config.json)
   - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
 
-Neovim (0.5) configs aren't completely in Lua, because not all APIs
-have alternative functions (at least native).
-Autocommands and mappings are in
-[Vimscript](../.config/nvim/init.vim),
-everything else - in [Lua](../.config/nvim/lua).
+Neovim (0.5) configs aren't completely in Lua, because ~~not all APIs
+have alternative functions (at least native)~~ I'm didn't rewrite-it-in-Lua yet.
