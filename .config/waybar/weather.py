@@ -47,5 +47,5 @@ if __name__ == "__main__":
             os.system(f"xdg-open {get_browser_url(app_id, location)}")
         else:
             print(get_weather_string(app_id, location))
-    except:
-        pass
+    except Exception as e:
+        raise e

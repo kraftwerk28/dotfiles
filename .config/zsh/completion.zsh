@@ -3,11 +3,7 @@ setopt complete_in_word
 setopt always_to_end
 
 autoload -Uz compinit
-if [[ -n "${ZDOTDIR}/.zcompdump(#qN.mh+24)" ]]; then
-	compinit
-else
-	compinit -C
-fi
+compinit
 
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' special-dirs true

@@ -24,10 +24,10 @@ case "$1" in
 			< <(pactl get-sink-volume $SINK \
 			| grep -oP "[0-9]+(?=%)" \
 			| xargs echo)
-		if [[ "$1" = "up" ]]; then
+		if [[ $1 == up ]]; then
 			(( l += (l % STEP) ? (STEP - l % STEP) : STEP ))
 			(( r += (r % STEP) ? (STEP - r % STEP) : STEP ))
-		elif [[ "$1" = "down" ]]; then
+		elif [[ $1 == down ]]; then
 			(( l -= (l % STEP) ? (l % STEP) : STEP ))
 			(( r -= (r % STEP) ? (r % STEP) : STEP ))
 		fi

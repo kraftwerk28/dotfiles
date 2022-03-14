@@ -88,17 +88,20 @@ do
 end
 
 do
-  function _G.go_rescope()
-    local word = fn.expand("<cword>")
-    local fst = word:sub(1, 1)
-    if fst:match("[A-Z]") then
-      word = fst:lower()..word:sub(2)
-    else
-      word = fst:upper()..word:sub(2)
-    end
-    vim.lsp.buf.rename(word)
-  end
-  api.nvim_add_user_command("GoChangeScope", "call v:lua.go_rescope()", {})
+  api.nvim_add_user_command(
+    "GoChangeScope",
+    function()
+      local word = fn.expand("<cword>")
+      local fst = word:sub(1, 1)
+      if fst:match("[A-Z]") then
+        word = fst:lower()..word:sub(2)
+      else
+        word = fst:upper()..word:sub(2)
+      end
+      vim.lsp.buf.rename(word)
+    end,
+    {}
+  )
 end
 
 return M
