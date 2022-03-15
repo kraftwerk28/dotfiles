@@ -1,17 +1,37 @@
 local cmp = require"cmp"
 local lspkind = require"lspkind"
-local snippy = require"snippy"
 local api = vim.api
--- local luasnip = require('luasnip')
+local luasnip = require("luasnip")
 
-snippy.setup {
-  mappings = {
-    is = {
-      ["<C-K>"] = "previous",
-      ["<C-J>"] = "next",
+do
+  require("luasnip.loaders.from_snipmate").lazy_load()
+  luasnip.filetype_extend("all", { "_" })
+  local t = luasnip.text_node
+  local i = luasnip.insert_node
+  -- local f = luasnip.function_node
+  -- local c = luasnip.choice_node
+  -- local d = luasnip.dynamic_node
+  -- local r = luasnip.restore_node
+  luasnip.snippets = {
+    go = {
+      luasnip.snippet("ie=", {
+        t{"if err := "}, i(1), t{"; err != nil {", "\t"},
+        i(2), t{"", "}"},
+      })
     },
-  },
-}
+  }
+  vim.keymap.set({"s", "i"}, "<C-J>", "<Plug>luasnip-jump-next")
+  vim.keymap.set({"s", "i"}, "<C-K>", "<Plug>luasnip-jump-prev")
+end
+
+-- snippy.setup {
+--   mappings = {
+--     is = {
+--       ["<C-K>"] = "previous",
+--       ["<C-J>"] = "next",
+--     },
+--   },
+-- }
 
 cmp.setup {
   mapping = {
@@ -21,7 +41,7 @@ cmp.setup {
     ["<CR>"]      = cmp.mapping.confirm({ select = false }),
   },
   sources = cmp.config.sources {
-    {name = "nvim_lsp"},
+    { name = "nvim_lsp" },
     {
       name = "buffer",
       -- option = {
@@ -38,10 +58,9 @@ cmp.setup {
         end,
       },
     },
-    {name = "path"},
-    -- {name = "luasnip"},
-    {name = "snippy"},
-    {name = "calc"},
+    { name = "path" },
+    { name = "luasnip" },
+    { name = "calc" },
   },
   documentation = {
     border = vim.g.floatwin_border,
@@ -63,8 +82,7 @@ cmp.setup {
   end,
   snippet = {
     expand = function(args)
-      snippy.expand_snippet(args.body)
-      -- luasnip.lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   view = {

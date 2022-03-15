@@ -178,19 +178,19 @@
 			"default": "🎜"
 		},
 		"escape": true,
-		"exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-		// "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+		"exec": "$HOME/.config/sway/bar-scripts/mediaplayer.py 2> /dev/null" // Script in resources folder
+		// "exec": "$HOME/.config/sway/bar-scripts/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
 	},
 	"sway/language": {
 		"format": "{flag}"
 	},
 	"custom/openweather": {
-		"exec": "~/.config/waybar/weather.py",
-		"on-click": "~/.config/waybar/weather.py open",
+		"exec": "~/.config/sway/bar-scripts/weather.py",
+		"on-click": "~/.config/sway/bar-scripts/weather.py open",
 		"interval": 1800
 	},
 	"custom/sensors": {
-		"exec": "awk -f ~/.config/waybar/cputemp.awk <(sensors)",
+		"exec": "awk -f ~/.config/sway/bar-scripts/cputemp.awk <(sensors)",
 		"return-type": "json",
 		"interval": 5
 	},

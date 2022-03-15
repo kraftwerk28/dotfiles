@@ -1,0 +1,82 @@
+bat_common: &bat_common
+  level_icons: ["", "", "", "", ""]
+  state_icons:
+    charging: ''
+  urgent_level: 10
+
+pulse_icons: &pulse_icons
+  devices:
+    Speakers: "墳"
+    Headphones: ""
+    Headset: ""
+    Microphone: ""
+    Internal Microphone: ""
+    Headset Microphone: ""
+  sink_muted: "ﱝ"
+  source_muted: ""
+
+version: "3"
+
+separator_width: 16
+
+blocks:
+
+  - name: shell
+    command: ~/.config/sway/bar-scripts/weather.py
+    on_click: ~/.config/sway/bar-scripts/weather.py open
+    interval: 5s
+
+  - name: pulseaudio
+    node: sink
+    format: "{icon}{volume:3*%}"
+    on_click: |
+      case $BUTTON in
+        Right) ~/.config/sway/bar-scripts/switch_audio_sink.py next;;
+        Left) pavucontrol;;
+      esac
+    icons: *pulse_icons
+
+  - name: pulseaudio
+    node: source
+    format: "{icon}{volume:3*%}"
+    icons: *pulse_icons
+
+  - name: bluez
+    format: " {devices}"
+    device_format: "{icon}"
+    icons:
+      phone: " "
+      audio-card: " "
+      audio-headset: " "
+      input-keyboard: " "
+
+  - name: networkmanager
+    format: "{status_icon}{strength:3*%}"
+    status_icons:
+      connected: "直"
+      disconnected: "睊"
+      connecting: " "
+    primary_only: true
+
+  # TODO: unimplemented
+  # - name: cpu
+
+  - name: shell
+    command: >
+      awk -f ~/.config/sway/bar-scripts/cputemp.awk <(sensors)
+    interval: 10s
+    json: true
+
+  - <<: *bat_common
+    name: battery
+    format: " {percentage:3*%}"
+    upower_device: keyboard_hid_dco2co26o0co73o0b_battery
+
+  - <<: *bat_common
+    name: battery
+    format: "{is_charging$}{state_icon}{percentage:3*%}"
+
+  - name: sway_layout
+    format: "{flag}"
+
+  - name: time
