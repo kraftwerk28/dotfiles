@@ -132,13 +132,19 @@ c () {
 	cd "$dname"
 }
 
-set_window_title () {
-	local title="$(basename $SHELL) (${PWD/$HOME/"~"})"
-	echo -n -e "\e]2;${title}\e\\"
+set_window_title() {
+	local title="$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
+	echo -ne "\e]2;${title}\e\\"
+}
+
+reset_window_title() {
+	local title="$(basename $SHELL) (${PWD/$HOME/~})"
+	echo -ne "\e]2;${title}\e\\"
 }
 
 add-zsh-hook precmd dump_cwd
-add-zsh-hook precmd set_window_title
+add-zsh-hook precmd reset_window_title
+add-zsh-hook preexec set_window_title
 
 noprompt () {
 	add-zsh-hook -d precmd refresh_prompt

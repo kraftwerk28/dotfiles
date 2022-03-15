@@ -24,7 +24,7 @@ blocks:
   - name: shell
     command: ~/.config/sway/bar-scripts/weather.py
     on_click: ~/.config/sway/bar-scripts/weather.py open
-    interval: 5s
+    interval: 5m
 
   - name: pulseaudio
     node: sink
