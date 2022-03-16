@@ -135,6 +135,11 @@ local function load(use)
   }
 
   use {
+    "L3MON4D3/LuaSnip",
+    config = function() require("plugins.luasnip") end,
+  }
+
+  use {
     "hrsh7th/nvim-cmp",
     requires = {
       "hrsh7th/cmp-nvim-lsp",
@@ -143,7 +148,6 @@ local function load(use)
       "onsails/lspkind-nvim",
       "hrsh7th/cmp-calc",
       "honza/vim-snippets",
-      "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
     },
     config = function() require("plugins.cmp") end,

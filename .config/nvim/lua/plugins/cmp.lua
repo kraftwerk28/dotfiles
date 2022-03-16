@@ -3,27 +3,6 @@ local lspkind = require"lspkind"
 local api = vim.api
 local luasnip = require("luasnip")
 
-do
-  require("luasnip.loaders.from_snipmate").lazy_load()
-  luasnip.filetype_extend("all", { "_" })
-  local t = luasnip.text_node
-  local i = luasnip.insert_node
-  -- local f = luasnip.function_node
-  -- local c = luasnip.choice_node
-  -- local d = luasnip.dynamic_node
-  -- local r = luasnip.restore_node
-  luasnip.snippets = {
-    go = {
-      luasnip.snippet("ie=", {
-        t{"if err := "}, i(1), t{"; err != nil {", "\t"},
-        i(2), t{"", "}"},
-      })
-    },
-  }
-  vim.keymap.set({"s", "i"}, "<C-J>", "<Plug>luasnip-jump-next")
-  vim.keymap.set({"s", "i"}, "<C-K>", "<Plug>luasnip-jump-prev")
-end
-
 -- snippy.setup {
 --   mappings = {
 --     is = {

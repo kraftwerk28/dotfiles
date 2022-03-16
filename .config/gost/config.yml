@@ -12,7 +12,7 @@ pulse_icons: &pulse_icons
     Microphone: ""
     Internal Microphone: ""
     Headset Microphone: ""
-  sink_muted: "ﱝ"
+  sink_muted: ""
   source_muted: ""
 
 version: "3"
@@ -44,6 +44,8 @@ blocks:
   - name: bluez
     format: " {devices}"
     device_format: "{icon}"
+    on_click: |
+      [ "$BUTTON" = Left ] && blueman-manager
     icons:
       phone: " "
       audio-card: " "
