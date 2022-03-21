@@ -23,15 +23,11 @@ cmp.setup {
     { name = "nvim_lsp" },
     {
       name = "buffer",
-      -- option = {
-      --   keyword_pattern = [[\%(-\?\d\+\%(\.\d\+\)\?\|\%(\h\w*\|[А-Яа-я]*\)\%([\-.]\w*\)*\)]],
-      -- },
       option = {
+        -- Uses only buffers from current tabpage
         get_bufnrs = function()
           return vim.tbl_map(
-            function(w)
-              return api.nvim_win_get_buf(w)
-            end,
+            function(w) return api.nvim_win_get_buf(w) end,
             api.nvim_tabpage_list_wins(0)
           )
         end,

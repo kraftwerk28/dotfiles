@@ -114,12 +114,12 @@ local function make_stl(focused)
     function()
       local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
       local icon, icon_highlight = devicons.get_icon(filename, fileext)
-      return icon
-      -- if icon then
-      --   return "%#"..stl_hl:get(icon_highlight, focused).."#"..icon.."%*"
-      -- end
+      if icon then
+        local hl = stl_hl:get(icon_highlight, focused)
+        return "%#"..hl.."#"..icon.."%*"
+      end
     end,
-    -- eval = true,
+    eval = true,
   }
   stl:space()
   stl:add {"%f"}

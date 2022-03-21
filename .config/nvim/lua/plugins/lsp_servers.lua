@@ -78,9 +78,9 @@ end
 do
   local cpb = lsp.protocol.make_client_capabilities()
   cpb = require("cmp_nvim_lsp").update_capabilities(cpb)
-  -- cpb.textDocument.completion.completionItem.snippetSupport = true
+  cpb.textDocument.completion.completionItem.snippetSupport = false
   lsp_config.rust_analyzer.setup {
-    capabilities = cpb,
+    -- capabilities = cpb,
   }
 end
 

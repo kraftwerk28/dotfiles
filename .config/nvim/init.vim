@@ -12,8 +12,8 @@ if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim
 endif
 
-verbose runtime opts.vim
-lua init = require(".")
+runtime opts.vim
+lua require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
 
@@ -53,11 +53,6 @@ augroup aux_win_close
                \ join(g:esc_close_ft, ','))
   execute printf('autocmd FileType %s noremap <silent><buffer> q :q<CR>',
                \ join(g:q_close_ft, ','))
-augroup END
-
-augroup highlight_yank
-  autocmd!
-  autocmd TextYankPost * silent! lua init.yank_highlight()
 augroup END
 
 " autocmd WinEnter * if &buftype == 'terminal'
@@ -142,12 +137,6 @@ endfunction
 " augroup END
 
 " autocmd BufEnter * lua require('lsp_signature').on_attach()
-
-augroup lsp_diagnostics
-  autocmd!
-  autocmd CursorMoved * lua init.show_lsp_diagnostics()
-augroup END
-autocmd! lsp_diagnostics
 
 augroup LSP_highlight
   autocmd!
@@ -284,9 +273,6 @@ vnoremap < <gv
 " Buffer nav
 nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
-" nnoremap <silent> <Leader>dbb :lua vim.api.nvim_buf_delete(0, {})<CR>
-" nnoremap <silent> <Leader>dba :lua init.delete_bufs(true)<CR>
-" nnoremap <silent> <Leader>dbo :lua init.delete_bufs(false)<CR>
 
 " Tab nav
 nnoremap <silent> th :tabprevious<CR>
@@ -310,20 +296,6 @@ nnoremap <silent> <Leader>cfg
       \ :e ~/.config/nvim/init.vim <CR>
 nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
 nnoremap <silent> <Leader>w :wall<CR>
-
-" LSP mappings:
-" inoremap <expr> <Tab> <SID>compTab()
-" inoremap <expr> <S-Tab> <SID>compShiftTab()
-" inoremap <silent><expr> <C-Space> compe#complete()
-" inoremap <silent><expr> <CR> <SID>compEnter()
-nnoremap <silent> <Leader>f <Cmd>lua init.format_code()<CR>
-nnoremap <silent> <Leader>ah <Cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> <Leader>aj <Cmd>Telescope lsp_definitions<CR>
-nnoremap <silent> <Leader>ae <Cmd>lua init.show_line_diagnostics()<CR>
-nnoremap <silent> <Leader>aa <Cmd>Telescope lsp_code_actions<CR>
-nnoremap <silent> <Leader>as <Cmd>Telescope lsp_document_symbols<CR>
-nnoremap <silent> <F2> <Cmd>lua vim.lsp.buf.rename()<CR>
-inoremap <silent> <C-S> <Cmd>lua vim.lsp.buf.signature_help()<CR>
 
 vnoremap <Leader>rev <Cmd>s#\%V.\+\%V.#\=join(reverse(split(submatch(0), '\zs')), '')#<CR>
 

@@ -106,6 +106,7 @@ bindsym {
 		-t warning \
 		-m "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
 		-b "Yes, exit sway" \
+		--no-dock \
 		"swaymsg exit"
 
 	$mod+1 workspace number 1
@@ -151,16 +152,18 @@ mode "resize" bindsym {
 # }
 
 bar {
-	status_command $HOME/.config/gost/run.sh
+	status_command gost
 	font Iosevka Term Slab Extended Bold 10.5
 	position bottom
 	icon_theme "Papirus"
-	status_padding 0
 	separator_symbol "|"
+	# disable tray until DBus will be implemented
+	tray_output none
+	wrap_scroll yes
+	workspace_min_width 24
 	colors {
 		separator "#bbbbbb"
 	}
-	tray_output none
 }
 
 input type:pointer {

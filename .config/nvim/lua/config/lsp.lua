@@ -36,6 +36,22 @@ fn.sign_define("DiagnosticSignError", {
   texthl = "DiagnosticSignError",
 })
 
+local tb = require("telescope.builtin")
+vim.keymap.set("n", "<Leader>f", vim.lsp.buf.formatting, { silent = true })
+vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, { silent = true })
+vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, { silent = true })
+vim.keymap.set(
+  "n", "<Leader>ae",
+  function()
+    vim.diagnostic.open_float { border = vim.g.floatwin_border }
+  end,
+  { silent = true }
+)
+vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, { silent = true })
+vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, { silent = true })
+vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, { silent = true })
+vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, { silent = true })
+
 local function setup_hover()
   local method = "textDocument/hover"
   lsp.handlers[method] = lsp.with(

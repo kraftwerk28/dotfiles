@@ -45,6 +45,13 @@ ipc:main(function()
     ipc:command(("[con_id=%d] focus"):format(previous_focused))
   end)
 
+  ipc.cmd:on("next_float", function()
+    ipc:once("window::new", function(_, event)
+      -- TODO: read a FIXME comment in lua-i3ipc source
+      ipc:command(("[con_id=%s] floating enable"):format(event.container.id))
+    end)
+  end)
+
   ipc:on("window::focus", function (ipc, event)
     previous_focused = current_focused
     local con_id = event.container.id

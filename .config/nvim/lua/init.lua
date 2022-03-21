@@ -2,9 +2,7 @@ local M = {}
 local api, fn = vim.api, vim.fn
 
 local utils = require("config.utils")
-local highlight = require("vim.highlight")
 local load = utils.load
-local fn = vim.fn
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
@@ -39,10 +37,6 @@ load("plugins")
 --   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 -- end
 
-function M.format_code()
-  vim.lsp.buf.formatting()
-end
-
 function M.save_session()
   vim.cmd("mksession")
 end
@@ -61,17 +55,14 @@ function M.restore_session()
   end
 end
 
-function M.yank_highlight()
-  if highlight ~= nil then
-    highlight.on_yank {timeout = 1000}
-  end
-end
-
-function M.show_line_diagnostics()
-  vim.diagnostic.open_float {
-    border = vim.g.floatwin_border,
-  }
-end
+api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    local highlight = require("vim.highlight")
+    if highlight then
+      highlight.on_yank { timeout = 1000 }
+    end
+  end,
+})
 
 do
   local no_line_number_ft = {"help", "man", "list", "TelescopePrompt"}

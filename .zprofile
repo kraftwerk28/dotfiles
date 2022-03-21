@@ -71,5 +71,5 @@ if [[ -z "$DISPLAY" && $(tty) = "/dev/tty1" ]]; then
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date --iso-8601=seconds).log"
-	exec sway --unsupported-gpu &> "$logfile"
+	exec sway --verbose --unsupported-gpu &> "$logfile"
 fi

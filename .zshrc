@@ -55,6 +55,7 @@ NOTIFY_COMMAND_COMPLETED_TRESHOLD=10
 KEYTIMEOUT=true
 
 autoload -U select-word-style
+autoload -z edit-command-line
 select-word-style bash
 setopt \
 	appendhistory autocd auto_pushd pushd_ignore_dups pushdminus \
@@ -87,12 +88,14 @@ bindkey -r "^[OA"
 bindkey -r "^[OB"
 bindkey -M viins "^[[A" history-search-backward
 bindkey -M viins "^[[B" history-search-forward
-bindkey -M viins "^R" history-incremental-search-backward-end
-bindkey -M viins "^S" history-incremental-search-forward-end
+bindkey -M viins "^R" history-incremental-search-backward
+bindkey -M viins "^[r" history-incremental-search-forward
+
 # bindkey "^[OA" up-line-or-history
 # bindkey "^[OB" down-line-or-history
 bindkey "^ " autosuggest-accept # Control+Space
 bindkey "^[[Z" reverse-menu-complete # Shift+Tab
+
 # bindkey -M viins "^?" backward-delete-char
 # bindkey -M viins "^W" backward-kill-word
 # bindkey -M viins "^P" up-history
