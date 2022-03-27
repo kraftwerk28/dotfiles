@@ -64,7 +64,6 @@ local iwyu_diagnostics = h.make_builtin {
   factory = h.generator_factory,
 }
 
-
 local iwyu_format = h.make_builtin {
   filetypes = {"cpp", "c"},
   method = m.internal.FORMATTING,
@@ -164,11 +163,7 @@ local jq_format = h.make_builtin {
 
 require("null-ls").setup {
   sources = {
-    b.diagnostics.eslint_d.with {
-      cwd = function(params)
-        return u.root_pattern(".eslintrc*")(params.bufname)
-      end
-    },
+    b.diagnostics.eslint_d,
     b.formatting.eslint_d,
     b.diagnostics.luacheck.with {
       args = {
@@ -187,15 +182,10 @@ require("null-ls").setup {
       filetypes = {"graphql"},
     },
     b.code_actions.eslint_d,
-    b.diagnostics.shellcheck.with {
-      filetypes = {"sh", "PKGBUILD"},
-    },
-    b.code_actions.shellcheck.with {
-      filetypes = {"sh", "PKGBUILD"},
-    },
-    -- hoogle_hover,
-    -- iwyu_format,
+    b.diagnostics.shellcheck,
+    b.code_actions.shellcheck,
     porth_diagnostic,
-    -- jq_format,
+    jq_format,
+    b.formatting.sqlformat,
   },
 }

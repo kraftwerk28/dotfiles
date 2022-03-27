@@ -3,12 +3,15 @@ set $left  h
 set $down  j
 set $up    k
 set $right l
-set $cursor_theme "Adwaita"
-set $cursor_size 24
+# set $cursor_theme "Adwaita"
+set $cursor_theme "Simp1e-Gruvbox-Light"
+# set $cursor_size 24
+set $cursor_size 32
 set $script "$HOME/.config/sway/scripts"
 set $border_width 3
 
-output * bg "$HOME/Pictures/pink_floyd_animals.png" fit
+# output * background "$HOME/Pictures/pink_floyd_animals.png" fit
+output * background "#000000" solid_color
 
 floating_modifier $mod
 
@@ -108,11 +111,9 @@ bindsym {
 	$mod+o exec $script/rename-workspace.sh
 
 	$mod+Shift+e exec swaynag \
-		-t warning \
-		-m "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
-		-b "Yes, exit sway" \
-		--no-dock \
-		"swaymsg exit"
+		--type warning \
+		--message "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
+		--button "Yes, exit sway" "swaymsg exit"
 
 	$mod+1 workspace number 1
 	$mod+2 workspace number 2
@@ -278,6 +279,7 @@ for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
 for_window [tiling app_id="^firefox$"] border pixel $border_width
+for_window [app_id="^foot_floating$"] floating enable
 
 # DAW + guitar = <3
 bindsym $mod+F3 \
@@ -297,12 +299,12 @@ focus_on_window_activation urgent
 # 	--key-hl-color "ffffff" \
 # 	--inside-color "000000"
 
-bindswitch lid:on \
-	input type:keyboard events disabled, \
-	input type:pointer  events disabled
-bindswitch lid:off \
-	input type:keyboard events enabled, \
-	input type:pointer  events enabled
+# bindswitch lid:on \
+# 	input type:keyboard events disabled, \
+# 	input type:pointer  events disabled
+# bindswitch lid:off \
+# 	input type:keyboard events enabled, \
+# 	input type:pointer  events enabled
 
 exec "systemctl --user import-environment; systemctl --user start sway-session.target"
 
