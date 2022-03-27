@@ -26,9 +26,9 @@ theme:
 blocks:
 
   - name: shell
-    command: ~/.config/sway/bar-scripts/weather.py
+    command: ~/.config/sway/bar-scripts/weather.sh
     on_click: |
-      [ $BUTTON = Left ] && ~/.config/sway/bar-scripts/weather.py open
+      [ $BUTTON = Left ] && ~/.config/sway/bar-scripts/weather.sh -o
     interval: 5m
 
   - name: pulseaudio
