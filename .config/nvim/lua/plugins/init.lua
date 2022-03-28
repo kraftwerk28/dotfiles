@@ -152,56 +152,15 @@ local function load(use)
     },
     config = function() require("plugins.cmp") end,
   }
+
   use {
     "kyazdani42/nvim-tree.lua",
     requires = {"kyazdani42/nvim-web-devicons", opt = true},
-    config = function()
-      local utils = require("config.utils")
-      utils.highlight {"NvimTreeFolderName", "Title"}
-      utils.highlight {"NvimTreeFolderIcon", "Title"}
-      vim.g.nvim_tree_indent_markers = 0
-      vim.g.nvim_tree_icons = {
-        folder = {
-          arrow_open   = "",
-          arrow_closed = "",
-          default      = "",
-          open         = "",
-          empty        = "",
-          empty_open   = "",
-          symlink      = "",
-          symlink_open = "",
-        },
-        git = {
-          unstaged  = "✗",
-          staged    = "✓",
-          unmerged  = "",
-          renamed   = "➜",
-          untracked = "",
-          deleted   = "",
-          ignored   = "",
-        },
-      }
-      require("nvim-tree").setup {
-        disable_netrw = false,
-        hijack_netrw = true,
-        auto_close = true,
-        hijack_cursor = true,
-        git = {
-          ignore = false
-        },
-        view = {
-          number = true,
-        },
-        actions = {
-          open_file = {
-            quit_on_open = true,
-            resize_window = false,
-          },
-        },
-      }
-    end,
+    config = function() require("plugins.nvimtree") end,
   }
+
   use {"equalsraf/neovim-gui-shim", opt = true}
+
   -- use {
   --   "ray-x/lsp_signature.nvim",
   --   config = function()
@@ -212,10 +171,11 @@ local function load(use)
   --     }
   --   end,
   -- }
+
   use {
     "junegunn/vim-easy-align",
     config = function()
-      vim.api.nvim_set_keymap("v", "<Leader>ea", "<Plug>(EasyAlign)", {})
+      vim.keymap.set("v", "<Leader>ea", "<Plug>(EasyAlign)")
     end,
   }
   use {"mfussenegger/nvim-dap"}
