@@ -256,6 +256,8 @@ local function load(use)
       vim.g.mkdp_filetypes = {"markdown"}
     end,
   }
+
+  -- use {"~/projects/neovim/copilot.vim"}
 end
 
 local function bootstrap()

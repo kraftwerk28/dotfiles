@@ -25,6 +25,12 @@ theme:
 
 blocks:
 
+  # - name: shell
+  #   command: |
+  #     curl -fs "https://war-api.ukrzen.in.ua/alerts/api/alerts/active.json" \
+  #       | jq -r '.alerts | map(.location_title) | join(", ")'
+  #   interval: 1m
+
   - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh
     on_click: |
