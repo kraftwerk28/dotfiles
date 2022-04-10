@@ -1,3 +1,5 @@
+# The function is not used anymore
+
 git_info () {
 	if [[ ! -d ".git" ]] || ! git rev-parse --git-dir &>/dev/null; then
 		return
@@ -12,28 +14,40 @@ git_info () {
 	echo $result
 }
 
-vimode () {
+zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%%b%k%c%u%m'
+zstyle ':vcs_info:git*+set-message:*' hooks check-dirty
+# zstyle ':vcs_info:*+*:*' debug true
++vi-check-dirty () {
+	if git diff-index --exit-code HEAD &>/dev/null; then
+		hook_com[misc]="%B%F{green}✔"
+	else
+		hook_com[misc]="%B%F{red}✗"
+	fi
+}
+
+vimode_label () {
 	case $ZVM_MODE in
 		$ZVM_MODE_NORMAL) echo " %B%F{green}N";;
 		$ZVM_MODE_INSERT) echo " %B%F{cyan}I";;
 		$ZVM_MODE_VISUAL) echo " %B%F{yellow}V";;
-		*) echo " %B%F{cyan}I";;
+		*)                echo " %B%F{cyan}I";;
 	esac
 }
 
-refresh_prompt () {
-	FILEPATH="%F{#ffa500}%(4~|…/%2~|%~)"
-	PROMPT_STATUS=" %(?:%B%F{green}\$:%B%F{red}\$)"
-	CL_RESET="%b%f%k"
-	PROMPT="${FILEPATH}$(git_info)$(vimode)${PROMPT_STATUS}${CL_RESET} "
-	# RPROMPT="%F{green}[$(date +%H:%M:%S)]$CL_RESET"
+vimode_rlabel () {
+	w=$(( COLUMNS / 6 ))
+	case $ZVM_MODE in
+		$ZVM_MODE_NORMAL) echo "%F{green}NORMAL";;
+		$ZVM_MODE_INSERT) echo "%F{blue}INSERT";;
+		$ZVM_MODE_VISUAL) echo "%F{yellow}VISUAL";;
+		*)                echo "";;
+	esac
 }
 
-zle-keymap-select () {
-	refresh_prompt "$1"
-	zle reset-prompt
-}
+filepath='%F{#ffa500}%(4~|…/%2~|%~)'
+exit_status=" %(?:%B%F{green}\$:%B%F{red}\$)"
+creset="%b%f%k"
+PS1="${filepath}\${vcs_info_msg_0_}${exit_status}${creset} "
+# RPS1="\$(vimode_rlabel)%f"
 
-zle -N zle-keymap-select
-zle -N edit-command-line
-zvm_after_select_vi_mode_commands+=(refresh_prompt)
+add-zsh-hook precmd vcs_info

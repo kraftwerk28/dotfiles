@@ -187,5 +187,6 @@ require("null-ls").setup {
     porth_diagnostic,
     jq_format,
     b.formatting.sqlformat,
+    b.formatting.xmllint,
   },
 }

@@ -2,6 +2,16 @@ local lsp_config = require("lspconfig")
 local root_pattern = require("lspconfig.util").root_pattern
 
 local lsp, fn = vim.lsp, vim.fn
+local make_cpb = vim.lsp.protocol.make_client_capabilities
+
+local function find_compile_commands()
+  local ccj = fn.glob("compile_commands.json", nil, true)
+  if #ccj == 0 then
+    ccj = fn.glob("build/compile_commands.json", nil, true)
+  end
+  if #ccj == 0 then return end
+  return fn.fnamemodify(ccj[1], ":p:h")
+end
 
 lsp_config.als.setup {}
 
@@ -148,54 +158,53 @@ lsp_config.tsserver.setup {
 -- }
 
 do
-  local clangdcmd = {"clangd", "--background-index"}
-  if fn.glob("build/compile_commands.json") ~= "" then
-    vim.tbl_extend("force", clangdcmd, {"--compile-commands-dir", "build"})
+  local cmd = {"clangd", "--background-index"}
+  local ccj = find_compile_commands()
+  if ccj then
+    table.insert(cmd, "--compile-commands-dir")
+    table.insert(cmd, ccj)
   end
-  local capabilities = lsp.protocol.make_client_capabilities()
-  capabilities.offsetEncoding = {"utf-16"}
+  local capabilities = make_cpb()
+  capabilities.offsetEncoding = { "utf-16" }
   lsp_config.clangd.setup {
-    cmd = clangdcmd,
-    filetypes = {"c", "cpp", "objc", "objcpp"},
-    root_dir = root_pattern {
-      "CMakeLists.txt",
-      "compile_flags.txt",
-      ".git",
-      fn.getcwd(),
-    },
+    cmd = cmd,
+    root_dir = root_pattern {"CMakeLists.txt", ".git", fn.getcwd()},
     capabilities = capabilities,
   }
 end
 
 lsp_config.svelte.setup {}
 
--- do
---   local schemas = {
---     {
---       fileMatch = {"tsconfig.json", "tsconfig.*.json"},
---       url = "http://json.schemastore.org/tsconfig",
---     },
---     {
---       fileMatch = {"jsconfig.json", "jsconfig.*.json"},
---       url = "http://json.schemastore.org/jsconfig",
---     },
---     {
---       fileMatch = {".eslintrc*"},
---       url = "http://json.schemastore.org/eslintrc",
---     },
---     {
---       fileMatch = {".babelrc*"},
---       url = "http://json.schemastore.org/babelrc",
---     },
---   }
---   lsp_config.jsonls.setup {
---     cmd = {"vscode-json-languageserver", "--stdio"},
---     filetypes = {"json", "jsonc"},
---     -- init_options = {provideFormatter = true},
---     root_dir = root_pattern {".git", fn.getcwd()},
---     settings = {json = {schemas = schemas}},
---   }
--- end
+do
+  -- local schemas = {
+  --   {
+  --     fileMatch = {"tsconfig.json", "tsconfig.*.json"},
+  --     url = "http://json.schemastore.org/tsconfig",
+  --   },
+  --   {
+  --     fileMatch = {"jsconfig.json", "jsconfig.*.json"},
+  --     url = "http://json.schemastore.org/jsconfig",
+  --   },
+  --   {
+  --     fileMatch = {".eslintrc*"},
+  --     url = "http://json.schemastore.org/eslintrc",
+  --   },
+  --   {
+  --     fileMatch = {".babelrc*"},
+  --     url = "http://json.schemastore.org/babelrc",
+  --   },
+  -- }
+  local cpb = make_cpb()
+  cpb.textDocument.completion.completionItem.snippetSupport = true
+  lsp_config.jsonls.setup {
+    cmd = {"vscode-json-languageserver", "--stdio"},
+    -- init_options = {provideFormatter = true},
+    -- settings = {
+    --   json = { schemas = schemas },
+    -- },
+    capabilities = cpb,
+  }
+end
 
 lsp_config.yamlls.setup {
   settings = {

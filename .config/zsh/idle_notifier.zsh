@@ -1,5 +1,7 @@
 requires jq swaymsg notify-send || return
 
+NOTIFY_COMMAND_COMPLETED_TRESHOLD=10
+
 # Send a notification, if command is executing more than
 # NOTIFY_COMMAND_COMPLETED_TRESHOLD seconds and the shell isn't focused
 
@@ -53,6 +55,5 @@ notify_if_needed() {
 	PREEXEC_TIMESTAMP=
 }
 
-autoload -U add-zsh-hook
 add-zsh-hook precmd notify_if_needed
 add-zsh-hook preexec remember_time

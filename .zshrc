@@ -2,8 +2,20 @@
 
 fpath+=("$HOME/.zfunc")
 
+# setopt xtrace
+
 # Disable reverse wrapping mode in foot terminal
-echo -n "\e[?45l"
+echo -n $'\e[?45l'
+
+# Options
+setopt auto_menu complete_in_word always_to_end promptsubst
+setopt appendhistory autocd auto_pushd pushd_ignore_dups pushdminus
+setopt extended_history hist_expire_dups_first hist_ignore_dups
+setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
+unsetopt PROMPT_SP
+
+# Autoloads
+autoload -U select-word-style add-zsh-hook edit-command-line vcs_info compinit
 
 requires () {
 	local banner="$(basename "$0"): please install:"
@@ -31,10 +43,11 @@ plug () {
 
 zvm_config () {
 	ZVM_CURSOR_STYLE_ENABLED=true
-	ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-	ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-	ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+	# Disables cursor styles
+	# ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+	# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+	# ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 }
 
 plug zsh-autosuggestions
@@ -46,22 +59,17 @@ plug zsh-vi-mode
 # export BASE16_THEME="woodland"
 export BASE16_THEME="eighties"
 
-NOTIFY_COMMAND_COMPLETED_TRESHOLD=10
-
-# Change cursor shape depending on vi mode
-# CHANGE_CURSOR_SHAPE=false
-# Show a character depending on vi mode
-# SHOW_VIMODE=true
 KEYTIMEOUT=true
 
-autoload -U select-word-style
-autoload -z edit-command-line
 select-word-style bash
-setopt \
-	appendhistory autocd auto_pushd pushd_ignore_dups pushdminus \
-	extended_history hist_expire_dups_first hist_ignore_dups hist_ignore_space \
-	hist_verify share_history nonomatch
-unsetopt PROMPT_SP
+
+compinit
+
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' list-colors ''
+
 # FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
@@ -78,7 +86,7 @@ fi
 
 NO_THEME=1
 for cfg in ~/.config/zsh/*.zsh; do
-	[[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]] && continue
+	if [[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]]; then continue; fi
 	source "$cfg"
 done
 
@@ -103,23 +111,7 @@ bindkey "^[[Z" reverse-menu-complete # Shift+Tab
 bindkey -M viins "^H" backward-kill-word # Shift+Backspace
 bindkey -s "^[l" "ls\n"
 bindkey -M viins "^I" complete-word
-
-# if [[ -d "/usr/share/nvm" ]]; then
-# 	nvm() {
-# 		echo "Warming up nvm..."
-# 		unset -f nvm
-# 		[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
-# 		source /usr/share/nvm/nvm.sh
-# 		source /usr/share/nvm/install-nvm-exec
-# 		if (( $# > 0 )); then
-# 			nvm $@
-# 		fi
-# 	}
-# 	nvm_on_change_working_dir() {
-# 		if [[ -f .nvmrc ]] && type nvm > /dev/null 2>&1 && nvm
-# 	}
-# 	add-zsh-hook chpwd nvm_on_change_working_dir
-# fi
+bindkey -M viins "^W" backward-delete-word
 
 dump_cwd () {
 	if [[ $PWD != $HOME ]]; then
@@ -154,11 +146,11 @@ noprompt () {
 	PS1="$ "
 }
 
-# fn () notify-send "columns: $COLUMNS"
-# trap fn WINCH
-
 # Make `null` values bold red instead of dim dark in jq colored output
 # https://github.com/stedolan/jq/issues/1972#issuecomment-721667377
 export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 
 eval "$(fnm env --use-on-cd)"
+
+# It requires to be sourced at the end
+plug zsh-syntax-highlighting

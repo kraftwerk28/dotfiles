@@ -11,6 +11,10 @@ vim.g.diagnostic_signs = {
   ERROR = " ", WARN  = " ", INFO  = " ", HINT  = " ",
 }
 
+function _G.printf(...)
+  return print(string.format(...))
+end
+
 -- require('config.lsp_handlers').patch_lsp_handlers()
 
 -- NB: The theme must *not* be set in the packer's `config` function to
@@ -94,7 +98,5 @@ do
     {}
   )
 end
-
--- vim.keymap.set("n", 
 
 return M

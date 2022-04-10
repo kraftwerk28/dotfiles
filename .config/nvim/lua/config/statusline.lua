@@ -1,5 +1,5 @@
 local utils = require("config.utils")
-local fn = vim.fn
+local fn, api = vim.fn, vim.api
 local devicons = require("nvim-web-devicons")
 local ts = require("nvim-treesitter")
 
@@ -29,14 +29,23 @@ local stl_hl = {
   cache = {},
 }
 do
-  local on_colors_load = utils.defglobalfn(function()
-    stl_hl.stl    = utils.get_highlight("StatusLine")
-    stl_hl.stl_nc = utils.get_highlight("StatusLineNC")
-    for hl, _ in pairs(stl_hl.cache) do
-      stl_hl:load(hl)
+  -- local on_colors_load = utils.defglobalfn(function()
+  --   stl_hl.stl    = utils.get_highlight("StatusLine")
+  --   stl_hl.stl_nc = utils.get_highlight("StatusLineNC")
+  --   for hl, _ in pairs(stl_hl.cache) do
+  --     stl_hl:load(hl)
+  --   end
+  -- end)
+  api.nvim_create_autocmd("ColorScheme", {
+    callback = function()
+      stl_hl.stl = utils.get_highlight("StatusLine")
+      stl_hl.stl_nc = utils.get_highlight("StatusLineNC")
+      for hl, _ in pairs(stl_hl.cache) do
+        stl_hl:load(hl)
+      end
     end
-  end)
-  vim.cmd("autocmd ColorScheme * call v:lua."..on_colors_load.."()")
+  })
+  -- vim.cmd("autocmd ColorScheme * call v:lua."..on_colors_load.."()")
 end
 
 function stl_hl:load(name)
@@ -130,17 +139,17 @@ local function make_stl(focused)
 
   stl:sep()
 
-  if focused then
-    stl:add {
-      function()
-        local ts_stl = ts.statusline()
-        if ts_stl and #ts_stl > 0 then
-          return " %<%#User2#" .. ts_stl .. "%*"
-        end
-      end,
-      eval = true,
-    }
-  end
+  -- if focused then
+  --   stl:add {
+  --     function()
+  --       local ts_stl = ts.statusline()
+  --       if ts_stl and #ts_stl > 0 then
+  --         return " %<%#User2#" .. ts_stl .. "%*"
+  --       end
+  --     end,
+  --     eval = true,
+  --   }
+  -- end
 
   stl:group(function()
     stl:space()
@@ -171,7 +180,7 @@ local function make_stl(focused)
             return vim.g.diagnostic_signs[it[2]]..count.." "
           end
         end,
-        -- highlight = it[1],
+        highlight = it[1],
       }
     end
   end)

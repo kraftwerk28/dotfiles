@@ -338,9 +338,9 @@ nnoremap <Leader>O O<Esc>
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
 " Commenting
-nmap <silent> <C-_> gcc
-imap <silent> <C-_> <C-O>:normal gcc<CR>
-xmap <silent> <C-_> gc
+nmap <silent> <C-/> gcc
+imap <silent> <C-/> <C-O>:normal gcc<CR>
+xmap <silent> <C-/> gc
 
 " File explorer
 nnoremap <silent> <F3> :call <SID>nvimTreeToggle(0)<CR>
@@ -404,6 +404,15 @@ nnoremap H <Nop>
 nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
 nnoremap <silent> dba <Cmd>%bd<CR>
 nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
+
+" let g:iexit_timer = 0
+" autocmd ModeChanged * if g:iexit_timer
+"                   \ |   call timer_stop(g:iexit_timer)
+"                   \ | endif
+"                   \ | if v:event.new_mode == "i"
+"                   \ |   let iexit_timer = timer_start(3000,
+"                   \                       { -> feedkeys("\<Esc>") })
+"                   \ | endif
 
 " Doesn't work with system buffer
 

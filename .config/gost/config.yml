@@ -25,6 +25,33 @@ theme:
 
 blocks:
 
+  # - name: shell
+  #   command: |
+  #     jwt=""
+  #     url="https://mw-api.vodafone.ua/prepaybalance/tmf-api/prepayBalanceManagement/v4/bucket"
+  #     curl -sf --compressed "${url}" \
+  #       -A 'Mozilla/5.0 (X11; Linux x86_64; rv:98.0) Gecko/20100101 Firefox/98.0' \
+  #       -H 'X-DEVICE-SOURCE: UNIX OS' \
+  #       -H 'Profile: COUNTERS-DATA' \
+  #       -H "Authorization: Bearer ${jwt}" | jq -r \
+  #       ' .[]
+  #       | select(.bucketType == "VFNewProMonth")
+  #       | "\(.remainingValue.amount)/\(.maximumAmount) \(.remainingValue.units)"'
+  #   interval: 1m
+
+  - name: shell
+    command: |
+      curl -s "https://war-api.ukrzen.in.ua/alerts/api/alerts/active.json" \
+      | jq -r \
+      ' (.alerts | map(.location_title | select(test("кірово"; "i")))) as $l
+      | if $l | length > 0 then
+          { full_text: ("䀘 " + ($l | join(", "))), urgent: true }
+        else
+          ""
+        end'
+    json: true
+    interval: 1m
+
   - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh
     on_click: |
@@ -64,14 +91,19 @@ blocks:
       input-keyboard: " "
 
   - name: networkmanager
-    format: "{status_icon}{strength:3*%}"
-    status_icons:
-      unavailable: "直"
-      connected: "直"
-      disconnected: "睊"
-      connecting: " "
-      connected_local: "直"
-    primary_only: true
+    format: "{status_icon}{access_point}"
+    ap_format: "{strength:3*%}"
+    icons:
+      wifi:
+        unavailable: "直"
+        connected: "直"
+        disconnected: "睊"
+        connecting: " "
+        connected_local: "直"
+      ethernet:
+        connected: ""
+        disconnected: ""
+    on_click: foot --app-id foot_floating nmtui
 
   - name: shell
     command: >

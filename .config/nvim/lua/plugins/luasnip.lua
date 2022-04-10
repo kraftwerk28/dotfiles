@@ -36,20 +36,41 @@ local js_usestate = ls.snippet(
   })
 )
 
-ls.snippets = {
+local snippets = {
   go = { go_iferr },
   javascript = { js_usestate },
   typescript = { js_usestate },
   typescriptreact = { js_usestate },
 }
 
-vim.keymap.set({"s", "i"}, "<C-J>", "<Plug>luasnip-jump-next", { noremap = true })
-vim.keymap.set({"i", "s"}, "<C-K>", function()
-  if ls.jumpable(-1) then
-    return "<Plug>luasnip-jump-prev"
-  else
-    return "<C-K>"
-  end
-end, { noremap = true, expr = true })
-vim.keymap.set({"s", "i"}, "<C-L>", "<Plug>luasnip-expand-or-jump", { noremap = true })
-vim.keymap.set({"s", "i"}, "<C-;>", "<Plug>luasnip-next-choice", { noremap = true })
+ls.add_snippets(nil, snippets)
+
+vim.keymap.set(
+  { "s", "i" },
+  "<C-J>", "<Plug>luasnip-jump-next",
+  { noremap = true }
+)
+vim.keymap.set(
+  { "i", "s" },
+  "<C-K>",
+  function()
+    if ls.jumpable(-1) then
+      return "<Plug>luasnip-jump-prev"
+    else
+      return "<C-K>"
+    end
+  end,
+  { noremap = true, expr = true }
+)
+
+vim.keymap.set(
+  { "s", "i" },
+  "<C-L>", "<Plug>luasnip-expand-or-jump",
+  { noremap = true }
+)
+
+vim.keymap.set(
+  { "s", "i" },
+  "<C-;>", "<Plug>luasnip-next-choice",
+  { noremap = true }
+)

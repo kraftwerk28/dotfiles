@@ -1,14 +1,28 @@
 #!/bin/bash
+# shellcheck disable=2154
 
-read -r wx wy ww wh < <(swaymsg -rt get_tree | jq -r '
-recurse(.nodes[], .floating_nodes[])
-| select(.floating_nodes | length > 0).floating_nodes[]
-| select(.focused).rect
-| "\(.x) \(.y) \(.width) \(.height)"')
+eval "$(swaymsg -t get_tree | jq -r \
+	' (
+		recurse(.nodes[])
+		| select(.type == "workspace")
+		| select(recurse(.nodes[], .floating_nodes[]).focused).rect
+		| "wsx=\(.x); wsy=\(.y); wsw=\(.width); wsh=\(.height); "
+	) + (
+		recurse(.nodes[]) | select(.floating_nodes | length > 0)
+		| .floating_nodes[]
+		| select(.focused)
+		| "wx=\(.rect.x); wy=\(.rect.y); ww=\(.rect.width); wh=\(.rect.height)"
+	)')"
 
-read -r wsx wsy wsw wsh < <(swaymsg -rt get_workspaces | jq -r '
-map(select(.focused))[0].rect
-| "\(.x) \(.y) \(.width) \(.height)"')
+# eval "$(swaymsg -rt get_tree | jq -r \
+# 	' recurse(.nodes[], .floating_nodes[])
+# 	| select(.floating_nodes | length > 0).floating_nodes[]
+# 	| select(.focused)
+# 	| "wx=\(.rect.x); wy=\(.rect.y); ww=\(.rect.width); wh=\(.rect.height+.deco_rect.height)"')"
+
+# eval "$(swaymsg -rt get_workspaces | jq -r \
+# 	' map(select(.focused))[0].rect
+# 	| "wsx=\(.x); wsy=\(.y); wsw=\(.width); wsh=\(.height)"')"
 
 if [[ -z $wx ]]; then
 	echo "Focused window is not floating"
@@ -18,7 +32,7 @@ fi
 (( x = wx - wsx ))
 (( y = wy - wsy ))
 
-while (($#)); do
+while (( $# > 0 )); do
 	case $1 in
 		left) (( x = 0 ));;
 		top) (( y = 0 ));;
