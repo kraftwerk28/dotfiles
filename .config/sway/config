@@ -283,6 +283,7 @@ for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
 for_window [tiling app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^foot_floating$"] floating enable
+for_window [app_id="^gnome-calculator$"] floating enable
 
 # DAW + guitar = <3
 bindsym $mod+F3 \

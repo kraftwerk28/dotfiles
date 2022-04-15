@@ -39,18 +39,18 @@ blocks:
   #       | "\(.remainingValue.amount)/\(.maximumAmount) \(.remainingValue.units)"'
   #   interval: 1m
 
-  - name: shell
-    command: |
-      curl -s "https://war-api.ukrzen.in.ua/alerts/api/alerts/active.json" \
-      | jq -r \
-      ' (.alerts | map(.location_title | select(test("кірово"; "i")))) as $l
-      | if $l | length > 0 then
-          { full_text: ("䀘 " + ($l | join(", "))), urgent: true }
-        else
-          ""
-        end'
-    json: true
-    interval: 1m
+  # - name: shell
+  #   command: |
+  #     curl -s "https://war-api.ukrzen.in.ua/alerts/api/alerts/active.json" \
+  #     | jq -r \
+  #     ' (.alerts | map(.location_title | select(test("кірово"; "i")))) as $l
+  #     | if $l | length > 0 then
+  #         { full_text: ("䀘 " + ($l | join(", "))), urgent: true }
+  #       else
+  #         ""
+  #       end'
+  #   json: true
+  #   interval: 1m
 
   - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh

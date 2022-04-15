@@ -83,6 +83,7 @@ do
 end
 
 do
+
   api.nvim_add_user_command(
     "GoChangeScope",
     function()
@@ -97,6 +98,36 @@ do
     end,
     {}
   )
+
+  local function organize_imports()
+    local params = vim.lsp.util.make_range_params()
+    -- local lnum = vim.api.nvim_win_get_cursor(opts.winnr)[1]
+    -- params.context = {
+    --   diagnostics = vim.lsp.diagnostic.get_line_diagnostics(opts.bufnr, lnum - 1),
+    -- }
+    local result, err = vim.lsp.buf_request_sync(
+      0,
+      "textDocument/codeAction",
+      params
+    )
+    if err then
+      print("error", err)
+      return
+    end
+    print(vim.inspect(result))
+    -- TODO
+    -- for _, r in pairs(result) do
+    --   for _, cmd in ipairs(r.result) do
+    --     if cmd.kind == "source.organizeImports" then
+    --       vim.lsp.buf.execute_command(cmd)
+    --       return
+    --     end
+    --   end
+    -- end
+  end
+
+  -- vim.keymap.set("n", "<Leader>aoi", organize_imports, { noremap = true })
+
 end
 
 return M

@@ -57,6 +57,7 @@ local function load(use)
       "kyazdani42/nvim-web-devicons",
       -- "nvim-lua/popup.nvim",
       "nvim-lua/plenary.nvim",
+      -- "TC72/telescope-tele-tabby.nvim",
     },
     config = function() require("plugins.telescope") end,
   }
@@ -110,8 +111,8 @@ local function load(use)
   use {"bfrg/vim-jq"}
 
   use {
-    "~/projects/neovim/nvim-treesitter",
-    -- "nvim-treesitter/nvim-treesitter",
+    -- "~/projects/neovim/nvim-treesitter",
+    "nvim-treesitter/nvim-treesitter",
     -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
     requires = {
       "nvim-treesitter/playground",

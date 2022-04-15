@@ -72,4 +72,7 @@ if [[ -z "$DISPLAY" && $(tty) = "/dev/tty1" ]]; then
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date --iso-8601=seconds).log"
 	exec sway --verbose --unsupported-gpu &> "$logfile"
+	# exec sway --verbose --debug --unsupported-gpu \
+	# 	--config ~/projects/wayland/sway/myconfig \
+	# 	&> "${sway_logdir}/sway-debug.log"
 fi
