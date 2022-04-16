@@ -1,6 +1,9 @@
 [Unit]
-After=graphical-session.target
+BindsTo=sway-session.target
+
 [Service]
+Type=simple
 ExecStart=gammastep
+
 [Install]
-WantedBy=graphical-session.target
+WantedBy=sway-session.target

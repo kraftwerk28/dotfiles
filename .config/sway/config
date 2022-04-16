@@ -116,7 +116,8 @@ bindsym {
 	$mod+Shift+e exec swaynag \
 		--type warning \
 		--message "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
-		--button "Yes, exit sway" "swaymsg exit"
+		--button "Yes, exit sway" "swaymsg exit" \
+		--no-dock
 
 	$mod+1 workspace number 1
 	$mod+2 workspace number 2
@@ -310,6 +311,6 @@ focus_on_window_activation urgent
 # 	input type:keyboard events enabled, \
 # 	input type:pointer  events enabled
 
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 
 # vim: cms=#\ %s
