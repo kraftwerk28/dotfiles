@@ -15,7 +15,7 @@ local additional_filetypes = {
 
 -- Set options for filetypes
 local ftconfig = {
-  {{"go", "make", "c", "cpp"},
+  {{"go", "make", "c", "cpp", "meson"},
    { shiftwidth = 4, tabstop = 4, expandtab = false }},
   {{"java", "kotlin", "groovy", "csharp", "cabal", "python"},
    { shiftwidth = 4, tabstop = 4, expandtab = true }},

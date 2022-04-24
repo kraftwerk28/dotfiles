@@ -3,7 +3,7 @@ WHAT=${1:-"output"}
 if [[ $WHAT == "area" ]] && pgrep grimshot || pgrep swaynag; then
 	exit
 fi
-fname=$(mktemp -u --suffix .png)
+fname=$(mktemp -u --suffix ".png")
 if ! grimshot save "$WHAT" "$fname" > /dev/null; then
 	exit 0
 fi

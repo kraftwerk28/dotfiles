@@ -57,7 +57,7 @@ plug zsh-vi-mode
 # export BASE16_THEME="default-dark"
 # export BASE16_THEME="gruvbox-dark-hard"
 # export BASE16_THEME="woodland"
-export BASE16_THEME="eighties"
+# export BASE16_THEME="eighties"
 
 KEYTIMEOUT=true
 
@@ -86,7 +86,9 @@ fi
 
 NO_THEME=1
 for cfg in ~/.config/zsh/*.zsh; do
-	if [[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]]; then continue; fi
+	if [[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]]; then
+		continue
+	fi
 	source "$cfg"
 done
 
@@ -128,11 +130,13 @@ c () {
 }
 
 set_window_title() {
+	# TODO: escape the title
 	local title="$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
 	echo -ne "\e]2;${title}\e\\"
 }
 
 reset_window_title() {
+	# TODO: escape the title
 	local title="$(basename $SHELL) (${PWD/$HOME/~})"
 	echo -ne "\e]2;${title}\e\\"
 }

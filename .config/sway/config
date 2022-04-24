@@ -47,8 +47,8 @@ bindsym --to-code {
 	$mod+$up    focus up
 	$mod+$right focus right
 
-	$mod+Control+h exec i3ipc-cmd tab prev
-	$mod+Control+l exec i3ipc-cmd tab next
+	$mod+Control+h nop tab prev
+	$mod+Control+l nop tab next
 	$mod+Control+1 exec $script/tab-switch.sh 1
 	$mod+Control+2 exec $script/tab-switch.sh 2
 	$mod+Control+3 exec $script/tab-switch.sh 3
@@ -129,7 +129,7 @@ bindsym {
 	$mod+8 workspace number 8
 	$mod+9 workspace number 9
 	$mod+0 workspace number 10
-	$mod+Tab exec i3ipc-cmd focus_prev
+	$mod+Tab nop focus_prev
 
 	$mod+Shift+1 move container to workspace number 1
 	$mod+Shift+2 move container to workspace number 2
@@ -146,16 +146,19 @@ bindsym {
 	$mod+minus scratchpad show
 }
 
-bindsym $mod+r mode "resize"
-mode "resize" bindsym {
+bindsym $mod+r mode resize
+mode resize bindsym {
 	$left  resize shrink width  20px
 	$down  resize grow   height 20px
 	$up    resize shrink height 20px
 	$right resize grow   width  20px
 	# Return to default mode
-	Return mode "default"
-	Escape mode "default"
+	Return mode default
+	Escape mode default
 }
+
+bindsym $mod+f12 mode nested_sway
+mode nested_sway bindsym $mod+f12 mode default
 
 # bar {
 # 	swaybar_command waybar
@@ -163,7 +166,7 @@ mode "resize" bindsym {
 
 bar {
 	status_command gost
-	font Iosevka Term Slab Extended Bold 10.5
+	font Iosevka Term Extended Bold 10.5
 	position bottom
 	icon_theme "Papirus"
 	separator_symbol "|"
@@ -194,8 +197,6 @@ input type:touchpad {
 	dwt enabled
 }
 
-include /etc/sway/config.d/*
-
 # Various multimedia keys
 bindsym {
 	XF86AudioRaiseVolume  exec $script/volume-control.sh up
@@ -217,20 +218,22 @@ bindsym {
 	Control+Print         exec $script/screenshot.sh screen
 }
 
-smart_borders on
 # smart_gaps on
 # gaps inner 4
 # gaps outer 4
-# default_border pixel $border_width
-default_border          normal $border_width
+
+smart_borders on
+default_border normal $border_width
 default_floating_border normal $border_width
 titlebar_padding 8 1
 
 focus_wrapping yes
 focus_follows_mouse no
+
+# kraftwerk28's patch only
 mouse_resizing_mode eight_direction
 
-# client.focused_inactive "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+# client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 # client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 # client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
 # client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
@@ -242,6 +245,7 @@ client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
 font Iosevka Term Extended Bold 11
 
+# Set up cursor
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
@@ -256,9 +260,7 @@ exec {
 	kdeconnect-indicator
 	$script/enhance.lua
 }
-
-# Autostart apps
-exec [ "$NO_AUTOSTART" != "1" ] && swaymsg "workspace 5, layout tabbed, exec telegram-desktop, exec foot weechat, exec thunderbird"
+exec [ -n "$NO_AUTOSTART" ] && swaymsg "workspace 5, layout tabbed, exec telegram-desktop, exec foot weechat, exec thunderbird"
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \

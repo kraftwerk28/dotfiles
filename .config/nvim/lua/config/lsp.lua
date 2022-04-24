@@ -1,7 +1,6 @@
 local utils = require("config.utils")
 
-local lsp, fn = vim.lsp, vim.fn
-local highlight = utils.highlight
+local lsp, fn, highlight = vim.lsp, vim.fn, utils.highlight
 
 -- highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
 -- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
@@ -14,10 +13,10 @@ local highlight = utils.highlight
 -- highlight {"DiagnosticUnderlineError", gui = "undercurl"}
 
 -- highlight {"DiagnosticsHint", fg = "Yellow"}
-highlight {"DiagnosticInfo", guifg = "LightBlue"}
+highlight({ "DiagnosticInfo", guifg = "LightBlue" })
 -- highlight {"DiagnosticWarn", guifg = "Orange"}
 -- highlight {"DiagnosticsError", fg = "Red"}
-highlight {"FloatBorder", guifg = "gray"}
+highlight({ "FloatBorder", guifg = "gray" })
 
 fn.sign_define("DiagnosticSignHint", {
   text = vim.g.diagnostic_signs.HINT,
@@ -36,27 +35,29 @@ fn.sign_define("DiagnosticSignError", {
   texthl = "DiagnosticSignError",
 })
 
-local tb = require("telescope.builtin")
-vim.keymap.set("n", "<Leader>f", vim.lsp.buf.formatting, { silent = true })
-vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, { silent = true })
-vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, { silent = true })
-vim.keymap.set(
-  "n", "<Leader>ae",
-  function()
-    vim.diagnostic.open_float { border = vim.g.floatwin_border }
-  end,
-  { silent = true }
-)
-vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, { silent = true })
-vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, { silent = true })
-vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, { silent = true })
-vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, { silent = true })
+do
+  local tb = require("telescope.builtin")
+  local opts = { silent = true, noremap = true }
+  vim.keymap.set("n", "<Leader>f", vim.lsp.buf.formatting, opts)
+  vim.keymap.set("v", "<Leader>f", vim.lsp.buf.range_formatting, opts)
+  vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, opts)
+  vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, opts)
+  vim.keymap.set(
+    "n", "<Leader>ae",
+    function() vim.diagnostic.open_float({ border = vim.g.floatwin_border }) end,
+    opts
+  )
+  vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, opts)
+  vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
+  vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
+  vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)
+end
 
 local function setup_hover()
   local method = "textDocument/hover"
   lsp.handlers[method] = lsp.with(
     lsp.handlers[method],
-    {border = vim.g.floatwin_border}
+    { border = vim.g.floatwin_border }
   )
 end
 
@@ -98,28 +99,5 @@ local function setup_diagnostics()
   end
 end
 
-local function setup_formatting()
-  local method = "textDocument/formatting"
-  local defaut_handler = lsp.handlers[method]
-  lsp.handlers[method] = function(...)
-    -- local err, method, result, client_id, bufnr, config = ...
-    -- dump {
-    --   err = err,
-    --   method = method,
-    --   result = result,
-    --   client_id = client_id,
-    --   bufnr = bufnr,
-    --   config = config,
-    -- }
-    local err = ...
-    if err == nil then
-      defaut_handler(...)
-    else
-      vim.cmd("Neoformat")
-    end
-  end
-end
-
 setup_diagnostics()
--- setup_formatting()
 setup_hover()

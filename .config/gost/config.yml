@@ -91,9 +91,10 @@ blocks:
       input-keyboard: " "
 
   - name: networkmanager
-    format: "{status_icon}{access_point}"
+    format: "{status_icon}{vpn}{access_point}"
     ap_format: "{strength:3*%}"
     icons:
+      vpn: "嬨"
       wifi:
         unavailable: "直"
         connected: "直"

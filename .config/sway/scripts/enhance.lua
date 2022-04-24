@@ -5,7 +5,7 @@ local current_focused, previous_focused
 -- { con_id => { input_identifier => layout_index } }
 local windows = {}
 
-local ipc = i3.Connection:new { cmd = true }
+local ipc = i3.Connection:new()
 
 function ipc:get_keyboard_inputs()
   local inputs, r = self:get_inputs(), {}
@@ -18,7 +18,7 @@ function ipc:get_keyboard_inputs()
 end
 
 ipc:main(function()
-  ipc.cmd:on("tab", function(_, arg)
+  ipc.cmd:on("tab", function(arg)
     local tabbed_node = ipc:get_tree():walk_focus(function(n)
       return n.layout == "tabbed"
     end)
@@ -46,13 +46,13 @@ ipc:main(function()
   end)
 
   ipc.cmd:on("next_float", function()
-    ipc:once("window::new", function(_, event)
+    ipc:once("window::new", function(event)
       -- TODO: read a FIXME comment in lua-i3ipc source
       ipc:command(("[con_id=%s] floating enable"):format(event.container.id))
     end)
   end)
 
-  ipc:on("window::focus", function (ipc, event)
+  ipc:on("window::focus", function (event)
     previous_focused = current_focused
     local con_id = event.container.id
     local inputs = ipc:get_keyboard_inputs()
@@ -90,8 +90,20 @@ ipc:main(function()
     current_focused = con_id
   end)
 
-  ipc:on("window::close", function(_, event)
+  ipc:on("window::close", function(event)
     windows[event.container.id] = nil
+  end)
+
+  -- When using nested sway, it's convenient to exit special mode which
+  -- disables all bindings in "outer" sway
+  ipc:on("window", function(event)
+    if event.container.app_id == "wlroots" then
+      if event.change == "new" then
+        ipc:command("mode nested_sway")
+      elseif event.change == "close" then
+        ipc:command("mode default")
+      end
+    end
   end)
 
   ipc:on("workspace::init", function()
