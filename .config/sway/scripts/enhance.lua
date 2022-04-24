@@ -47,7 +47,6 @@ ipc:main(function()
 
   ipc.cmd:on("next_float", function()
     ipc:once("window::new", function(event)
-      -- TODO: read a FIXME comment in lua-i3ipc source
       ipc:command(("[con_id=%s] floating enable"):format(event.container.id))
     end)
   end)
