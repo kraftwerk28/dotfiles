@@ -260,7 +260,9 @@ exec {
 	kdeconnect-indicator
 	$script/enhance.lua
 }
-exec [ -n "$NO_AUTOSTART" ] && swaymsg "workspace 5, layout tabbed, exec telegram-desktop, exec foot weechat, exec thunderbird"
+
+exec [ "$NO_AUTOSTART" != 1 ] && \
+	swaymsg "workspace 5, layout tabbed, exec telegram-desktop, exec foot weechat, exec thunderbird"
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \

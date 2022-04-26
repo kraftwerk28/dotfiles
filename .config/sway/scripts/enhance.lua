@@ -113,4 +113,23 @@ ipc:main(function()
     end
   end)
 
+  -- Set floating for telegram PiP surface
+  ipc:on("window::new", function(event)
+    local tg_app_id = "appimagekit_64Gram_Desktop"
+    local con = event.container
+    if con.app_id == tg_app_id then
+      local t = ipc:get_tree():find_all(function(c)
+        return c.app_id == tg_app_id
+      end)
+      table.sort(t, function(a, b) return a.pid < b.pid end)
+      table.remove(t, 1)
+      if #t == 0 then return end
+      for _, c in ipairs(t) do
+        if c.type == "con" then
+          ipc:command("[con_id="..c.id.."] floating enable")
+        end
+      end
+    end
+  end)
+
 end)
