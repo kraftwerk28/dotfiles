@@ -157,4 +157,4 @@ export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 eval "$(fnm env --use-on-cd)"
 
 # It requires to be sourced at the end
-plug zsh-syntax-highlighting
+# plug zsh-syntax-highlighting

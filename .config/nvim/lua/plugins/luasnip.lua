@@ -11,7 +11,7 @@ local t = ls.text_node
 
 -- ls.filetype_extend("all", { "_" })
 local function capitalize(s)
-  return s:sub(1, 1):upper()..w:sub(2)
+  return s:sub(1, 1):upper()..s:sub(2)
 end
 
 local go_iferr = ls.snippet(

@@ -31,12 +31,12 @@ local function load(use)
   use {
     "tpope/vim-surround",
     config = function()
-      -- local char2nr = vim.fn.char2nr
-      -- vim.g["surround_"..char2nr('r')] = "{'\r'}"
-      -- vim.g["surround_"..char2nr('j')] = "{/* \r */}"
-      -- vim.g["surround_"..char2nr('c')] = "/* \r */"
-      -- vim.g["surround_"..char2nr('l')] = "[[\r]]"
-      -- vim.g["surround_"..char2nr('i')] = "\1before: \1\r\2after: \2"
+      local char2nr = vim.fn.char2nr
+      vim.g["surround_"..char2nr('r')] = "{'\r'}"
+      vim.g["surround_"..char2nr('j')] = "{/* \r */}"
+      vim.g["surround_"..char2nr('c')] = "/* \r */"
+      vim.g["surround_"..char2nr('l')] = "[[\r]]"
+      vim.g["surround_"..char2nr('i')] = "\1before: \1\r\2after: \2"
     end,
   }
 

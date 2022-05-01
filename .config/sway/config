@@ -6,12 +6,10 @@ set $right l
 set $script "$HOME/.config/sway/scripts"
 set $border_width 3
 
-set {
-	# $cursor_theme "Adwaita"
-	# $cursor_size 24
-	$cursor_theme "Simp1e"
-	$cursor_size 32
-}
+# set $cursor_theme "Adwaita"
+# set $cursor_size 24
+set $cursor_theme "Simp1e"
+set $cursor_size 32
 
 # output * background "$HOME/Pictures/pink_floyd_animals.png" fit
 output * background "#000000" solid_color

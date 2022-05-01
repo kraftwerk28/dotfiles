@@ -8,7 +8,8 @@ set smartindent
 set list
 " set listchars=tab:»\ ,trail:·
 set listchars=tab:>\ ,trail:·
-" set listchars=tab⇥ ,trail·
+" set listchars=tab:⇥\ ,trail:·
+" set listchars=tab:\ ﲒ,trail:·
 set cursorline
 set colorcolumn=80,120
 set mouse=a
