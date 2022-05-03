@@ -84,7 +84,7 @@ end
 
 do
 
-  api.nvim_add_user_command(
+  api.nvim_create_user_command(
     "GoChangeScope",
     function()
       local word = fn.expand("<cword>")

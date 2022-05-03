@@ -37,8 +37,10 @@ cmp.setup {
     { name = "luasnip" },
     { name = "calc" },
   },
-  documentation = {
-    border = vim.g.floatwin_border,
+  window = {
+    documentation = {
+      border = vim.g.floatwin_border,
+    },
   },
   preselect = cmp.PreselectMode.None,
   formatting = {

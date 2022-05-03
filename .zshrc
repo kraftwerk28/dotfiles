@@ -15,7 +15,7 @@ setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
 unsetopt PROMPT_SP
 
 # Autoloads
-autoload -U select-word-style add-zsh-hook edit-command-line vcs_info compinit
+autoload -U add-zsh-hook edit-command-line vcs_info compinit
 
 requires () {
 	local banner="$(basename "$0"): please install:"
@@ -60,8 +60,6 @@ plug zsh-vi-mode
 # export BASE16_THEME="eighties"
 
 KEYTIMEOUT=true
-
-select-word-style bash
 
 compinit
 

@@ -11,6 +11,7 @@ local additional_filetypes = {
   elixir = {"*.exs", "*.ex"},
   prolog = {"*pl"},
   html = {"*.ejs", "*.mjml"},
+  glsl = {"*.{vert,frag}"},
 }
 
 -- Set options for filetypes

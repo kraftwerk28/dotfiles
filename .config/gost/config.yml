@@ -99,7 +99,7 @@ blocks:
         unavailable: "直"
         connected: "直"
         disconnected: "睊"
-        connecting: " "
+        connecting: "直 "
         connected_local: "直"
       ethernet:
         connected: ""

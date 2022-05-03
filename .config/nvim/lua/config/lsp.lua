@@ -38,7 +38,9 @@ fn.sign_define("DiagnosticSignError", {
 do
   local tb = require("telescope.builtin")
   local opts = { silent = true, noremap = true }
-  vim.keymap.set("n", "<Leader>f", vim.lsp.buf.formatting, opts)
+  vim.keymap.set("n", "<Leader>f", function()
+    vim.lsp.buf.format()
+  end, opts)
   vim.keymap.set("v", "<Leader>f", vim.lsp.buf.range_formatting, opts)
   vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, opts)
   vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, opts)
@@ -47,7 +49,7 @@ do
     function() vim.diagnostic.open_float({ border = vim.g.floatwin_border }) end,
     opts
   )
-  vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, opts)
+  -- vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, opts)
   vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
   vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
   vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)

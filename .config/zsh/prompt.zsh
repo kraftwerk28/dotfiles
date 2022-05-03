@@ -17,6 +17,7 @@ git_info () {
 zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%%b%k%c%u%m'
 zstyle ':vcs_info:git*+set-message:*' hooks check-dirty
 # zstyle ':vcs_info:*+*:*' debug true
+
 +vi-check-dirty () {
 	if git diff-index --exit-code HEAD &>/dev/null; then
 		hook_com[misc]="%B%F{green}✔"
