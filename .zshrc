@@ -15,7 +15,8 @@ setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
 unsetopt PROMPT_SP
 
 # Autoloads
-autoload -U add-zsh-hook edit-command-line vcs_info compinit
+autoload -U select-word-style add-zsh-hook edit-command-line vcs_info compinit
+export WORDCHARS='-'
 
 requires () {
 	local banner="$(basename "$0"): please install:"

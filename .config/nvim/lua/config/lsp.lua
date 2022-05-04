@@ -50,6 +50,9 @@ do
     opts
   )
   -- vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, opts)
+  vim.keymap.set("n", "<Leader>aa", function()
+    vim.lsp.buf.code_action()
+  end, opts)
   vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
   vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
   vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)

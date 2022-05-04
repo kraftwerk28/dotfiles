@@ -405,6 +405,8 @@ nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
 nnoremap <silent> dba <Cmd>%bd<CR>
 nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
 
+inoremap <silent> <C-BS> <C-W>
+
 " let g:iexit_timer = 0
 " autocmd ModeChanged * if g:iexit_timer
 "                   \ |   call timer_stop(g:iexit_timer)

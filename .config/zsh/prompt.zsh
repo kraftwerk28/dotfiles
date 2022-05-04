@@ -14,10 +14,9 @@ git_info () {
 	echo $result
 }
 
-zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%%b%k%c%u%m'
-zstyle ':vcs_info:git*+set-message:*' hooks check-dirty
-# zstyle ':vcs_info:*+*:*' debug true
-
+zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%%b%m'
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:git+set-message:*:*' hooks check-dirty
 +vi-check-dirty () {
 	if git diff-index --exit-code HEAD &>/dev/null; then
 		hook_com[misc]="%B%F{green}✔"
