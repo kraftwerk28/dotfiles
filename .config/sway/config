@@ -36,8 +36,8 @@ bindsym --to-code {
 bindsym --to-code {
 	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
 	# based on this variable
-	$mod+p \
-		exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun, \
+	$mod+p exec env -u XDG_CURRENT_DESKTOP \
+		rofi -i -show drun -run-command 'swaymsg exec {cmd}', \
 		input type:keyboard xkb_switch_layout 0
 
 	$mod+$left  focus left
@@ -164,7 +164,7 @@ mode nested_sway bindsym $mod+f12 mode default
 
 bar {
 	status_command gost
-	font Iosevka Term Extended Bold 10.5
+	font Iosevka Term Extended 10.5
 	position bottom
 	icon_theme "Papirus"
 	separator_symbol "|"
@@ -241,7 +241,7 @@ client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
 client.focused_inactive  "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
 client.focused_tab_title "#4c7899" "#285577" "#ffffff"
 
-font Iosevka Term Extended Bold 11
+font Iosevka Term Extended 11
 
 # Set up cursor
 seat * xcursor_theme $cursor_theme $cursor_size
