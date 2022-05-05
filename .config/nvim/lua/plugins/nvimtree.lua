@@ -1,8 +1,4 @@
--- local utils = require("config.utils")
--- local highlight = utils.highlight
-
--- highlight { "NvimTreeFolderName", "Title" }
--- highlight { "NvimTreeFolderIcon", "Title" }
+local nt = require("nvim-tree")
 
 vim.g.nvim_tree_icons = {
   folder = {
@@ -26,7 +22,24 @@ vim.g.nvim_tree_icons = {
   },
 }
 
-require("nvim-tree").setup({
+vim.keymap.set("n", "<F3>", function()
+  if vim.o.filetype == "NvimTree" then
+    return ":NvimTreeClose<CR>"
+  else
+    return ":NvimTreeOpen<CR>"
+  end
+end, { noremap = true, silent = true, expr = true })
+
+vim.keymap.set("n", "<Leader><F3>", function()
+  if vim.o.filetype == "NvimTree" then
+    return ":NvimTreeClose<CR>"
+  else
+    return ":NvimTreeFindFile<CR>"
+  end
+end, { noremap = true, silent = true, expr = true })
+
+
+nt.setup({
   disable_netrw = false,
   hijack_netrw = true,
   hijack_cursor = true,

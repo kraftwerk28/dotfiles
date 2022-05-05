@@ -1,0 +1,82 @@
+#!/bin/bash
+set -eo pipefail
+usage () {
+	echo \
+		"Usage: $(basename "$0") [--notify] [--cursor] [--swaynag] [--copy]" \
+		"[-o|--file <FILE>] [--output <OUTPUT>]" \
+		"[--active|--area|--screen|--window]" >&2
+	exit 1
+}
+while (( $# > 0 )); do
+	arg=$1
+	shift
+	case $arg in
+		--notify) NOTIFY=1;;
+		--swaynag) RUN_SWAYNAG=1;;
+		--cursor) WITH_CURSOR=1;;
+		--copy) COPY=1;;
+		-o|--file) FILE=$1; shift;;
+		--output) OUTPUT=$1; shift;;
+		--active|--area|--screen|--window) ACTION=$arg;;
+		*) usage;;
+	esac
+done
+[[ -z $ACTION ]] && usage
+RECT_QUERY='"\(.rect.x),\(.rect.y - .deco_rect.height) \(.rect.width)x\(.rect.height + .deco_rect.height)"'
+case $ACTION in
+	--area)
+		grim - | imv -f - &
+		IMV_PID=$!
+		if ! GEOM="$(slurp)"; then
+			kill "$IMV_PID"
+			exit
+		fi
+		;;
+	--window)
+		grim - | imv -f - &
+		IMV_PID=$!
+		if ! GEOM=$(swaymsg -t get_tree | jq -r \
+			'.. | select(.pid? and .visible?) | '"$RECT_QUERY" | slurp); then
+			kill "$IMV_PID"
+			exit
+		fi
+		;;
+	--active)
+		GEOM="$(swaymsg -t get_tree | jq -r \
+			' .recurse(.nodes[], floating_nodes[])
+			| select(.focused)
+			| '"$RECT_QUERY")";;
+esac
+[[ -n $OUTPUT ]] && args+=(-o "$OUTPUT")
+[[ -n $GEOM ]] && args+=(-g "$GEOM")
+if [[ -n $RUN_SWAYNAG ]]; then
+	FILE=${FILE:-"$(mktemp /tmp/grimvshot-XXXXXX.png)"}
+	grim "${args[@]}" "$FILE"
+elif [[ -n $COPY ]]; then
+	grim "${args[@]}" - | wl-copy
+else
+	grim "${args[@]}" "$FILE"
+fi
+[[ -n $IMV_PID ]] && kill "$IMV_PID"
+if [[ -n $RUN_SWAYNAG ]]; then
+	case $(swaynag \
+		-t warning \
+		--no-dock \
+		-y overlay \
+		-m 'Choose action' \
+		-Z Copy 'echo copy' \
+		-Z Save 'echo save' \
+		-Z Edit 'echo edit'
+	) in
+		copy) COPY=1; wl-copy < "$FILE";;
+		save) mv "$FILE" "$(xdg-user-dir PICTURES)/grim-$(date -Ins).png";;
+		edit) swappy -f "$FILE"; exit;;
+	esac
+fi
+if [[ -n $NOTIFY ]]; then
+	if [[ -n $COPY ]]; then
+		notify-send "Screenshot copied to clipboard"
+	else
+		notify-send "Screenshot saved to $FILE"
+	fi
+fi

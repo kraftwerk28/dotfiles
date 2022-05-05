@@ -37,7 +37,7 @@ bindsym --to-code {
 	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
 	# based on this variable
 	$mod+p exec env -u XDG_CURRENT_DESKTOP \
-		rofi -i -show drun -run-command 'swaymsg exec {cmd}', \
+		rofi -i -show drun -run-command 'swaymsg exec "{cmd}"', \
 		input type:keyboard xkb_switch_layout 0
 
 	$mod+$left  focus left
@@ -211,9 +211,9 @@ bindsym {
 	XF86AudioNext         exec playerctl next
 	XF86AudioPrev         exec playerctl previous
 
-	Print                 exec $script/screenshot.sh area
-	Shift+Print           exec $script/screenshot.sh window
-	Control+Print         exec $script/screenshot.sh screen
+	Print         exec grimvshot --notify --swaynag --area
+	Shift+Print   exec grimvshot --notify --swaynag --window
+	Control+Print exec grimvshot --notify --swaynag --screen
 }
 
 # smart_gaps on

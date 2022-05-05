@@ -36,11 +36,11 @@ autocmd CursorHold,CursorHoldI * if !bufexists('[Command Line]')
                              \ |   silent checktime
                              \ | endif
 
-autocmd FileType markdown setlocal conceallevel=2
-autocmd FileType NvimTree setlocal signcolumn=no
-autocmd WinEnter * if win_gettype() == 'popup'
-               \ |   setlocal conceallevel=3
-               \ | endif
+" autocmd FileType markdown setlocal conceallevel=2
+" autocmd FileType NvimTree setlocal signcolumn=no
+" autocmd WinEnter * if win_gettype() == 'popup'
+"                \ |   setlocal conceallevel=3
+"                \ | endif
 
 " Filetypes names where q does :q<CR>
 let g:q_close_ft = ['help', 'list', 'qf']
@@ -110,19 +110,19 @@ function! s:compEnter()
   endif
 endfunction
 
-function! s:nvimTreeToggle(find)
-  if &filetype == 'NvimTree'
-    NvimTreeClose
-  elseif a:find
-    NvimTreeFindFile
-  else
-    NvimTreeOpen
-    let l:found = win_findbuf(bufnr('NvimTree'))
-    if len(l:found)
-      call win_gotoid(l:found[0])
-    endif
-  endif
-endfunction
+" function! s:nvimTreeToggle(find)
+"   if &filetype == 'NvimTree'
+"     NvimTreeClose
+"   elseif a:find
+"     NvimTreeFindFile
+"   else
+"     NvimTreeOpen
+"     let l:found = win_findbuf(bufnr('NvimTree'))
+"     if len(l:found)
+"       call win_gotoid(l:found[0])
+"     endif
+"   endif
+" endfunction
 
 " augroup formatprgs
 "   autocmd!
@@ -337,29 +337,6 @@ nnoremap <Leader>O O<Esc>
 
 nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
-" Commenting
-nmap <silent> <C-/> gcc
-imap <silent> <C-/> <C-O>:normal gcc<CR>
-xmap <silent> <C-/> gc
-
-" File explorer
-nnoremap <silent> <F3> :call <SID>nvimTreeToggle(0)<CR>
-nnoremap <silent> <Leader><F3> :call <SID>nvimTreeToggle(1)<CR>
-
-" Search tool
-nnoremap <silent> <C-P> :Telescope find_files<CR>
-nnoremap <silent> <Leader>rg :Telescope live_grep<CR>
-nnoremap <silent> <Leader>b :Telescope buffers<CR>
-nnoremap <silent> <C-B> :Telescope buffers<CR>
-nnoremap <silent> <Leader>ad :Telescope diagnostics<CR>
-
-" Git
-nnoremap <silent> <Leader>gm :Gdiffsplit!<CR>
-nnoremap <silent> <Leader>gs :vertical Git<CR>
-nnoremap <silent> <Leader>gp :Git --paginate push origin HEAD<CR>
-nnoremap <silent> <Leader>m[ :diffget //2<CR>
-nnoremap <silent> <Leader>m] :diffget //3<CR>
-
 " tnoremap <Esc> <C-\><C-N>
 " Window/tab switch when in terminal-insert
 tnoremap <C-W>j <C-\><C-N><C-W>j
@@ -379,24 +356,19 @@ vnoremap / "vy/<C-R>v<CR>
 
 let $MANWIDTH = 80
 " Move the window to the right and set it's appropriate width
-autocmd BufWinEnter *
-  \   if "help" == &ft
-  \ |   wincmd L
-  \ |   execute "82wincmd |"
-  \ | endif
 
-autocmd BufWinEnter *
-  \   if "man" == &ft
-  \ |   if empty(filter(
-  \       tabpagebuflist(),
-  \       { b -> index(["man", "help", ""], bufname(b)) == -1 }
-  \     ))
-  \ |     wincmd o
-  \ |   else
-  \ |     wincmd L
-  \ |     execute "82wincmd |"
-  \ |   endif
-  \ | endif
+" autocmd BufWinEnter *
+"   \   if "man" == &ft
+"   \ |   if empty(filter(
+"   \       tabpagebuflist(),
+"   \       { b -> index(["man", "help", ""], bufname(b)) == -1 }
+"   \     ))
+"   \ |     wincmd o
+"   \ |   else
+"   \ |     wincmd L
+"   \ |     execute "82wincmd |"
+"   \ |   endif
+"   \ | endif
 
 " Because it is annoying
 nnoremap H <Nop>

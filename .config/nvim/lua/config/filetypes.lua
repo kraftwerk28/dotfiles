@@ -29,6 +29,10 @@ local ftconfig = {
    { commentstring = "// %s" }},
   {{"asm"},
    { shiftwidth = 8, tabstop=8, expandtab = false }},
+  {{"markdown"},
+   { conceallevel = 2 }},
+  -- {{"NvimTree"},
+  --  { signcolumn = "no" }},
 }
 
 return function()

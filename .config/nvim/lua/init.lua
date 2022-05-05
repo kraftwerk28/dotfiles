@@ -4,6 +4,12 @@ local api, fn = vim.api, vim.fn
 local utils = require("config.utils")
 local load = utils.load
 
+_G.A = setmetatable({}, {
+  __index = function(_, k)
+    return vim.api["nvim_"..k]
+  end
+})
+
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
@@ -129,5 +135,29 @@ do
   -- vim.keymap.set("n", "<Leader>aoi", organize_imports, { noremap = true })
 
 end
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  callback = function()
+    if vim.bo.filetype == "help" then
+      vim.cmd("wincmd L | 82wincmd |")
+    elseif vim.bo.filetype == "man" then
+      -- TODO:
+      -- local wins = vim.tbl_filter(
+      --   function(w)
+      --     local b = vim.api.nvim_win_get_buf(w)
+      --     local ft = vim.api.nvim_buf_get_option(b, "filetype")
+      --     print(b, ft)
+      --     return ft ~= "" and ft ~= "man"
+      --   end,
+      --   vim.api.nvim_tabpage_list_wins(0)
+      -- )
+      -- print(vim.inspect(wins))
+      -- if #wins == 0 then
+      --   -- print("should go to the right")
+      --   vim.cmd("wincmd L | 82wincmd |")
+      -- end
+    end
+  end,
+})
 
 return M

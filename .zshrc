@@ -2,6 +2,7 @@
 
 fpath+=("$HOME/.zfunc")
 
+# zmodload zsh/zprof
 # setopt xtrace
 
 # Disable reverse wrapping mode in foot terminal
@@ -15,8 +16,8 @@ setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
 unsetopt PROMPT_SP
 
 # Autoloads
-autoload -U select-word-style add-zsh-hook edit-command-line vcs_info compinit
-export WORDCHARS='-'
+autoload -U add-zsh-hook edit-command-line vcs_info compinit
+# export WORDCHARS='-'
 
 requires () {
 	local banner="$(basename "$0"): please install:"
@@ -91,28 +92,20 @@ for cfg in ~/.config/zsh/*.zsh; do
 	source "$cfg"
 done
 
-# NB: Some of these are handled by zsh-vi-mode.
-# bindkey -v
-bindkey -r "^[OA"
-bindkey -r "^[OB"
-bindkey -M viins "^[[A" history-search-backward
-bindkey -M viins "^[[B" history-search-forward
-bindkey -M viins "^R" history-incremental-search-backward
-bindkey -M viins "^[r" history-incremental-search-forward
+bindkeys () {
+	bindkey -v "^[[A" history-search-backward
+	bindkey -v "^[[B" history-search-forward
+	bindkey -v "^R" history-incremental-search-backward
+	bindkey -v "^[r" history-incremental-search-forward
+	bindkey -v "^ " autosuggest-accept # Control+Space
+	bindkey -v "^[[Z" reverse-menu-complete # Shift+Tab
+	bindkey -v "^H" vi-backward-kill-word # Shift+Backspace
+	bindkey -v "^W" vi-backward-kill-word
+	bindkey -v -s "^[l" "ls\n"
+	bindkey -v "^I" complete-word
+}
 
-# bindkey "^[OA" up-line-or-history
-# bindkey "^[OB" down-line-or-history
-bindkey "^ " autosuggest-accept # Control+Space
-bindkey "^[[Z" reverse-menu-complete # Shift+Tab
-
-# bindkey -M viins "^?" backward-delete-char
-# bindkey -M viins "^W" backward-kill-word
-# bindkey -M viins "^P" up-history
-# bindkey -M viins "^N" down-history
-bindkey -M viins "^H" backward-kill-word # Shift+Backspace
-bindkey -s "^[l" "ls\n"
-bindkey -M viins "^I" complete-word
-bindkey -M viins "^W" backward-delete-word
+zvm_after_init_commands=(bindkeys)
 
 dump_cwd () {
 	if [[ $PWD != $HOME ]]; then

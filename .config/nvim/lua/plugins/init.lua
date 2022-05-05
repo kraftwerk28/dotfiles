@@ -47,6 +47,9 @@ local function load(use)
         "default",
         { prefer_single_line_comments = true }
       )
+      vim.keymap.set("n", "<C-/>", "gcc", { silent = true })
+      vim.keymap.set("i", "<C-/>", "<C-O>:normal gcc<CR>", { silent = true })
+      vim.keymap.set("x", "<C-/>", "gc", { silent = true })
     end,
   }
 
@@ -67,10 +70,14 @@ local function load(use)
     "lewis6991/gitsigns.nvim",
     requires = {"nvim-lua/plenary.nvim"},
     config = function()
-      require("gitsigns").setup {
-        keymaps = {
-        },
-      }
+      require("gitsigns").setup({
+        keymaps = {},
+      })
+      local m = vim.keymap.set
+      m("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>", { noremap = true })
+      m("n", "<Leader>gs", "<Cmd>vert Git<CR>",    { noremap = true })
+      m("n", "<Leader>mh", "<Cmd>diffget //2<CR>", { noremap = true })
+      m("n", "<Leader>ml", "<Cmd>diffget //3<CR>", { noremap = true })
     end,
   }
 
