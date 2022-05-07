@@ -71,6 +71,7 @@ if [[ -n $RUN_SWAYNAG ]]; then
 		copy) COPY=1; wl-copy < "$FILE";;
 		save) mv "$FILE" "$(xdg-user-dir PICTURES)/grim-$(date -Ins).png";;
 		edit) swappy -f "$FILE"; exit;;
+		*) exit;;
 	esac
 fi
 if [[ -n $NOTIFY ]]; then

@@ -49,14 +49,9 @@ local snippets = {
 ls.add_snippets(nil, snippets)
 
 do
+  vim.keymap.set({"s", "i"}, "<C-J>", "<Plug>luasnip-jump-next")
   vim.keymap.set(
-    { "s", "i" },
-    "<C-J>", "<Plug>luasnip-jump-next",
-    { noremap = true }
-  )
-  vim.keymap.set(
-    { "i", "s" },
-    "<C-K>",
+    {"i", "s"}, "<C-K>",
     function()
       if ls.jumpable(-1) then
         return "<Plug>luasnip-jump-prev"
@@ -64,16 +59,8 @@ do
         return "<C-K>"
       end
     end,
-    { noremap = true, expr = true }
+    { expr = true }
   )
-  vim.keymap.set(
-    { "s", "i" },
-    "<C-L>", "<Plug>luasnip-expand-or-jump",
-    { noremap = true }
-  )
-  vim.keymap.set(
-    { "s", "i" },
-    "<C-;>", "<Plug>luasnip-next-choice",
-    { noremap = true }
-  )
+  vim.keymap.set({"s", "i"}, "<C-L>", "<Plug>luasnip-expand-or-jump")
+  vim.keymap.set({"s", "i"}, "<C-;>", "<Plug>luasnip-next-choice")
 end

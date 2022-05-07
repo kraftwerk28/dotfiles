@@ -35,12 +35,13 @@ requires () {
 }
 
 plug () {
-	local plugfile="/usr/share/zsh/plugins/${1}/${1}.plugin.zsh"
-	if [[ -f $plugfile ]]; then
-		source "$plugfile"
-	else
-		echo "Plugin $1 not found" 1>&2
-	fi
+	for c in {/usr/share/zsh/plugins,$HOME/.config/zsh/plugins}/$1/$1.plugin.zsh; do
+		if [[ -f $c ]]; then
+			source "$c"
+			return
+		fi
+	done
+	echo "Plugin $1 not found" >&2
 }
 
 zvm_config () {
@@ -55,6 +56,9 @@ zvm_config () {
 plug zsh-autosuggestions
 plug zsh-z
 plug zsh-vi-mode
+plug zsh-fzf-history-search
+
+ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS='--reverse --height=10 --cycle'
 
 # export BASE16_THEME="default-dark"
 # export BASE16_THEME="gruvbox-dark-hard"
@@ -68,7 +72,7 @@ compinit
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' list-colors ''
+# zstyle ':completion:*' list-colors ''
 
 # FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
 HISTFILE="$HOME/.zsh_history"
@@ -93,10 +97,11 @@ for cfg in ~/.config/zsh/*.zsh; do
 done
 
 bindkeys () {
-	bindkey -v "^[[A" history-search-backward
-	bindkey -v "^[[B" history-search-forward
-	bindkey -v "^R" history-incremental-search-backward
-	bindkey -v "^[r" history-incremental-search-forward
+	# bindkey -v "^[[A" history-search-backward
+	# bindkey -v "^[[B" history-search-forward
+	# bindkey -v "^R" history-incremental-search-backward
+	# bindkey -v "^[r" history-incremental-search-forward
+	bindkey "^R" fzf_history_search
 	bindkey -v "^ " autosuggest-accept # Control+Space
 	bindkey -v "^[[Z" reverse-menu-complete # Shift+Tab
 	bindkey -v "^H" vi-backward-kill-word # Shift+Backspace

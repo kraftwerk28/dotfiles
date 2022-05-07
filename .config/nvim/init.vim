@@ -354,7 +354,7 @@ vnoremap / "vy/<C-R>v<CR>
 
 " nnoremap <Leader>ma :vertical Man 
 
-let $MANWIDTH = 80
+" let $MANWIDTH = 80
 " Move the window to the right and set it's appropriate width
 
 " autocmd BufWinEnter *

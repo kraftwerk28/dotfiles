@@ -8,7 +8,7 @@ set $border_width 3
 
 # set $cursor_theme "Adwaita"
 # set $cursor_size 24
-set $cursor_theme "Simp1e"
+set $cursor_theme "Simp1e-Breeze-Snow"
 set $cursor_size 32
 
 # output * background "$HOME/Pictures/pink_floyd_animals.png" fit

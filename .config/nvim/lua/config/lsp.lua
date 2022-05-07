@@ -37,7 +37,7 @@ fn.sign_define("DiagnosticSignError", {
 
 do
   local tb = require("telescope.builtin")
-  local opts = { silent = true, noremap = true }
+  local opts = { silent = true }
   vim.keymap.set("n", "<Leader>f", function()
     vim.lsp.buf.format()
   end, opts)

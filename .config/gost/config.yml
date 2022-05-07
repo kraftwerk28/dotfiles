@@ -53,6 +53,10 @@ blocks:
   #   interval: 1m
 
   - name: shell
+    command: ALERTS_LOC_REGEX='кіро' ~/.config/sway/scripts/air_alerts.py
+    json: true
+
+  - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh
     on_click: |
       [ $BUTTON = Left ] && ~/.config/sway/bar-scripts/weather.sh -o

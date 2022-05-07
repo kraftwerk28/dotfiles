@@ -16,6 +16,8 @@ do
   m("n", "<Leader>rg", b.live_grep, opt)
   m("n", "<Leader>b", b.buffers, opt)
   m("n", "<Leader>ad", b.diagnostics, opt)
+  m("n", "<Leader>ma", function() b.man_pages({ sections = {"ALL"} }) end, opt)
+  m("n", "<Leader>he", b.help_tags, opt)
 end
 
 telescope.setup({
