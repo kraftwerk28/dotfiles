@@ -161,6 +161,13 @@ local jq_format = h.make_builtin {
   factory = h.formatter_factory,
 }
 
+local b = require("null-ls.builtins")
+require("null-ls").setup {
+  sources = {
+    b.diagnostics.shellcheck,
+    b.code_actions.shellcheck,
+  },
+}
 require("null-ls").setup {
   sources = {
     b.diagnostics.eslint_d,

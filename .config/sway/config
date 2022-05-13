@@ -16,6 +16,8 @@ output * background "#000000" solid_color
 
 floating_modifier $mod
 
+set $foo '#abfeef'
+
 # bindsym --to-code {
 # 	$mod+Return exec alacritty
 # 	$mod+Shift+Return exec alacritty \
@@ -29,8 +31,7 @@ bindsym --to-code {
 	$mod+Return exec foot
 	$mod+Shift+Return exec foot \
 		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
-	$mod+f2 exec foot \
-		--working-directory $HOME/.config/sway $SHELL -i -c "nvim config"
+	$mod+f2 exec foot $SHELL -i -c "cd $HOME/.config/sway && nvim config"
 }
 
 bindsym --to-code {

@@ -12,7 +12,8 @@ _G.A = setmetatable({}, {
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
-vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
+-- vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
+vim.g.floatwin_border = {'┌', '─', '┐', '│', '┘', '─', '└', '│'}
 vim.g.diagnostic_signs = {
   ERROR = " ", WARN  = " ", INFO  = " ", HINT  = " ",
 }
@@ -51,45 +52,36 @@ function M.save_session()
   vim.cmd("mksession")
 end
 
-function M.restore_session()
-  if fn.filereadable("Session.vim") == 0 then
-    return
-  end
-  vim.cmd("source Session.vim")
-  if fn.bufexists(1) == 1 then
-    for i = 1, fn.bufnr("$") do
-      if fn.bufwinnr(i) == -1 then
-        vim.cmd("sbuffer "..i)
-      end
-    end
-  end
-end
-
 api.nvim_create_autocmd("TextYankPost", {
   callback = function()
     local highlight = require("vim.highlight")
     if highlight then
-      highlight.on_yank { timeout = 1000 }
+      highlight.on_yank({ timeout = 1000 })
     end
   end,
 })
 
 do
   local no_line_number_ft = {"help", "man", "list", "TelescopePrompt"}
-  local f = utils.defglobalfn(function(relative)
-    if
-      fn.win_gettype() == "popup"
-      or vim.tbl_contains(no_line_number_ft, vim.bo.filetype)
-    then return end
-    vim.wo.number = true
-    vim.wo.relativenumber = relative
-  end)
-  vim.cmd(("autocmd BufEnter,WinEnter,FocusGained * lua %s(true)"):format(f))
-  vim.cmd(("autocmd BufLeave,WinLeave,FocusLost * lua %s(false)"):format(f))
+  local function set_nu(relative)
+    return function()
+      if fn.win_gettype() == "popup" then return end
+      if vim.tbl_contains(no_line_number_ft, vim.bo.filetype) then
+        return
+      end
+      vim.wo.number = true
+      vim.wo.relativenumber = relative
+    end
+  end
+  vim.api.nvim_create_autocmd("BufEnter,WinEnter,FocusGained", {
+    callback = set_nu(true)
+  })
+  vim.api.nvim_create_autocmd("BufLeave,WinLeave,FocusLost", {
+    callback = set_nu(false)
+  })
 end
 
 do
-
   api.nvim_create_user_command(
     "GoChangeScope",
     function()
@@ -133,7 +125,14 @@ do
   end
 
   -- vim.keymap.set("n", "<Leader>aoi", organize_imports, { noremap = true })
+end
 
+-- set 'makeprg' for some projects
+if vim.fn.glob("meson.build") ~= "" then
+  vim.o.makeprg = "meson compile -C build"
+end
+if vim.fn.glob("go.mod") ~= "" then
+  vim.o.makeprg = "go build"
 end
 
 vim.api.nvim_create_autocmd("BufWinEnter", {

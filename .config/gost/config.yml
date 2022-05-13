@@ -53,10 +53,6 @@ blocks:
   #   interval: 1m
 
   - name: shell
-    command: ALERTS_LOC_REGEX='кіро' ~/.config/sway/scripts/air_alerts.py
-    json: true
-
-  - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh
     on_click: |
       [ $BUTTON = Left ] && ~/.config/sway/bar-scripts/weather.sh -o
@@ -68,7 +64,7 @@ blocks:
     on_click: |
       case $BUTTON in
         Right) ~/.config/sway/bar-scripts/switch_audio_sink.py next;;
-        Left) pavucontrol -t 3;;
+        Left) if ! pgrep -x pavucontrol; then pavucontrol -t 3; fi;;
       esac
     icons: *pulse_icons
 
@@ -78,7 +74,7 @@ blocks:
     icons: *pulse_icons
     on_click: |
       case $BUTTON in
-        Left) pavucontrol -t 4;;
+        Left) if ! pgrep -x pavucontrol; then pavucontrol -t 4; fi;;
       esac
 
   - name: bluez
@@ -108,7 +104,7 @@ blocks:
       ethernet:
         connected: ""
         disconnected: ""
-    on_click: foot --app-id foot_floating nmtui
+    on_click: if ! pgrep -x nmtui; then foot --app-id foot_floating nmtui; fi
 
   - name: shell
     command: >

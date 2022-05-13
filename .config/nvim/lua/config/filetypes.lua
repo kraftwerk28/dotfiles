@@ -31,6 +31,8 @@ local ftconfig = {
    { shiftwidth = 8, tabstop=8, expandtab = false }},
   {{"markdown"},
    { conceallevel = 2 }},
+  {{"graphql"},
+   { commentstring = "# %s" }},
   -- {{"NvimTree"},
   --  { signcolumn = "no" }},
 }

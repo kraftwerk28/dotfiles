@@ -5,8 +5,11 @@ set background=dark
 
 syntax enable
 syntax on
+
 " execute "colorscheme base16-".$BASE16_THEME
 colorscheme kanagawa
+" colorscheme base16-gruvbox-light-medium
+" colorscheme base16-gruvbox-dark-medium
 
 if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim
@@ -378,6 +381,8 @@ nnoremap <silent> dba <Cmd>%bd<CR>
 nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
 
 inoremap <silent> <C-BS> <C-W>
+
+au BufRead,BufNewFile */sway/config set filetype=sway
 
 " let g:iexit_timer = 0
 " autocmd ModeChanged * if g:iexit_timer

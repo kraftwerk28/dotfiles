@@ -13,7 +13,8 @@ setopt auto_menu complete_in_word always_to_end promptsubst
 setopt appendhistory autocd auto_pushd pushd_ignore_dups pushdminus
 setopt extended_history hist_expire_dups_first hist_ignore_dups
 setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
-unsetopt PROMPT_SP
+setopt hist_ignore_dups hist_ignore_all_dups hist_find_no_dups
+setopt noprompt_sp
 
 # Autoloads
 autoload -U add-zsh-hook edit-command-line vcs_info compinit
@@ -68,11 +69,13 @@ ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS='--reverse --height=10 --cycle'
 KEYTIMEOUT=true
 
 compinit
+# zmodload zsh/complist
+# bindkey -M menuselect '^[' send-break
 
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-# zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-colors ''
 
 # FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
 HISTFILE="$HOME/.zsh_history"

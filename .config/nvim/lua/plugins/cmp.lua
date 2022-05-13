@@ -3,21 +3,14 @@ local lspkind = require"lspkind"
 local api = vim.api
 local luasnip = require("luasnip")
 
--- snippy.setup {
---   mappings = {
---     is = {
---       ["<C-K>"] = "previous",
---       ["<C-J>"] = "next",
---     },
---   },
--- }
-
 cmp.setup {
   mapping = {
-    ["<Tab>"]     = cmp.mapping.select_next_item(),
-    ["<S-Tab>"]   = cmp.mapping.select_prev_item(),
+    ["<Tab>"] = cmp.mapping.select_next_item(),
+    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+    ["<C-N>"] = cmp.mapping.select_next_item(),
+    ["<C-P>"] = cmp.mapping.select_prev_item(),
     ["<C-Space>"] = cmp.mapping.complete(),
-    ["<CR>"]      = cmp.mapping.confirm({ select = false }),
+    ["<CR>"] = cmp.mapping.confirm({ select = false }),
   },
   sources = cmp.config.sources {
     { name = "nvim_lsp" },
@@ -62,9 +55,9 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
-  view = {
-    entries = "native",
-  },
+  -- view = {
+  --   entries = "native",
+  -- },
 }
 
 --[[

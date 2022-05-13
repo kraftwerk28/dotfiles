@@ -228,7 +228,9 @@ lsp_config.cssls.setup {}
 --   cmd = {"vscode-html-languageserver", "--stdio"}
 -- }
 
-lsp_config.bashls.setup {filetypes = {"bash", "sh", "zsh"}}
+-- lsp_config.bashls.setup {
+--   filetypes = {"bash", "sh", "zsh"}
+-- }
 
 lsp_config.solargraph.setup {}
 

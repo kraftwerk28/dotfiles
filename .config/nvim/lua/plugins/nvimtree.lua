@@ -28,7 +28,7 @@ vim.keymap.set("n", "<F3>", function()
   else
     return ":NvimTreeOpen<CR>"
   end
-end, { noremap = true, silent = true, expr = true })
+end, { silent = true, expr = true })
 
 vim.keymap.set("n", "<Leader><F3>", function()
   if vim.o.filetype == "NvimTree" then
@@ -36,7 +36,7 @@ vim.keymap.set("n", "<Leader><F3>", function()
   else
     return ":NvimTreeFindFile<CR>"
   end
-end, { noremap = true, silent = true, expr = true })
+end, { silent = true, expr = true })
 
 
 nt.setup({

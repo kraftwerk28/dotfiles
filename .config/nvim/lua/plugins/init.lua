@@ -21,7 +21,7 @@ local function load(use)
   use {
     -- "~/projects/neovim/nvim-base16",
     "RRethy/nvim-base16",
-    disable = true,
+    -- disable = true,
   }
   use { "projekt0n/github-nvim-theme", disable = true }
   use {"rebelot/kanagawa.nvim"}
@@ -229,6 +229,17 @@ local function load(use)
   }
 
   use { "~/projects/neovim/copilot.vim", disable = true }
+
+  use {
+    "Shatur/neovim-session-manager",
+    requires = {"nvim-lua/plenary.nvim"},
+    config = function()
+      local c = require('session_manager.config')
+      require('session_manager').setup({
+        autoload_mode = c.AutoloadMode.Disabled,
+      })
+    end,
+  }
 end
 
 local function bootstrap()
@@ -252,7 +263,11 @@ local function bootstrap()
   }
   api.nvim_create_autocmd("BufWritePost", {
     pattern = "*/plugins/init.lua",
-    command = "source <afile> | PackerCompile",
+    callback = function(arg)
+      vim.cmd("source "..arg.file)
+      print("Running :PackerCompile")
+      vim.cmd("PackerCompile")
+    end,
   })
   if not_installed then
     vim.cmd("PackerSync")
