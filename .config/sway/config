@@ -8,7 +8,7 @@ set $border_width 3
 
 # set $cursor_theme "Adwaita"
 # set $cursor_size 24
-set $cursor_theme "Simp1e-Breeze-Snow"
+set $cursor_theme "Simp1e"
 set $cursor_size 32
 
 # output * background "$HOME/Pictures/pink_floyd_animals.png" fit
@@ -307,12 +307,12 @@ focus_on_window_activation urgent
 # 	--key-hl-color "ffffff" \
 # 	--inside-color "000000"
 
-# bindswitch lid:on \
-# 	input type:keyboard events disabled, \
-# 	input type:pointer  events disabled
-# bindswitch lid:off \
-# 	input type:keyboard events enabled, \
-# 	input type:pointer  events enabled
+bindswitch lid:on \
+	input type:keyboard events disabled, \
+	input type:pointer  events disabled
+bindswitch lid:off \
+	input type:keyboard events enabled, \
+	input type:pointer  events enabled
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 

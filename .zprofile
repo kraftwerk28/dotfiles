@@ -67,11 +67,11 @@ export PATH="$PATH:$HOME/.ghcup/bin/"
 
 export NVIM_LISTEN_PORT=6969
 
-if [[ -z "$DISPLAY" && $(tty) = "/dev/tty1" ]]; then
+if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"
-	logfile="${sway_logdir}/sway-$(date --iso-8601=seconds).log"
-	exec sway --verbose --unsupported-gpu &> "$logfile"
+	logfile="${sway_logdir}/sway-$(date -Is).log"
+	exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \
 	# 	&> "${sway_logdir}/sway-debug.log"
