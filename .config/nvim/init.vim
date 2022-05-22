@@ -1,43 +1,22 @@
 scriptencoding utf-8
 autocmd!
-set termguicolors
-set background=dark
-
-syntax enable
-syntax on
-
-" execute "colorscheme base16-".$BASE16_THEME
-colorscheme kanagawa
-" colorscheme base16-gruvbox-light-medium
-" colorscheme base16-gruvbox-dark-medium
 
 if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim
 endif
 
 runtime opts.vim
+colorscheme kanagawa
+" colorscheme base16-gruvbox-light-medium
+" colorscheme base16-gruvbox-dark-medium
 lua require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
 
-function! s:restoreCursor()
-  let l:last_pos = line("'\"")
-  if l:last_pos > 0 && l:last_pos <= line('$')
-    exe 'normal! g`"'
-  endif
-endfunction
-
-autocmd BufReadPost * call s:restoreCursor()
-
-augroup auto_save
-  autocmd!
-  autocmd FocusLost * silent! wall
-augroup END
-
 " Reload file if it changed on disk
-autocmd CursorHold,CursorHoldI * if !bufexists('[Command Line]')
-                             \ |   silent checktime
-                             \ | endif
+" autocmd CursorHold,CursorHoldI * if !bufexists('[Command Line]')
+"                              \ |   silent checktime
+"                              \ | endif
 
 " autocmd FileType markdown setlocal conceallevel=2
 " autocmd FileType NvimTree setlocal signcolumn=no
@@ -46,17 +25,17 @@ autocmd CursorHold,CursorHoldI * if !bufexists('[Command Line]')
 "                \ | endif
 
 " Filetypes names where q does :q<CR>
-let g:q_close_ft = ['help', 'list', 'qf']
-let g:esc_close_ft = ['NvimTree']
+" let g:q_close_ft = ['help', 'list', 'qf']
+" let g:esc_close_ft = ['NvimTree']
 
-augroup aux_win_close
-  autocmd!
-  autocmd FileType fugitive,git nmap <buffer> q gq
-  execute printf('autocmd FileType %s noremap <silent><buffer> <Esc> :q<CR>',
-               \ join(g:esc_close_ft, ','))
-  execute printf('autocmd FileType %s noremap <silent><buffer> q :q<CR>',
-               \ join(g:q_close_ft, ','))
-augroup END
+" augroup aux_win_close
+"   autocmd!
+"   autocmd FileType fugitive,git nmap <buffer> q gq
+"   execute printf('autocmd FileType %s noremap <silent><buffer> <Esc> :q<CR>',
+"                \ join(g:esc_close_ft, ','))
+"   execute printf('autocmd FileType %s noremap <silent><buffer> q :q<CR>',
+"                \ join(g:q_close_ft, ','))
+" augroup END
 
 " autocmd WinEnter * if &buftype == 'terminal'
 "                \ |   startinsert
@@ -89,29 +68,29 @@ function RevStr(str)
   return join(reverse(l:chars), '')
 endfunction
 
-function! s:compTab()
-  if pumvisible()
-    return "\<C-N>"
-  else
-    return "\<Tab>"
-  endif
-endfunction
+" function! s:compTab()
+"   if pumvisible()
+"     return "\<C-N>"
+"   else
+"     return "\<Tab>"
+"   endif
+" endfunction
 
-function! s:compShiftTab()
-  if pumvisible()
-    return "\<C-P>"
-  else
-    return "\<S-Tab>"
-  endif
-endfunction
+" function! s:compShiftTab()
+"   if pumvisible()
+"     return "\<C-P>"
+"   else
+"     return "\<S-Tab>"
+"   endif
+" endfunction
 
-function! s:compEnter()
-  if pumvisible() && complete_info()['selected'] != -1
-    return compe#confirm()
-  else
-    return "\<CR>"
-  endif
-endfunction
+" function! s:compEnter()
+"   if pumvisible() && complete_info()['selected'] != -1
+"     return compe#confirm()
+"   else
+"     return "\<CR>"
+"   endif
+" endfunction
 
 " function! s:nvimTreeToggle(find)
 "   if &filetype == 'NvimTree'
@@ -126,18 +105,6 @@ endfunction
 "     endif
 "   endif
 " endfunction
-
-" augroup formatprgs
-"   autocmd!
-"   autocmd FileType haskell setlocal formatprg=brittany
-"   autocmd FileType
-"         \ typescript,typescriptreact
-"         \ setlocal formatprg=prettier\ --parser\ typescript
-"   autocmd FileType
-"         \ javascript,javascriptreact
-"         \ setlocal formatprg=prettier\ --parser\ babel
-"   autocmd FileType cabal setlocal formatprg=cabal-fmt
-" augroup END
 
 " autocmd BufEnter * lua require('lsp_signature').on_attach()
 
@@ -155,17 +122,12 @@ augroup terminal_insert
   autocmd TermOpen * startinsert
 augroup END
 
-autocmd FocusGained * silent !pwd > /tmp/last_pwd
-
 " Autoclose tag
 autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
 
 nnoremap <buffer><silent> <Leader>qj :cnext<CR>
 nnoremap <buffer><silent> <Leader>qk :cprevious<CR>
 nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
-
-" Erase word with <C-W> in floating window, like before
-autocmd FileType TelescopePrompt inoremap <C-W> <C-S-W>
 
 " `i3config` doesn't work properly for sway's config
 autocmd BufNewFile,BufRead *config/sway/config set filetype=
@@ -278,20 +240,24 @@ nnoremap <silent> <M-]> :bnext<CR>
 nnoremap <silent> <M-[> :bprevious<CR>
 
 " Tab nav
-nnoremap <silent> th :tabprevious<CR>
-nnoremap <silent> tj :tablast<CR>
-nnoremap <silent> tk :tabfirst<CR>
-nnoremap <silent> tl :tabnext<CR>
-nnoremap <silent> tt :tabnew<CR>
-nnoremap <silent> t1 :1tabnext<CR>
-nnoremap <silent> t2 :2tabnext<CR>
-nnoremap <silent> t3 :3tabnext<CR>
-nnoremap <silent> t4 :4tabnext<CR>
-nnoremap <silent> t5 :5tabnext<CR>
-nnoremap <silent> t6 :6tabnext<CR>
-nnoremap <silent> td :tabclose<CR>
-nnoremap <silent> tH :-tabmove<CR>
-nnoremap <silent> tL :+tabmove<CR>
+nnoremap <silent> th <Cmd>tabprevious<CR>
+nnoremap <silent> tj <Cmd>tablast<CR>
+nnoremap <silent> tk <Cmd>tabfirst<CR>
+nnoremap <silent> tl <Cmd>tabnext<CR>
+nnoremap <silent> tt <Cmd>tabnew<CR>
+nnoremap <silent> td <Cmd>tabclose<CR>
+nnoremap <silent> tH <Cmd>-tabmove<CR>
+nnoremap <silent> tL <Cmd>+tabmove<CR>
+
+nnoremap <silent> <M-1> <Cmd>1tabnext<CR>
+nnoremap <silent> <M-2> <Cmd>2tabnext<CR>
+nnoremap <silent> <M-3> <Cmd>3tabnext<CR>
+nnoremap <silent> <M-4> <Cmd>4tabnext<CR>
+nnoremap <silent> <M-5> <Cmd>5tabnext<CR>
+nnoremap <silent> <M-6> <Cmd>6tabnext<CR>
+nnoremap <silent> <M-7> <Cmd>7tabnext<CR>
+nnoremap <silent> <M-8> <Cmd>8tabnext<CR>
+nnoremap <silent> <M-9> <Cmd>9tabnext<CR>
 
 nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
 nnoremap <silent> <Leader>cfg
@@ -351,27 +317,11 @@ tnoremap <ScrollWheelUp> <C-X><C-Y>
 tnoremap <ScrollWheelDown> <C-X><C-E>
 
 " Control+Backspace erases a whole word
-imap <C-H> <C-W>
+inoremap <C-BS> <C-W>
 
 vnoremap / "vy/<C-R>v<CR>
 
-" nnoremap <Leader>ma :vertical Man 
-
-" let $MANWIDTH = 80
-" Move the window to the right and set it's appropriate width
-
-" autocmd BufWinEnter *
-"   \   if "man" == &ft
-"   \ |   if empty(filter(
-"   \       tabpagebuflist(),
-"   \       { b -> index(["man", "help", ""], bufname(b)) == -1 }
-"   \     ))
-"   \ |     wincmd o
-"   \ |   else
-"   \ |     wincmd L
-"   \ |     execute "82wincmd |"
-"   \ |   endif
-"   \ | endif
+nnoremap <Leader>ma :vertical Man 
 
 " Because it is annoying
 nnoremap H <Nop>
@@ -379,8 +329,6 @@ nnoremap H <Nop>
 nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
 nnoremap <silent> dba <Cmd>%bd<CR>
 nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
-
-inoremap <silent> <C-BS> <C-W>
 
 au BufRead,BufNewFile */sway/config set filetype=sway
 

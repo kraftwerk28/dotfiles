@@ -18,7 +18,6 @@ setopt noprompt_sp
 
 # Autoloads
 autoload -U add-zsh-hook edit-command-line vcs_info compinit
-# export WORDCHARS='-'
 
 requires () {
 	local banner="$(basename "$0"): please install:"
@@ -69,8 +68,6 @@ ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS='--reverse --height=10 --cycle'
 KEYTIMEOUT=true
 
 compinit
-# zmodload zsh/complist
-# bindkey -M menuselect '^[' send-break
 
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' special-dirs true
@@ -99,26 +96,27 @@ for cfg in ~/.config/zsh/*.zsh; do
 	source "$cfg"
 done
 
+autoload -U select-word-style
+select-word-style bash
+
 bindkeys () {
 	# bindkey -v "^[[A" history-search-backward
 	# bindkey -v "^[[B" history-search-forward
 	# bindkey -v "^R" history-incremental-search-backward
 	# bindkey -v "^[r" history-incremental-search-forward
-	bindkey "^R" fzf_history_search
-	bindkey -v "^ " autosuggest-accept # Control+Space
-	bindkey -v "^[[Z" reverse-menu-complete # Shift+Tab
-	bindkey -v "^H" vi-backward-kill-word # Shift+Backspace
-	bindkey -v "^W" vi-backward-kill-word
-	bindkey -v -s "^[l" "ls\n"
-	bindkey -v "^I" complete-word
+	bindkey -M viins '^R' fzf_history_search
+	bindkey -M viins '^ ' autosuggest-accept # Control+Space
+	bindkey -M viins '^[[Z' reverse-menu-complete # Shift+Tab
+	bindkey -M viins "^H" backward-kill-word
+	# bindkey -v "^H" vi-backward-kill-word # Shift+Backspace
+	bindkey -M viins -s '^[l' $'ls\n'
+	bindkey -M viins '^I' complete-word
 }
 
 zvm_after_init_commands=(bindkeys)
 
 dump_cwd () {
-	if [[ $PWD != $HOME ]]; then
-		echo $PWD > /tmp/last_pwd
-	fi
+	[[ $PWD != $HOME ]] && echo $PWD > /tmp/last_pwd
 }
 
 c () {
@@ -155,6 +153,18 @@ noprompt () {
 export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 
 eval "$(fnm env --use-on-cd)"
+
+updatenvim () {
+	pushd $HOME/projects/neovim/neovim
+	git pull -r upstream HEAD
+	(
+		export CMAKE_BUILD_TYPE=RelWithDebInfo
+		export CMAKE_INSTALL_PREFIX=/usr
+		make
+		sudo make install
+	)
+	popd
+}
 
 # It requires to be sourced at the end
 # plug zsh-syntax-highlighting

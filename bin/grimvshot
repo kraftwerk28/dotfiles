@@ -1,5 +1,9 @@
 #!/bin/bash
 set -eo pipefail
+if (( $(pgrep -x grimvshot | wc -l) > 2 )); then
+	# Prevent running it multiple times
+	exit 0
+fi
 usage () {
 	echo \
 		"Usage: $(basename "$0") [--notify] [--cursor] [--swaynag] [--copy]" \

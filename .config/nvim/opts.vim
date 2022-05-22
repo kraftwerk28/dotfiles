@@ -1,13 +1,14 @@
+set termguicolors
+set background=dark
 set hidden
 set noexpandtab
 set softtabstop=0
 set tabstop=4
 set shiftwidth=4
-set autoindent
-set smartindent
+set autoindent smartindent
 set list
 " set listchars=tab:»\ ,trail:·
-set listchars=tab:>\ ,trail:·
+let &listchars = "tab:> ,trail:·"
 " set listchars=tab:⇥\ ,trail:·
 " set listchars=tab:\ ﲒ,trail:·
 set cursorline
@@ -15,16 +16,12 @@ set colorcolumn=80,120
 set mouse=a
 set clipboard=unnamedplus
 set completeopt=menu,menuone,noselect
-set incsearch
-set nohlsearch
-set ignorecase
-set smartcase
+set incsearch nohlsearch
+set ignorecase smartcase
 set wildmenu
 set wildmode=full
 set signcolumn=yes
-set autoread
-set autowrite
-set autowriteall
+set autoread autowrite autowriteall
 set foldlevel=99
 set foldmethod=indent
 " set foldexpr = "nvim_treesitter#foldexpr()"
@@ -52,9 +49,8 @@ set diffopt+=vertical
 
 if has("win64")
   set shell=powershell.exe
-  set shellquote = ""
-  set shellpipe=\|
+  let shellpipe = '|'
   set shellxquote=
-  set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
-  set shellredir=\|\ Out-File\ -Encoding\ UTF8
+  let &shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+  let &shellredir = "| Out-File -Encoding UTF8"
 endif

@@ -4,9 +4,6 @@ if requires nvim; then
 	alias v="nvim"
 	alias im="nvim"
 	alias vin="nvim"
-	alias updatenvim="yay -S --needed \
-		--noconfirm --nodiffmenu --nocleanmenu --noeditmenu \
-		neovim-git"
 fi
 
 if requires lsd; then
