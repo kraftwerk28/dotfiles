@@ -1,11 +1,11 @@
 local function load(use)
-  use { "wbthomason/packer.nvim", opt = true }
+  use({ "wbthomason/packer.nvim", opt = true })
 
-  use {
+  use({
     "~/projects/neovim/gtranslate.nvim",
     -- "kraftwerk28/gtranslate.nvim",
-    requires = {"nvim-lua/plenary.nvim"},
-  }
+    requires = { "nvim-lua/plenary.nvim" },
+  })
 
   -- use {
   --   disable = true,
@@ -18,29 +18,29 @@ local function load(use)
   -- Themes
   -- use {"navarasu/onedark.nvim"}
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
-  use {
+  use({
     -- "~/projects/neovim/nvim-base16",
     "RRethy/nvim-base16",
     -- disable = true,
-  }
-  use { "projekt0n/github-nvim-theme", disable = true }
-  use {"rebelot/kanagawa.nvim"}
+  })
+  use({ "projekt0n/github-nvim-theme", disable = true })
+  use({ "rebelot/kanagawa.nvim" })
 
-  use {"kyazdani42/nvim-web-devicons"}
+  use({ "kyazdani42/nvim-web-devicons" })
 
-  use {
+  use({
     "tpope/vim-surround",
     config = function()
       local char2nr = vim.fn.char2nr
-      vim.g["surround_"..char2nr('r')] = "{'\r'}"
-      vim.g["surround_"..char2nr('j')] = "{/* \r */}"
-      vim.g["surround_"..char2nr('c')] = "/* \r */"
-      vim.g["surround_"..char2nr('l')] = "[[\r]]"
-      vim.g["surround_"..char2nr('i')] = "\1before: \1\r\2after: \2"
+      vim.g["surround_" .. char2nr("r")] = "{'\r'}"
+      vim.g["surround_" .. char2nr("j")] = "{/* \r */}"
+      vim.g["surround_" .. char2nr("c")] = "/* \r */"
+      vim.g["surround_" .. char2nr("l")] = "[[\r]]"
+      vim.g["surround_" .. char2nr("i")] = "\1before: \1\r\2after: \2"
     end,
-  }
+  })
 
-  use {
+  use({
     "b3nj5m1n/kommentary",
     config = function()
       require("kommentary.config").configure_language(
@@ -52,9 +52,9 @@ local function load(use)
       vim.keymap.set("i", "<C-/>", "<C-O>:normal! gcc<CR>", opt)
       vim.keymap.set("x", "<C-/>", "gcgv", opt)
     end,
-  }
+  })
 
-  use {
+  use({
     "nvim-telescope/telescope.nvim",
     -- "~/projects/neovim/telescope.nvim",
     requires = {
@@ -63,13 +63,15 @@ local function load(use)
       "nvim-lua/plenary.nvim",
       -- "TC72/telescope-tele-tabby.nvim",
     },
-    config = function() require("plugins.telescope") end,
-  }
+    config = function()
+      require("plugins.telescope")
+    end,
+  })
 
-  use {"tpope/vim-fugitive"}
-  use {
+  use({ "tpope/vim-fugitive" })
+  use({
     "lewis6991/gitsigns.nvim",
-    requires = {"nvim-lua/plenary.nvim"},
+    requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("gitsigns").setup({
         keymaps = {},
@@ -80,7 +82,7 @@ local function load(use)
       m("n", "<Leader>mh", "<Cmd>diffget //2<CR>")
       m("n", "<Leader>ml", "<Cmd>diffget //3<CR>")
     end,
-  }
+  })
 
   -- Still missing some features
   -- use {
@@ -105,20 +107,20 @@ local function load(use)
   --   end,
   -- }
 
-  use {"chrisbra/Colorizer"}
-  use {"mattn/emmet-vim"}
+  use({ "chrisbra/Colorizer" })
+  use({ "mattn/emmet-vim" })
 
   -- Missing / not ready to use languages in tree-sitter
-  use {"neovimhaskell/haskell-vim"}
-  use {"editorconfig/editorconfig-vim"}
-  use {"elixir-editors/vim-elixir"}
-  use {"chr4/nginx.vim"}
+  use({ "neovimhaskell/haskell-vim" })
+  use({ "editorconfig/editorconfig-vim" })
+  use({ "elixir-editors/vim-elixir" })
+  use({ "chr4/nginx.vim" })
   -- use {"tpope/vim-markdown"}
-  use {"adimit/prolog.vim"}
-  use {"digitaltoad/vim-pug"}
-  use {"bfrg/vim-jq"}
+  use({ "adimit/prolog.vim" })
+  use({ "digitaltoad/vim-pug" })
+  use({ "bfrg/vim-jq" })
 
-  use {
+  use({
     -- "~/projects/neovim/nvim-treesitter",
     "nvim-treesitter/nvim-treesitter",
     -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
@@ -126,31 +128,39 @@ local function load(use)
       "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
-    run = function() vim.cmd("TSUpdate") end,
-    config = function() require("plugins.treesitter") end,
-  }
+    run = function()
+      vim.cmd("TSUpdate")
+    end,
+    config = function()
+      require("plugins.treesitter")
+    end,
+  })
 
-  use {
+  use({
     "neovim/nvim-lspconfig",
     -- "~/projects/neovim/nvim-lspconfig",
-    config = function() require("plugins.lsp_servers") end,
-  }
+    config = function()
+      require("plugins.lsp_servers")
+    end,
+  })
 
-  use {
+  use({
     "RRethy/vim-illuminate",
     disable = true,
     config = function()
       local utils = require("config.utils")
-      utils.highlight { "illuminatedWord", guibg = "#303030" }
+      utils.highlight({ "illuminatedWord", guibg = "#303030" })
     end,
-  }
+  })
 
-  use {
+  use({
     "L3MON4D3/LuaSnip",
-    config = function() require("plugins.luasnip") end,
-  }
+    config = function()
+      require("plugins.luasnip")
+    end,
+  })
 
-  use {
+  use({
     "hrsh7th/nvim-cmp",
     requires = {
       "hrsh7th/cmp-nvim-lsp",
@@ -161,16 +171,20 @@ local function load(use)
       "honza/vim-snippets",
       "saadparwaiz1/cmp_luasnip",
     },
-    config = function() require("plugins.cmp") end,
-  }
+    config = function()
+      require("plugins.cmp")
+    end,
+  })
 
-  use {
+  use({
     "kyazdani42/nvim-tree.lua",
-    requires = {"kyazdani42/nvim-web-devicons", opt = true},
-    config = function() require("plugins.nvimtree") end,
-  }
+    requires = { "kyazdani42/nvim-web-devicons", opt = true },
+    config = function()
+      require("plugins.nvimtree")
+    end,
+  })
 
-  use { "equalsraf/neovim-gui-shim", opt = true }
+  use({ "equalsraf/neovim-gui-shim", opt = true })
 
   -- use {
   --   "ray-x/lsp_signature.nvim",
@@ -183,94 +197,101 @@ local function load(use)
   --   end,
   -- }
 
-  use {
+  use({
     "junegunn/vim-easy-align",
     config = function()
       vim.keymap.set("v", "<Leader>ea", "<Plug>(EasyAlign)")
     end,
-  }
-  use { "mfussenegger/nvim-dap" }
+  })
+  use({ "mfussenegger/nvim-dap" })
 
-  use {
+  use({
     "jose-elias-alvarez/null-ls.nvim",
-    requires = {"nvim-lua/plenary.nvim"},
-    config = function() require("plugins.null_ls") end,
-  }
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("plugins.null_ls")
+    end,
+  })
 
-  use {
+  use({
     "nvim-neorg/neorg",
     disable = true,
-    requires = {"nvim-lua/plenary.nvim"},
-    after = {"nvim-treesitter"},
+    requires = { "nvim-lua/plenary.nvim" },
+    after = { "nvim-treesitter" },
     config = function()
-      require("neorg").setup {
+      require("neorg").setup({
         load = {
           ["core.defaults"] = {},
           ["core.norg.concealer"] = {},
           ["core.norg.dirman"] = {
             config = {
               workspaces = {
-                my_workspace = "~/notes"
+                my_workspace = "~/notes",
               },
             },
-          }
+          },
         },
-      }
+      })
     end,
-  }
+  })
 
-  use {
+  use({
     "iamcco/markdown-preview.nvim",
     run = "cd app && npm install",
-    ft = {"markdown"},
+    ft = { "markdown" },
     config = function()
-      vim.g.mkdp_filetypes = {"markdown"}
+      vim.g.mkdp_filetypes = { "markdown" }
     end,
-  }
+  })
 
-  use { "~/projects/neovim/copilot.vim", disable = true }
+  use({ "~/projects/neovim/copilot.vim", disable = true })
 
-  use {
+  use({
     "Shatur/neovim-session-manager",
-    requires = {"nvim-lua/plenary.nvim"},
+    requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      local c = require('session_manager.config')
-      require('session_manager').setup({
+      local c = require("session_manager.config")
+      require("session_manager").setup({
         autoload_mode = c.AutoloadMode.Disabled,
       })
     end,
-  }
+  })
 end
 
 local function bootstrap()
   local fn, api = vim.fn, vim.api
-  local packer_install_path =
-    fn.stdpath("data").."/site/pack/packer/opt/packer.nvim"
+  local packer_install_path = fn.stdpath("data")
+    .. "/site/pack/packer/opt/packer.nvim"
   local not_installed = fn.empty(fn.glob(packer_install_path)) == 1
 
   if not_installed then
     print("`packer.nvim` is not installed, installing...")
-    local repo = "https://github.com/wbthomason/packer.nvim"
-    vim.cmd(("!git clone %s %s"):format(repo, packer_install_path))
+    vim.fn.system({
+      "git",
+      "clone",
+      "--depth",
+      "1",
+      "https://github.com/wbthomason/packer.nvim",
+      packer_install_path,
+    })
   end
 
   vim.cmd("packadd packer.nvim")
-  require("packer").startup {
+  require("packer").startup({
     load,
     config = {
-      git = {clone_timeout = 240},
+      git = { clone_timeout = 240 },
     },
-  }
+  })
   api.nvim_create_autocmd("BufWritePost", {
     pattern = "*/plugins/init.lua",
     callback = function(arg)
-      vim.cmd("source "..arg.file)
-      print("Running :PackerCompile")
+      vim.cmd("source " .. arg.file)
       vim.cmd("PackerCompile")
     end,
   })
   if not_installed then
-    vim.cmd("PackerSync")
+    require("packer").sync()
   end
 end
 

@@ -8,13 +8,13 @@ o.shiftwidth = 4
 o.autoindent = true
 o.smartindent = true
 o.list = true
-o.listchars = {tab = "» ", trail = "·"}
+o.listchars = { tab = "» ", trail = "·" }
 -- o.listchars = {tab = "⇥ ", trail = "·"}
 o.cursorline = true
-o.colorcolumn = {80, 120}
+o.colorcolumn = { 80, 120 }
 o.mouse = "a"
 o.clipboard = "unnamedplus"
-o.completeopt = {"menu", "menuone", "noselect"}
+o.completeopt = { "menu", "menuone", "noselect" }
 o.incsearch = true
 o.hlsearch = false
 o.ignorecase = true
@@ -29,7 +29,7 @@ o.foldlevel = 99
 o.foldmethod = "indent"
 -- o.foldexpr = "nvim_treesitter#foldexpr()"
 -- o.foldmethod = "expr"
-o.foldopen = {"hor", "mark", "percent", "quickfix", "search", "tag", "undo"}
+o.foldopen = { "hor", "mark", "percent", "quickfix", "search", "tag", "undo" }
 o.exrc = true
 o.secure = true
 

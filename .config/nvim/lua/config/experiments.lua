@@ -16,8 +16,12 @@ utils.nnoremap("<Leader>ar", function()
   local parser = vim.treesitter.get_parser()
   local root_node = parser:parse()[1]:root()
 
-  local arguments_node =
-    root_node:named_descendant_for_range(line_num, col_num, line_num, col_num)
+  local arguments_node = root_node:named_descendant_for_range(
+    line_num,
+    col_num,
+    line_num,
+    col_num
+  )
   while true do
     local type = arguments_node:type()
     if arguments_node == root_node then
@@ -34,8 +38,10 @@ utils.nnoremap("<Leader>ar", function()
   for i = 0, child_count - 1 do
     local child = arguments_node:named_child(i)
     local line, col, e_line, e_col = child:range()
-    print(("%s; [%d %d, %d, %d]"):format(child:type(), line, col, e_line, e_col))
-    fn.cursor(line+1, col+1)
+    print(
+      ("%s; [%d %d, %d, %d]"):format(child:type(), line, col, e_line, e_col)
+    )
+    fn.cursor(line + 1, col + 1)
     break
   end
   -- for child in arguments_node:iter_children() do
@@ -50,7 +56,8 @@ end)
 -- List of all highlight groups
 local highlight_groups = {}
 local forbidden_patterns = {
-  "^DevIcon", "Debug",
+  "^DevIcon",
+  "Debug",
 }
 
 do
@@ -69,10 +76,11 @@ do
 end
 
 local function color_distance(a, b)
-  return
-    math.abs(bit.rshift(a, 16) - bit.rshift(b, 16)) +
-    math.abs(bit.band(bit.rshift(a, 8), 0xff) - bit.band(bit.rshift(b, 8), 0xff)) +
-    math.abs(bit.band(a, 0xff) - bit.band(b, 0xff))
+  return math.abs(bit.rshift(a, 16) - bit.rshift(b, 16))
+    + math.abs(
+      bit.band(bit.rshift(a, 8), 0xff) - bit.band(bit.rshift(b, 8), 0xff)
+    )
+    + math.abs(bit.band(a, 0xff) - bit.band(b, 0xff))
 end
 
 function _G.get_closest_highlight(hl)
@@ -92,7 +100,7 @@ function _G.get_closest_highlight(hl)
       closest_hl_group = group
     end
   end
-  vim.cmd("hi "..closest_hl_group.name)
+  vim.cmd("hi " .. closest_hl_group.name)
   return closest_hl_group
 end
 
@@ -107,12 +115,12 @@ do
   local api = {}
   local api_mt = {}
   function api_mt:__index(k)
-    local t = {unpack(self)}
+    local t = { unpack(self) }
     table.insert(t, k)
     return setmetatable(t, api_mt)
   end
   function api_mt:__call(...)
-    return vim.api["nvim_"..table.concat(self, "_")](...)
+    return vim.api["nvim_" .. table.concat(self, "_")](...)
   end
   setmetatable(api, api_mt)
   _G.api = api

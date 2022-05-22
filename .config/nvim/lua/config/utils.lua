@@ -1,15 +1,21 @@
 local M = {}
 
-local function printf(...) print(string.format(...)) end
+local function printf(...)
+  print(string.format(...))
+end
 local sprintf = string.format
-local function cmdf(...) vim.cmd(sprintf(...)) end
+local function cmdf(...)
+  vim.cmd(sprintf(...))
+end
 local fn, api = vim.fn, vim.api
 
 M.printf = printf
 M.sprintf = sprintf
 M.cmdf = cmdf
 
-function M.get_cursor_pos() return {fn.line('.'), fn.col('.')} end
+function M.get_cursor_pos()
+  return { fn.line("."), fn.col(".") }
+end
 
 function M.debounce(func, timeout)
   local timer_id
@@ -17,7 +23,7 @@ function M.debounce(func, timeout)
     if timer_id ~= nil then
       fn.timer_stop(timer_id)
     end
-    local args = {...}
+    local args = { ... }
     local function cb()
       func(args)
       timer_id = nil
@@ -31,7 +37,7 @@ function M.throttle(func, timeout)
   local timer_id
   local did_call = false
   return function(...)
-    local args = {...}
+    local args = { ... }
     if timer_id == nil then
       func(unpack(args))
       local function cb()
@@ -71,11 +77,11 @@ function M.u(code)
     z = c(bit.bor(0x80, bit.band(bit.rshift(code, 6), 0x3f)))
     w = c(bit.bor(0x80, bit.band(code, 0x3f)))
   end
-  return x..y..z..w
+  return x .. y .. z .. w
 end
 
 function _G.dump(...)
-  local args = {...}
+  local args = { ... }
   if #args == 1 then
     print(vim.inspect(args[1]))
   else
@@ -86,7 +92,7 @@ end
 function M.load(path)
   local ok, mod = pcall(require, path)
   if not ok then
-    printf('Error loading module `%s`', path)
+    printf("Error loading module `%s`", path)
     print(mod)
   else
     local loadfunc
@@ -110,10 +116,10 @@ end
 function M.hl_by_name(hl_group)
   local hl = api.nvim_get_hl_by_name(hl_group, true)
   if hl.foreground ~= nil then
-    hl.fg = sprintf('#%x', hl.foreground)
+    hl.fg = sprintf("#%x", hl.foreground)
   end
   if hl.background ~= nil then
-    hl.bg = sprintf('#%x', hl.background)
+    hl.bg = sprintf("#%x", hl.background)
   end
   return hl
 end
@@ -177,26 +183,51 @@ function last_falsy(t)
 end
 
 local hl_special_names = {
-  "bold", "underline", "undercurl", "strikethrough", "reverse", "inverse",
-  "italic", "standout", "nocombine",
+  "bold",
+  "underline",
+  "undercurl",
+  "strikethrough",
+  "reverse",
+  "inverse",
+  "italic",
+  "standout",
+  "nocombine",
 }
 
 function M.get_highlight(name)
-  local hl  = api.nvim_get_hl_by_name(name, true)  -- gui*
+  local hl = api.nvim_get_hl_by_name(name, true) -- gui*
   local chl = api.nvim_get_hl_by_name(name, false) -- cterm*
   local res = { [1] = name }
   local special, cspecial = {}, {}
   for _, spname in ipairs(hl_special_names) do
-    if hl[spname] then table.insert(special, spname) end
-    if chl[spname] then table.insert(cspecial, spname) end
+    if hl[spname] then
+      table.insert(special, spname)
+    end
+    if chl[spname] then
+      table.insert(cspecial, spname)
+    end
   end
-  if #special  > 0  then res.gui     = table.concat(special, ",")     end
-  if #cspecial > 0  then res.cterm   = table.concat(cspecial, ",")    end
-  if hl.foreground  then res.guifg   = ("#%x"):format(hl.foreground)  end
-  if hl.background  then res.guibg   = ("#%x"):format(hl.background)  end
-  if hl.special     then res.guisp   = ("#%x"):format(hl.special)     end
-  if chl.foreground then res.ctermfg = chl.foreground end
-  if chl.background then res.ctermbg = chl.background end
+  if #special > 0 then
+    res.gui = table.concat(special, ",")
+  end
+  if #cspecial > 0 then
+    res.cterm = table.concat(cspecial, ",")
+  end
+  if hl.foreground then
+    res.guifg = ("#%x"):format(hl.foreground)
+  end
+  if hl.background then
+    res.guibg = ("#%x"):format(hl.background)
+  end
+  if hl.special then
+    res.guisp = ("#%x"):format(hl.special)
+  end
+  if chl.foreground then
+    res.ctermfg = chl.foreground
+  end
+  if chl.background then
+    res.ctermbg = chl.background
+  end
   return res
 end
 
@@ -252,13 +283,15 @@ local autocmd_fn_index = 0
 
 -- WIP:
 function M.autocmd(event_name, pattern, callback)
-  local fn_name = 'lua_autocmd' .. autocmd_fn_index
+  local fn_name = "lua_autocmd" .. autocmd_fn_index
   autocmd_fn_index = autocmd_fn_index + 1
   _G[fn_name] = callback
-  cmdf('autocmd %s %s call v:lua.%s()', event_name, pattern, fn_name)
+  cmdf("autocmd %s %s call v:lua.%s()", event_name, pattern, fn_name)
 end
 
-function M.glob_exists(path) return fn.empty(fn.glob(path)) == 0 end
+function M.glob_exists(path)
+  return fn.empty(fn.glob(path)) == 0
+end
 
 do
   -- TODO: open diagnostic on hover
@@ -266,7 +299,7 @@ do
   -- local cursor_pos = M.get_cursor_pos()
   -- local debounced = M.debounce(show_diagnostics, 300)
   M.show_lsp_diagnostics = function()
-    vim.diagnostic.open_float({border = vim.g.floatwin_border})
+    vim.diagnostic.open_float({ border = vim.g.floatwin_border })
     -- local cursor_pos2 = M.get_cursor_pos()
     -- -- TODO: doesn't work when both diagnostics and popup is shown
     -- if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
@@ -288,16 +321,16 @@ end
 do
   local map_func_counter = 0
   function M.map(mode, lhs, fn, opts)
-    local name = 'map_func_' .. map_func_counter
+    local name = "map_func_" .. map_func_counter
     _G[name] = fn
-    local rhs = ':call v:lua.' .. name .. '()<CR>'
+    local rhs = ":call v:lua." .. name .. "()<CR>"
     api.nvim_set_keymap(mode, lhs, rhs, opts)
     map_func_counter = map_func_counter + 1
   end
 end
 
-for _, mode in ipairs {'', 'n', 'i', 'c', 'x'} do
-  M[mode .. 'noremap'] = function(lhs, fn, opts)
+for _, mode in ipairs({ "", "n", "i", "c", "x" }) do
+  M[mode .. "noremap"] = function(lhs, fn, opts)
     local mapopts = opts or {}
     mapopts.noremap = true
     return M.map(mode, lhs, fn, mapopts)
@@ -309,15 +342,17 @@ function M.log_time(fn, label)
     local now = os.clock()
     fn(...)
     print(
-      ((label and (label .. ' ')) or '') ..
-      (math.floor((os.clock() - now) * 1e6) / 1000) ..
-      "ms."
+      ((label and (label .. " ")) or "")
+        .. (math.floor((os.clock() - now) * 1e6) / 1000)
+        .. "ms."
     )
   end
 end
 
 function M.index_of(t, v, eqfn)
-  eqfn = eqfn or (function(el) return el == v end)
+  eqfn = eqfn or function(el)
+    return el == v
+  end
   for i, value in ipairs(t) do
     if eqfn(value, v) then
       return i

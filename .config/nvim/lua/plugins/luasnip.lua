@@ -8,25 +8,23 @@ local c = ls.choice_node
 local f = ls.function_node
 local i = ls.insert_node
 local t = ls.text_node
+local sn = ls.snippet_node
 local rep = extras.rep
 
 -- ls.filetype_extend("all", { "_" })
 
 ls.add_snippets("go", {
-  ls.snippet(
-    "ie",
-    {
-      t("if "),
-      c(1, {
-        fmt.fmta("<> != nil", { i(1, "err") }),
-        fmt.fmta("<> = <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
-        fmt.fmta("<> := <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
-      }),
-      t({ " {", "\t" }),
-      i(0),
-      t({ "", "}" })
-    }
-  )
+  ls.snippet("ie2", {
+    t("if "),
+    c(1, {
+      fmt.fmta("<> != nil", { i(1, "err") }),
+      fmt.fmta("<> = <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+      fmt.fmta("<> := <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+    }),
+    t({ " {", "\t" }),
+    i(0),
+    t({ "", "}" }),
+  }),
 })
 
 local ecma_snippets = {
@@ -36,7 +34,7 @@ local ecma_snippets = {
       i(1),
       f(function(args)
         local s = args[1][1]
-        return "set"..s:sub(1, 1):upper()..s:sub(2)
+        return "set" .. s:sub(1, 1):upper() .. s:sub(2)
       end, { 1 }),
       i(0),
     })
@@ -48,13 +46,16 @@ ls.add_snippets("javascript", ecma_snippets)
 ls.add_snippets("javascriptreact", ecma_snippets)
 ls.add_snippets("typescript", ecma_snippets)
 ls.add_snippets("typescriptreact", ecma_snippets)
+ls.add_snippets("all", {
+  ls.snippet("foobar", { i(2, "foo"), i(1, "bar"), i(0) }),
+})
 
 ls.config.set_config({
   -- history = true,
   updateevents = "TextChanged,TextChangedI",
 })
 
-vim.keymap.set({"s", "i"}, "<C-L>", function()
+vim.keymap.set({ "s", "i" }, "<C-L>", function()
   if ls.expand_or_jumpable() then
     vim.schedule(ls.expand_or_jump)
     return "<Plug>luasnip-expand-or-jump"
@@ -63,7 +64,7 @@ vim.keymap.set({"s", "i"}, "<C-L>", function()
   end
 end, { silent = true, expr = true })
 
-vim.keymap.set({"s", "i"}, "<C-H>", function()
+vim.keymap.set({ "s", "i" }, "<C-H>", function()
   if ls.jumpable(-1) then
     return "<Plug>luasnip-jump-prev"
   else
@@ -71,7 +72,7 @@ vim.keymap.set({"s", "i"}, "<C-H>", function()
   end
 end, { silent = true, expr = true })
 
-vim.keymap.set({"s", "i"}, "<C-;>", function()
+vim.keymap.set({ "s", "i" }, "<C-;>", function()
   if ls.choice_active() then
     return "<Plug>luasnip-next-choice"
   else

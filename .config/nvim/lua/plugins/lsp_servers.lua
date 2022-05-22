@@ -9,60 +9,65 @@ local function find_compile_commands()
   if #ccj == 0 then
     ccj = fn.glob("build/compile_commands.json", nil, true)
   end
-  if #ccj == 0 then return end
+  if #ccj == 0 then
+    return
+  end
   return fn.fnamemodify(ccj[1], ":p:h")
 end
 
-lsp_config.als.setup {}
+lsp_config.als.setup({})
 
-lsp_config.arduino_language_server.setup {
+lsp_config.arduino_language_server.setup({
   cmd = {
     "arduino-language-server",
-    "-clangd", fn.exepath("clangd"),
-    "-cli", fn.exepath("arduino-cli"),
-    "-cli-config", fn.expand("~/.arduino15/arduino-cli.yaml"),
+    "-clangd",
+    fn.exepath("clangd"),
+    "-cli",
+    fn.exepath("arduino-cli"),
+    "-cli-config",
+    fn.expand("~/.arduino15/arduino-cli.yaml"),
   },
-}
+})
 
-lsp_config.awk_ls.setup {}
+lsp_config.awk_ls.setup({})
 
-lsp_config.denols.setup {
+lsp_config.denols.setup({
   autostart = false,
   initializationOptions = {
     enable = true,
     lint = true,
     unstable = false,
   },
-  root_dir = root_pattern {"deno.json"},
-}
+  root_dir = root_pattern({ "deno.json" }),
+})
 
-lsp_config.gopls.setup {
-  cmd = {"gopls", "serve"},
-  filetypes = {"go", "gomod"},
-  root_dir = root_pattern {
+lsp_config.gopls.setup({
+  cmd = { "gopls", "serve" },
+  filetypes = { "go", "gomod" },
+  root_dir = root_pattern({
     "go.mod",
     ".git",
     fn.getcwd(),
-  },
-}
+  }),
+})
 
-lsp_config.graphql.setup {
-  cmd = {"graphql-lsp", "server", "--method=stream"},
-}
+lsp_config.graphql.setup({
+  cmd = { "graphql-lsp", "server", "--method=stream" },
+})
 
-lsp_config.hls.setup {
+lsp_config.hls.setup({
   settings = {
     haskell = { formattingProvider = "brittany" },
   },
-  root_dir = root_pattern {
+  root_dir = root_pattern({
     "*.cabal",
     "stack.yaml",
     "cabal.project",
     "package.yaml",
     "hie.yaml",
     fn.getcwd(),
-  },
-}
+  }),
+})
 
 do
   -- local pyls_settings = {
@@ -82,26 +87,26 @@ do
   --     pyflakes = {enabled = false},
   --   },
   -- }
-  lsp_config.pylsp.setup {}
+  lsp_config.pylsp.setup({})
 end
 
 do
   local cpb = lsp.protocol.make_client_capabilities()
   cpb = require("cmp_nvim_lsp").update_capabilities(cpb)
   cpb.textDocument.completion.completionItem.snippetSupport = false
-  lsp_config.rust_analyzer.setup {
+  lsp_config.rust_analyzer.setup({
     -- capabilities = cpb,
-  }
+  })
 end
 
-lsp_config.tsserver.setup {
-  root_dir = root_pattern {
+lsp_config.tsserver.setup({
+  root_dir = root_pattern({
     "package.json",
     "tsconfig.json",
     "jsconfig.json",
     ".git",
     fn.getcwd(),
-  },
+  }),
   initializationOptions = {
     preferences = {
       -- TODO: doesn't work
@@ -110,11 +115,12 @@ lsp_config.tsserver.setup {
     },
   },
   on_attach = function(client)
-    -- Formatting is handled by null-ls
+    print(vim.inspect(client.server_capabilities))
+    -- Formatting is handled by prettier through null-ls
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
   end,
-}
+})
 
 -- lsp_config.flow.setup {
 --   cmd = {'flow', 'lsp'},
@@ -158,7 +164,7 @@ lsp_config.tsserver.setup {
 -- }
 
 do
-  local cmd = {"clangd", "--background-index"}
+  local cmd = { "clangd", "--background-index" }
   local ccj = find_compile_commands()
   if ccj then
     table.insert(cmd, "--compile-commands-dir")
@@ -166,14 +172,14 @@ do
   end
   local capabilities = make_cpb()
   capabilities.offsetEncoding = { "utf-16" }
-  lsp_config.clangd.setup {
+  lsp_config.clangd.setup({
     cmd = cmd,
-    root_dir = root_pattern {"CMakeLists.txt", ".git", fn.getcwd()},
+    root_dir = root_pattern({ "CMakeLists.txt", ".git", fn.getcwd() }),
     capabilities = capabilities,
-  }
+  })
 end
 
-lsp_config.svelte.setup {}
+lsp_config.svelte.setup({})
 
 do
   -- local schemas = {
@@ -196,17 +202,17 @@ do
   -- }
   local cpb = make_cpb()
   cpb.textDocument.completion.completionItem.snippetSupport = true
-  lsp_config.jsonls.setup {
-    cmd = {"vscode-json-languageserver", "--stdio"},
+  lsp_config.jsonls.setup({
+    cmd = { "vscode-json-languageserver", "--stdio" },
     -- init_options = {provideFormatter = true},
     -- settings = {
     --   json = { schemas = schemas },
     -- },
     capabilities = cpb,
-  }
+  })
 end
 
-lsp_config.yamlls.setup {
+lsp_config.yamlls.setup({
   settings = {
     yaml = {
       format = {
@@ -220,9 +226,9 @@ lsp_config.yamlls.setup {
       completion = true,
     },
   },
-}
+})
 
-lsp_config.cssls.setup {}
+lsp_config.cssls.setup({})
 
 -- lsp_config.html.setup {
 --   cmd = {"vscode-html-languageserver", "--stdio"}
@@ -232,7 +238,7 @@ lsp_config.cssls.setup {}
 --   filetypes = {"bash", "sh", "zsh"}
 -- }
 
-lsp_config.solargraph.setup {}
+lsp_config.solargraph.setup({})
 
 -- lsp_config.emmet_ls.setup {}
 
@@ -242,7 +248,7 @@ if fn.has("win64") == 1 then
   )
   local java_home = fn.expand("C:/Program Files/Java/jdk-11.0.11")
 
-  lsp_config.jdtls.setup {
+  lsp_config.jdtls.setup({
     cmd = {
       fn.expand(java_home .. "/bin/java.exe"),
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
@@ -253,31 +259,33 @@ if fn.has("win64") == 1 then
       "-Xmx1G",
       "-jar",
       fn.expand(
-        jdt_base ..
-        "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
+        jdt_base
+          .. "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
       ),
       "-configuration",
       fn.expand(jdt_base .. "/config_win"),
       "-data",
       fn.expand("~/Projects/jdt-ls-data"),
       "--add-modules=ALL-SYSTEM",
-      "--add-opens", "java.base/java.util=ALL-UNNAMED",
-      "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+      "--add-opens",
+      "java.base/java.util=ALL-UNNAMED",
+      "--add-opens",
+      "java.base/java.lang=ALL-UNNAMED",
     },
-    filetypes = {"java"},
-    root_dir = root_pattern {".git", "build.gradle", "build.gradle.kts"},
-  }
+    filetypes = { "java" },
+    root_dir = root_pattern({ ".git", "build.gradle", "build.gradle.kts" }),
+  })
 
-  lsp_config.groovyls.setup {
+  lsp_config.groovyls.setup({
     cmd = {
       "java",
       "-jar",
       fn.expand(
-        "~/Projects/groovy-language-server" ..
-        "/build/libs/groovy-language-server-all.jar"
+        "~/Projects/groovy-language-server"
+          .. "/build/libs/groovy-language-server-all.jar"
       ),
     },
-  }
+  })
 end
 
 do
@@ -286,8 +294,8 @@ do
   if fn.has("win64") == 1 then
     cmd = {
       fn.expand(
-        "~/Projects/kotlin-language-server/server/build/install" ..
-        "/server/bin/kotlin-language-server.bat"
+        "~/Projects/kotlin-language-server/server/build/install"
+          .. "/server/bin/kotlin-language-server.bat"
       ),
     }
   end
@@ -298,10 +306,10 @@ do
       JAVA_HOME = jdk_home,
     }
   end
-  lsp_config.kotlin_language_server.setup {
+  lsp_config.kotlin_language_server.setup({
     cmd = cmd,
     cmd_env = cmd_env,
-    settings = {kotlin = {compiler = {jvm = {target = "1.8"}}}},
-    root_dir = root_pattern {"build.gradle", "build.gradle.kts"},
-  }
+    settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },
+    root_dir = root_pattern({ "build.gradle", "build.gradle.kts" }),
+  })
 end

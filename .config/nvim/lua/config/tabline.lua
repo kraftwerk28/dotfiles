@@ -11,20 +11,17 @@ local function tab_label(tabnr, nparts)
   if bufname == "" then
     return EMPTY_TAB_LABEL
   end
-  local tabpage_wins = vim.tbl_filter(
-    function(winnr)
-      return api.nvim_win_get_config(winnr).relative == ""
-    end,
-    api.nvim_tabpage_list_wins(tabnr)
-  )
+  local tabpage_wins = vim.tbl_filter(function(winnr)
+    return api.nvim_win_get_config(winnr).relative == ""
+  end, api.nvim_tabpage_list_wins(tabnr))
   local text = fn.fnamemodify(bufname, ":t")
   if #tabpage_wins > 1 then
-    text = #tabpage_wins.." "..text
+    text = #tabpage_wins .. " " .. text
   end
   if api.nvim_buf_get_option(focused_buf, "modified") then
-    text = UNSAVED_MARK..text
+    text = UNSAVED_MARK .. text
   end
-  return " "..text.." "
+  return " " .. text .. " "
 end
 
 local function build_tabline()
@@ -32,14 +29,14 @@ local function build_tabline()
   local str = ""
   for i, tab_nr in ipairs(api.nvim_list_tabpages()) do
     local hl_group = tab_nr == current_tab and "TabLineSel" or "TabLine"
-    str = str.."%#"..hl_group.."#%"..i.."T"..tab_label(tab_nr)
+    str = str .. "%#" .. hl_group .. "#%" .. i .. "T" .. tab_label(tab_nr)
   end
   str = str .. "%#TabLineFill#"
   return str
 end
 
-local tabline_sel = utils.get_highlight("TabLineSel")
-tabline_sel.gui = "reverse,bold"
-utils.highlight(tabline_sel)
+-- local tabline_sel = utils.get_highlight("TabLineSel")
+-- tabline_sel.gui = "reverse,bold"
+-- utils.highlight(tabline_sel)
 
-vim.o.tabline = "%!v:lua."..utils.defglobalfn(build_tabline).."()"
+vim.o.tabline = "%!v:lua." .. utils.defglobalfn(build_tabline) .. "()"

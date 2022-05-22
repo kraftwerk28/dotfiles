@@ -1,9 +1,9 @@
-local cmp = require"cmp"
-local lspkind = require"lspkind"
+local cmp = require("cmp")
+local lspkind = require("lspkind")
 local api = vim.api
 local luasnip = require("luasnip")
 
-cmp.setup {
+cmp.setup({
   mapping = {
     ["<Tab>"] = cmp.mapping.select_next_item(),
     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
@@ -12,24 +12,30 @@ cmp.setup {
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm({ select = false }),
   },
-  sources = cmp.config.sources {
+  sources = cmp.config.sources({
     { name = "nvim_lsp" },
     {
       name = "buffer",
       option = {
-        -- Uses only buffers from current tabpage
+        -- use only buffers from current tabpage, but omit manpages as they can
+        -- slow down neovim by being too large
         get_bufnrs = function()
-          return vim.tbl_map(
-            function(w) return api.nvim_win_get_buf(w) end,
-            api.nvim_tabpage_list_wins(0)
-          )
+          local ret = {}
+          for _, winid in ipairs(api.nvim_tabpage_list_wins(0)) do
+            local bufnr = api.nvim_win_get_buf(winid)
+            local ft = api.nvim_buf_get_option(bufnr, "filetype")
+            if ft ~= "man" then
+              table.insert(ret, bufnr)
+            end
+          end
+          return ret
         end,
       },
     },
     { name = "path" },
     { name = "luasnip" },
     { name = "calc" },
-  },
+  }),
   window = {
     documentation = {
       border = vim.g.floatwin_border,
@@ -47,18 +53,15 @@ cmp.setup {
   },
   enabled = function()
     return vim.bo.buftype ~= "prompt"
-       and vim.bo.filetype ~= "asm"
-       and vim.fn.win_gettype() == ""
+      and vim.bo.filetype ~= "asm"
+      and vim.fn.win_gettype() == ""
   end,
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
   },
-  -- view = {
-  --   entries = "native",
-  -- },
-}
+})
 
 --[[
 local compe = require("compe")

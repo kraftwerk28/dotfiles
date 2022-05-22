@@ -44,11 +44,9 @@ do
   vim.keymap.set("v", "<Leader>f", vim.lsp.buf.range_formatting, opts)
   vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, opts)
   vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, opts)
-  vim.keymap.set(
-    "n", "<Leader>ae",
-    function() vim.diagnostic.open_float({ border = vim.g.floatwin_border }) end,
-    opts
-  )
+  vim.keymap.set("n", "<Leader>ae", function()
+    vim.diagnostic.open_float({ border = vim.g.floatwin_border })
+  end, opts)
   -- vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, opts)
   vim.keymap.set("n", "<Leader>aa", function()
     vim.lsp.buf.code_action()
@@ -92,9 +90,9 @@ local function setup_diagnostics()
             text = diag.message,
           }
           if diag.severity == 1 then
-            item.type = 'E'
+            item.type = "E"
           elseif diag.severity == 2 then
-            item.type = 'W'
+            item.type = "W"
           end
           table.insert(qflist, item)
         end

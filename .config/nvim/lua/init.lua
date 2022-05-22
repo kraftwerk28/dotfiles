@@ -6,16 +6,29 @@ local load = utils.load
 
 _G.A = setmetatable({}, {
   __index = function(_, k)
-    return vim.api["nvim_"..k]
-  end
+    return vim.api["nvim_" .. k]
+  end,
 })
 
+-- vim.g.do_filetype_lua = 1
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
-vim.g.floatwin_border = {'┌', '─', '┐', '│', '┘', '─', '└', '│'}
+vim.g.floatwin_border = {
+  "┌",
+  "─",
+  "┐",
+  "│",
+  "┘",
+  "─",
+  "└",
+  "│",
+}
 vim.g.diagnostic_signs = {
-  ERROR = " ", WARN  = " ", INFO  = " ", HINT  = " ",
+  ERROR = " ",
+  WARN = " ",
+  INFO = " ",
+  HINT = " ",
 }
 
 function _G.printf(...)
@@ -30,7 +43,6 @@ end
 --   theme_style = "dark_default",
 --   hide_inactive_statusline = false,
 -- }
-
 
 load("config.mappings")
 -- load("config.opts")
@@ -62,10 +74,12 @@ api.nvim_create_autocmd("TextYankPost", {
 })
 
 do
-  local no_line_number_ft = {"help", "man", "list", "TelescopePrompt"}
+  local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
   local function set_nu(relative)
     return function()
-      if fn.win_gettype() == "popup" then return end
+      if fn.win_gettype() == "popup" then
+        return
+      end
       if vim.tbl_contains(no_line_number_ft, vim.bo.filetype) then
         return
       end
@@ -74,28 +88,24 @@ do
     end
   end
   vim.api.nvim_create_autocmd("BufEnter,WinEnter,FocusGained", {
-    callback = set_nu(true)
+    callback = set_nu(true),
   })
   vim.api.nvim_create_autocmd("BufLeave,WinLeave,FocusLost", {
-    callback = set_nu(false)
+    callback = set_nu(false),
   })
 end
 
 do
-  api.nvim_create_user_command(
-    "GoChangeScope",
-    function()
-      local word = fn.expand("<cword>")
-      local fst = word:sub(1, 1)
-      if fst:match("[A-Z]") then
-        word = fst:lower()..word:sub(2)
-      else
-        word = fst:upper()..word:sub(2)
-      end
-      vim.lsp.buf.rename(word)
-    end,
-    {}
-  )
+  api.nvim_create_user_command("GoChangeScope", function()
+    local word = fn.expand("<cword>")
+    local fst = word:sub(1, 1)
+    if fst:match("[A-Z]") then
+      word = fst:lower() .. word:sub(2)
+    else
+      word = fst:upper() .. word:sub(2)
+    end
+    vim.lsp.buf.rename(word)
+  end, {})
 
   local function organize_imports()
     local params = vim.lsp.util.make_range_params()
@@ -135,6 +145,15 @@ if vim.fn.glob("go.mod") ~= "" then
   vim.o.makeprg = "go build"
 end
 
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local pos = vim.fn.line([['"]])
+    if pos > 0 and pos <= vim.fn.line("$") then
+      vim.cmd([[normal! g`"]])
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufWinEnter", {
   callback = function()
     if vim.bo.filetype == "help" then
@@ -156,6 +175,18 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
       --   vim.cmd("wincmd L | 82wincmd |")
       -- end
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd("FocusLost", {
+  callback = function()
+    vim.cmd("silent! wall")
+  end,
+})
+
+vim.api.nvim_create_autocmd("FocusGained", {
+  callback = function()
+    vim.fn.system("pwd > /tmp/last_pwd")
   end,
 })
 

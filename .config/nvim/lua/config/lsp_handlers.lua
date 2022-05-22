@@ -1,7 +1,7 @@
 local M = {}
 
 function M.patch_lsp_handlers()
-  local emitter = {_handlers = {}}
+  local emitter = { _handlers = {} }
 
   function emitter:on(method, handler)
     local handlers = self._handlers
@@ -27,7 +27,9 @@ function M.patch_lsp_handlers()
 
   function emitter:off(method, handler)
     local handlers = self._handlers
-    if handlers[method] == nil then return end
+    if handlers[method] == nil then
+      return
+    end
     if handler == nil then
       handlers[method] = nil
       return
@@ -42,7 +44,9 @@ function M.patch_lsp_handlers()
 
   function emitter:emit(method, ...)
     local handler = self[method]
-    if handler ~= nil then handler(...) end
+    if handler ~= nil then
+      handler(...)
+    end
   end
 
   function emitter:getlisteners(method)
@@ -52,8 +56,12 @@ function M.patch_lsp_handlers()
   local emitter_mt = {}
   function emitter_mt:__index(method)
     local handlers = self._handlers
-    if handlers[method] == nil then return nil end
-    if #handlers[method] == 1 then return handlers[method][1] end
+    if handlers[method] == nil then
+      return nil
+    end
+    if #handlers[method] == 1 then
+      return handlers[method][1]
+    end
     return function(...)
       for _, handler in ipairs(handlers[method]) do
         handler(...)
@@ -62,7 +70,7 @@ function M.patch_lsp_handlers()
   end
 
   function emitter_mt:__newindex(method, handler)
-    self._handlers[method] = {handler}
+    self._handlers[method] = { handler }
   end
 
   setmetatable(emitter, emitter_mt)
@@ -73,7 +81,7 @@ function M.patch_lsp_handlers()
     vim.lsp.handlers[method] = nil
   end
 
-  setmetatable(vim.lsp.handlers, {__index = emitter, __newindex = emitter})
+  setmetatable(vim.lsp.handlers, { __index = emitter, __newindex = emitter })
 end
 
 return M
