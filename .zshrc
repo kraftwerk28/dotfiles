@@ -10,14 +10,14 @@ echo -n $'\e[?45l'
 
 # Options
 setopt auto_menu complete_in_word always_to_end promptsubst
-setopt appendhistory autocd auto_pushd pushd_ignore_dups pushdminus
+setopt appendhistory auto_pushd pushd_ignore_dups pushd_minus auto_cd
 setopt extended_history hist_expire_dups_first hist_ignore_dups
 setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
 setopt hist_ignore_dups hist_ignore_all_dups hist_find_no_dups
-setopt noprompt_sp
+unsetopt prompt_sp
 
 # Autoloads
-autoload -U add-zsh-hook edit-command-line vcs_info compinit
+autoload -U add-zsh-hook edit-command-line compinit
 
 requires () {
 	local banner="$(basename "$0"): please install:"
@@ -96,8 +96,7 @@ for cfg in ~/.config/zsh/*.zsh; do
 	source "$cfg"
 done
 
-autoload -U select-word-style
-select-word-style bash
+WORDCHARS='-'
 
 bindkeys () {
 	# bindkey -v "^[[A" history-search-backward
@@ -152,7 +151,9 @@ noprompt () {
 # https://github.com/stedolan/jq/issues/1972#issuecomment-721667377
 export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 
-eval "$(fnm env --use-on-cd)"
+if (( $+commands[fnm] )); then
+	eval "$(fnm env --use-on-cd)"
+fi
 
 updatenvim () {
 	pushd $HOME/projects/neovim/neovim

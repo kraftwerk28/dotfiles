@@ -1,21 +1,10 @@
 local M = {}
-
-local function printf(...)
-  print(string.format(...))
-end
-local sprintf = string.format
-local function cmdf(...)
-  vim.cmd(sprintf(...))
-end
 local fn, api = vim.fn, vim.api
 
-M.printf = printf
-M.sprintf = sprintf
-M.cmdf = cmdf
-
-function M.get_cursor_pos()
-  return { fn.line("."), fn.col(".") }
-end
+-- local function printf(...)
+--   print(string.format(...))
+-- end
+-- local sprintf = string.format
 
 function M.debounce(func, timeout)
   local timer_id
@@ -80,36 +69,37 @@ function M.u(code)
   return x .. y .. z .. w
 end
 
-function _G.dump(...)
-  local args = { ... }
-  if #args == 1 then
-    print(vim.inspect(args[1]))
-  else
-    print(vim.inspect(args))
-  end
-end
+vim.g.my_package_loaded = {}
 
 function M.load(path)
   local ok, mod = pcall(require, path)
   if not ok then
-    printf("Error loading module `%s`", path)
-    print(mod)
-  else
-    local loadfunc
-    if mod == true then
-      -- Module doesn't export anything
-      return
-    elseif type(mod) == "table" and mod.setup ~= nil then
-      loadfunc = mod.setup
-    elseif type(mod) == "function" then
-      loadfunc = mod
-    end
-    local ok, err = pcall(loadfunc)
-    if not ok then
-      printf("Error loading module `%s`", path)
-      print(err)
-    end
+    error("Error loadding " .. path)
+    error(mod)
+    return
   end
+  local loadfn
+  if type(mod) == "function" then
+    loadfn = mod
+  elseif type(mod) == "table" and type(mod.setup) == "function" then
+    loadfn = mod.setup
+  else
+    return
+  end
+  local ok, err = pcall(loadfn)
+  if not ok then
+    error("Error loading module " .. path)
+    error(err)
+    return
+  end
+  vim.g.my_package_loaded[path] = loadfn or true
+end
+
+function M.clear_load_cache()
+  for k in ipairs(vim.g.my_package_loaded) do
+    package.loaded[k] = nil
+  end
+  vim.g.my_package_loaded = {}
 end
 
 -- Get information about highlight group

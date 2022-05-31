@@ -1,0 +1,15 @@
+-- 1. Get repo remote type (i.e. GitHub, Bitbucket, GitLab etc)
+-- 2. Get the branch
+-- 3. Get remotes and choose one
+
+-- local function get_remotes()
+--   local out = vim.fn.system(
+--     [[git config --local --get-regexp 'remote\.\S+\.url']]
+--   )
+--   local ret = {}
+--   for line in out:split("[^\n]+") do
+--     local sp = vim.split(line, " ")
+--     table.insert(ret, sp[2])
+--   end
+--   return ret
+-- end

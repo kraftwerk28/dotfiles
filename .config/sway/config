@@ -8,12 +8,13 @@ set $border_width 3
 
 # set $cursor_theme "Adwaita"
 # set $cursor_size 24
-set $cursor_theme "Simp1e-Dark"
+set $cursor_theme "Simp1e"
 # /usr/share/icons/Simp1e-Dark
 set $cursor_size 32
 
 # output * background "$HOME/Pictures/pink_floyd_animals.png" fit
-output * background "#000000" solid_color
+# output * background "#000000" solid_color
+output * background "$HOME/Pictures/8421.jpg"
 
 floating_modifier $mod
 
@@ -317,4 +318,4 @@ focus_on_window_activation urgent
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 
-# vim: cms=#\ %s
+# vim: cms=#\ %s ft=swayconfig

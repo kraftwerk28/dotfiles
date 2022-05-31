@@ -8,12 +8,13 @@ bat_common: &bat_common
 
 pulse_icons: &pulse_icons
   devices:
-    Speakers: "墳"
+    Analog Output: ""
     Headphones: ""
-    Headset: ""
-    Microphone: ""
-    Internal Microphone: ""
     Headset Microphone: ""
+    Headset: ""
+    Internal Microphone: ""
+    Microphone: ""
+    Speakers: "墳"
   sink_muted: ""
   source_muted: ""
 
@@ -24,6 +25,10 @@ theme:
   value: 90
 
 blocks:
+
+  - name: shell
+    command: ALERTS_LOC_REGEX='кіро' ~/.config/sway/bar-scripts/air_alerts.py
+    json: true
 
   - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh
@@ -65,7 +70,7 @@ blocks:
 
   - name: networkmanager
     format: "{status_icon}{vpn}{access_point}"
-    ap_format: "{strength:3*%}"
+    ap_format: "{ssid}{strength:3*%}"
     icons:
       vpn: "嬨"
       wifi:

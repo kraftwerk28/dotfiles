@@ -102,23 +102,22 @@ local function load(use)
   --         },
   --       },
   --     }
-  --     dump(opts)
   --     neogit.setup(opts)
   --   end,
   -- }
 
-  use({ "chrisbra/Colorizer" })
-  use({ "mattn/emmet-vim" })
+  use("chrisbra/Colorizer")
+  use("mattn/emmet-vim")
 
   -- Missing / not ready to use languages in tree-sitter
-  use({ "neovimhaskell/haskell-vim" })
-  use({ "editorconfig/editorconfig-vim" })
-  use({ "elixir-editors/vim-elixir" })
-  use({ "chr4/nginx.vim" })
+  use("neovimhaskell/haskell-vim")
+  use("editorconfig/editorconfig-vim")
+  use("elixir-editors/vim-elixir")
+  use("chr4/nginx.vim")
   -- use {"tpope/vim-markdown"}
-  use({ "adimit/prolog.vim" })
-  use({ "digitaltoad/vim-pug" })
-  use({ "bfrg/vim-jq" })
+  use("adimit/prolog.vim")
+  use("digitaltoad/vim-pug")
+  use("bfrg/vim-jq")
 
   use({
     -- "~/projects/neovim/nvim-treesitter",
@@ -281,6 +280,7 @@ local function bootstrap()
     load,
     config = {
       git = { clone_timeout = 240 },
+      autoremove = true,
     },
   })
   api.nvim_create_autocmd("BufWritePost", {

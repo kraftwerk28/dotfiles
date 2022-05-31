@@ -71,6 +71,8 @@ local ftconfig = {
 
   { { "asm" }, { shiftwidth = 8, tabstop = 8, expandtab = false } },
 
+  { { "help" }, { conceallevel = 0 } },
+
   -- { {"markdown"},
   --   { conceallevel = 2 }},
 
@@ -94,7 +96,7 @@ return function()
       pattern = filetypes,
       callback = function()
         for name, value in pairs(opts) do
-          api.nvim_buf_set_option(0, name, value)
+          vim.o[name] = value
         end
       end,
       group = optgroup,

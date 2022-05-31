@@ -1,14 +1,11 @@
 scriptencoding utf-8
-autocmd!
 
 if has("win64")
   set runtimepath+=$HOME/dotfiles/.config/nvim
 endif
 
 runtime opts.vim
-colorscheme kanagawa
-" colorscheme base16-gruvbox-light-medium
-" colorscheme base16-gruvbox-dark-medium
+
 lua require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
@@ -128,9 +125,6 @@ autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
 nnoremap <buffer><silent> <Leader>qj :cnext<CR>
 nnoremap <buffer><silent> <Leader>qk :cprevious<CR>
 nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
-
-" `i3config` doesn't work properly for sway's config
-autocmd BufNewFile,BufRead *config/sway/config set filetype=
 
 "------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
@@ -330,7 +324,7 @@ nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
 nnoremap <silent> dba <Cmd>%bd<CR>
 nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
 
-au BufRead,BufNewFile */sway/config set filetype=sway
+au BufRead,BufNewFile */sway/config set filetype=swayconfig
 
 " let g:iexit_timer = 0
 " autocmd ModeChanged * if g:iexit_timer

@@ -115,10 +115,10 @@ lsp_config.tsserver.setup({
     },
   },
   on_attach = function(client)
-    print(vim.inspect(client.server_capabilities))
+    local cpb = client.server_capabilities
     -- Formatting is handled by prettier through null-ls
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
+    cpb.documentFormattingProvider = false
+    cpb.documentRangeFormattingProvider = false
   end,
 })
 
@@ -151,7 +151,7 @@ lsp_config.tsserver.setup({
 --         path = vim.split(package.path, ";"),
 --       },
 --       diagnostics = {
---         globals = {"vim", "dump", "love"},
+--         globals = {"vim", "love"},
 --       },
 --       workspace = {
 --         library = {

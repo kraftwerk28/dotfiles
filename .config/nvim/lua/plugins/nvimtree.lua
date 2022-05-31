@@ -1,27 +1,5 @@
 local nt = require("nvim-tree")
 
-vim.g.nvim_tree_icons = {
-  folder = {
-    arrow_open = "",
-    arrow_closed = "",
-    default = "",
-    open = "",
-    empty = "",
-    empty_open = "",
-    symlink = "",
-    symlink_open = "",
-  },
-  git = {
-    unstaged = "✗",
-    staged = "✓",
-    unmerged = "",
-    renamed = "➜",
-    untracked = "",
-    deleted = "",
-    ignored = "",
-  },
-}
-
 vim.keymap.set("n", "<F3>", function()
   if vim.o.filetype == "NvimTree" then
     return ":NvimTreeClose<CR>"
@@ -56,5 +34,28 @@ nt.setup({
   },
   renderer = {
     indent_markers = { enable = false },
+    icons = {
+      glyphs = {
+        folder = {
+          arrow_open = "",
+          arrow_closed = "",
+          default = "",
+          open = "",
+          empty = "",
+          empty_open = "",
+          symlink = "",
+          symlink_open = "",
+        },
+        git = {
+          unstaged = "✗",
+          staged = "✓",
+          unmerged = "",
+          renamed = "➜",
+          untracked = "",
+          deleted = "",
+          ignored = "",
+        },
+      },
+    },
   },
 })

@@ -10,26 +10,23 @@ _G.A = setmetatable({}, {
   end,
 })
 
--- vim.g.do_filetype_lua = 1
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
+-- stylua: ignore start
 -- vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
-vim.g.floatwin_border = {
-  "┌",
-  "─",
-  "┐",
-  "│",
-  "┘",
-  "─",
-  "└",
-  "│",
-}
+vim.g.floatwin_border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
+-- stylua: ignore end
 vim.g.diagnostic_signs = {
   ERROR = " ",
   WARN = " ",
   INFO = " ",
   HINT = " ",
 }
+vim.g.sql_type_default = "sqlanywhere"
+
+vim.cmd("colorscheme kanagawa")
+-- vim.cmd("colorscheme base16-gruvbox-light-medium")
+-- vim.cmd("colorscheme base16-gruvbox-dark-medium")
 
 function _G.printf(...)
   return print(string.format(...))
@@ -44,14 +41,56 @@ end
 --   hide_inactive_statusline = false,
 -- }
 
+local function rtp_searchpath(path)
+  local p = package.searchpath(
+    path,
+
+    table.concat(
+      vim.tbl_flatten(vim.tbl_map(function(p)
+        return { p .. "/lua/?.lua", p .. "/lua/?/init.lua" }
+      end, api.nvim_list_runtime_paths())),
+      ";"
+    )
+
+    -- table.concat(
+    --   vim.tbl_flatten(
+    --     vim.tbl_map(function(p)
+    --       return { p .. "/lua/?.lua", p .. "/lua/?/init.lua" }
+    --     end, vim.split(vim.o.runtimepath, ",")),
+    --     vim.split(vim.o.runtimepath, ";")
+    --   ),
+    --   ";"
+    -- )
+  )
+  return p
+end
+
+function _G.reload_config()
+  -- TODO:
+  for k in pairs(package.loaded) do
+    local spath = rtp_searchpath(k)
+    if
+      spath
+      and not spath:find("packer")
+      and (
+        spath:find(fn.stdpath("data"), 1, true)
+        or spath:find(fn.stdpath("config"), 1, true)
+      )
+    then
+      print("Invalidating module: " .. k)
+      package.loaded[k] = nil
+    end
+  end
+  vim.cmd("runtime init.vim")
+  require("packer").compile()
+end
+
 load("config.mappings")
--- load("config.opts")
 load("config.lsp")
 load("config.tabline")
 load("config.statusline")
 load("config.filetypes")
 load("plugins")
--- load("config.experiments")
 
 -- if fn.has("unix") == 1 then
 --   -- Clicking any link pointing to neovim or vim docs site
@@ -59,10 +98,6 @@ load("plugins")
 --   -- (required corresponding .desktop file which replaces browser
 --   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 -- end
-
-function M.save_session()
-  vim.cmd("mksession")
-end
 
 api.nvim_create_autocmd("TextYankPost", {
   callback = function()
@@ -74,7 +109,7 @@ api.nvim_create_autocmd("TextYankPost", {
 })
 
 do
-  local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
+  local no_line_number_ft = { "help", "man", "list", "TelescopePrompt", "git" }
   local function set_nu(relative)
     return function()
       if fn.win_gettype() == "popup" then
@@ -95,53 +130,10 @@ do
   })
 end
 
-do
-  api.nvim_create_user_command("GoChangeScope", function()
-    local word = fn.expand("<cword>")
-    local fst = word:sub(1, 1)
-    if fst:match("[A-Z]") then
-      word = fst:lower() .. word:sub(2)
-    else
-      word = fst:upper() .. word:sub(2)
-    end
-    vim.lsp.buf.rename(word)
-  end, {})
-
-  local function organize_imports()
-    local params = vim.lsp.util.make_range_params()
-    -- local lnum = vim.api.nvim_win_get_cursor(opts.winnr)[1]
-    -- params.context = {
-    --   diagnostics = vim.lsp.diagnostic.get_line_diagnostics(opts.bufnr, lnum - 1),
-    -- }
-    local result, err = vim.lsp.buf_request_sync(
-      0,
-      "textDocument/codeAction",
-      params
-    )
-    if err then
-      print("error", err)
-      return
-    end
-    print(vim.inspect(result))
-    -- TODO
-    -- for _, r in pairs(result) do
-    --   for _, cmd in ipairs(r.result) do
-    --     if cmd.kind == "source.organizeImports" then
-    --       vim.lsp.buf.execute_command(cmd)
-    --       return
-    --     end
-    --   end
-    -- end
-  end
-
-  -- vim.keymap.set("n", "<Leader>aoi", organize_imports, { noremap = true })
-end
-
 -- set 'makeprg' for some projects
 if vim.fn.glob("meson.build") ~= "" then
   vim.o.makeprg = "meson compile -C build"
-end
-if vim.fn.glob("go.mod") ~= "" then
+elseif vim.fn.glob("go.mod") ~= "" then
   vim.o.makeprg = "go build"
 end
 
@@ -156,7 +148,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
   callback = function()
-    if vim.bo.filetype == "help" then
+    if vim.o.filetype == "help" then
       vim.cmd("wincmd L | 82wincmd |")
     elseif vim.bo.filetype == "man" then
       -- TODO:

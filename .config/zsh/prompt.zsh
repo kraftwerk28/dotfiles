@@ -14,14 +14,21 @@ git_info () {
 	echo $result
 }
 
-zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%%b%m'
-zstyle ':vcs_info:*' check-for-changes true
+autoload -Uz vcs_info 
+
+zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%m%Q%%b'
+zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git+set-message:*:*' hooks check-dirty
+# zstyle ':vcs_info:git:*' unstagedstr '%B%F{red}✗'
+# zstyle ':vcs_info:git:*' check-for-staged-changes true
+# zstyle ':vcs_info:git:*' stagedstr '%B%F{red}✗'
+# zstyle ':vcs_info:*' patch-format '#%p [%n|%c]'
+
 +vi-check-dirty () {
-	if git diff-index --exit-code HEAD &>/dev/null; then
+	if git diff-index --exit-code --quiet HEAD; then
 		hook_com[misc]="%B%F{green}✔"
 	else
-		hook_com[misc]="%B%F{red}✗"
+		hook_com[misc]="%B%F{red}✘"
 	fi
 }
 
@@ -45,9 +52,8 @@ vimode_rlabel () {
 }
 
 filepath='%F{#ffa500}%(4~|…/%2~|%~)'
-exit_status=" %(?:%B%F{green}\$:%B%F{red}\$)"
-creset="%b%f%k"
-PS1="${filepath}\${vcs_info_msg_0_}${exit_status}${creset} "
+exit_status=" %(?:%B%F{green}\$:%B%F{red}\$)%b%f"
+PS1="${filepath}\${vcs_info_msg_0_}${exit_status} "
 # RPS1="\$(vimode_rlabel)%f"
 
 add-zsh-hook precmd vcs_info

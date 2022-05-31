@@ -13,20 +13,6 @@ local rep = extras.rep
 
 -- ls.filetype_extend("all", { "_" })
 
-ls.add_snippets("go", {
-  ls.snippet("ie2", {
-    t("if "),
-    c(1, {
-      fmt.fmta("<> != nil", { i(1, "err") }),
-      fmt.fmta("<> = <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
-      fmt.fmta("<> := <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
-    }),
-    t({ " {", "\t" }),
-    i(0),
-    t({ "", "}" }),
-  }),
-})
-
 local ecma_snippets = {
   ls.snippet(
     "usest",
@@ -39,15 +25,95 @@ local ecma_snippets = {
       i(0),
     })
   ),
-  ls.snippet("cl", fmt.fmta("console.log(<>)", i(0))),
+  ls.snippet(
+    "cl",
+    fmt.fmta(
+      "console.<>(<>)",
+      { c(1, { t("log"), t("warn"), t("error"), t("dir") }), i(0) }
+    )
+  ),
 }
 
+local c_cpp_snippets = {
+  ls.snippet(
+    "main",
+    fmt.fmta(
+      [[
+        int main(<args>) {
+        <ind><cursor>
+        <ind>return 0;
+        }
+      ]],
+      {
+        args = c(1, { t("int argc, char *argv[]"), t("void") }),
+        ind = t("\t"),
+        cursor = i(0),
+      }
+    )
+  ),
+  ls.snippet(
+    "fori",
+    fmt.fmta(
+      [[
+        for (<> <> = 0; <> << <>; <>++) {
+        <><>
+        }
+      ]],
+      { i(1, "int"), i(2, "i"), rep(2), i(3, "42"), rep(2), t("\t"), i(0) }
+    )
+  ),
+}
+
+ls.add_snippets("go", {
+  ls.snippet("ie", {
+    t("if "),
+    c(1, {
+      fmt.fmta("<> != nil", { i(1, "err") }),
+      fmt.fmta("<> = <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+      fmt.fmta("<> := <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+    }),
+    t({ " {", "\t" }),
+    i(0),
+    t({ "", "}" }),
+  }),
+  ls.snippet(
+    "main",
+    fmt.fmta(
+      [[
+        func main() {
+        <><>
+        }
+      ]],
+      { t("\t"), i(0) }
+    )
+  ),
+})
 ls.add_snippets("javascript", ecma_snippets)
 ls.add_snippets("javascriptreact", ecma_snippets)
 ls.add_snippets("typescript", ecma_snippets)
 ls.add_snippets("typescriptreact", ecma_snippets)
+ls.add_snippets("python", {
+  ls.snippet("ifmain", {
+    t("if __name__ == "),
+    c(1, { t('"__main__"'), t("'__main__'") }),
+    t({ ":", "\t" }),
+    i(0),
+  }),
+  ls.snippet(
+    "dundermethod",
+    fmt.fmta(
+      [[
+        def __<>__(self<>):
+        <><>
+      ]],
+      { i(1, "init"), i(2), t("\t"), i(0) }
+    )
+  ),
+})
+ls.add_snippets("cpp", c_cpp_snippets)
+ls.add_snippets("c", c_cpp_snippets)
 ls.add_snippets("all", {
-  ls.snippet("foobar", { i(2, "foo"), i(1, "bar"), i(0) }),
+  ls.snippet("lorem", t("Lorem ipsum dolor sit amet")),
 })
 
 ls.config.set_config({
@@ -57,7 +123,6 @@ ls.config.set_config({
 
 vim.keymap.set({ "s", "i" }, "<C-L>", function()
   if ls.expand_or_jumpable() then
-    vim.schedule(ls.expand_or_jump)
     return "<Plug>luasnip-expand-or-jump"
   else
     return "<C-L>"
