@@ -41,7 +41,7 @@ plug () {
 			return
 		fi
 	done
-	echo "Plugin $1 not found" >&2
+	echo "Plugin $1 not found, please install it." >&2
 }
 
 zvm_config () {
@@ -151,9 +151,7 @@ noprompt () {
 # https://github.com/stedolan/jq/issues/1972#issuecomment-721667377
 export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 
-if (( $+commands[fnm] )); then
-	eval "$(fnm env --use-on-cd)"
-fi
+(( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 
 updatenvim () {
 	pushd $HOME/projects/neovim/neovim

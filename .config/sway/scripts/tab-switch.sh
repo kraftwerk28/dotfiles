@@ -1,4 +1,6 @@
 #!/bin/bash
+# NOTE: This is now replaced with enhance.lua script
+
 if [[ -z $1 ]]; then
 	exit 1
 fi
