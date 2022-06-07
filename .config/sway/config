@@ -1,24 +1,12 @@
-set $mod Mod4
+set $scripts "$HOME/.config/sway/scripts"
+
+# Key bindings {{{
+set $mod  Mod4
+set $modr Mod5
 set $left  h
 set $down  j
 set $up    k
 set $right l
-set $script "$HOME/.config/sway/scripts"
-set $border_width 3
-
-# set $cursor_theme "Adwaita"
-# set $cursor_size 24
-set $cursor_theme "Simp1e"
-# /usr/share/icons/Simp1e-Dark
-set $cursor_size 32
-
-# output * background "$HOME/Pictures/pink_floyd_animals.png" fit
-# output * background "#000000" solid_color
-output * background "$HOME/Pictures/8421.jpg"
-
-floating_modifier $mod
-
-set $foo '#abfeef'
 
 # bindsym --to-code {
 # 	$mod+Return exec alacritty
@@ -31,7 +19,10 @@ set $foo '#abfeef'
 
 bindsym --to-code {
 	$mod+Return exec foot
+	$modr+Return exec foot
 	$mod+Shift+Return exec foot \
+		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$modr+Shift+Return exec foot \
 		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	$mod+f2 exec foot $SHELL -i -c "cd $HOME/.config/sway && nvim config"
 }
@@ -43,19 +34,31 @@ bindsym --to-code {
 		rofi -i -show drun -run-command 'swaymsg exec "{cmd}"', \
 		input type:keyboard xkb_switch_layout 0
 
-	$mod+$left  focus left
-	$mod+$down  focus down
-	$mod+$up    focus up
-	$mod+$right focus right
+	$mod+$left   focus left
+	$mod+$down   focus down
+	$mod+$up     focus up
+	$mod+$right  focus right
 
 	$mod+Control+h nop tab prev
 	$mod+Control+l nop tab next
-	$mod+Control+1 exec $script/tab-switch.sh 1
-	$mod+Control+2 exec $script/tab-switch.sh 2
-	$mod+Control+3 exec $script/tab-switch.sh 3
-	$mod+Control+4 exec $script/tab-switch.sh 4
-	$mod+Control+5 exec $script/tab-switch.sh 5
-	$mod+Control+6 exec $script/tab-switch.sh 6
+	$mod+Control+1 nop tab 1
+	$mod+Control+2 nop tab 2
+	$mod+Control+3 nop tab 3
+	$mod+Control+4 nop tab 4
+	$mod+Control+5 nop tab 5
+	$mod+Control+6 nop tab 6
+	$mod+Control+7 nop tab 7
+	$mod+Control+8 nop tab 8
+	$modr+Control+h nop tab prev
+	$modr+Control+l nop tab next
+	$modr+Control+1 nop tab 1
+	$modr+Control+2 nop tab 2
+	$modr+Control+3 nop tab 3
+	$modr+Control+4 nop tab 4
+	$modr+Control+5 nop tab 5
+	$modr+Control+6 nop tab 6
+	$modr+Control+7 nop tab 7
+	$modr+Control+8 nop tab 8
 
 	$mod+Shift+$left  move left
 	$mod+Shift+$down  move down
@@ -64,14 +67,17 @@ bindsym --to-code {
 
 	$mod+Bracketleft  workspace prev
 	$mod+Bracketright workspace next
+	$modr+Bracketleft  workspace prev
+	$modr+Bracketright workspace next
 
-	$mod+Shift+Bracketleft exec $script/workspace-switch.sh prev
-	$mod+Shift+Bracketright exec $script/workspace-switch.sh next
+	$mod+Shift+Bracketleft  nop workspace prev
+	$mod+Shift+Bracketright nop workspace next
 
-	$mod+Control+Up    exec $script/push-window.sh top
-	$mod+Control+Right exec $script/push-window.sh right
-	$mod+Control+Down  exec $script/push-window.sh bottom
-	$mod+Control+Left  exec $script/push-window.sh left
+	# TODO: rewrite using lua framework
+	$mod+Control+Up    exec $scripts/push-window.sh top
+	$mod+Control+Right exec $scripts/push-window.sh right
+	$mod+Control+Down  exec $scripts/push-window.sh bottom
+	$mod+Control+Left  exec $scripts/push-window.sh left
 
 	$mod+s layout stacking
 	$mod+w layout tabbed
@@ -108,17 +114,6 @@ bindsym --to-code {
 	--release   $mod+Alt+Period seat * cursor release button1
 	--no-repeat $mod+Alt+Slash  seat * cursor press   button3
 	--release   $mod+Alt+Slash  seat * cursor release button3
-}
-
-bindsym {
-	$mod+i exec $script/rofi-window-switch.sh
-	$mod+o exec $script/rename-workspace.sh
-
-	$mod+Shift+e exec swaynag \
-		--type warning \
-		--message "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
-		--button "Yes, exit sway" "swaymsg exit" \
-		--no-dock
 
 	$mod+1 workspace number 1
 	$mod+2 workspace number 2
@@ -130,6 +125,18 @@ bindsym {
 	$mod+8 workspace number 8
 	$mod+9 workspace number 9
 	$mod+0 workspace number 10
+
+	$modr+1 workspace number 1
+	$modr+2 workspace number 2
+	$modr+3 workspace number 3
+	$modr+4 workspace number 4
+	$modr+5 workspace number 5
+	$modr+6 workspace number 6
+	$modr+7 workspace number 7
+	$modr+8 workspace number 8
+	$modr+9 workspace number 9
+	$modr+0 workspace number 10
+
 	$mod+Tab nop focus_prev
 
 	$mod+Shift+1 move container to workspace number 1
@@ -143,11 +150,51 @@ bindsym {
 	$mod+Shift+9 move container to workspace number 9
 	$mod+Shift+0 move container to workspace number 10
 
+	$modr+Shift+1 move container to workspace number 1
+	$modr+Shift+2 move container to workspace number 2
+	$modr+Shift+3 move container to workspace number 3
+	$modr+Shift+4 move container to workspace number 4
+	$modr+Shift+5 move container to workspace number 5
+	$modr+Shift+6 move container to workspace number 6
+	$modr+Shift+7 move container to workspace number 7
+	$modr+Shift+8 move container to workspace number 8
+	$modr+Shift+9 move container to workspace number 9
+	$modr+Shift+0 move container to workspace number 10
+
 	$mod+Shift+minus move scratchpad
 	$mod+minus scratchpad show
 }
 
-bindsym $mod+r mode resize
+bindsym {
+	$mod+i exec $scripts/rofi-window-switch.sh
+	$mod+o exec $scripts/rename-workspace.sh
+
+	$mod+Shift+e exec swaynag \
+		--type warning \
+		--message "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
+		--button "Yes, exit sway" "swaymsg exit" \
+		--no-dock
+}
+
+# Various multimedia keys
+bindsym {
+	XF86AudioRaiseVolume  exec $scripts/volume-control.sh up
+	XF86AudioLowerVolume  exec $scripts/volume-control.sh down
+	XF86AudioMute         exec $scripts/volume-control.sh toggle
+	Control+XF86AudioMute exec $scripts/volume-control.sh toggle-mic
+	--to-code --no-repeat $mod+m exec $scripts/volume-control.sh unmute-down
+	--to-code --release   $mod+m exec $scripts/volume-control.sh unmute-up
+	XF86MonBrightnessDown exec $scripts/backlight-control.sh down
+	XF86MonBrightnessUp   exec $scripts/backlight-control.sh up
+	XF86AudioPlay         exec playerctl play-pause
+	XF86AudioNext         exec playerctl next
+	XF86AudioPrev         exec playerctl previous
+	Print         exec grimvshot --notify --swaynag --area
+	Shift+Print   exec grimvshot --notify --swaynag --window
+	Control+Print exec grimvshot --notify --swaynag --screen
+}
+
+bindsym --to-code $mod+r mode resize
 mode resize bindsym {
 	$left  resize shrink width  20px
 	$down  resize grow   height 20px
@@ -160,6 +207,53 @@ mode resize bindsym {
 
 bindsym $mod+f12 mode nested_sway
 mode nested_sway bindsym $mod+f12 mode default
+# }}}
+
+# Theme and colors {{{
+set {
+	$focused_title_border "#ee6600"
+	$focused_title_bg "#884400"
+	$focused_title_text "#ffffff"
+	$focused_indicator "#ff4400"
+	$focused_border $focused_title_border
+	$unfocused_title_border "#333333"
+	$unfocused_title_bg "#222222"
+	$unfocused_title_text "#bbbbbb"
+	$unfocused_indicator "#882200"
+	$unfocused_border $unfocused_title_border
+	$urgent_title_border "#bb0000"
+	$urgent_title_bg "#880000"
+	$urgent_title_text "#ffffff"
+	$urgent_indicator "#dd0000"
+	$urgent_border $urgent_title_border
+}
+
+# Default colors
+# client.focused           "#4c7899" "#285577" "#ffffff" "#2e9ef4" "#285577
+# client.focused_inactive  "#333333" "#5f676a" "#ffffff" "#484e50" "#5f676a
+# client.focused_tab_title "#333333" "#5f676a" "#ffffff"
+# client.unfocused         "#333333" "#222222" "#888888" "#292d2e" "#222222
+# client.urgent            "#2f343a" "#900000" "#ffffff" "#900000" "#900000
+
+# Set from theme variables
+client.focused $focused_title_border $focused_title_bg $focused_title_text $focused_indicator $focused_border
+client.focused_inactive $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
+client.focused_tab_title $focused_title_border $focused_title_bg $focused_title_text
+client.unfocused $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
+client.urgent $urgent_title_border $urgent_title_bg $urgent_title_text $urgent_indicator $urgent_border
+
+# client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+# client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+# client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
+# client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
+# client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
+
+# client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
+# client.focused_inactive  "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
+# client.focused_tab_title "#4c7899" "#285577" "#ffffff"
+# }}}
+
+# Bar {{{
 
 # bar {
 # 	swaybar_command waybar
@@ -177,15 +271,20 @@ bar {
 	workspace_min_width 24
 	colors {
 		separator "#bbbbbb"
+		focused_workspace $focused_title_border $focused_title_bg $focused_title_text
+		inactive_workspace $unfocused_title_border $unfocused_title_bg $unfocused_title_text
+		urgent_workspace $urgent_title_border $urgent_title_bg $urgent_title_text
 	}
 }
+# }}}
 
+# Input configuration {{{
 input type:pointer {
 	accel_profile flat
 }
 
 input type:keyboard {
-	xkb_layout "us,ua"
+	xkb_layout "us(altgr-intl),ua"
 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
 	repeat_delay 300
 	repeat_rate 25
@@ -197,56 +296,32 @@ input type:touchpad {
 	click_method clickfinger
 	dwt enabled
 }
+# }}}
 
-# Various multimedia keys
-bindsym {
-	XF86AudioRaiseVolume  exec $script/volume-control.sh up
-	XF86AudioLowerVolume  exec $script/volume-control.sh down
-	XF86AudioMute         exec $script/volume-control.sh toggle
-	Control+XF86AudioMute exec $script/volume-control.sh toggle-mic
-	--to-code --no-repeat $mod+m exec $script/volume-control.sh unmute-down
-	--to-code --release   $mod+m exec $script/volume-control.sh unmute-up
-
-	XF86MonBrightnessDown exec $script/backlight-control.sh down
-	XF86MonBrightnessUp   exec $script/backlight-control.sh up
-
-	XF86AudioPlay         exec playerctl play-pause
-	XF86AudioNext         exec playerctl next
-	XF86AudioPrev         exec playerctl previous
-
-	Print         exec grimvshot --notify --swaynag --area
-	Shift+Print   exec grimvshot --notify --swaynag --window
-	Control+Print exec grimvshot --notify --swaynag --screen
-}
-
-# smart_gaps on
-# gaps inner 4
-# gaps outer 4
-
+# Various options {{{
+set $border_width 2
+output * background "#000000" solid_color
+smart_gaps on
+gaps inner 6
+floating_modifier $mod
 smart_borders on
 default_border normal $border_width
 default_floating_border normal $border_width
 titlebar_padding 8 1
-
 focus_wrapping yes
 focus_follows_mouse no
-
+font Iosevka Term Extended 10
 # kraftwerk28's patch only
 mouse_resizing_mode eight_direction
+# }}}
 
-# client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-# client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-# client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
-# client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
-# client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-
-client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
-client.focused_inactive  "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
-client.focused_tab_title "#4c7899" "#285577" "#ffffff"
-
-font Iosevka Term Extended 11
-
+# Cursor {{{
 # Set up cursor
+# set $cursor_theme "Adwaita"
+# set $cursor_size 24
+# /usr/share/icons/Simp1e-Dark
+set $cursor_theme "Simp1e"
+set $cursor_size 32
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
@@ -255,15 +330,37 @@ exec_always {
 		's/^Inherits=.+/Inherits='$cursor_theme'/' \
 		~/.icons/default/index.theme 2>/dev/null
 }
+# }}}
 
+# Autostart {{{
 exec {
 	blueman-applet
 	kdeconnect-indicator
-	$script/enhance.lua
+	$scripts/enhance.lua
 }
 
-exec [ "$NO_AUTOSTART" != 1 ] && \
-	swaymsg "workspace 5, layout tabbed, exec telegram-desktop, exec foot weechat, exec thunderbird"
+exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
+	"workspace 5, layout tabbed," \
+	"exec telegram-desktop, exec foot weechat, exec thunderbird"
+# }}}
+
+# Window rules {{{
+for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
+for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="blueman-manager"] floating enable
+for_window [title="QjackCtl"] floating enable
+for_window [title="xeyes"] floating enable; sticky enable
+for_window [floating app_id="^Alacritty$"] border pixel $border_width
+for_window [title="^Blender Preferences$"] floating enable
+for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
+for_window [tiling app_id="^firefox$"] border pixel $border_width
+for_window [app_id="^foot_floating$"] floating enable
+for_window [app_id="^gnome-calculator$"] floating enable
+# }}}
+
+bindswitch lid:on  output * dpms off
+bindswitch lid:off output * dpms on
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
@@ -275,29 +372,6 @@ exec [ "$NO_AUTOSTART" != 1 ] && \
 # swayidle \
 # 	timeout 300 'if pgrep swaylock; then swaymsg output "*" dpms off' \
 # 	resume 'then swaymsg output "*" dpms on'
-
-for_window [app_id="firefox" title="^Picture-in-Picture$"] \
-	floating enable, sticky enable, border pixel
-for_window [app_id="firefox" title="Sharing Indicator$"] \
-	floating enable, sticky enable
-for_window [app_id="pavucontrol"] floating enable
-for_window [app_id="blueman-manager"] floating enable
-for_window [title="QjackCtl"] floating enable
-for_window [title="xeyes"] floating enable; sticky enable
-for_window [floating app_id="^Alacritty$"] border pixel $border_width
-for_window [title="^Blender Preferences$"] floating enable
-for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
-for_window [tiling app_id="^firefox$"] border pixel $border_width
-for_window [app_id="^foot_floating$"] floating enable
-for_window [app_id="^gnome-calculator$"] floating enable
-
-# DAW + guitar = <3
-bindsym $mod+F3 \
-	workspace 7, \
-	layout splith, \
-	exec "swaymsg exec pw-jack guitarix; sleep 1; swaymsg exec helvum"
-
-focus_on_window_activation urgent
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \
@@ -316,6 +390,8 @@ focus_on_window_activation urgent
 # 	input type:keyboard events enabled, \
 # 	input type:pointer  events enabled
 
-exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
+exec_always \
+	"systemctl --user import-environment;" \
+	"systemctl --user start sway-session.target"
 
-# vim: cms=#\ %s ft=swayconfig
+# vim: filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0

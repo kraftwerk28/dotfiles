@@ -9,30 +9,18 @@ vim.filetype.add({
     mjml = "html",
     ejs = "html",
     bnf = "bnf",
+    http = "rest",
   },
   filename = {
     ["tsconfig.json"] = "jsonc",
     [".eslintrc"] = "json",
   },
   pattern = {
+    ["exs?$"] = "elixir",
     ["^%.env%."] = "sh",
     ["%.webmanifest$"] = "json",
   },
 })
-
--- filetype -> list of patterns that match it
--- local additional_filetypes = {
---   zsh = {"*.zsh*"},
---   sh = {".env.*"},
---   bnf = {"*.bnf"},
---   json = {"*.webmanifest", ".eslintrc"},
---   jsonc = {"tsconfig.json"},
---   rest = {"*.http"},
---   elixir = {"*.exs", "*.ex"},
---   prolog = {"*pl"},
---   html = {"*.ejs", "*.mjml"},
---   glsl = {"*.{vert,frag}"},
--- }
 
 -- Set options for filetypes
 local ftconfig = {
@@ -79,39 +67,16 @@ local ftconfig = {
   { { "graphql" }, { commentstring = "# %s" } },
 }
 
-return function()
-  -- local ftgroup = api.nvim_create_augroup("extra_filetypes", {})
-  -- for ft, patterns in pairs(additional_filetypes) do
-  --   api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
-  --     pattern = patterns,
-  --     callback = function() vim.bo.filetype = ft end,
-  --     group = ftgroup,
-  --   })
-  -- end
-
-  local optgroup = api.nvim_create_augroup("filetype_opts", {})
-  for _, cfg in ipairs(ftconfig) do
-    local filetypes, opts = cfg[1], cfg[2]
-    api.nvim_create_autocmd("FileType", {
-      pattern = filetypes,
-      callback = function()
-        for name, value in pairs(opts) do
-          vim.o[name] = value
-        end
-      end,
-      group = optgroup,
-    })
-  end
-
-  local qclose_group = vim.api.nvim_create_augroup("aux_win_close", {})
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "help", "man", "qf", "fugitive" },
+local optgroup = api.nvim_create_augroup("filetype_opts", {})
+for _, cfg in ipairs(ftconfig) do
+  local filetypes, opts = cfg[1], cfg[2]
+  api.nvim_create_autocmd("FileType", {
+    pattern = filetypes,
     callback = function()
-      vim.keymap.set("n", "<Esc>", "<Cmd>:bdelete<CR>", {
-        buffer = true,
-        silent = true,
-      })
+      for name, value in pairs(opts) do
+        vim.o[name] = value
+      end
     end,
-    group = qclose_group,
+    group = optgroup,
   })
 end

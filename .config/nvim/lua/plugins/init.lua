@@ -106,7 +106,12 @@ local function load(use)
   --   end,
   -- }
 
-  use("chrisbra/Colorizer")
+  use({
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end,
+  })
   use("mattn/emmet-vim")
 
   -- Missing / not ready to use languages in tree-sitter
@@ -240,6 +245,13 @@ local function load(use)
     ft = { "markdown" },
     config = function()
       vim.g.mkdp_filetypes = { "markdown" }
+      local fn = [[
+        function! MkdpOpenInNewWindow(url) abort
+          execute 'silent !firefox --new-window ' .. a:url
+        endfunction
+      ]]
+      vim.api.nvim_exec(fn, false)
+      vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
     end,
   })
 

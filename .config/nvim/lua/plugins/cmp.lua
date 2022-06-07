@@ -1,7 +1,7 @@
 local cmp = require("cmp")
 local lspkind = require("lspkind")
-local api = vim.api
 local luasnip = require("luasnip")
+local api = vim.api
 
 cmp.setup({
   mapping = {
@@ -14,6 +14,9 @@ cmp.setup({
   },
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "calc" },
+    { name = "path", max_item_count = 8 },
     {
       name = "buffer",
       option = {
@@ -31,10 +34,9 @@ cmp.setup({
           return ret
         end,
       },
+      max_item_count = 8,
+      keyword_length = 5,
     },
-    { name = "path" },
-    { name = "luasnip" },
-    { name = "calc" },
   }),
   window = {
     documentation = {
@@ -52,14 +54,17 @@ cmp.setup({
     -- end,
   },
   enabled = function()
-    return vim.bo.buftype ~= "prompt"
-      and vim.bo.filetype ~= "asm"
+    return vim.o.buftype ~= "prompt"
+      and vim.o.filetype ~= "asm"
       and vim.fn.win_gettype() == ""
   end,
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
+  },
+  view = {
+    entries = "native",
   },
 })
 

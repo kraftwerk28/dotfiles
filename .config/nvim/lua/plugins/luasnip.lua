@@ -10,6 +10,7 @@ local i = ls.insert_node
 local t = ls.text_node
 local sn = ls.snippet_node
 local rep = extras.rep
+local d = ls.dynamic_node
 
 -- ls.filetype_extend("all", { "_" })
 
@@ -64,57 +65,59 @@ local c_cpp_snippets = {
   ),
 }
 
-ls.add_snippets("go", {
-  ls.snippet("ie", {
-    t("if "),
-    c(1, {
-      fmt.fmta("<> != nil", { i(1, "err") }),
-      fmt.fmta("<> = <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
-      fmt.fmta("<> := <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+ls.add_snippets(nil, {
+  go = {
+    ls.snippet("ie", {
+      t("if "),
+      c(1, {
+        fmt.fmta("<> != nil", { i(1, "err") }),
+        fmt.fmta("<> = <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+        fmt.fmta("<> := <>; <> != nil", { i(2, "err"), i(1), rep(2) }),
+      }),
+      t({ " {", "\t" }),
+      i(0),
+      t({ "", "}" }),
     }),
-    t({ " {", "\t" }),
-    i(0),
-    t({ "", "}" }),
-  }),
-  ls.snippet(
-    "main",
-    fmt.fmta(
-      [[
+    ls.snippet(
+      "main",
+      fmt.fmta(
+        [[
         func main() {
         <><>
         }
       ]],
-      { t("\t"), i(0) }
-    )
-  ),
-})
-ls.add_snippets("javascript", ecma_snippets)
-ls.add_snippets("javascriptreact", ecma_snippets)
-ls.add_snippets("typescript", ecma_snippets)
-ls.add_snippets("typescriptreact", ecma_snippets)
-ls.add_snippets("python", {
-  ls.snippet("ifmain", {
-    t("if __name__ == "),
-    c(1, { t('"__main__"'), t("'__main__'") }),
-    t({ ":", "\t" }),
-    i(0),
-  }),
-  ls.snippet(
-    "dundermethod",
-    fmt.fmta(
-      [[
+        { t("\t"), i(0) }
+      )
+    ),
+  },
+  javascript = ecma_snippets,
+  javascriptreact = ecma_snippets,
+  typescript = ecma_snippets,
+  typescriptreact = ecma_snippets,
+  python = {
+    ls.snippet("ifmain", {
+      t("if __name__ == "),
+      c(1, { t('"__main__"'), t("'__main__'") }),
+      t({ ":", "\t" }),
+      i(0),
+    }),
+    ls.snippet(
+      "dundermethod",
+      fmt.fmta(
+        [[
         def __<>__(self<>):
         <><>
       ]],
-      { i(1, "init"), i(2), t("\t"), i(0) }
-    )
-  ),
-})
-ls.add_snippets("cpp", c_cpp_snippets)
-ls.add_snippets("c", c_cpp_snippets)
-ls.add_snippets("all", {
-  ls.snippet("lorem", t("Lorem ipsum dolor sit amet")),
-})
+        { i(1, "init"), i(2), t("\t"), i(0) }
+      )
+    ),
+  },
+  c = c_cpp_snippets,
+  cpp = c_cpp_snippets,
+  all = {
+    ls.snippet("lorem", t("Lorem ipsum dolor sit amet")),
+  },
+}, { key = "mysnippets" })
 
 ls.config.set_config({
   -- history = true,

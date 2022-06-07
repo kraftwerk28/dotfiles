@@ -18,22 +18,50 @@ function ipc:get_keyboard_inputs()
 end
 
 ipc:main(function()
+  ipc.cmd:on("workspace", function(arg)
+    local ws = ipc:get_workspaces()
+    local focused_ws
+    for _, w in ipairs(ws) do
+      if w.focused then
+        focused_ws = w.num
+        break
+      end
+    end
+    if arg == "prev" then
+      focused_ws = focused_ws - 1
+    elseif arg == "next" then
+      focused_ws = focused_ws + 1
+    else
+      return
+    end
+    if focused_ws < 1 then
+      return
+    end
+    ipc:command("workspace " .. focused_ws)
+  end)
   ipc.cmd:on("tab", function(arg)
     local tabbed_node = ipc:get_tree():walk_focus(function(n)
       return n.layout == "tabbed"
     end)
-    if not tabbed_node then return end
+    if not tabbed_node then
+      return
+    end
     local focused_index
     for index, node in ipairs(tabbed_node.nodes) do
       if node.id == tabbed_node.focus[1] then
         focused_index = index
       end
     end
+    local ntabs = #tabbed_node.nodes
     if arg == "prev" then
-      focused_index =
-        (focused_index - 2 + #tabbed_node.nodes) % #tabbed_node.nodes + 1
+      focused_index = (focused_index - 2 + ntabs) % ntabs + 1
+    elseif arg == "next" then
+      focused_index = focused_index % ntabs + 1
     else
-      focused_index = focused_index % #tabbed_node.nodes + 1
+      focused_index = tonumber(arg)
+    end
+    if not focused_index or not tabbed_node.nodes[focused_index] then
+      return
     end
     local to_be_focused =
       i3.wrap_node(tabbed_node.nodes[focused_index]):walk_focus()
@@ -41,7 +69,9 @@ ipc:main(function()
   end)
 
   ipc.cmd:on("focus_prev", function()
-    if not previous_focused then return end
+    if not previous_focused then
+      return
+    end
     ipc:command(("[con_id=%d] focus"):format(previous_focused))
   end)
 
@@ -51,7 +81,7 @@ ipc:main(function()
     end)
   end)
 
-  ipc:on("window::focus", function (event)
+  ipc:on("window::focus", function(event)
     previous_focused = current_focused
     local con_id = event.container.id
     local inputs = ipc:get_keyboard_inputs()
@@ -131,5 +161,4 @@ ipc:main(function()
   --     end
   --   end
   -- end)
-
 end)

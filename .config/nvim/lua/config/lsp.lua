@@ -35,28 +35,31 @@ fn.sign_define("DiagnosticSignError", {
   texthl = "DiagnosticSignError",
 })
 
+local tb = require("telescope.builtin")
+local opts = { silent = true }
+
+vim.keymap.set("n", "<Leader>f", vim.lsp.buf.format, opts)
+vim.keymap.set("v", "<Leader>f", vim.lsp.buf.range_formatting, opts)
+vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, opts)
+vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, opts)
+vim.keymap.set("n", "<Leader>ae", function()
+  vim.diagnostic.open_float({ border = vim.g.floatwin_border })
+end, opts)
+vim.keymap.set("n", "<Leader>aa", vim.lsp.buf.code_action, opts)
+vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
+vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
+vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)
+vim.keymap.set("i", "<C-S", vim.lsp.buf.signature_help, opts)
+
 do
-  local tb = require("telescope.builtin")
-  local opts = { silent = true }
-  vim.keymap.set("n", "<Leader>f", function()
-    vim.lsp.buf.format()
-  end, opts)
-  vim.keymap.set("v", "<Leader>f", vim.lsp.buf.range_formatting, opts)
-  vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, opts)
-  vim.keymap.set("n", "<Leader>ae", function()
-    vim.diagnostic.open_float({ border = vim.g.floatwin_border })
-  end, opts)
-  -- vim.keymap.set("n", "<Leader>aa", tb.lsp_code_actions, opts)
-  vim.keymap.set("n", "<Leader>aa", function()
-    vim.lsp.buf.code_action()
-  end, opts)
-  vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
-  vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
-  vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)
+  local method = "textDocument/signatureHelp"
+  lsp.handlers[method] = lsp.with(
+    lsp.handlers[method],
+    { border = vim.g.floatwin_border }
+  )
 end
 
-local function setup_hover()
+do
   local method = "textDocument/hover"
   lsp.handlers[method] = lsp.with(
     lsp.handlers[method],
@@ -66,7 +69,7 @@ end
 
 local USE_DIAGNOSTIC_QUICKFIX = false
 
-local function setup_diagnostics()
+do
   local method = "textDocument/publishDiagnostics"
   local diagnostics_handler = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
     underline = true,
@@ -101,6 +104,3 @@ local function setup_diagnostics()
     end
   end
 end
-
-setup_diagnostics()
-setup_hover()

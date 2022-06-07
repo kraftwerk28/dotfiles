@@ -69,8 +69,6 @@ function M.u(code)
   return x .. y .. z .. w
 end
 
-vim.g.my_package_loaded = {}
-
 function M.load(path)
   local ok, mod = pcall(require, path)
   if not ok then
@@ -92,7 +90,6 @@ function M.load(path)
     error(err)
     return
   end
-  vim.g.my_package_loaded[path] = loadfn or true
 end
 
 function M.clear_load_cache()

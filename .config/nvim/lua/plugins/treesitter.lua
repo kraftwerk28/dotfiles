@@ -15,7 +15,7 @@ local enabled_linux = {
   "d",
   "dart",
   "devicetree",
-  "dockerfile",
+  -- "dockerfile",
   "dot",
   "eex",
   "elixir",
@@ -120,6 +120,20 @@ if vim.fn.has("unix") == 1 then
   ensure_installed = enabled_linux
 elseif vim.fn.has("win64") == 1 then
   ensure_installed = enabled_windows
+end
+
+do
+  local install_dir = require("nvim-treesitter.utils").get_parser_install_dir()
+  local so_files = vim.split(vim.fn.glob(install_dir .. "/*.so"), "\n")
+  local existing = vim.tbl_map(function(it)
+    return vim.fn.fnamemodify(it, ":t:r")
+  end, so_files)
+  local redundant = vim.tbl_filter(function(lng)
+    return not vim.tbl_contains(ensure_installed, lng)
+  end, existing)
+  if #redundant > 0 then
+    require("nvim-treesitter.install").uninstall(redundant)
+  end
 end
 
 local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
