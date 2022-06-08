@@ -390,8 +390,6 @@ bindswitch lid:off output * dpms on
 # 	input type:keyboard events enabled, \
 # 	input type:pointer  events enabled
 
-exec_always \
-	"systemctl --user import-environment;" \
-	"systemctl --user start sway-session.target"
+exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 
 # vim: filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0

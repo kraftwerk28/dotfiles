@@ -1,23 +1,26 @@
 # [@krafterk28](https://github.com/kraftwerk28)'s dotfiles
 
-### A setup, that sometimes breaks, but it works on my machine ©
+### Contents:
+  - [alacritty config](../.config/alacritty/alacritty.yml)
+  - [foot config](../.config/foot/foot.ini)
+  - [gost config](../.config/gost/config.yml)
+  - [kitty config](../.config/kitty/kitty.conf)
+  - [mako config](../.config/mako/config)
+  - [neovim configs](../.config/nvim)
+  - [openttd configs & saves](../.openttd)
+  - [pipewire & ALSA configs](../.config/pipewire)
+  - [swaywm configs](../.config/sway)
+  - [systemd user units](../.config/systemd/user)
+  - [waybar configs](../.config/waybar)
+  - [wofi config](../.config/wofi/config)
+  - [yay config](../.config/yay/config.json)
+  - [zsh configs](../.config/zsh) ([.zshrc](../.zshrc))
 
-### In this repo:
-  - [Alacritty config](../.config/alacritty/alacritty.yml)
-  - [Foot config](../.config/foot/foot.ini)
-  - [Kitty config](../.config/kitty/kitty.conf) (obsolette)
-  - [Mako config](../.config/mako/config)
-  - [Neovim config](../.config/nvim)
-  - [OpenTTD config](../.openttd/openttd.cfg)
-  - [Pipewire & ALSA configs](../.config/pipewire)
-  - [Sway configs](../.config/sway)
-  - [Systemd user units](../.config/systemd/user)
-  - [Tilix config](../.config/tilix/tilix.dconf) (obsolette)
-  - [VSCode config](../.config/Code/User/settings.json) (obsolette)
-  - [Waybar configs](../.config/waybar)
-  - [Wofi config](../.config/wofi/config)
-  - [Yay config](../.config/yay/config.json)
-  - [ZSH config](../.config/zsh) ([.zshrc](../.zshrc))
 
-Neovim (0.5) configs aren't completely in Lua, because ~~not all APIs
-have alternative functions (at least native)~~ I'm didn't rewrite-it-in-Lua yet.
+The directory structure is preserved thanks to `git`'s `--git-dir` and
+`--work-tree` flags. To make git stop yelling about tons of untracked files in
+your home dir, execute (assuming you have set the
+[correct alias](../.config/zsh/dotfiles.zsh) for the `dotfiles`):
+```bash
+$ dotfiles config status.showUntrackedFiles = no
+```

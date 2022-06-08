@@ -9,6 +9,7 @@ export QT_QPA_PLATFORMTHEME="qt5ct"
 export EDITOR="/usr/bin/nvim"
 export PAGER="less -i"
 export MANPAGER="nvim +Man!"
+export TERMINAL="$(which foot)"
 
 export PATH="$HOME/bin:$PATH"
 
