@@ -303,6 +303,7 @@ set $border_width 2
 output * background "#000000" solid_color
 smart_gaps on
 gaps inner 6
+gaps outer 0
 floating_modifier $mod
 smart_borders on
 default_border normal $border_width
@@ -392,4 +393,4 @@ bindswitch lid:off output * dpms on
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 
-# vim: filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0
+# vim: filetype= commentstring=#\ %s foldmethod=marker foldlevel=0

@@ -74,7 +74,7 @@ for _, cfg in ipairs(ftconfig) do
     pattern = filetypes,
     callback = function()
       for name, value in pairs(opts) do
-        vim.o[name] = value
+        vim.opt_local[name] = value
       end
     end,
     group = optgroup,

@@ -33,6 +33,7 @@ local ecma_snippets = {
       { c(1, { t("log"), t("warn"), t("error"), t("dir") }), i(0) }
     )
   ),
+  ls.snippet("@ts", c(1, { t("// @ts-expect-error"), t("// @ts-ignore") })),
 }
 
 local c_cpp_snippets = {
