@@ -29,23 +29,18 @@ set foldmethod=indent
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set exrc
 set secure
-
-" set guicursor=a:blinkon1-Cursor
-set guicursor=a:blinkon1-Cursor,n-c-sm:block,i-ci-ve:ver25,r-cr-o-v:hor20
-
 set splitbelow splitright
 set regexpengine=0
 set lazyredraw
-" set noshowmode
 set undofile
 set backupcopy=yes
 set inccommand=nosplit
 set title
-
-" set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
-
 set shortmess+=c
 set diffopt+=vertical
+
+" set guicursor=a:blinkon1-Cursor
+set guicursor=a:blinkon1-Cursor,n-c-sm:block,i-ci-ve:ver25,r-cr-o-v:hor20
 
 if has("win64")
   set shell=powershell.exe

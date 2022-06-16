@@ -131,6 +131,7 @@ local function load(use)
     requires = {
       "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
+      "JoosepAlviste/nvim-ts-context-commentstring",
     },
     run = function()
       vim.cmd("TSUpdate")
@@ -255,7 +256,11 @@ local function load(use)
     end,
   })
 
-  use({ "~/projects/neovim/copilot.vim", disable = true })
+  use({
+    -- "github/copilot.vim",
+    "~/projects/neovim/copilot.vim",
+    disable = true,
+  })
 
   use({
     "Shatur/neovim-session-manager",

@@ -12,8 +12,8 @@ end
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "TelescopePrompt",
   callback = function()
-    vim.keymap.set("i", "<C-W", "<C-S-W>", { buffer = true })
-    vim.keymap.set("i", "<C-BS", "<C-S-W>", { buffer = true })
+    vim.keymap.set("i", "<C-W>", "<C-S-W>", { buffer = true })
+    vim.keymap.set("i", "<C-BS>", "<C-S-W>", { buffer = true })
   end,
 })
 

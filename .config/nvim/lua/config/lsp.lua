@@ -49,7 +49,6 @@ vim.keymap.set("n", "<Leader>aa", vim.lsp.buf.code_action, opts)
 vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
 vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
 vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)
-vim.keymap.set("i", "<C-S", vim.lsp.buf.signature_help, opts)
 
 do
   local method = "textDocument/signatureHelp"

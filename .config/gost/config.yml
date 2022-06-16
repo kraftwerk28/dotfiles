@@ -93,7 +93,8 @@ blocks:
   - <<: *bat_common
     name: battery
     format: " {state_icon}{percentage:3*%}"
-    upower_device: keyboard_hid_dco2co26o0co73o0b_battery
+    # upower_device: keyboard_hid_dco2co26o0co73o0b_battery
+    upower_device: battery_hid_dco2co26o0co73o0b_battery
 
   - <<: *bat_common
     name: battery

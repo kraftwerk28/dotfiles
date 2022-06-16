@@ -107,8 +107,16 @@ require("null-ls").setup({
     }),
     b.formatting.stylua,
 
-    b.diagnostics.shellcheck,
-    b.code_actions.shellcheck,
+    b.diagnostics.shellcheck.with({
+      condition = function()
+        return vim.fn.expand("%:t") ~= "PKGBUILD"
+      end,
+    }),
+    b.code_actions.shellcheck.with({
+      condition = function()
+        return vim.fn.expand("%:t") ~= "PKGBUILD"
+      end,
+    }),
 
     porth_diagnostic,
     jq_format,

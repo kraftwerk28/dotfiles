@@ -72,6 +72,7 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date -Is).log"
+	export WLR_XWAYLAND="custom-xwayland"
 	exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \

@@ -10,10 +10,13 @@ vim.filetype.add({
     ejs = "html",
     bnf = "bnf",
     http = "rest",
+    mts = "typescript",
+    mtsx = "typescriptreact",
   },
   filename = {
     ["tsconfig.json"] = "jsonc",
     [".eslintrc"] = "json",
+    ["go.mod"] = "gomod",
   },
   pattern = {
     ["exs?$"] = "elixir",
@@ -42,6 +45,7 @@ local ftconfig = {
       "typescriptreact",
       "svelte",
       "json",
+      "jsonc",
       "vim",
       "yaml",
       "haskell",
@@ -61,10 +65,11 @@ local ftconfig = {
 
   { { "help" }, { conceallevel = 0 } },
 
-  -- { {"markdown"},
-  --   { conceallevel = 2 }},
+  -- { { "markdown" }, { conceallevel = 2 } },
 
   { { "graphql" }, { commentstring = "# %s" } },
+
+  { { "dosini", "confini" }, { commentstring = "; %s" } },
 }
 
 local optgroup = api.nvim_create_augroup("filetype_opts", {})

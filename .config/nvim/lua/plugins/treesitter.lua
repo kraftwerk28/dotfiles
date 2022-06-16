@@ -179,6 +179,11 @@ do
   }
 end
 
+local ts_cms = require("ts_context_commentstring.internal")
+vim.api.nvim_create_autocmd("CursorMoved", {
+  callback = ts_cms.update_commentstring,
+})
+
 require("nvim-treesitter.configs").setup({
   ensure_installed = ensure_installed,
   highlight = {
@@ -213,5 +218,9 @@ require("nvim-treesitter.configs").setup({
     move = {
       enable = false,
     },
+  },
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false,
   },
 })

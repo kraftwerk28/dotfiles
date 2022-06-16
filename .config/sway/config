@@ -300,10 +300,11 @@ input type:touchpad {
 
 # Various options {{{
 set $border_width 2
-output * background "#000000" solid_color
+# output * background "#000000" solid_color
+output * background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fit
 smart_gaps on
-gaps inner 6
-gaps outer 0
+# gaps inner 6
+# gaps outer 0
 floating_modifier $mod
 smart_borders on
 default_border normal $border_width
@@ -343,6 +344,11 @@ exec {
 exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
 	"workspace 5, layout tabbed," \
 	"exec telegram-desktop, exec foot weechat, exec thunderbird"
+
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+exec swayidle \
+	after-resume 'swaymsg output "*" dpms on'
 # }}}
 
 # Window rules {{{
