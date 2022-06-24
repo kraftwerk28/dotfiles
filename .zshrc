@@ -139,8 +139,8 @@ reset_window_title() {
 }
 
 add-zsh-hook precmd dump_cwd
-add-zsh-hook precmd reset_window_title
-add-zsh-hook preexec set_window_title
+# add-zsh-hook precmd reset_window_title
+# add-zsh-hook preexec set_window_title
 
 noprompt () {
 	add-zsh-hook -d precmd refresh_prompt

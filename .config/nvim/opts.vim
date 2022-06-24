@@ -7,12 +7,16 @@ set tabstop=4
 set shiftwidth=4
 set autoindent smartindent
 set list
+
 " set listchars=tab:»\ ,trail:·
-let &listchars = "tab:> ,trail:·"
+" let &listchars = "tab:> ,trail:·"
 " set listchars=tab:⇥\ ,trail:·
 " set listchars=tab:\ ﲒ,trail:·
+" let &listchars = "tab:→ ,trail:·"
+set listchars=tab:\ \ ,lead:·,trail:·"
+
 set cursorline
-set colorcolumn=80,120
+" set colorcolumn=80,120
 set mouse=a
 set clipboard=unnamedplus
 set completeopt=menu,menuone,noselect

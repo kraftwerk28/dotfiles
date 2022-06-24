@@ -1,4 +1,4 @@
-font=Monospace 11
+font=monospace 11
 sort=-time
 default-timeout=5000
 icon-path=/usr/share/icons/Papirus-Dark

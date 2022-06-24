@@ -4,7 +4,7 @@ vim.g.do_filetype_lua = 1
 
 vim.filetype.add({
   extension = {
-    glsl = "frag",
+    vert = "glsl",
     frag = "glsl",
     mjml = "html",
     ejs = "html",

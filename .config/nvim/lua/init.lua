@@ -19,7 +19,7 @@ _G.A = setmetatable({}, {
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- stylua: ignore start
--- vim.g.floatwin_border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}
+vim.g.floatwin_border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 vim.g.floatwin_border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
 -- stylua: ignore end
 vim.g.diagnostic_signs = {
@@ -30,19 +30,26 @@ vim.g.diagnostic_signs = {
 }
 vim.g.sql_type_default = "sqlanywhere"
 
-local colorscheme = "kanagawa"
--- local colorscheme = "base16-gruvbox-light-medium"
-local ok, err = pcall(vim.cmd, "colorscheme " .. colorscheme)
+local ok, err = pcall(function()
+  -- require("github-theme").setup({
+  --   theme_style = "dark_default",
+  --   -- function_style = "italic",
+  --   -- sidebars = { "qf", "vista_kind", "terminal", "packer" },
+  --   colors = { hint = "orange", error = "#ff0000" },
+  --   hide_inactive_statusline = false,
+  -- })
+  -- require("onedark").setup({ style = "darker" })
+  -- require("onedark").load()
+
+  -- local colorscheme = "github_dark_default"
+  local colorscheme = "kanagawa"
+  -- local colorscheme = "base16-gruvbox-light-medium"
+  vim.cmd("colorscheme " .. colorscheme)
+end)
+
 if not ok then
   print(err)
 end
-
--- NB: The theme must *not* be set in the packer's `config` function to
--- and load theme immediately instead of lazily
--- require("github-theme").setup {
---   theme_style = "dark_default",
---   hide_inactive_statusline = false,
--- }
 
 _G.reload_config = function()
   local rtp_lua_path = table.concat(
@@ -113,9 +120,11 @@ local function set_nu(relative)
     vim.o.relativenumber = relative
   end
 end
+
 api.nvim_create_autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
   callback = set_nu(true),
 })
+
 api.nvim_create_autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
   callback = set_nu(false),
 })

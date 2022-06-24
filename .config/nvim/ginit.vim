@@ -1,4 +1,4 @@
-" Settings for neovim-qt
+Settings for neovim-qt
 packadd neovim-gui-shim
 if has("win64")
   GuiFont! Iosevka NF:h12

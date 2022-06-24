@@ -113,8 +113,9 @@ font:
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
     # family: monospace
+    family: "Hack Nerd Font"
+    # family: "Iosevka Term"
     # family: "Hack Nerd Font"
-    family: "Iosevka Term"
     # family: "MesloLGS Nerd Font"
     # style: bold
     # family: "Ubuntu Mono"

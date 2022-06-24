@@ -1,7 +1,7 @@
 version: "1"
 
 bat_common: &bat_common
-  level_icons: ["", "", "", "", ""]
+  level_icons: [" ", " ", " ", " ", " "]
   state_icons:
     charging: ''
   urgent_level: 10
@@ -69,7 +69,7 @@ blocks:
       input-keyboard: " "
 
   - name: networkmanager
-    format: "{status_icon}{vpn}{access_point}"
+    format: "{status_icon} {vpn}{access_point}"
     ap_format: "{ssid}{strength:3*%}"
     icons:
       vpn: "嬨"

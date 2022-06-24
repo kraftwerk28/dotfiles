@@ -1,6 +1,4 @@
-local utils = require("config.utils")
-
-local lsp, fn, highlight = vim.lsp, vim.fn, utils.highlight
+local lsp, fn, api = vim.lsp, vim.fn, vim.api
 
 -- highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
 -- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
@@ -11,12 +9,15 @@ local lsp, fn, highlight = vim.lsp, vim.fn, utils.highlight
 -- }
 -- highlight {"DiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
 -- highlight {"DiagnosticUnderlineError", gui = "undercurl"}
+-- --
+
+-- local ns = api.nvim_create_namespace("lsp-hl")
 
 -- highlight {"DiagnosticsHint", fg = "Yellow"}
-highlight({ "DiagnosticInfo", guifg = "LightBlue" })
+-- api.nvim_set_hl(ns, "DiagnosticInfo", { fg = "LightBlue" })
 -- highlight {"DiagnosticWarn", guifg = "Orange"}
 -- highlight {"DiagnosticsError", fg = "Red"}
-highlight({ "FloatBorder", guifg = "gray" })
+-- api.nvim_set_hl(ns, "FloatBorder", { fg = "Gray" })
 
 fn.sign_define("DiagnosticSignHint", {
   text = vim.g.diagnostic_signs.HINT,
@@ -34,6 +35,16 @@ fn.sign_define("DiagnosticSignError", {
   text = vim.g.diagnostic_signs.ERROR,
   texthl = "DiagnosticSignError",
 })
+
+-- local function extend_hl(name, val)
+--   local h = api.nvim_get_hl_by_name(name, true)
+--   api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
+-- end
+
+-- extend_hl(
+--   "DiagnosticUnderlineWarn",
+--   { underlineline = true, undercurl = false }
+-- )
 
 local tb = require("telescope.builtin")
 local opts = { silent = true }

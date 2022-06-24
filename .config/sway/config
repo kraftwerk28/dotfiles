@@ -1,4 +1,5 @@
 set $scripts "$HOME/.config/sway/scripts"
+set $font "Monospace"
 
 # Key bindings {{{
 set $mod  Mod4
@@ -261,7 +262,7 @@ client.urgent $urgent_title_border $urgent_title_bg $urgent_title_text $urgent_i
 
 bar {
 	status_command gost
-	font Iosevka Term Extended 10.5
+	font $font 11
 	position bottom
 	icon_theme "Papirus"
 	separator_symbol "|"
@@ -301,7 +302,8 @@ input type:touchpad {
 # Various options {{{
 set $border_width 2
 # output * background "#000000" solid_color
-output * background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fit
+# output * background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fit
+output * background $HOME/Pictures/bb-walp.jpg fit
 smart_gaps on
 # gaps inner 6
 # gaps outer 0
@@ -312,7 +314,7 @@ default_floating_border normal $border_width
 titlebar_padding 8 1
 focus_wrapping yes
 focus_follows_mouse no
-font Iosevka Term Extended 10
+font $font 10
 # kraftwerk28's patch only
 mouse_resizing_mode eight_direction
 # }}}

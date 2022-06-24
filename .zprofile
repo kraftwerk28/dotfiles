@@ -28,8 +28,7 @@ export PATH="$PATH:$ANDROID_HOME/platform-tools"
 
 # GO
 export GOPATH="$HOME/projects/go"
-export GO111MODULE="on"
-export PATH="$PATH:$HOME/projects/go/bin"
+export PATH="$PATH:$GOPATH/bin"
 
 # ruby
 if [[ -d ~/.gem/ruby ]]; then
@@ -72,7 +71,6 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date -Is).log"
-	export WLR_XWAYLAND="custom-xwayland"
 	exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \

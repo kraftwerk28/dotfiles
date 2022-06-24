@@ -92,24 +92,17 @@ function M.load(path)
   end
 end
 
-function M.clear_load_cache()
-  for k in ipairs(vim.g.my_package_loaded) do
-    package.loaded[k] = nil
-  end
-  vim.g.my_package_loaded = {}
-end
-
 -- Get information about highlight group
-function M.hl_by_name(hl_group)
-  local hl = api.nvim_get_hl_by_name(hl_group, true)
-  if hl.foreground ~= nil then
-    hl.fg = sprintf("#%x", hl.foreground)
-  end
-  if hl.background ~= nil then
-    hl.bg = sprintf("#%x", hl.background)
-  end
-  return hl
-end
+-- function M.hl_by_name(hl_group)
+--   local hl = api.nvim_get_hl_by_name(hl_group, true)
+--   if hl.foreground ~= nil then
+--     hl.fg = sprintf("#%x", hl.foreground)
+--   end
+--   if hl.background ~= nil then
+--     hl.bg = sprintf("#%x", hl.background)
+--   end
+--   return hl
+-- end
 
 -- Define a new highlight group
 -- TODO: rewrite to `nvim_set_hl()` when API will be stable
@@ -161,140 +154,132 @@ end
 --   vim.cmd(command)
 -- end
 
-function last_falsy(t)
-  for i, v in ipairs(t) do
-    if not v then
-      return t[i - 1]
-    end
-  end
-end
+-- local hl_special_names = {
+--   "bold",
+--   "underline",
+--   "undercurl",
+--   "strikethrough",
+--   "reverse",
+--   "inverse",
+--   "italic",
+--   "standout",
+--   "nocombine",
+-- }
 
-local hl_special_names = {
-  "bold",
-  "underline",
-  "undercurl",
-  "strikethrough",
-  "reverse",
-  "inverse",
-  "italic",
-  "standout",
-  "nocombine",
-}
+-- function M.get_highlight(name)
+--   local hl = api.nvim_get_hl_by_name(name, true) -- gui*
+--   local chl = api.nvim_get_hl_by_name(name, false) -- cterm*
+--   local res = { [1] = name }
+--   local special, cspecial = {}, {}
+--   for _, spname in ipairs(hl_special_names) do
+--     if hl[spname] then
+--       table.insert(special, spname)
+--     end
+--     if chl[spname] then
+--       table.insert(cspecial, spname)
+--     end
+--   end
+--   if #special > 0 then
+--     res.gui = table.concat(special, ",")
+--   end
+--   if #cspecial > 0 then
+--     res.cterm = table.concat(cspecial, ",")
+--   end
+--   if hl.foreground then
+--     res.guifg = ("#%x"):format(hl.foreground)
+--   end
+--   if hl.background then
+--     res.guibg = ("#%x"):format(hl.background)
+--   end
+--   if hl.special then
+--     res.guisp = ("#%x"):format(hl.special)
+--   end
+--   if chl.foreground then
+--     res.ctermfg = chl.foreground
+--   end
+--   if chl.background then
+--     res.ctermbg = chl.background
+--   end
+--   return res
+-- end
 
-function M.get_highlight(name)
-  local hl = api.nvim_get_hl_by_name(name, true) -- gui*
-  local chl = api.nvim_get_hl_by_name(name, false) -- cterm*
-  local res = { [1] = name }
-  local special, cspecial = {}, {}
-  for _, spname in ipairs(hl_special_names) do
-    if hl[spname] then
-      table.insert(special, spname)
-    end
-    if chl[spname] then
-      table.insert(cspecial, spname)
-    end
-  end
-  if #special > 0 then
-    res.gui = table.concat(special, ",")
-  end
-  if #cspecial > 0 then
-    res.cterm = table.concat(cspecial, ",")
-  end
-  if hl.foreground then
-    res.guifg = ("#%x"):format(hl.foreground)
-  end
-  if hl.background then
-    res.guibg = ("#%x"):format(hl.background)
-  end
-  if hl.special then
-    res.guisp = ("#%x"):format(hl.special)
-  end
-  if chl.foreground then
-    res.ctermfg = chl.foreground
-  end
-  if chl.background then
-    res.ctermbg = chl.background
-  end
-  return res
-end
+-- function M.highlight(cfg)
+--   local hidef = vim.tbl_extend("force", {}, cfg)
+--   local command = "highlight"
+--   if cfg.bang == true then
+--     command = command .. "!"
+--   end
+--   local link = cfg.link or cfg[2]
+--   if link then
+--     vim.cmd(command .. " link " .. cfg[1] .. " " .. link)
+--     return
+--   end
+--   -- if #cfg == 2 and type(cfg[1]) == 'string' and type(cfg[2]) == 'string' then
+--   --   -- :highlight link
+--   --   vim.cmd(command.." link "..cfg[1].." "..cfg[2])
+--   --   return
+--   -- end
+--   -- local guibg, guifg, gui, guisp
+--   if type(cfg.override) == "string" then
+--     hidef = vim.tbl_extend("force", hidef, M.get_highlight(cfg.override))
+--   end
+--   hidef.bang = nil
+--   hidef.override = nil
+--   hidef[1] = nil
+--   command = command .. " " .. cfg[1]
+--   for k, v in pairs(hidef) do
+--     command = command .. " " .. k .. "=" .. v
+--   end
+--   -- TODO: remove fg/bg
+--   -- guifg = cfg.fg or cfg.guifg or guifg
+--   -- guibg = cfg.bg or cfg.guibg or guibg
+--   -- guisp = cfg.guisp or guisp
+--   -- gui   = cfg.gui or gui
+--   -- command = command .. " " .. cfg[1]
+--   -- if guifg then
+--   --   command = command .. " guifg=" .. guifg
+--   -- end
+--   -- if guibg then
+--   --   command = command .. " guibg=" .. guibg
+--   -- end
+--   -- if gui then
+--   --   command = command .. " gui=" .. gui
+--   -- end
+--   -- if guisp then
+--   --   command = command .. " guisp=" .. guisp
+--   -- end
+--   vim.cmd(command)
+-- end
 
-function M.highlight(cfg)
-  local hidef = vim.tbl_extend("force", {}, cfg)
-  local command = "highlight"
-  if cfg.bang == true then
-    command = command .. "!"
-  end
-  local link = cfg.link or cfg[2]
-  if link then
-    vim.cmd(command .. " link " .. cfg[1] .. " " .. link)
-    return
-  end
-  -- if #cfg == 2 and type(cfg[1]) == 'string' and type(cfg[2]) == 'string' then
-  --   -- :highlight link
-  --   vim.cmd(command.." link "..cfg[1].." "..cfg[2])
-  --   return
-  -- end
-  -- local guibg, guifg, gui, guisp
-  if type(cfg.override) == "string" then
-    hidef = vim.tbl_extend("force", hidef, M.get_highlight(cfg.override))
-  end
-  hidef.bang = nil
-  hidef.override = nil
-  hidef[1] = nil
-  command = command .. " " .. cfg[1]
-  for k, v in pairs(hidef) do
-    command = command .. " " .. k .. "=" .. v
-  end
-  -- TODO: remove fg/bg
-  -- guifg = cfg.fg or cfg.guifg or guifg
-  -- guibg = cfg.bg or cfg.guibg or guibg
-  -- guisp = cfg.guisp or guisp
-  -- gui   = cfg.gui or gui
-  -- command = command .. " " .. cfg[1]
-  -- if guifg then
-  --   command = command .. " guifg=" .. guifg
-  -- end
-  -- if guibg then
-  --   command = command .. " guibg=" .. guibg
-  -- end
-  -- if gui then
-  --   command = command .. " gui=" .. gui
-  -- end
-  -- if guisp then
-  --   command = command .. " guisp=" .. guisp
-  -- end
-  vim.cmd(command)
-end
-
-local autocmd_fn_index = 0
+-- local autocmd_fn_index = 0
 
 -- WIP:
-function M.autocmd(event_name, pattern, callback)
-  local fn_name = "lua_autocmd" .. autocmd_fn_index
-  autocmd_fn_index = autocmd_fn_index + 1
-  _G[fn_name] = callback
-  cmdf("autocmd %s %s call v:lua.%s()", event_name, pattern, fn_name)
-end
+-- function M.autocmd(event_name, pattern, callback)
+--   local fn_name = "lua_autocmd" .. autocmd_fn_index
+--   autocmd_fn_index = autocmd_fn_index + 1
+--   _G[fn_name] = callback
+--   cmdf("autocmd %s %s call v:lua.%s()", event_name, pattern, fn_name)
+-- end
 
-function M.glob_exists(path)
-  return fn.empty(fn.glob(path)) == 0
-end
+-- function M.glob_exists(path)
+--   return fn.empty(fn.glob(path)) == 0
+-- end
 
-do
-  -- TODO: open diagnostic on hover
-  -- local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
-  -- local cursor_pos = M.get_cursor_pos()
-  -- local debounced = M.debounce(show_diagnostics, 300)
-  M.show_lsp_diagnostics = function()
-    vim.diagnostic.open_float({ border = vim.g.floatwin_border })
-    -- local cursor_pos2 = M.get_cursor_pos()
-    -- -- TODO: doesn't work when both diagnostics and popup is shown
-    -- if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
-    --   cursor_pos = cursor_pos2
-    --   debounced()
-    -- end
-  end
-end
+-- do
+--   -- TODO: open diagnostic on hover
+--   -- local show_diagnostics = vim.lsp.diagnostic.show_line_diagnostics
+--   -- local cursor_pos = M.get_cursor_pos()
+--   -- local debounced = M.debounce(show_diagnostics, 300)
+--   M.show_lsp_diagnostics = function()
+--     vim.diagnostic.open_float({ border = vim.g.floatwin_border })
+--     -- local cursor_pos2 = M.get_cursor_pos()
+--     -- -- TODO: doesn't work when both diagnostics and popup is shown
+--     -- if cursor_pos[1] ~= cursor_pos2[1] and cursor_pos[2] ~= cursor_pos2[2] then
+--     --   cursor_pos = cursor_pos2
+--     --   debounced()
+--     -- end
+--   end
+-- end
 
 function M.id_generator(start)
   local cnt = start or 0
@@ -305,48 +290,48 @@ function M.id_generator(start)
   end
 end
 
-do
-  local map_func_counter = 0
-  function M.map(mode, lhs, fn, opts)
-    local name = "map_func_" .. map_func_counter
-    _G[name] = fn
-    local rhs = ":call v:lua." .. name .. "()<CR>"
-    api.nvim_set_keymap(mode, lhs, rhs, opts)
-    map_func_counter = map_func_counter + 1
-  end
-end
+-- do
+--   local map_func_counter = 0
+--   function M.map(mode, lhs, fn, opts)
+--     local name = "map_func_" .. map_func_counter
+--     _G[name] = fn
+--     local rhs = ":call v:lua." .. name .. "()<CR>"
+--     api.nvim_set_keymap(mode, lhs, rhs, opts)
+--     map_func_counter = map_func_counter + 1
+--   end
+-- end
 
-for _, mode in ipairs({ "", "n", "i", "c", "x" }) do
-  M[mode .. "noremap"] = function(lhs, fn, opts)
-    local mapopts = opts or {}
-    mapopts.noremap = true
-    return M.map(mode, lhs, fn, mapopts)
-  end
-end
+-- for _, mode in ipairs({ "", "n", "i", "c", "x" }) do
+--   M[mode .. "noremap"] = function(lhs, fn, opts)
+--     local mapopts = opts or {}
+--     mapopts.noremap = true
+--     return M.map(mode, lhs, fn, mapopts)
+--   end
+-- end
 
-function M.log_time(fn, label)
-  return function(...)
-    local now = os.clock()
-    fn(...)
-    print(
-      ((label and (label .. " ")) or "")
-        .. (math.floor((os.clock() - now) * 1e6) / 1000)
-        .. "ms."
-    )
-  end
-end
+-- function M.log_time(fn, label)
+--   return function(...)
+--     local now = os.clock()
+--     fn(...)
+--     print(
+--       ((label and (label .. " ")) or "")
+--         .. (math.floor((os.clock() - now) * 1e6) / 1000)
+--         .. "ms."
+--     )
+--   end
+-- end
 
-function M.index_of(t, v, eqfn)
-  eqfn = eqfn or function(el)
-    return el == v
-  end
-  for i, value in ipairs(t) do
-    if eqfn(value, v) then
-      return i
-    end
-  end
-  return -1
-end
+-- function M.index_of(t, v, eqfn)
+--   eqfn = eqfn or function(el)
+--     return el == v
+--   end
+--   for i, value in ipairs(t) do
+--     if eqfn(value, v) then
+--       return i
+--     end
+--   end
+--   return -1
+-- end
 
 local globalfn_counter = 0
 function M.defglobalfn(func)

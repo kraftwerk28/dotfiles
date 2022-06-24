@@ -16,14 +16,14 @@ local function load(use)
   -- }
 
   -- Themes
-  -- use {"navarasu/onedark.nvim"}
+  use({ "navarasu/onedark.nvim" })
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   use({
     -- "~/projects/neovim/nvim-base16",
     "RRethy/nvim-base16",
     -- disable = true,
   })
-  use({ "projekt0n/github-nvim-theme", disable = true })
+  use({ "projekt0n/github-nvim-theme" })
   use({ "rebelot/kanagawa.nvim" })
 
   use({ "kyazdani42/nvim-web-devicons" })
@@ -109,7 +109,7 @@ local function load(use)
   use({
     "norcalli/nvim-colorizer.lua",
     config = function()
-      require("colorizer").setup()
+      require("colorizer").setup({ "!*" })
     end,
   })
   use("mattn/emmet-vim")
