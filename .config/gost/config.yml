@@ -27,7 +27,7 @@ theme:
 blocks:
 
   - name: shell
-    command: ALERTS_LOC_REGEX='кіро' ~/.config/sway/bar-scripts/air_alerts.py
+    command: ~/.config/sway/bar-scripts/air_alerts.py
     json: true
 
   - name: shell
