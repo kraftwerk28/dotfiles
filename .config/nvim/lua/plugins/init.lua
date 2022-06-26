@@ -248,7 +248,7 @@ local function load(use)
       vim.g.mkdp_filetypes = { "markdown" }
       local fn = [[
         function! MkdpOpenInNewWindow(url) abort
-          execute 'silent !firefox --new-window ' .. a:url
+          execute 'silent !firefox -ssb --new-window ' .. a:url
         endfunction
       ]]
       vim.api.nvim_exec(fn, false)

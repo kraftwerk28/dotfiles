@@ -2,6 +2,8 @@
 
 ### Contents:
   - [alacritty config](../.config/alacritty/alacritty.yml)
+  - [chrome flags](../.config/chrome-flags.conf)
+  - [fontconfig](../.config/fontconfig/fonts.conf)
   - [foot config](../.config/foot/foot.ini)
   - [gost config](../.config/gost/config.yml)
   - [kitty config](../.config/kitty/kitty.conf)
@@ -13,6 +15,7 @@
   - [systemd user units](../.config/systemd/user)
   - [waybar configs](../.config/waybar)
   - [wofi config](../.config/wofi/config)
+  - [xdg-desktop-portal-wlr config](../.config/xdg-desktop-portal-wlr/config)
   - [yay config](../.config/yay/config.json)
   - [zsh configs](../.config/zsh) ([.zshrc](../.zshrc))
 

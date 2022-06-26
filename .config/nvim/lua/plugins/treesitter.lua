@@ -202,7 +202,9 @@ require("nvim-treesitter.configs").setup({
       node_decremental = "(",
     },
   },
-  -- indent = {enable = true},
+  -- indent = {
+  --   enable = true,
+  -- },
   textobjects = {
     select = {
       enable = true,
