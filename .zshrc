@@ -5,9 +5,6 @@ fpath+=("$HOME/.zfunc")
 # zmodload zsh/zprof
 # setopt xtrace
 
-# Disable reverse wrapping mode in foot terminal
-echo -n $'\e[?45l'
-
 # Options
 setopt auto_menu complete_in_word always_to_end promptsubst
 setopt appendhistory auto_pushd pushd_ignore_dups pushd_minus auto_cd
@@ -120,6 +117,7 @@ zvm_after_init_commands=(bindkeys)
 dump_cwd () {
 	[[ $PWD != $HOME ]] && echo $PWD > /tmp/last_pwd
 }
+add-zsh-hook precmd dump_cwd
 
 c () {
 	local dname="$HOME/.config/$1"
@@ -129,21 +127,25 @@ c () {
 	cd "$dname"
 }
 
-set_window_title() {
-	# TODO: escape the title
-	local title="$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
-	echo -ne "\e]2;${title}\e\\"
-}
-
-reset_window_title() {
-	# TODO: escape the title
-	local title="$(basename $SHELL) (${PWD/$HOME/~})"
-	echo -ne "\e]2;${title}\e\\"
-}
-
-add-zsh-hook precmd dump_cwd
-# add-zsh-hook precmd reset_window_title
+# set_window_title() {
+# 	# TODO: escape the title
+# 	local title="$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
+# 	echo -ne "\e]2;${title}\e\\"
+# }
 # add-zsh-hook preexec set_window_title
+
+# reset_window_title() {
+# 	# TODO: escape the title
+# 	local title="$(basename $SHELL) (${PWD/$HOME/~})"
+# 	echo -ne "\e]2;${title}\e\\"
+# }
+# add-zsh-hook precmd reset_window_title
+
+foot_quirk() {
+	# Disable reverse wrapping mode in foot terminal
+	echo -n "\e[?45l"
+}
+add-zsh-hook precmd foot_quirk
 
 noprompt () {
 	add-zsh-hook -d precmd refresh_prompt
