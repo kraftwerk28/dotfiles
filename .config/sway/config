@@ -387,10 +387,12 @@ set $external DP-1
 
 bindswitch lid:on  output $laptop disable
 bindswitch lid:off output $laptop enable
-output $laptop scale 1.2
-output $laptop   position 0    1700
-output $external position 1600 0
-output $external transform 90
+# output $laptop scale 1.2
+# output $laptop scale 1
+# output $laptop   position 0    1700
+# output $external position 1600 0
+# output $external transform 90
+# output $laptop position 0 
 
 output $laptop   background "#000000" solid_color
 output $external background "#000000" solid_color
