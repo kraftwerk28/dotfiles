@@ -36,15 +36,15 @@ fn.sign_define("DiagnosticSignError", {
   texthl = "DiagnosticSignError",
 })
 
--- local function extend_hl(name, val)
---   local h = api.nvim_get_hl_by_name(name, true)
---   api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
--- end
+local function overload_hl(name, val)
+  local h = api.nvim_get_hl_by_name(name, true)
+  api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
+end
 
--- extend_hl(
---   "DiagnosticUnderlineWarn",
---   { underlineline = true, undercurl = false }
--- )
+overload_hl("DiagnosticUnderlineError", { underline = true, undercurl = false })
+overload_hl("DiagnosticUnderlineWarn", { underline = true, undercurl = false })
+overload_hl("DiagnosticUnderlineHint", { underline = true, undercurl = false })
+overload_hl("DiagnosticUnderlineInfo", { underline = true, undercurl = false })
 
 local tb = require("telescope.builtin")
 local opts = { silent = true }

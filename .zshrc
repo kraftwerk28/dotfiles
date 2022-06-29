@@ -89,7 +89,7 @@ if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
 fi
 
 NO_THEME=1
-for cfg in ~/.config/zsh/*.zsh; do
+for cfg in ${XDG_CONFIG_HOME:-~/.config}/zsh/*.zsh; do
 	if [[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]]; then
 		continue
 	fi
@@ -119,27 +119,29 @@ dump_cwd () {
 }
 add-zsh-hook precmd dump_cwd
 
-c () {
-	local dname="$HOME/.config/$1"
+# cd into $XDG_CONFIG_HOME/$1 directory
+c() {
+	local root=${XDG_CONFIG_HOME:-~/.config}
+	local dname="$root/$1"
 	if [[ ! -d "$dname" ]]; then
 		return
 	fi
 	cd "$dname"
 }
 
-# set_window_title() {
-# 	# TODO: escape the title
-# 	local title="$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
-# 	echo -ne "\e]2;${title}\e\\"
-# }
-# add-zsh-hook preexec set_window_title
+set_title() {
+	echo -n $'\E]2;'"$(sed 's/\\/\\\\/g' <<<$1)"$'\E\\'
+}
 
-# reset_window_title() {
-# 	# TODO: escape the title
-# 	local title="$(basename $SHELL) (${PWD/$HOME/~})"
-# 	echo -ne "\e]2;${title}\e\\"
-# }
-# add-zsh-hook precmd reset_window_title
+set_window_title() {
+	set_title "$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
+}
+reset_window_title() {
+	set_title "$(basename $SHELL) (${PWD/$HOME/~})"
+}
+
+add-zsh-hook precmd reset_window_title
+add-zsh-hook preexec set_window_title
 
 foot_quirk() {
 	# Disable reverse wrapping mode in foot terminal
