@@ -67,11 +67,13 @@ export PATH="$PATH:$HOME/.ghcup/bin/"
 
 export NVIM_LISTEN_PORT=6969
 
+export CMAKE_EXPORT_COMPILE_COMMANDS=1
+
 if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date -Is).log"
-	export WLR_RENDERER=vulkan
+	# export WLR_RENDERER=vulkan
 	exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \

@@ -51,3 +51,5 @@ mkcd () {
 	mkdir -p $1
 	cd $1
 }
+
+alias ssh='TERM=xterm-256color ssh'

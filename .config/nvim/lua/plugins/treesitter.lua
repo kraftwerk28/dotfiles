@@ -123,7 +123,7 @@ elseif vim.fn.has("win64") == 1 then
 end
 
 do
-  local install_dir = require("nvim-treesitter.utils").get_parser_install_dir()
+  local install_dir = require("nvim-treesitter.configs").get_parser_install_dir()
   local so_files = vim.split(vim.fn.glob(install_dir .. "/*.so"), "\n")
   local existing = vim.tbl_map(function(it)
     return vim.fn.fnamemodify(it, ":t:r")

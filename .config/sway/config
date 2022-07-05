@@ -316,11 +316,11 @@ input type:touchpad {
 
 # Various options {{{
 set $border_width 2
-smart_gaps on
+# smart_gaps on
 # gaps inner 6
 # gaps outer 0
 floating_modifier $mod
-smart_borders on
+smart_borders no_gaps
 default_border normal $border_width
 default_floating_border normal $border_width
 titlebar_padding 8 1
@@ -329,16 +329,12 @@ focus_follows_mouse no
 font Monospace Bold 10
 # kraftwerk28's patch only
 mouse_resizing_mode eight_direction
-hide_edge_borders both
 # }}}
 
 # Cursor {{{
-# Set up cursor
-# set $cursor_theme "Adwaita"
-# set $cursor_size 24
-# /usr/share/icons/Simp1e-Dark
-set $cursor_theme "Simp1e"
-set $cursor_size 24
+# Path int /usr/share/icons
+set $cursor_theme "Simp1e-Breeze-Snow"
+set $cursor_size 32
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
@@ -393,11 +389,13 @@ bindswitch lid:off output $laptop enable
 # output $external position 1600 0
 # output $external transform 90
 # output $laptop position 0 
+output $laptop position 0 360
+output $external position 1920 0
 
-output $laptop   background "#000000" solid_color
-output $external background "#000000" solid_color
-# output * background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fit
-# output * background $HOME/Pictures/bb-walp.jpg fit
+# output $laptop   background "#000000" solid_color
+# output $external background "#000000" solid_color
+output $laptop background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output $external background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
 
 # exec swayidle -w \
