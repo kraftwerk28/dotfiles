@@ -43,6 +43,8 @@ set title
 set shortmess+=c
 set diffopt+=vertical
 
+" highlight! Cursor gui=reverse guifg=NONE guibg=NONE
+highlight Cursor gui=NONE guifg=bg guibg=fg
 " set guicursor=a:blinkon1-Cursor
 set guicursor=a:blinkon1-Cursor,n-c-sm:block,i-ci-ve:ver25,r-cr-o-v:hor20
 

@@ -278,6 +278,7 @@ client.urgent $urgent_title_border $urgent_title_bg $urgent_title_text $urgent_i
 bar {
 	status_command gost
 	font Monospace 11
+	height 0
 	position bottom
 	icon_theme "Papirus"
 	separator_symbol "|"

@@ -42,8 +42,8 @@ local ok, err = pcall(function()
   -- require("onedark").load()
 
   -- local colorscheme = "github_dark_default"
-  local colorscheme = "kanagawa"
-  -- local colorscheme = "base16-gruvbox-light-medium"
+  -- local colorscheme = "kanagawa"
+  local colorscheme = "base16-gruvbox-light-medium"
   vim.cmd("colorscheme " .. colorscheme)
 end)
 
@@ -149,22 +149,22 @@ api.nvim_create_autocmd("BufWinEnter", {
   callback = function()
     if vim.o.filetype == "help" then
       vim.cmd("wincmd L | 82wincmd |")
-    elseif vim.bo.filetype == "man" then
-      -- TODO:
-      -- local wins = vim.tbl_filter(
-      --   function(w)
-      --     local b = api.nvim_win_get_buf(w)
-      --     local ft = api.nvim_buf_get_option(b, "filetype")
-      --     print(b, ft)
-      --     return ft ~= "" and ft ~= "man"
-      --   end,
-      --   api.nvim_tabpage_list_wins(0)
-      -- )
-      -- print(vim.inspect(wins))
-      -- if #wins == 0 then
-      --   -- print("should go to the right")
-      --   vim.cmd("wincmd L | 82wincmd |")
-      -- end
+      -- elseif vim.bo.filetype == "man" then
+      --   TODO:
+      --   local wins = vim.tbl_filter(
+      --     function(w)
+      --       local b = api.nvim_win_get_buf(w)
+      --       local ft = api.nvim_buf_get_option(b, "filetype")
+      --       print(b, ft)
+      --       return ft ~= "" and ft ~= "man"
+      --     end,
+      --     api.nvim_tabpage_list_wins(0)
+      --   )
+      --   print(vim.inspect(wins))
+      --   if #wins == 0 then
+      --     -- print("should go to the right")
+      --     vim.cmd("wincmd L | 82wincmd |")
+      --   end
     end
   end,
 })
@@ -180,5 +180,53 @@ api.nvim_create_autocmd("FocusGained", {
     fn.system("pwd > /tmp/last_pwd")
   end,
 })
+
+--[[
+local vt_ns_ids = {}
+-- local old_vt_show = vim.diagnostic.handlers.virtual_text.show
+-- local old_vt_hide = vim.diagnostic.handlers.virtual_text.hide
+vim.diagnostic.handlers["virtual_text"] = {
+  show = function(namespace, bufnr, diagnostics, opts)
+    local buf_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
+    local margin = 4
+    local virt_text_win_col = 0
+
+    if not bufnr or bufnr == 0 then
+      bufnr = vim.api.nvim_get_current_buf()
+    end
+    -- opts = opts or {}
+    -- local x = ''
+    -- y = ''
+
+    local vt_ns_id = vim.api.nvim_create_namespace("")
+    vt_ns_ids[namespace] = vt_ns_id
+    local text_per_line = {}
+    for _, d in ipairs(diagnostics) do
+      local diag_messages = text_per_line[d.lnum] or {}
+      local m = #buf_lines[d.lnum + 1] + margin
+      if m > virt_text_win_col then
+        virt_text_win_col = m
+      end
+      table.insert(diag_messages, d.message)
+      text_per_line[d.lnum] = diag_messages
+    end
+
+    for line, texts in pairs(text_per_line) do
+      vim.api.nvim_buf_set_extmark(bufnr, vt_ns_id, line, 0, {
+        virt_text = vim.tbl_map(function(t)
+          return { t, "Normal" }
+        end, texts),
+        virt_text_win_col = virt_text_win_col,
+      })
+    end
+  end,
+  hide = function(namespace, bufnr)
+    local ns = vt_ns_ids[namespace]
+    if ns then
+      vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+    end
+  end,
+}
+]]
 
 return M

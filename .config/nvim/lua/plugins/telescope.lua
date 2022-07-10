@@ -40,7 +40,6 @@ telescope.setup({
       prompt_position = "top",
     },
     selection_caret = " ",
-    -- color_devicons = true,
     scroll_strategy = "cycle",
     mappings = {
       i = {
@@ -55,6 +54,11 @@ telescope.setup({
       previewer = false,
       theme = "dropdown",
       hidden = true, -- show hidden files
+    },
+    live_grep = {
+      additional_args = function()
+        return { "--sort", "path" }
+      end,
     },
   },
   extensions = {
