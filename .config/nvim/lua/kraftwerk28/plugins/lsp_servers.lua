@@ -1,8 +1,14 @@
 local lsp_config = require("lspconfig")
 local root_pattern = require("lspconfig.util").root_pattern
+local cmp_lsp = require("cmp_nvim_lsp")
 
-local lsp, fn = vim.lsp, vim.fn
-local make_cpb = vim.lsp.protocol.make_client_capabilities
+local fn = vim.fn
+
+local function make_cpb()
+  local ret = vim.lsp.protocol.make_client_capabilities()
+  ret = cmp_lsp.update_capabilities(ret)
+  return ret
+end
 
 local function find_compile_commands()
   local ccj = fn.glob("compile_commands.json", nil, true)
@@ -47,8 +53,16 @@ lsp_config.gopls.setup({
   root_dir = root_pattern({
     "go.mod",
     ".git",
-    fn.getcwd(),
   }),
+  handlers = {
+    ["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics,
+      {
+        update_in_insert = true,
+        virtual_text = { spacing = 2, prefix = "" },
+      }
+    ),
+  },
 })
 
 lsp_config.graphql.setup({
@@ -57,7 +71,9 @@ lsp_config.graphql.setup({
 
 lsp_config.hls.setup({
   settings = {
-    haskell = { formattingProvider = "brittany" },
+    haskell = {
+      formattingProvider = "brittany",
+    },
   },
   root_dir = root_pattern({
     "*.cabal",
@@ -65,8 +81,8 @@ lsp_config.hls.setup({
     "cabal.project",
     "package.yaml",
     "hie.yaml",
-    fn.getcwd(),
   }),
+  capabilities = make_cpb(),
 })
 
 do
@@ -90,14 +106,9 @@ do
   lsp_config.pylsp.setup({})
 end
 
-do
-  local cpb = lsp.protocol.make_client_capabilities()
-  cpb = require("cmp_nvim_lsp").update_capabilities(cpb)
-  cpb.textDocument.completion.completionItem.snippetSupport = false
-  lsp_config.rust_analyzer.setup({
-    -- capabilities = cpb,
-  })
-end
+lsp_config.rust_analyzer.setup({
+  capabilities = make_cpb(),
+})
 
 lsp_config.tsserver.setup({
   root_dir = root_pattern({
@@ -105,21 +116,14 @@ lsp_config.tsserver.setup({
     "tsconfig.json",
     "jsconfig.json",
     ".git",
-    fn.getcwd(),
   }),
-  initializationOptions = {
-    preferences = {
-      -- TODO: doesn't work
-      -- importModuleSpecifierPreference = "relative",
-      -- importModuleSpecifier = "relative",
-    },
-  },
   on_attach = function(client)
-    local cpb = client.server_capabilities
+    local c = client.server_capabilities
     -- Formatting is handled by prettier through null-ls
-    cpb.documentFormattingProvider = false
-    cpb.documentRangeFormattingProvider = false
+    c.documentFormattingProvider = false
+    c.documentRangeFormattingProvider = false
   end,
+  capabilities = make_cpb(),
 })
 
 -- lsp_config.flow.setup {
@@ -131,7 +135,6 @@ lsp_config.tsserver.setup({
 -- lsp_config.pyre.setup {
 --   root_dir = root_pattern {
 --     ".git",
---     fn.getcwd()
 --   },
 -- }
 
@@ -170,47 +173,35 @@ do
     table.insert(cmd, "--compile-commands-dir")
     table.insert(cmd, ccj)
   end
-  local capabilities = make_cpb()
-  capabilities.offsetEncoding = { "utf-16" }
+  local cpb = make_cpb()
+  cpb.offsetEncoding = { "utf-16" }
   lsp_config.clangd.setup({
     cmd = cmd,
-    root_dir = root_pattern({ "CMakeLists.txt", ".git", fn.getcwd() }),
-    capabilities = capabilities,
-  })
-end
-
-lsp_config.svelte.setup({})
-
-do
-  -- local schemas = {
-  --   {
-  --     fileMatch = {"tsconfig.json", "tsconfig.*.json"},
-  --     url = "http://json.schemastore.org/tsconfig",
-  --   },
-  --   {
-  --     fileMatch = {"jsconfig.json", "jsconfig.*.json"},
-  --     url = "http://json.schemastore.org/jsconfig",
-  --   },
-  --   {
-  --     fileMatch = {".eslintrc*"},
-  --     url = "http://json.schemastore.org/eslintrc",
-  --   },
-  --   {
-  --     fileMatch = {".babelrc*"},
-  --     url = "http://json.schemastore.org/babelrc",
-  --   },
-  -- }
-  local cpb = make_cpb()
-  cpb.textDocument.completion.completionItem.snippetSupport = true
-  lsp_config.jsonls.setup({
-    cmd = { "vscode-json-languageserver", "--stdio" },
-    -- init_options = {provideFormatter = true},
-    -- settings = {
-    --   json = { schemas = schemas },
-    -- },
+    root_dir = root_pattern({
+      "CMakeLists.txt",
+      "meson.build",
+      "meson_options.txt",
+      ".git",
+    }),
     capabilities = cpb,
   })
 end
+
+lsp_config.svelte.setup({
+  capabilities = make_cpb(),
+})
+
+lsp_config.jsonls.setup({
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas(),
+      validate = {
+        enable = true,
+      },
+    },
+  },
+  capabilities = make_cpb(),
+})
 
 lsp_config.yamlls.setup({
   settings = {
@@ -226,6 +217,7 @@ lsp_config.yamlls.setup({
       completion = true,
     },
   },
+  capabilities = make_cpb(),
 })
 
 lsp_config.cssls.setup({})
@@ -289,7 +281,7 @@ if fn.has("win64") == 1 then
 end
 
 do
-  -- OBSOLETTE: kotlin is much better with Jetbrains software...
+  -- OBSOLETTE: kotlin is still much better with Jetbrains Idea...
   local cmd, cmd_env
   if fn.has("win64") == 1 then
     cmd = {
@@ -311,5 +303,6 @@ do
     cmd_env = cmd_env,
     settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },
     root_dir = root_pattern({ "build.gradle", "build.gradle.kts" }),
+    capabilities = make_cpb(),
   })
 end

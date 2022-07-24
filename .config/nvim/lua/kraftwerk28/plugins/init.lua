@@ -57,18 +57,26 @@ local function load(use)
   use({
     "nvim-telescope/telescope.nvim",
     -- "~/projects/neovim/telescope.nvim",
-    requires = {
-      "kyazdani42/nvim-web-devicons",
-      -- "nvim-lua/popup.nvim",
-      "nvim-lua/plenary.nvim",
-      -- "TC72/telescope-tele-tabby.nvim",
-    },
+    requires = { "kyazdani42/nvim-web-devicons", "nvim-lua/plenary.nvim" },
     config = function()
-      require("plugins.telescope")
+      require("kraftwerk28.plugins.telescope")
     end,
   })
 
-  use({ "tpope/vim-fugitive" })
+  use({
+    "tpope/vim-fugitive",
+    requires = { "tpope/vim-rhubarb", "tommcdo/vim-fubitive" },
+    config = function()
+      vim.keymap.set("n", "<Leader>gs", "<Cmd>vert Git<CR>")
+      vim.keymap.set("n", "<Leader>gb", "<Cmd>GBrowse<CR>")
+
+      -- Merge conflicts
+      vim.keymap.set("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
+      vim.keymap.set("n", "<Leader>gh", "<Cmd>diffget //2<CR>")
+      vim.keymap.set("n", "<Leader>gl", "<Cmd>diffget //3<CR>")
+    end,
+  })
+
   use({
     "lewis6991/gitsigns.nvim",
     requires = { "nvim-lua/plenary.nvim" },
@@ -76,11 +84,6 @@ local function load(use)
       require("gitsigns").setup({
         keymaps = {},
       })
-      local m = vim.keymap.set
-      m("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
-      m("n", "<Leader>gs", "<Cmd>vert Git<CR>")
-      m("n", "<Leader>mh", "<Cmd>diffget //2<CR>")
-      m("n", "<Leader>ml", "<Cmd>diffget //3<CR>")
     end,
   })
 
@@ -137,15 +140,16 @@ local function load(use)
       vim.cmd("TSUpdate")
     end,
     config = function()
-      require("plugins.treesitter")
+      require("kraftwerk28.plugins.treesitter")
     end,
   })
 
   use({
     "neovim/nvim-lspconfig",
+    requires = { "b0o/schemastore.nvim" },
     -- "~/projects/neovim/nvim-lspconfig",
     config = function()
-      require("plugins.lsp_servers")
+      require("kraftwerk28.plugins.lsp_servers")
     end,
   })
 
@@ -153,7 +157,7 @@ local function load(use)
     "RRethy/vim-illuminate",
     disable = true,
     config = function()
-      local utils = require("config.utils")
+      local utils = require("kraftwerk28.config.utils")
       utils.highlight({ "illuminatedWord", guibg = "#303030" })
     end,
   })
@@ -161,7 +165,7 @@ local function load(use)
   use({
     "L3MON4D3/LuaSnip",
     config = function()
-      require("plugins.luasnip")
+      require("kraftwerk28.plugins.luasnip")
     end,
   })
 
@@ -177,7 +181,7 @@ local function load(use)
       "saadparwaiz1/cmp_luasnip",
     },
     config = function()
-      require("plugins.cmp")
+      require("kraftwerk28.plugins.cmp")
     end,
   })
 
@@ -185,7 +189,7 @@ local function load(use)
     "kyazdani42/nvim-tree.lua",
     requires = { "kyazdani42/nvim-web-devicons", opt = true },
     config = function()
-      require("plugins.nvimtree")
+      require("kraftwerk28.plugins.nvimtree")
     end,
   })
 
@@ -214,7 +218,7 @@ local function load(use)
     "jose-elias-alvarez/null-ls.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("plugins.null_ls")
+      require("kraftwerk28.plugins.null_ls")
     end,
   })
 

@@ -105,19 +105,19 @@ endfunction
 
 " autocmd BufEnter * lua require('lsp_signature').on_attach()
 
-augroup LSP_highlight
-  autocmd!
-  autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
-  autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
-  autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-augroup END
-autocmd! LSP_highlight
+" augroup LSP_highlight
+"   autocmd!
+"   autocmd CursorHold <buffer> silent! lua vim.lsp.buf.document_highlight()
+"   autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.document_highlight()
+"   autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+" augroup END
+" autocmd! LSP_highlight
 
 "----------------------------- Embedded terminal ------------------------------"
-augroup terminal_insert
-  autocmd!
-  autocmd TermOpen * startinsert
-augroup END
+" augroup terminal_insert
+"   autocmd!
+"   autocmd TermOpen * startinsert
+" augroup END
 
 " Autoclose tag
 autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>

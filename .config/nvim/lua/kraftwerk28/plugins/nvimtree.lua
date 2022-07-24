@@ -24,6 +24,7 @@ nt.setup({
     ignore = false,
   },
   view = {
+    adaptive_size = true,
     number = true,
   },
   actions = {

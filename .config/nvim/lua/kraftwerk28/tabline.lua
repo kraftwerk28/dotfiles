@@ -1,4 +1,4 @@
-local utils = require("config.utils")
+local utils = require("kraftwerk28.utils")
 
 local fn, api = vim.fn, vim.api
 local EMPTY_TAB_LABEL = [[ ¯\_(ツ)_/¯ ]]

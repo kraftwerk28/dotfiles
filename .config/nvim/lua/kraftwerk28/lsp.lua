@@ -36,15 +36,15 @@ fn.sign_define("DiagnosticSignError", {
   texthl = "DiagnosticSignError",
 })
 
-local function overload_hl(name, val)
+local function override_hl(name, val)
   local h = api.nvim_get_hl_by_name(name, true)
   api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
 end
 
-overload_hl("DiagnosticUnderlineError", { underline = true, undercurl = false })
-overload_hl("DiagnosticUnderlineWarn", { underline = true, undercurl = false })
-overload_hl("DiagnosticUnderlineHint", { underline = true, undercurl = false })
-overload_hl("DiagnosticUnderlineInfo", { underline = true, undercurl = false })
+-- override_hl("DiagnosticUnderlineError", { underline = true, undercurl = false })
+-- override_hl("DiagnosticUnderlineWarn", { underline = true, undercurl = false })
+-- override_hl("DiagnosticUnderlineHint", { underline = true, undercurl = false })
+-- override_hl("DiagnosticUnderlineInfo", { underline = true, undercurl = false })
 
 local tb = require("telescope.builtin")
 local opts = { silent = true }
@@ -62,55 +62,23 @@ vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
 vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)
 
 do
-  local method = "textDocument/signatureHelp"
-  lsp.handlers[method] = lsp.with(
-    lsp.handlers[method],
-    { border = vim.g.floatwin_border }
-  )
+  local m = "textDocument/signatureHelp"
+  lsp.handlers[m] =
+    lsp.with(lsp.handlers[m], { border = vim.g.floatwin_border })
 end
 
 do
-  local method = "textDocument/hover"
-  lsp.handlers[method] = lsp.with(
-    lsp.handlers[method],
-    { border = vim.g.floatwin_border }
-  )
+  local m = "textDocument/hover"
+  lsp.handlers[m] =
+    lsp.with(lsp.handlers[m], { border = vim.g.floatwin_border })
 end
 
-local USE_DIAGNOSTIC_QUICKFIX = false
-
 do
-  local method = "textDocument/publishDiagnostics"
-  local diagnostics_handler = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    virtual_text = true,
-    update_in_insert = false,
-    -- border = win_border,
+  local m = "textDocument/publishDiagnostics"
+  lsp.handlers[m] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = {
+      spacing = 2,
+      prefix = "",
+    },
   })
-  lsp.handlers[method] = diagnostics_handler
-
-  if USE_DIAGNOSTIC_QUICKFIX then
-    lsp.handlers[method] = function(...)
-      diagnostics_handler(...)
-      local all_diagnostics = vim.lsp.diagnostic.get_all()
-      local qflist = {}
-      for bufnr, diagnostic in pairs(all_diagnostics) do
-        for _, diag in ipairs(diagnostic) do
-          local item = {
-            bufnr = bufnr,
-            lnum = diag.range.start.line + 1,
-            col = diag.range.start.character + 1,
-            text = diag.message,
-          }
-          if diag.severity == 1 then
-            item.type = "E"
-          elseif diag.severity == 2 then
-            item.type = "W"
-          end
-          table.insert(qflist, item)
-        end
-      end
-      fn.setqflist(qflist)
-    end
-  end
 end

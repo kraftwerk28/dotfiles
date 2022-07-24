@@ -1,7 +1,7 @@
 local M = {}
 local api, fn = vim.api, vim.fn
 
-local utils = require("config.utils")
+local utils = require("kraftwerk28.utils")
 local load = utils.load
 
 local min_version = "nvim-0.8"
@@ -42,8 +42,8 @@ local ok, err = pcall(function()
   -- require("onedark").load()
 
   -- local colorscheme = "github_dark_default"
-  -- local colorscheme = "kanagawa"
-  local colorscheme = "base16-gruvbox-light-medium"
+  local colorscheme = "kanagawa"
+  -- local colorscheme = "base16-gruvbox-light-medium"
   vim.cmd("colorscheme " .. colorscheme)
 end)
 
@@ -72,12 +72,12 @@ _G.reload_config = function()
   api.nvim_exec_autocmds({ "FileType" }, {})
 end
 
-load("config.mappings")
-load("config.lsp")
-load("config.tabline")
-load("config.statusline")
-load("config.filetypes")
-load("plugins")
+load("kraftwerk28.map")
+load("kraftwerk28.lsp")
+load("kraftwerk28.tabline")
+load("kraftwerk28.statusline")
+load("kraftwerk28.filetype")
+load("kraftwerk28.plugins")
 
 -- if fn.has("unix") == 1 then
 --   -- Clicking any link pointing to neovim or vim docs site

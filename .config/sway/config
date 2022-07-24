@@ -204,9 +204,9 @@ mode "resize" bindsym {
 	Escape mode default
 }
 
-bindsym $mod+f12 mode "nested sway"
-mode "nested sway" {
-	bindsym $mod+f12 mode default
+bindsym --to-code $mod+f12 mode "nested sway"
+mode "nested sway" bindsym {
+	$mod+f12 mode default
 }
 
 bindsym --to-code $mod+Shift+w mode "move workspace"
@@ -217,46 +217,78 @@ mode "move workspace" bindsym --to-code {
 }
 
 bindsym --to-code $mod+Shift+b mode "set window border"
-mode "set window border" bindsym {
+mode "set window border" bindsym --to-code {
 	n border normal, mode default
 	p border pixel, mode default
+	Escape mode default
+}
+
+bindsym --to-code $mod+Shift+o mode "manage output"
+mode "manage output" bindsym --to-code {
+	t output - toggle, mode default
+	p output - power toggle, mode default
+	a output * enable, mode default
 	Escape mode default
 }
 
 # }}}
 
 # Theme and colors {{{
+
+# Default colors from sway(5)
+# class              border      background  text        indicator   child_border
+# focused            #4c7899     #285577     #ffffff     #2e9ef4     #285577
+# focused_inactive   #333333     #5f676a     #ffffff     #484e50     #5f676a
+# focused_tab_title  #333333     #5f676a     #ffffff     n/a         n/a    
+# unfocused          #333333     #222222     #888888     #292d2e     #222222
+# urgent             #2f343a     #900000     #ffffff     #900000     #900000
+# placeholder        #000000     #0c0c0c     #ffffff     #000000     #0c0c0c
+
+# Same as above, but via variables
 set {
-	$focused_title_border "#ee6600"
-	$focused_title_bg "#884400"
-	$focused_title_text "#ffffff"
-	$focused_indicator "#ff4400"
-	$focused_border $focused_title_border
-	$unfocused_title_border "#333333"
-	$unfocused_title_bg "#222222"
-	$unfocused_title_text "#bbbbbb"
-	$unfocused_indicator "#882200"
-	$unfocused_border $unfocused_title_border
-	$urgent_title_border "#bb0000"
-	$urgent_title_bg "#880000"
-	$urgent_title_text "#ffffff"
-	$urgent_indicator "#dd0000"
-	$urgent_border $urgent_title_border
+	$focused_title_border #4c7899
+	$focused_title_bg #285577
+	$focused_title_text #ffffff
+	$focused_indicator #2e9ef4
+	$focused_border #285577
+
+	$unfocused_title_border #333333
+	$unfocused_title_bg #222222
+	$unfocused_title_text #888888
+	$unfocused_indicator #292d2e
+	$unfocused_border #222222
+
+	$urgent_title_border #2f343a
+	$urgent_title_bg #900000
+	$urgent_title_text #ffffff
+	$urgent_indicator #900000
+	$urgent_border #900000
 }
 
-# Default colors
-# client.focused           "#4c7899" "#285577" "#ffffff" "#2e9ef4" "#285577
-# client.focused_inactive  "#333333" "#5f676a" "#ffffff" "#484e50" "#5f676a
-# client.focused_tab_title "#333333" "#5f676a" "#ffffff"
-# client.unfocused         "#333333" "#222222" "#888888" "#292d2e" "#222222
-# client.urgent            "#2f343a" "#900000" "#ffffff" "#900000" "#900000
+# set {
+# 	$focused_title_border "#ee6600"
+# 	$focused_title_bg "#884400"
+# 	$focused_title_text "#ffffff"
+# 	$focused_indicator "#ff0044"
+# 	$focused_border $focused_title_border
+# 	$unfocused_title_border "#333333"
+# 	$unfocused_title_bg "#222222"
+# 	$unfocused_title_text "#bbbbbb"
+# 	$unfocused_indicator "#882200"
+# 	$unfocused_border $unfocused_title_border
+# 	$urgent_title_border "#bb0000"
+# 	$urgent_title_bg "#880000"
+# 	$urgent_title_text "#ffffff"
+# 	$urgent_indicator "#dd0000"
+# 	$urgent_border $urgent_title_border
+# }
 
-# Set from theme variables
-client.focused $focused_title_border $focused_title_bg $focused_title_text $focused_indicator $focused_border
-client.focused_inactive $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
-client.focused_tab_title $focused_title_border $focused_title_bg $focused_title_text
-client.unfocused $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
-client.urgent $urgent_title_border $urgent_title_bg $urgent_title_text $urgent_indicator $urgent_border
+# Set colors from theme variables
+client.focused           $focused_title_border   $focused_title_bg   $focused_title_text   $focused_indicator   $focused_border
+client.focused_inactive  $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
+client.focused_tab_title $focused_title_border   $focused_title_bg   $focused_title_text
+client.unfocused         $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
+client.urgent            $urgent_title_border    $urgent_title_bg    $urgent_title_text    $urgent_indicator    $urgent_border
 
 # client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 # client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
@@ -317,7 +349,7 @@ input type:touchpad {
 
 # Various options {{{
 set $border_width 2
-# smart_gaps on
+smart_gaps on
 # gaps inner 6
 # gaps outer 0
 floating_modifier $mod
@@ -348,7 +380,7 @@ exec_always {
 
 # Autostart {{{
 exec {
-	blueman-applet
+	# blueman-applet
 	kdeconnect-indicator
 	$scripts/enhance.lua
 }
@@ -359,8 +391,8 @@ exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
 
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
-exec swayidle \
-	after-resume 'swaymsg output "*" dpms on'
+# exec swayidle \
+# 	after-resume 'swaymsg output "*" power on'
 # }}}
 
 # Window rules {{{
@@ -376,11 +408,14 @@ for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
 for_window [tiling app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^foot_floating$"] floating enable
 for_window [app_id="^gnome-calculator$"] floating enable
+for_window [app_id="^org.gnome.Calculator$"] floating enable
+for_window [title="^FX: Track"] floating enable
 # }}}
 
 # Output configuration {{{
 set $laptop eDP-1
-set $external DP-1
+# set $external DP-1
+set $external DP-3
 
 bindswitch lid:on  output $laptop disable
 bindswitch lid:off output $laptop enable
@@ -395,20 +430,20 @@ output $external position 1920 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color
-output $laptop background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output $external background /usr/local/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+output $laptop background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output $external background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
 
 # exec swayidle -w \
 # 	# timeout 300 'swaylock -f -c 000000' \
-# 	timeout 6 'swaymsg "output * dpms off"' \
-# 	resume 'swaymsg "output * dpms on"'
+# 	timeout 6 'swaymsg "output * power off"' \
+# 	resume 'swaymsg "output * power on"'
 # 	# before-sleep 'swaylock -f -c 000000'
 
-# swaylock ... && swaymsg output "*" dpms off
+# swaylock ... && swaymsg output "*" power off
 # swayidle \
-# 	timeout 300 'if pgrep swaylock; then swaymsg output "*" dpms off' \
-# 	resume 'then swaymsg output "*" dpms on'
+# 	timeout 300 'if pgrep swaylock; then swaymsg output "*" power off' \
+# 	resume 'then swaymsg output "*" power on'
 
 # bindswitch lid:toggle exec swaylock \
 # 	--image $HOME/Pictures/scp_wallpaper_1.jpg \

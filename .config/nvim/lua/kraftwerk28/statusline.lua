@@ -1,4 +1,4 @@
-local utils = require("config.utils")
+local utils = require("kraftwerk28.utils")
 local fn, api = vim.fn, vim.api
 local devicons = require("nvim-web-devicons")
 local ts = require("nvim-treesitter")
