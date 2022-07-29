@@ -1,4 +1,4 @@
-local api, fn = vim.api, vim.fn
+local fn = vim.fn
 
 m("x", "p", function()
   fn.setreg("a", fn.getreg("+"))
@@ -12,12 +12,12 @@ m("x", "P", function()
   fn.setreg("+", fn.getreg("a"))
 end)
 
-api.nvim_create_autocmd("TextYankPost", {
+au("TextYankPost", {
   pattern = "svg,xml,html",
   callback = function()
     m("i", "</>", "</<C-X><C-O><C-N>", { buffer = true })
   end,
-  group = api.nvim_create_augroup("tag_completion", {}),
+  group = aug("tag_completion", {}),
 })
 
 m("n", "j", function()
@@ -57,8 +57,9 @@ for i = 1, 9 do
 end
 
 m("n", "<Leader>hs", function()
-  vim.opt_local.hlsearch = not vim.opt_local.hlsearch:get()
+  lo.hlsearch = not lo.hlsearch:get()
 end)
+
 m("n", "<Leader>w", "<Cmd>wall<CR>")
 
 m("n", "<M-k>", "<Cmd>m-2<CR>")

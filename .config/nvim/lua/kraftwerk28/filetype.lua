@@ -75,6 +75,7 @@ local ftconfig = {
   },
 }
 
+local filetype_opts = aug("filetype_opts")
 for _, cfg in ipairs(ftconfig) do
   local filetypes, opts = cfg[1], cfg[2]
   au("FileType", {
@@ -84,6 +85,6 @@ for _, cfg in ipairs(ftconfig) do
         vim.opt_local[name] = value
       end
     end,
-    group = aug("filetype_opts"),
+    group = filetype_opts,
   })
 end

@@ -14,7 +14,7 @@ end
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- stylua: ignore start
-vim.g.floatwin_border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+-- vim.g.floatwin_border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 vim.g.floatwin_border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
 -- stylua: ignore end
 vim.g.diagnostic_signs = {
@@ -24,6 +24,8 @@ vim.g.diagnostic_signs = {
   HINT = " ",
 }
 vim.g.sql_type_default = "sqlanywhere"
+
+pcall(vim.cmd, "source .nvimrc")
 
 vim.cmd("runtime opts.vim")
 
