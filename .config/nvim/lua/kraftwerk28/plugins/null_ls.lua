@@ -86,24 +86,27 @@ require("null-ls").setup({
   fallback_severity = vim.diagnostic.severity.WARN,
   sources = {
     b.diagnostics.eslint_d,
-    b.formatting.eslint_d,
+    b.formatting.eslint_d.with({
+      timeout = 10000,
+    }),
     b.code_actions.eslint_d,
     b.formatting.prettier.with({
       filetypes = { "graphql" },
     }),
 
     b.diagnostics.luacheck.with({
-      args = {
+      args = vim.tbl_flatten({
         "--formatter",
         "plain",
         "--codes",
         "--ranges",
         "--globals",
-        "vim",
+        -- See lua/kraftwerk28/globals.lua
+        { "vim", "o", "lo", "go", "m", "au", "aug" },
         "--filename",
         "$FILENAME",
         "-",
-      },
+      }),
     }),
     b.formatting.stylua,
 

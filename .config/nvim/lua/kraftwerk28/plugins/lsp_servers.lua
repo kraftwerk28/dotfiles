@@ -1,4 +1,5 @@
-local lsp_config = require("lspconfig")
+local lspconfig = require("lspconfig")
+local configs = require("lspconfig.configs")
 local root_pattern = require("lspconfig.util").root_pattern
 local cmp_lsp = require("cmp_nvim_lsp")
 
@@ -21,9 +22,22 @@ local function find_compile_commands()
   return fn.fnamemodify(ccj[1], ":p:h")
 end
 
-lsp_config.als.setup({})
+if not configs.mesonls then
+  configs.mesonls = {
+    default_config = {
+      cmd = { "/home/kraftwerk28/projects/meson/mesonls/__main__.py" },
+      filetypes = { "meson" },
+      root_dir = root_pattern({ "meson.build" }),
+      settings = {},
+    },
+  }
+end
 
-lsp_config.arduino_language_server.setup({
+lspconfig.mesonls.setup({})
+
+lspconfig.als.setup({})
+
+lspconfig.arduino_language_server.setup({
   cmd = {
     "arduino-language-server",
     "-clangd",
@@ -35,9 +49,9 @@ lsp_config.arduino_language_server.setup({
   },
 })
 
-lsp_config.awk_ls.setup({})
+lspconfig.awk_ls.setup({})
 
-lsp_config.denols.setup({
+lspconfig.denols.setup({
   autostart = false,
   initializationOptions = {
     enable = true,
@@ -47,7 +61,7 @@ lsp_config.denols.setup({
   root_dir = root_pattern({ "deno.json" }),
 })
 
-lsp_config.gopls.setup({
+lspconfig.gopls.setup({
   cmd = { "gopls", "serve" },
   filetypes = { "go", "gomod" },
   root_dir = root_pattern({
@@ -65,11 +79,11 @@ lsp_config.gopls.setup({
   },
 })
 
-lsp_config.graphql.setup({
+lspconfig.graphql.setup({
   cmd = { "graphql-lsp", "server", "--method=stream" },
 })
 
-lsp_config.hls.setup({
+lspconfig.hls.setup({
   settings = {
     haskell = {
       formattingProvider = "brittany",
@@ -103,14 +117,14 @@ do
   --     pyflakes = {enabled = false},
   --   },
   -- }
-  lsp_config.pylsp.setup({})
+  lspconfig.pylsp.setup({})
 end
 
-lsp_config.rust_analyzer.setup({
+lspconfig.rust_analyzer.setup({
   capabilities = make_cpb(),
 })
 
-lsp_config.tsserver.setup({
+lspconfig.tsserver.setup({
   root_dir = root_pattern({
     "package.json",
     "tsconfig.json",
@@ -126,21 +140,21 @@ lsp_config.tsserver.setup({
   capabilities = make_cpb(),
 })
 
--- lsp_config.flow.setup {
+-- lspconfig.flow.setup {
 --   cmd = {'flow', 'lsp'},
 --   filetypes = {'javascript', 'javascriptreact'},
 --   root_dir = root_pattern('.flowconfig'),
 -- }
 
--- lsp_config.pyre.setup {
+-- lspconfig.pyre.setup {
 --   root_dir = root_pattern {
 --     ".git",
 --   },
 -- }
 
--- lsp_config.pyright.setup {}
+-- lspconfig.pyright.setup {}
 
--- lsp_config.sumneko_lua.setup {
+-- lspconfig.sumneko_lua.setup {
 --   cmd = {
 --     "lua-language-server",
 --     "-E", "/usr/share/lua-language-server/main.lua",
@@ -175,7 +189,7 @@ do
   end
   local cpb = make_cpb()
   cpb.offsetEncoding = { "utf-16" }
-  lsp_config.clangd.setup({
+  lspconfig.clangd.setup({
     cmd = cmd,
     root_dir = root_pattern({
       "CMakeLists.txt",
@@ -187,11 +201,11 @@ do
   })
 end
 
-lsp_config.svelte.setup({
+lspconfig.svelte.setup({
   capabilities = make_cpb(),
 })
 
-lsp_config.jsonls.setup({
+lspconfig.jsonls.setup({
   settings = {
     json = {
       schemas = require("schemastore").json.schemas(),
@@ -203,7 +217,7 @@ lsp_config.jsonls.setup({
   capabilities = make_cpb(),
 })
 
-lsp_config.yamlls.setup({
+lspconfig.yamlls.setup({
   settings = {
     yaml = {
       format = {
@@ -220,19 +234,19 @@ lsp_config.yamlls.setup({
   capabilities = make_cpb(),
 })
 
-lsp_config.cssls.setup({})
+lspconfig.cssls.setup({})
 
--- lsp_config.html.setup {
+-- lspconfig.html.setup {
 --   cmd = {"vscode-html-languageserver", "--stdio"}
 -- }
 
--- lsp_config.bashls.setup {
+-- lspconfig.bashls.setup {
 --   filetypes = {"bash", "sh", "zsh"}
 -- }
 
-lsp_config.solargraph.setup({})
+lspconfig.solargraph.setup({})
 
--- lsp_config.emmet_ls.setup {}
+-- lspconfig.emmet_ls.setup {}
 
 if fn.has("win64") == 1 then
   local jdt_base = fn.expand(
@@ -240,7 +254,7 @@ if fn.has("win64") == 1 then
   )
   local java_home = fn.expand("C:/Program Files/Java/jdk-11.0.11")
 
-  lsp_config.jdtls.setup({
+  lspconfig.jdtls.setup({
     cmd = {
       fn.expand(java_home .. "/bin/java.exe"),
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
@@ -268,7 +282,7 @@ if fn.has("win64") == 1 then
     root_dir = root_pattern({ ".git", "build.gradle", "build.gradle.kts" }),
   })
 
-  lsp_config.groovyls.setup({
+  lspconfig.groovyls.setup({
     cmd = {
       "java",
       "-jar",
@@ -298,7 +312,7 @@ do
       JAVA_HOME = jdk_home,
     }
   end
-  lsp_config.kotlin_language_server.setup({
+  lspconfig.kotlin_language_server.setup({
     cmd = cmd,
     cmd_env = cmd_env,
     settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },

@@ -1,5 +1,3 @@
-local api = vim.api
-
 vim.g.do_filetype_lua = 1
 
 vim.filetype.add({
@@ -70,18 +68,22 @@ local ftconfig = {
   { { "graphql" }, { commentstring = "# %s" } },
 
   { { "dosini", "confini" }, { commentstring = "; %s" } },
+
+  {
+    { "python", "typescript", "typescriptreact" },
+    { indentexpr = "nvim_treesitter#indent()" },
+  },
 }
 
-local optgroup = api.nvim_create_augroup("filetype_opts", {})
 for _, cfg in ipairs(ftconfig) do
   local filetypes, opts = cfg[1], cfg[2]
-  api.nvim_create_autocmd("FileType", {
+  au("FileType", {
     pattern = filetypes,
     callback = function()
       for name, value in pairs(opts) do
         vim.opt_local[name] = value
       end
     end,
-    group = optgroup,
+    group = aug("filetype_opts"),
   })
 end

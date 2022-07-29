@@ -1,5 +1,9 @@
 local lsp, fn, api = vim.lsp, vim.fn, vim.api
 
+-- api.create_user_command("LspLog", function()
+--   vim.cmd("edit " .. vim.lsp.get_log_path())
+-- end, { nargs = 0 })
+
 -- highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
 -- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
 -- highlight {

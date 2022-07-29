@@ -414,8 +414,8 @@ for_window [title="^FX: Track"] floating enable
 
 # Output configuration {{{
 set $laptop eDP-1
-# set $external DP-1
-set $external DP-3
+set $external_usb DP-1
+set $external_hdmi DP-3
 
 bindswitch lid:on  output $laptop disable
 bindswitch lid:off output $laptop enable
@@ -426,12 +426,14 @@ bindswitch lid:off output $laptop enable
 # output $external transform 90
 # output $laptop position 0 
 output $laptop position 0 360
-output $external position 1920 0
+output $external_usb position 1920 0
+output $external_hdmi position 1920 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color
-output $laptop background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output $external background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+output $laptop   background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
 
 # exec swayidle -w \

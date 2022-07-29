@@ -26,8 +26,7 @@ cmp.setup({
           local ret = {}
           for _, winid in ipairs(api.nvim_tabpage_list_wins(0)) do
             local bufnr = api.nvim_win_get_buf(winid)
-            local ft = api.nvim_buf_get_option(bufnr, "filetype")
-            if ft ~= "man" then
+            if vim.opt_local.filetype ~= "man" then
               table.insert(ret, bufnr)
             end
           end
@@ -45,17 +44,19 @@ cmp.setup({
   },
   preselect = cmp.PreselectMode.None,
   formatting = {
-    format = lspkind.cmp_format(),
-    -- format = function(entry, vim_item)
-    --   return lspkind.cmp_format()
-    --   -- local icon = lspkind.presets.default[vim_item.kind]
-    --   -- vim_item.abbr = icon.." "..vim_item.abbr
-    --   -- return vim_item
-    -- end,
+    format = lspkind.cmp_format({
+      mode = "symbol",
+      menu = {
+        buffer = "[buf]",
+        nvim_lsp = "[LSP]",
+        path = "[path]",
+        luasnip = "[snip]",
+      },
+    }),
   },
   enabled = function()
-    return vim.o.buftype ~= "prompt"
-      and vim.o.filetype ~= "asm"
+    return vim.opt.buftype ~= "prompt"
+      and vim.opt.filetype ~= "asm"
       and vim.fn.win_gettype() == ""
   end,
   snippet = {
@@ -64,7 +65,7 @@ cmp.setup({
     end,
   },
   view = {
-    entries = "native",
+    -- entries = "native",
   },
 })
 

@@ -7,14 +7,7 @@ set tabstop=4
 set shiftwidth=4
 set autoindent smartindent
 set list
-
-" set listchars=tab:»\ ,trail:·
-" let &listchars = "tab:> ,trail:·"
-" set listchars=tab:⇥\ ,trail:·
-" set listchars=tab:\ ﲒ,trail:·
-" let &listchars = "tab:→ ,trail:·"
-set listchars=tab:\ \ ,lead:·,trail:·"
-
+let &listchars = 'tab:  ,lead:·,trail:·'
 set cursorline
 " set colorcolumn=80,120
 set mouse=a
@@ -28,8 +21,6 @@ set signcolumn=yes
 set autoread autowrite autowriteall
 set foldlevel=99
 set foldmethod=indent
-" set foldexpr = "nvim_treesitter#foldexpr()"
-" set foldmethod=expr
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set exrc
 set secure
@@ -42,12 +33,11 @@ set inccommand=nosplit
 set title
 set shortmess+=c
 set diffopt+=vertical
-
+set scrolloff=3
 " highlight! Cursor gui=reverse guifg=NONE guibg=NONE
 highlight Cursor gui=NONE guifg=bg guibg=fg
-set guicursor=a:blinkon1-Cursor
-" set guicursor=a:blinkon1-Cursor,n-c-sm:block,i-ci-ve:ver25,r-cr-o-v:hor20
-
+" set guicursor=a:blinkon1-Cursor
+set guicursor=a:blinkon1-Cursor,n-c-sm:block,i-ci-ve:ver25,r-cr-o-v:hor20
 if has("win64")
   set shell=powershell.exe
   let shellpipe = '|'

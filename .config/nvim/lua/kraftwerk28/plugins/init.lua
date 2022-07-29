@@ -68,7 +68,7 @@ local function load(use)
     requires = { "tpope/vim-rhubarb", "tommcdo/vim-fubitive" },
     config = function()
       vim.keymap.set("n", "<Leader>gs", "<Cmd>vert Git<CR>")
-      vim.keymap.set("n", "<Leader>gb", "<Cmd>GBrowse<CR>")
+      vim.keymap.set({ "n", "v" }, "<Leader>gb", ":GBrowse<CR>")
 
       -- Merge conflicts
       vim.keymap.set("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
@@ -297,22 +297,27 @@ local function bootstrap()
   end
 
   vim.cmd("packadd packer.nvim")
-  require("packer").startup({
+  local packer = require("packer")
+
+  packer.startup({
     load,
     config = {
       git = { clone_timeout = 240 },
       autoremove = true,
     },
   })
+
   api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*/plugins/init.lua",
+    pattern = "kraftwerk28/plugins/*.lua",
     callback = function(arg)
       vim.cmd("source " .. arg.file)
-      vim.cmd("PackerCompile")
+      packer.compile()
     end,
+    group = api.nvim_create_augroup("packer", {}),
   })
+
   if not_installed then
-    require("packer").sync()
+    packer.sync()
   end
 end
 

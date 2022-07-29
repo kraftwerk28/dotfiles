@@ -25,7 +25,7 @@ zstyle ':vcs_info:git+set-message:*:*' hooks check-dirty
 # zstyle ':vcs_info:*' patch-format '#%p [%n|%c]'
 
 +vi-check-dirty () {
-	if git diff-index --exit-code --quiet HEAD; then
+	if git diff-index --exit-code --quiet HEAD &>/dev/null; then
 		hook_com[misc]="%B%F{green}✔"
 	else
 		hook_com[misc]="%B%F{red}✘"

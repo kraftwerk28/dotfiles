@@ -1,5 +1,6 @@
-local M = {}
 local api, fn = vim.api, vim.fn
+
+require("kraftwerk28.globals")
 
 local utils = require("kraftwerk28.utils")
 local load = utils.load
@@ -9,12 +10,6 @@ if fn.has(min_version) == 0 then
   print("At least " .. min_version .. " is required for this config.")
   return
 end
-
-_G.A = setmetatable({}, {
-  __index = function(_, k)
-    return vim.api["nvim_" .. k]
-  end,
-})
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
@@ -29,6 +24,8 @@ vim.g.diagnostic_signs = {
   HINT = " ",
 }
 vim.g.sql_type_default = "sqlanywhere"
+
+vim.cmd("runtime opts.vim")
 
 local ok, err = pcall(function()
   -- require("github-theme").setup({
@@ -86,7 +83,7 @@ load("kraftwerk28.plugins")
 --   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
 -- end
 
-api.nvim_create_autocmd("TextYankPost", {
+au("TextYankPost", {
   callback = function()
     local highlight = require("vim.highlight")
     if highlight then
@@ -95,8 +92,7 @@ api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
-local qclose_group = api.nvim_create_augroup("aux_win_close", {})
-api.nvim_create_autocmd("FileType", {
+au("FileType", {
   pattern = { "help", "qf", "fugitive", "git", "fugitiveblame" },
   callback = function()
     vim.keymap.set("n", "q", "<Cmd>:bdelete<CR>", {
@@ -104,7 +100,7 @@ api.nvim_create_autocmd("FileType", {
       silent = true,
     })
   end,
-  group = qclose_group,
+  group = api.nvim_create_augroup("aux_win_close", {}),
 })
 
 local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
@@ -121,22 +117,26 @@ local function set_nu(relative)
   end
 end
 
-api.nvim_create_autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
+local number_augroup = aug("number")
+au({ "BufEnter", "WinEnter", "FocusGained" }, {
   callback = set_nu(true),
+  group = number_augroup,
 })
 
-api.nvim_create_autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
+au({ "BufLeave", "WinLeave", "FocusLost" }, {
   callback = set_nu(false),
+  group = number_augroup,
 })
 
 -- set 'makeprg' for some projects
 if fn.glob("meson.build") ~= "" then
-  vim.o.makeprg = "meson compile -C build"
+  o.makeprg = "meson compile -C build"
 elseif fn.glob("go.mod") ~= "" then
-  vim.o.makeprg = "go build"
+  o.makeprg = "go build"
 end
 
-api.nvim_create_autocmd("BufReadPost", {
+-- Restore cursor position
+au("BufReadPost", {
   callback = function()
     local pos = fn.line([['"]])
     if pos > 0 and pos <= fn.line("$") then
@@ -145,7 +145,7 @@ api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-api.nvim_create_autocmd("BufWinEnter", {
+au("BufWinEnter", {
   callback = function()
     if vim.o.filetype == "help" then
       vim.cmd("wincmd L | 82wincmd |")
@@ -169,13 +169,13 @@ api.nvim_create_autocmd("BufWinEnter", {
   end,
 })
 
-api.nvim_create_autocmd("FocusLost", {
+au("FocusLost", {
   callback = function()
     vim.cmd("silent! wall")
   end,
 })
 
-api.nvim_create_autocmd("FocusGained", {
+au("FocusGained", {
   callback = function()
     fn.system("pwd > /tmp/last_pwd")
   end,
@@ -228,5 +228,3 @@ vim.diagnostic.handlers["virtual_text"] = {
   end,
 }
 ]]
-
-return M

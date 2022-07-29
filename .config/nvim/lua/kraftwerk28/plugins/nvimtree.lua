@@ -1,6 +1,6 @@
 local nt = require("nvim-tree")
 
-vim.keymap.set("n", "<F3>", function()
+m("n", "<F3>", function()
   if vim.o.filetype == "NvimTree" then
     return ":NvimTreeClose<CR>"
   else
@@ -8,7 +8,7 @@ vim.keymap.set("n", "<F3>", function()
   end
 end, { silent = true, expr = true })
 
-vim.keymap.set("n", "<Leader><F3>", function()
+m("n", "<Leader><F3>", function()
   if vim.o.filetype == "NvimTree" then
     return ":NvimTreeClose<CR>"
   else

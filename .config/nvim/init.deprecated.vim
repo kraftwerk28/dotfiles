@@ -1,12 +1,12 @@
-scriptencoding utf-8
+" scriptencoding utf-8
 
-if has("win64")
-  set runtimepath+=$HOME/dotfiles/.config/nvim
-endif
+" if has("win64")
+"   set runtimepath+=$HOME/dotfiles/.config/nvim
+" endif
 
-runtime opts.vim
+" runtime opts.vim
 
-lua require(".")
+" lua require(".")
 
 "---------------------------------- Autocmd -----------------------------------"
 
@@ -60,10 +60,10 @@ lua require(".")
 " augroup END
 
 "----------------------------- Mapping functions ------------------------------"
-function RevStr(str)
-  let l:chars = split(submatch(0), '\zs')
-  return join(reverse(l:chars), '')
-endfunction
+" function RevStr(str)
+"   let l:chars = split(submatch(0), '\zs')
+"   return join(reverse(l:chars), '')
+" endfunction
 
 " function! s:compTab()
 "   if pumvisible()
@@ -120,88 +120,90 @@ endfunction
 " augroup END
 
 " Autoclose tag
-autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
+" augroup tag_completion
+"   autocmd FileType svg,xml,html inoremap <buffer> </> </<C-X><C-O><C-N>
+" augroup END
 
-nnoremap <buffer><silent> <Leader>qj :cnext<CR>
-nnoremap <buffer><silent> <Leader>qk :cprevious<CR>
-nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
+" nnoremap <buffer><silent> <Leader>qj :cnext<CR>
+" nnoremap <buffer><silent> <Leader>qk :cprevious<CR>
+" nnoremap <buffer><silent> <Leader>qc :cprevious<CR>
 
 "------------------------- Misc commands & functions --------------------------"
 " Adds shebang to current file and makes it executable (to current user)
-let s:filetype_executables = {'javascript': 'node'}
+" let s:filetype_executables = {'javascript': 'node'}
 
-function! s:shebang()
-  silent! write
-  execute 'silent !chmod u+x %'
-  if stridx(getline(1), "#!") == 0
-    echo 'Shebang already exists.'
-    return
-  endif
-  execute 'silent !which ' . &filetype
-  let l:shb = '#!/usr/bin/env '
-  if v:shell_error == 0
-    let l:shb .= &filetype
-  elseif has_key(s:filetype_executables, &filetype)
-    let l:shb .= s:filetype_executables[&filetype]
-  else
-    echoerr 'Filename not supported.'
-    return
-  endif
-  call append(0, shb)
-  update
-endfunction
+" function! s:shebang()
+"   silent! write
+"   execute 'silent !chmod u+x %'
+"   if stridx(getline(1), "#!") == 0
+"     echo 'Shebang already exists.'
+"     return
+"   endif
+"   execute 'silent !which ' . &filetype
+"   let l:shb = '#!/usr/bin/env '
+"   if v:shell_error == 0
+"     let l:shb .= &filetype
+"   elseif has_key(s:filetype_executables, &filetype)
+"     let l:shb .= s:filetype_executables[&filetype]
+"   else
+"     echoerr 'Filename not supported.'
+"     return
+"   endif
+"   call append(0, shb)
+"   update
+" endfunction
 
-command! -nargs=0 Shebang call s:shebang()
+" command! -nargs=0 Shebang call s:shebang()
 
-function! Durka()
-  let themes = map(
-  \   split(system('ls ~/.config/nvim/colors/')) +
-  \   split(system('ls /usr/share/nvim/runtime/colors/')),
-  \   'v:val[:-5]'
-  \ )
-  for th in themes
-    echo th
-    execute 'colorscheme' th
-    sleep 200m
-  endfor
-endfunction
+" function! Durka()
+"   let themes = map(
+"   \   split(system('ls ~/.config/nvim/colors/')) +
+"   \   split(system('ls /usr/share/nvim/runtime/colors/')),
+"   \   'v:val[:-5]'
+"   \ )
+"   for th in themes
+"     echo th
+"     execute 'colorscheme' th
+"     sleep 200m
+"   endfor
+" endfunction
 
-function! PrettyComment(comment, fill_char) abort
-  let l:text_len = strlen(getline('.'))
-  let l:remain_len = 80 - l:text_len
+" function! PrettyComment(comment, fill_char) abort
+"   let l:text_len = strlen(getline('.'))
+"   let l:remain_len = 80 - l:text_len
 
-  let l:l_size = l:remain_len / 2
-  let l:r_size = l:remain_len - l:l_size
+"   let l:l_size = l:remain_len / 2
+"   let l:r_size = l:remain_len - l:l_size
 
-  let l:result = a:comment .
-               \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
-               \ ' ' .
-               \ getline('.') .
-               \ ' ' .
-               \ repeat(a:fill_char, l:r_size - 1)
+"   let l:result = a:comment .
+"                \ repeat(a:fill_char, l:l_size - strlen(a:comment) - 1) .
+"                \ ' ' .
+"                \ getline('.') .
+"                \ ' ' .
+"                \ repeat(a:fill_char, l:r_size - 1)
 
-  call setline('.', l:result)
-endfunction
+"   call setline('.', l:result)
+" endfunction
 
-function! Emoji2Unicode() abort
-  let l:c = execute('ascii')
-  let l:u = substitute(l:c, '[^x]*Hex\s*\([a-f0-9]*\),[^H]*', '\1', 'g')
-  let l:u = repeat('0', strlen(l:u) % 4) . l:u
-  let @m = substitute(l:u, '\(.\{4\}\)', '\\u\1', 'g')
-  execute "normal xi\<C-R>m\<Esc>"
-endfunction
+" function! Emoji2Unicode() abort
+"   let l:c = execute('ascii')
+"   let l:u = substitute(l:c, '[^x]*Hex\s*\([a-f0-9]*\),[^H]*', '\1', 'g')
+"   let l:u = repeat('0', strlen(l:u) % 4) . l:u
+"   let @m = substitute(l:u, '\(.\{4\}\)', '\\u\1', 'g')
+"   execute "normal xi\<C-R>m\<Esc>"
+" endfunction
 
-command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
+" command! -nargs=0 LspLog execute 'edit ' . luaeval('vim.lsp.get_log_path()')
 
 " augroup display_signature_help
 "   autocmd!
 "   autocmd CursorMoved <buffer> lua vim.lsp.buf.signature_help()
 " augroup END
 
-function! PasteBlock()
-  execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
-  normal! p
-endfunction
+" function! PasteBlock()
+"   execute 'normal!' repeat("O\<Esc>", len(split(@", '\n')))
+"   normal! p
+" endfunction
 
 " function s:expandFolds()
 "   let l:fld = &foldlevel
@@ -212,55 +214,55 @@ endfunction
 "--------------------------------- Mappings -----------------------------------"
 " The block below WON'T execute in vscode-vim extension,
 " so thath's why I use it
-if has("nvim")
-  nnoremap <expr> j v:count1 > 1 ? "j" : "gj"
-  nnoremap <expr> k v:count1 > 1 ? "k" : "gk"
-endif
+" if has("nvim")
+"   nnoremap <expr> j v:count1 > 1 ? "j" : "gj"
+"   nnoremap <expr> k v:count1 > 1 ? "k" : "gk"
+" endif
 
 " Arrow movement mappings
-nnoremap <Down> <C-E>
-nnoremap <Up> <C-Y>
-nnoremap <S-Up> <C-U>M
-nnoremap <S-Down> <C-D>M
-nnoremap <C-Up> <C-B>M
-nnoremap <C-Down> <C-F>M
+" nnoremap <Down> <C-E>
+" nnoremap <Up> <C-Y>
+" nnoremap <S-Up> <C-U>M
+" nnoremap <S-Down> <C-D>M
+" nnoremap <C-Up> <C-B>M
+" nnoremap <C-Down> <C-F>M
 
 " Indenting
-vnoremap > >gv
-vnoremap < <gv
+" vnoremap > >gv
+" vnoremap < <gv
 
 " Buffer nav
-nnoremap <silent> <M-]> :bnext<CR>
-nnoremap <silent> <M-[> :bprevious<CR>
+" nnoremap <silent> <M-]> :bnext<CR>
+" nnoremap <silent> <M-[> :bprevious<CR>
 
 " Tab nav
-nnoremap <silent> th <Cmd>tabprevious<CR>
-nnoremap <silent> tj <Cmd>tablast<CR>
-nnoremap <silent> tk <Cmd>tabfirst<CR>
-nnoremap <silent> tl <Cmd>tabnext<CR>
-nnoremap <silent> tt <Cmd>tabnew<CR>
-nnoremap <silent> td <Cmd>tabclose<CR>
-nnoremap <silent> tH <Cmd>-tabmove<CR>
-nnoremap <silent> tL <Cmd>+tabmove<CR>
+" nnoremap <silent> th <Cmd>tabprevious<CR>
+" nnoremap <silent> tj <Cmd>tablast<CR>
+" nnoremap <silent> tk <Cmd>tabfirst<CR>
+" nnoremap <silent> tl <Cmd>tabnext<CR>
+" nnoremap <silent> tt <Cmd>tabnew<CR>
+" nnoremap <silent> td <Cmd>tabclose<CR>
+" nnoremap <silent> tH <Cmd>-tabmove<CR>
+" nnoremap <silent> tL <Cmd>+tabmove<CR>
 
-nnoremap <silent> <M-1> <Cmd>1tabnext<CR>
-nnoremap <silent> <M-2> <Cmd>2tabnext<CR>
-nnoremap <silent> <M-3> <Cmd>3tabnext<CR>
-nnoremap <silent> <M-4> <Cmd>4tabnext<CR>
-nnoremap <silent> <M-5> <Cmd>5tabnext<CR>
-nnoremap <silent> <M-6> <Cmd>6tabnext<CR>
-nnoremap <silent> <M-7> <Cmd>7tabnext<CR>
-nnoremap <silent> <M-8> <Cmd>8tabnext<CR>
-nnoremap <silent> <M-9> <Cmd>9tabnext<CR>
+" nnoremap <silent> <M-1> <Cmd>1tabnext<CR>
+" nnoremap <silent> <M-2> <Cmd>2tabnext<CR>
+" nnoremap <silent> <M-3> <Cmd>3tabnext<CR>
+" nnoremap <silent> <M-4> <Cmd>4tabnext<CR>
+" nnoremap <silent> <M-5> <Cmd>5tabnext<CR>
+" nnoremap <silent> <M-6> <Cmd>6tabnext<CR>
+" nnoremap <silent> <M-7> <Cmd>7tabnext<CR>
+" nnoremap <silent> <M-8> <Cmd>8tabnext<CR>
+" nnoremap <silent> <M-9> <Cmd>9tabnext<CR>
 
-nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
-nnoremap <silent> <Leader>cfg
-      \ :e ~/.config/nvim/lua/init.lua <Bar>
-      \ :e ~/.config/nvim/init.vim <CR>
-nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
-nnoremap <silent> <Leader>w :wall<CR>
+" nnoremap <silent> <Leader>src :w<CR> :source ~/.config/nvim/init.vim<CR>
+" nnoremap <silent> <Leader>cfg
+"       \ :e ~/.config/nvim/lua/init.lua <Bar>
+"       \ :e ~/.config/nvim/init.vim <CR>
+" nnoremap <silent> <Leader>hs :setlocal hlsearch!<CR>
+" nnoremap <silent> <Leader>w :wall<CR>
 
-vnoremap <Leader>rev <Cmd>s#\%V.\+\%V.#\=join(reverse(split(submatch(0), '\zs')), '')#<CR>
+" vnoremap <Leader>rev <Cmd>s#\%V.\+\%V.#\=join(reverse(split(submatch(0), '\zs')), '')#<CR>
 
 " shake_case -> camelCase
 vnoremap <silent> <Leader>csc :s#\%V\@<=_\(.\)#\u\1#g<CR><Esc>
@@ -288,43 +290,43 @@ nmap     <silent> <Leader>ckc viw<Leader>cks
 " snake_case -> kebab-case
 " TODO: implement
 
-nnoremap <silent> <M-k> :m-2<CR>
-nnoremap <silent> <M-j> :m+1<CR>
-vnoremap <silent> <M-k> :m'<-2<CR>gv
-vnoremap <silent> <M-j> :m'>+1<CR>gv
+" nnoremap <silent> <M-k> :m-2<CR>
+" nnoremap <silent> <M-j> :m+1<CR>
+" vnoremap <silent> <M-k> :m'<-2<CR>gv
+" vnoremap <silent> <M-j> :m'>+1<CR>gv
 
-vnoremap <Leader>rv :s/\%V
+" vnoremap <Leader>rv :s/\%V
 
-nnoremap <Leader>o o<Esc>
-nnoremap <Leader>O O<Esc>
+" nnoremap <Leader>o o<Esc>
+" nnoremap <Leader>O O<Esc>
 
-nnoremap <Leader>` :10split <Bar> :terminal<CR>
+" nnoremap <Leader>` :10split <Bar> :terminal<CR>
 
 " tnoremap <Esc> <C-\><C-N>
 " Window/tab switch when in terminal-insert
-tnoremap <C-W>j <C-\><C-N><C-W>j
-tnoremap <C-W>k <C-\><C-N><C-W>k
-tnoremap <C-W>l <C-\><C-N><C-W>l
-tnoremap th <C-\><C-N>th
-tnoremap tl <C-\><C-N>tl
-tnoremap <ScrollWheelUp> <C-X><C-Y>
-tnoremap <ScrollWheelDown> <C-X><C-E>
+" tnoremap <C-W>j <C-\><C-N><C-W>j
+" tnoremap <C-W>k <C-\><C-N><C-W>k
+" tnoremap <C-W>l <C-\><C-N><C-W>l
+" tnoremap th <C-\><C-N>th
+" tnoremap tl <C-\><C-N>tl
+" tnoremap <ScrollWheelUp> <C-X><C-Y>
+" tnoremap <ScrollWheelDown> <C-X><C-E>
 
 " Control+Backspace erases a whole word
-inoremap <C-BS> <C-W>
+" inoremap <C-BS> <C-W>
 
-vnoremap / "vy/<C-R>v<CR>
+" vnoremap / "vy/<C-R>v<CR>
 
-nnoremap <Leader>ma :vertical Man 
+" nnoremap <Leader>ma :vertical Man 
 
 " Because it is annoying
-nnoremap H <Nop>
+" nnoremap H <Nop>
 
-nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
-nnoremap <silent> dba <Cmd>%bd<CR>
-nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
+" nnoremap <silent> dbo <Cmd>%bd<CR><C-O>
+" nnoremap <silent> dba <Cmd>%bd<CR>
+" nnoremap <silent> dbb <C-W>s<Cmd>bd<CR>
 
-au BufRead,BufNewFile */sway/config set filetype=swayconfig
+" au BufRead,BufNewFile */sway/config set filetype=swayconfig
 
 " let g:iexit_timer = 0
 " autocmd ModeChanged * if g:iexit_timer
