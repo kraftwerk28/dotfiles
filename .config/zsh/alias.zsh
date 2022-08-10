@@ -26,13 +26,13 @@ alias serves="serve \
 	--ssl-cert ~/ca-tmp/localhost.crt \
 	--ssl-key ~/ca-tmp/localhost.key"
 
-if [[ -d /usr/lib/jvm ]]; then
-	for dir in /usr/lib/jvm/*; do
-		if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
-			eval "alias java${ver}=/usr/lib/jvm/${dir}bin/java"
-		fi
-	done
-fi
+# if [[ -d /usr/lib/jvm ]]; then
+# 	for dir in /usr/lib/jvm/*; do
+# 		if grep -oP "(?<=java-)\d+(?=-openjdk)" <<< $dir | read ver; then
+# 			eval "alias java${ver}=/usr/lib/jvm/${dir}bin/java"
+# 		fi
+# 	done
+# fi
 
 alias gst="git status"
 alias gco="git checkout"

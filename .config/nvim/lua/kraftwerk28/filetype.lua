@@ -20,6 +20,7 @@ vim.filetype.add({
     ["exs?$"] = "elixir",
     ["^%.env%."] = "sh",
     ["%.webmanifest$"] = "json",
+    ["*/sway/config"] = "swayconfig",
   },
 })
 
@@ -82,7 +83,7 @@ for _, cfg in ipairs(ftconfig) do
     pattern = filetypes,
     callback = function()
       for name, value in pairs(opts) do
-        vim.opt_local[name] = value
+        lo[name] = value
       end
     end,
     group = filetype_opts,

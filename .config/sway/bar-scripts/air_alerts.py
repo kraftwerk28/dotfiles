@@ -1,9 +1,10 @@
 #!/usr/bin/env python
+import json
 import msgpack
-import requests
-import re
-import time
 import os
+import re
+import requests
+import time
 
 while True:
     try:
@@ -27,10 +28,10 @@ while True:
             if re.search(name_re, statename, flags=re.IGNORECASE):
                 states.append(re.sub(r" область$", "", statename))
         if states:
-            text = ", ".join(states)
-            print('{"full_text": "䀘 ' + text + '", "urgent": true}', flush=True)
+            obj = {"full_text": "䀘 " + ", ".join(states), "urgent": True}
+            print(json.dumps(obj))
         else:
-            print('{"full_text": ""}', flush=True)
+            print(json.dumps({"full_text": ""}))
         time.sleep(30)
     except Exception:
         time.sleep(5)

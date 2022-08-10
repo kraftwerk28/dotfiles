@@ -39,13 +39,13 @@ cmp.setup({
   }),
   window = {
     documentation = {
-      border = vim.g.floatwin_border,
+      border = vim.g.borderchars,
     },
   },
   preselect = cmp.PreselectMode.None,
   formatting = {
     format = lspkind.cmp_format({
-      mode = "symbol",
+      mode = "text",
       menu = {
         buffer = "[buf]",
         nvim_lsp = "[LSP]",
@@ -64,23 +64,7 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
-  view = {
-    -- entries = "native",
-  },
+  -- view = {
+  --   entries = "native",
+  -- },
 })
-
---[[
-local compe = require("compe")
-compe.setup {
-  throttle_time = 200,
-  preselect = "disable",
-  source = {
-    path = true,
-    buffer = true,
-    calc = true,
-    nvim_lsp = true,
-    ultisnips = true,
-  },
-  documentation = {border = vim.g.floatwin_border},
-}
-]]

@@ -53,28 +53,32 @@ end
 local tb = require("telescope.builtin")
 local opts = { silent = true }
 
-vim.keymap.set("n", "<Leader>f", vim.lsp.buf.format, opts)
-vim.keymap.set("v", "<Leader>f", vim.lsp.buf.range_formatting, opts)
-vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, opts)
-vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, opts)
-vim.keymap.set("n", "<Leader>ae", function()
-  vim.diagnostic.open_float({ border = vim.g.floatwin_border })
+m:opt({ silent = true })
+m("n", "<Leader>f", function()
+  vim.lsp.buf.format({ timeout_ms = 5000, async = false })
 end, opts)
-vim.keymap.set("n", "<Leader>aa", vim.lsp.buf.code_action, opts)
-vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, opts)
-vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
-vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, opts)
+m("v", "<Leader>f", function()
+  vim.lsp.buf.range_formatting()
+end, opts)
+m("n", "<Leader>ah", vim.lsp.buf.hover, opts)
+m("n", "<Leader>aj", tb.lsp_definitions, opts)
+m("n", "<Leader>ae", function()
+  vim.diagnostic.open_float({ border = vim.g.borderchars })
+end, opts)
+m("n", "<Leader>aa", vim.lsp.buf.code_action, opts)
+m("n", "<Leader>as", tb.lsp_document_symbols, opts)
+m("n", "<F2>", vim.lsp.buf.rename, opts)
+m("i", "<C-S>", vim.lsp.buf.signature_help, opts)
+m:unopt()
 
 do
   local m = "textDocument/signatureHelp"
-  lsp.handlers[m] =
-    lsp.with(lsp.handlers[m], { border = vim.g.floatwin_border })
+  lsp.handlers[m] = lsp.with(lsp.handlers[m], { border = vim.g.borderchars })
 end
 
 do
   local m = "textDocument/hover"
-  lsp.handlers[m] =
-    lsp.with(lsp.handlers[m], { border = vim.g.floatwin_border })
+  lsp.handlers[m] = lsp.with(lsp.handlers[m], { border = vim.g.borderchars })
 end
 
 do

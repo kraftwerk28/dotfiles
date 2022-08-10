@@ -1,6 +1,16 @@
-_G.m = function(...)
-  vim.keymap.set(...)
-end
+_G.m = setmetatable({
+  opt = function(self, o)
+    self.o = o
+  end,
+  unopt = function(self)
+    self.o = nil
+  end,
+}, {
+  __call = function(self, mode, lhs, rhs, opts)
+    opts = vim.tbl_extend("force", self.o or {}, opts or {})
+    vim.keymap.set(mode, lhs, rhs, opts)
+  end,
+})
 
 _G.o = vim.opt
 _G.lo = vim.opt_local

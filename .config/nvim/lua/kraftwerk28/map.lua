@@ -38,6 +38,8 @@ m("n", "<C-Down>", "<C-F>M")
 m("v", ">", ">gv")
 m("v", "<", "<gv")
 
+m:opt({ silent = true })
+
 -- Buffer navigation
 m("n", "<M-]>", "<Cmd>bnext<CR>")
 m("n", "<M-[>", "<Cmd>bprevious<CR>")
@@ -56,25 +58,27 @@ for i = 1, 9 do
   m("n", ("<M-%d>"):format(i), ("<Cmd>%dtabnext<CR>"):format(i))
 end
 
+m:unopt()
+
 m("n", "<Leader>hs", function()
   lo.hlsearch = not lo.hlsearch:get()
 end)
+
+m:opt({ silent = true })
 
 m("n", "<Leader>w", "<Cmd>wall<CR>")
 
 m("n", "<M-k>", "<Cmd>m-2<CR>")
 m("n", "<M-j>", "<Cmd>m+1<CR>")
-m("v", "<M-k>", "<Cmd>m'<-2<CR>gv")
-m("v", "<M-j>", "<Cmd>m'>+1<CR>gv")
+m("v", "<M-k>", ":m'<-2<CR>gv")
+m("v", "<M-j>", ":m'>+1<CR>gv")
+
+m:unopt()
 
 m("i", "<C-BS>", "<C-W>")
-
 m("v", "/", [["vy/<C-R>v<CR>]])
-
 m("n", "<Leader>ma", ":<C-U>vertical Man ")
-
 m("n", "H", "<Nop>")
-
 m("n", "dbo", "<Cmd>%bd<CR><C-O>")
 m("n", "dba", "<Cmd>%bd<CR>")
 m("n", "dbb", "<C-W>s<Cmd>bd<CR>")

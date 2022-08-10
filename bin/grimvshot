@@ -35,7 +35,7 @@ done
 RECT_QUERY='"\(.rect.x),\(.rect.y - .deco_rect.height) \(.rect.width)x\(.rect.height + .deco_rect.height)"'
 case $ACTION in
 	--area)
-		grim -o "$(get_focused_output)" - | imv -f - &
+		grim -c -o "$(get_focused_output)" - | imv -f - &
 		IMV_PID=$!
 		if ! GEOM="$(slurp)"; then
 			kill "$IMV_PID"
@@ -43,7 +43,7 @@ case $ACTION in
 		fi
 		;;
 	--window)
-		grim -o "$(get_focused_output)" - | imv -f - &
+		grim -c -o "$(get_focused_output)" - | imv -f - &
 		IMV_PID=$!
 		if ! GEOM=$(swaymsg -t get_tree | jq -r \
 			'.. | select(.pid? and .visible?) | '"$RECT_QUERY" | slurp); then

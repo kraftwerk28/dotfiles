@@ -64,6 +64,17 @@ local function load(use)
   })
 
   use({
+    "stevearc/dressing.nvim",
+    config = function()
+      require("dressing").setup({
+        input = {
+          border = vim.g.borderchars,
+        },
+      })
+    end,
+  })
+
+  use({
     "tpope/vim-fugitive",
     requires = { "tpope/vim-rhubarb", "tommcdo/vim-fubitive" },
     config = function()
@@ -223,6 +234,46 @@ local function load(use)
   })
 
   use({
+    "iamcco/markdown-preview.nvim",
+    run = "cd app && npm install",
+    ft = { "markdown" },
+    config = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+      local fn = [[
+        function! MkdpOpenInNewWindow(url) abort
+          execute 'silent !firefox -ssb --new-window ' .. a:url
+        endfunction
+      ]]
+      vim.api.nvim_exec(fn, false)
+      vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
+    end,
+  })
+
+  use({
+    "Shatur/neovim-session-manager",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local c = require("session_manager.config")
+      require("session_manager").setup({
+        autoload_mode = c.AutoloadMode.Disabled,
+      })
+    end,
+  })
+
+  use({
+    "p00f/clangd_extensions.nvim",
+    config = function()
+      require("clangd_extensions").setup()
+    end,
+  })
+
+  use({
+    -- "github/copilot.vim",
+    "~/projects/neovim/copilot.vim",
+    disable = true,
+  })
+
+  use({
     "nvim-neorg/neorg",
     disable = true,
     requires = { "nvim-lua/plenary.nvim" },
@@ -240,39 +291,6 @@ local function load(use)
             },
           },
         },
-      })
-    end,
-  })
-
-  use({
-    "iamcco/markdown-preview.nvim",
-    run = "cd app && npm install",
-    ft = { "markdown" },
-    config = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-      local fn = [[
-        function! MkdpOpenInNewWindow(url) abort
-          execute 'silent !firefox -ssb --new-window ' .. a:url
-        endfunction
-      ]]
-      vim.api.nvim_exec(fn, false)
-      vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
-    end,
-  })
-
-  use({
-    -- "github/copilot.vim",
-    "~/projects/neovim/copilot.vim",
-    disable = true,
-  })
-
-  use({
-    "Shatur/neovim-session-manager",
-    requires = { "nvim-lua/plenary.nvim" },
-    config = function()
-      local c = require("session_manager.config")
-      require("session_manager").setup({
-        autoload_mode = c.AutoloadMode.Disabled,
       })
     end,
   })

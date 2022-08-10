@@ -1,3 +1,4 @@
+" NOTE: this file 
 set termguicolors
 set background=dark
 set hidden
@@ -37,7 +38,8 @@ set scrolloff=3
 " highlight! Cursor gui=reverse guifg=NONE guibg=NONE
 highlight Cursor gui=NONE guifg=bg guibg=fg
 " set guicursor=a:blinkon1-Cursor
-set guicursor=a:blinkon1-Cursor,n-c-sm:block,i-ci-ve:ver25,r-cr-o-v:hor20
+set guicursor=a:blinkon1-Cursor,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
+
 if has("win64")
   set shell=powershell.exe
   let shellpipe = '|'

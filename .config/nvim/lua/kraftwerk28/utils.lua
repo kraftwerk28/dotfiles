@@ -67,8 +67,8 @@ end
 function M.load(path)
   local ok, mod = pcall(require, path)
   if not ok then
-    error("Error loadding " .. path)
-    error(mod)
+    api.nvim_err_writeln("Error loadding " .. path)
+    api.nvim_err_writeln(mod)
     return
   end
   local loadfn
@@ -81,18 +81,9 @@ function M.load(path)
   end
   local ok, err = pcall(loadfn)
   if not ok then
-    error("Error loading module " .. path)
-    error(err)
+    api.nvim_err_writeln("Error loading module " .. path)
+    api.nvim_err_writeln(err)
     return
-  end
-end
-
-function M.id_generator(start)
-  local cnt = start or 0
-  return function()
-    local result = cnt
-    cnt = cnt + 1
-    return result
   end
 end
 

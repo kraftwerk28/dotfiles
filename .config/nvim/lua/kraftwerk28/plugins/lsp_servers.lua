@@ -58,16 +58,10 @@ lspconfig.denols.setup({
     lint = true,
     unstable = false,
   },
-  root_dir = root_pattern({ "deno.json" }),
+  capabilities = make_cpb(),
 })
 
 lspconfig.gopls.setup({
-  cmd = { "gopls", "serve" },
-  filetypes = { "go", "gomod" },
-  root_dir = root_pattern({
-    "go.mod",
-    ".git",
-  }),
   handlers = {
     ["textDocument/publishDiagnostics"] = vim.lsp.with(
       vim.lsp.diagnostic.on_publish_diagnostics,
@@ -77,11 +71,10 @@ lspconfig.gopls.setup({
       }
     ),
   },
+  capabilities = make_cpb(),
 })
 
-lspconfig.graphql.setup({
-  cmd = { "graphql-lsp", "server", "--method=stream" },
-})
+lspconfig.graphql.setup({ capabilities = make_cpb() })
 
 lspconfig.hls.setup({
   settings = {
@@ -89,13 +82,6 @@ lspconfig.hls.setup({
       formattingProvider = "brittany",
     },
   },
-  root_dir = root_pattern({
-    "*.cabal",
-    "stack.yaml",
-    "cabal.project",
-    "package.yaml",
-    "hie.yaml",
-  }),
   capabilities = make_cpb(),
 })
 
@@ -117,7 +103,7 @@ do
   --     pyflakes = {enabled = false},
   --   },
   -- }
-  lspconfig.pylsp.setup({})
+  lspconfig.pylsp.setup({ capabilities = make_cpb() })
 end
 
 lspconfig.rust_analyzer.setup({
@@ -125,12 +111,6 @@ lspconfig.rust_analyzer.setup({
 })
 
 lspconfig.tsserver.setup({
-  root_dir = root_pattern({
-    "package.json",
-    "tsconfig.json",
-    "jsconfig.json",
-    ".git",
-  }),
   on_attach = function(client)
     local c = client.server_capabilities
     -- Formatting is handled by prettier through null-ls
@@ -234,7 +214,7 @@ lspconfig.yamlls.setup({
   capabilities = make_cpb(),
 })
 
-lspconfig.cssls.setup({})
+lspconfig.cssls.setup({ capabilities = make_cpb() })
 
 -- lspconfig.html.setup {
 --   cmd = {"vscode-html-languageserver", "--stdio"}
@@ -294,29 +274,29 @@ if fn.has("win64") == 1 then
   })
 end
 
-do
-  -- OBSOLETTE: kotlin is still much better with Jetbrains Idea...
-  local cmd, cmd_env
-  if fn.has("win64") == 1 then
-    cmd = {
-      fn.expand(
-        "~/Projects/kotlin-language-server/server/build/install"
-          .. "/server/bin/kotlin-language-server.bat"
-      ),
-    }
-  end
-  if fn.has("unix") == 1 then
-    local jdk_home = "/usr/lib/jvm/java-11-openjdk"
-    cmd_env = {
-      PATH = jdk_home .. "/bin:" .. vim.env.PATH,
-      JAVA_HOME = jdk_home,
-    }
-  end
-  lspconfig.kotlin_language_server.setup({
-    cmd = cmd,
-    cmd_env = cmd_env,
-    settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },
-    root_dir = root_pattern({ "build.gradle", "build.gradle.kts" }),
-    capabilities = make_cpb(),
-  })
-end
+-- do
+--   -- OBSOLETTE: kotlin is still much better with Jetbrains Idea...
+--   local cmd, cmd_env
+--   if fn.has("win64") == 1 then
+--     cmd = {
+--       fn.expand(
+--         "~/Projects/kotlin-language-server/server/build/install"
+--           .. "/server/bin/kotlin-language-server.bat"
+--       ),
+--     }
+--   end
+--   if fn.has("unix") == 1 then
+--     local jdk_home = "/usr/lib/jvm/java-11-openjdk"
+--     cmd_env = {
+--       PATH = jdk_home .. "/bin:" .. vim.env.PATH,
+--       JAVA_HOME = jdk_home,
+--     }
+--   end
+--   lspconfig.kotlin_language_server.setup({
+--     cmd = cmd,
+--     cmd_env = cmd_env,
+--     settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },
+--     root_dir = root_pattern({ "build.gradle", "build.gradle.kts" }),
+--     capabilities = make_cpb(),
+--   })
+-- end

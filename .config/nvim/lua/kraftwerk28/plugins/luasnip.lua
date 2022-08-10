@@ -106,9 +106,9 @@ ls.add_snippets(nil, {
       "dundermethod",
       fmt.fmta(
         [[
-        def __<>__(self<>):
-        <><>
-      ]],
+          def __<>__(self<>):
+          <><>
+        ]],
         { i(1, "init"), i(2), t("\t"), i(0) }
       )
     ),
@@ -125,7 +125,8 @@ ls.config.set_config({
   updateevents = "TextChanged,TextChangedI",
 })
 
-vim.keymap.set({ "s", "i" }, "<C-L>", function()
+m:opt({ silent = true })
+m({ "s", "i" }, "<C-L>", function()
   if ls.expand_or_jumpable() then
     return "<Plug>luasnip-expand-or-jump"
   else
@@ -133,7 +134,7 @@ vim.keymap.set({ "s", "i" }, "<C-L>", function()
   end
 end, { silent = true, expr = true })
 
-vim.keymap.set({ "s", "i" }, "<C-H>", function()
+m({ "s", "i" }, "<C-H>", function()
   if ls.jumpable(-1) then
     return "<Plug>luasnip-jump-prev"
   else
@@ -141,10 +142,11 @@ vim.keymap.set({ "s", "i" }, "<C-H>", function()
   end
 end, { silent = true, expr = true })
 
-vim.keymap.set({ "s", "i" }, "<C-;>", function()
+m({ "s", "i" }, "<C-;>", function()
   if ls.choice_active() then
     return "<Plug>luasnip-next-choice"
   else
     return "<C-;>"
   end
 end, { silent = true, expr = true })
+m:unopt()

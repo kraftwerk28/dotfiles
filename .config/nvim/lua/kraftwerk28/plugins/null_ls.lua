@@ -86,9 +86,7 @@ require("null-ls").setup({
   fallback_severity = vim.diagnostic.severity.WARN,
   sources = {
     b.diagnostics.eslint_d,
-    b.formatting.eslint_d.with({
-      timeout = 10000,
-    }),
+    b.formatting.eslint_d,
     b.code_actions.eslint_d,
     b.formatting.prettier.with({
       filetypes = { "graphql" },

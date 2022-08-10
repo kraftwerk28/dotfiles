@@ -25,6 +25,10 @@ end
 
 telescope.setup({
   defaults = {
+    borderchars = (function()
+      local a, b, c, d, e, f, g, h = unpack(vim.g.borderchars)
+      return {b, d, f, h, a, c, e, g}
+    end)(),
     sorting_strategy = "ascending",
     prompt_prefix = " ",
     layout_strategy = "horizontal",

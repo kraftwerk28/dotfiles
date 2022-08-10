@@ -226,7 +226,6 @@ mode "set window border" bindsym --to-code {
 bindsym --to-code $mod+Shift+o mode "manage output"
 mode "manage output" bindsym --to-code {
 	t output - toggle, mode default
-	p output - power toggle, mode default
 	a output * enable, mode default
 	Escape mode default
 }
@@ -245,6 +244,27 @@ mode "manage output" bindsym --to-code {
 # placeholder        #000000     #0c0c0c     #ffffff     #000000     #0c0c0c
 
 # Same as above, but via variables
+# set {
+# 	$focused_title_border #4c7899
+# 	$focused_title_bg #285577
+# 	$focused_title_text #ffffff
+# 	$focused_indicator #2e9ef4
+# 	$focused_border #285577
+
+# 	$unfocused_title_border #333333
+# 	$unfocused_title_bg #222222
+# 	$unfocused_title_text #888888
+# 	$unfocused_indicator #292d2e
+# 	$unfocused_border #222222
+
+# 	$urgent_title_border #2f343a
+# 	$urgent_title_bg #900000
+# 	$urgent_title_text #ffffff
+# 	$urgent_indicator #900000
+# 	$urgent_border #900000
+# }
+
+# Same as above, but via variables
 set {
 	$focused_title_border #4c7899
 	$focused_title_bg #285577
@@ -252,11 +272,11 @@ set {
 	$focused_indicator #2e9ef4
 	$focused_border #285577
 
-	$unfocused_title_border #333333
+	$unfocused_title_border #444444
 	$unfocused_title_bg #222222
 	$unfocused_title_text #888888
-	$unfocused_indicator #292d2e
-	$unfocused_border #222222
+	$unfocused_indicator #666666
+	$unfocused_border #444444
 
 	$urgent_title_border #2f343a
 	$urgent_title_bg #900000
@@ -354,7 +374,7 @@ smart_gaps on
 # gaps outer 0
 floating_modifier $mod
 smart_borders no_gaps
-default_border normal $border_width
+default_border pixel $border_width
 default_floating_border normal $border_width
 titlebar_padding 8 1
 focus_wrapping yes
@@ -405,7 +425,7 @@ for_window [title="xeyes"] floating enable; sticky enable
 for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
-for_window [tiling app_id="^firefox$"] border pixel $border_width
+# for_window [tiling app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^foot_floating$"] floating enable
 for_window [app_id="^gnome-calculator$"] floating enable
 for_window [app_id="^org.gnome.Calculator$"] floating enable
@@ -425,9 +445,16 @@ bindswitch lid:off output $laptop enable
 # output $external position 1600 0
 # output $external transform 90
 # output $laptop position 0 
-output $laptop position 0 360
-output $external_usb position 1920 0
-output $external_hdmi position 1920 0
+
+# If external monitor is on the right
+# output $laptop position 0 360
+# output $external_usb position 1920 0
+# output $external_hdmi position 1920 0
+
+# If external monitor is on the left
+output $laptop position 2560 360
+output $external_usb position 0 0
+output $external_hdmi position 0 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color

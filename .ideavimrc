@@ -1,7 +1,7 @@
 let mapleader = " "
 
-source /home/kraftwerk28/.config/nvim/init.vim
 source /home/kraftwerk28/.config/nvim/opts.vim
+
 set ideajoin
 set ideaput
 set surround
@@ -9,8 +9,12 @@ set ideavimsupport=singleline
 set visualbell
 set noerrorbells
 
+set number
+set relativenumber
+
 map <Leader>ae <Action>(ShowErrorDescription)
 map <Leader>ah <Action>(QuickJavaDoc)
 map <Leader>f <Action>(ReformatCode)
 map <C-W> <Action>(SmartSelect)
 map <C-S-W> <Action>(SmartUnSelect)
+map za <Action>(CollapseSelection)

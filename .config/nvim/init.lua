@@ -14,8 +14,8 @@ end
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- stylua: ignore start
--- vim.g.floatwin_border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
-vim.g.floatwin_border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
+-- vim.g.borderchars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
 -- stylua: ignore end
 vim.g.diagnostic_signs = {
   ERROR = " ",
@@ -77,13 +77,6 @@ load("kraftwerk28.tabline")
 load("kraftwerk28.statusline")
 load("kraftwerk28.filetype")
 load("kraftwerk28.plugins")
-
--- if fn.has("unix") == 1 then
---   -- Clicking any link pointing to neovim or vim docs site
---   -- will open :help split in existing neovim session, if any
---   -- (required corresponding .desktop file which replaces browser
---   pcall(fn.serverstart, "localhost:" .. (vim.env.NVIM_LISTEN_PORT or 6969))
--- end
 
 au("TextYankPost", {
   callback = function()
@@ -182,51 +175,3 @@ au("FocusGained", {
     fn.system("pwd > /tmp/last_pwd")
   end,
 })
-
---[[
-local vt_ns_ids = {}
--- local old_vt_show = vim.diagnostic.handlers.virtual_text.show
--- local old_vt_hide = vim.diagnostic.handlers.virtual_text.hide
-vim.diagnostic.handlers["virtual_text"] = {
-  show = function(namespace, bufnr, diagnostics, opts)
-    local buf_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
-    local margin = 4
-    local virt_text_win_col = 0
-
-    if not bufnr or bufnr == 0 then
-      bufnr = vim.api.nvim_get_current_buf()
-    end
-    -- opts = opts or {}
-    -- local x = ''
-    -- y = ''
-
-    local vt_ns_id = vim.api.nvim_create_namespace("")
-    vt_ns_ids[namespace] = vt_ns_id
-    local text_per_line = {}
-    for _, d in ipairs(diagnostics) do
-      local diag_messages = text_per_line[d.lnum] or {}
-      local m = #buf_lines[d.lnum + 1] + margin
-      if m > virt_text_win_col then
-        virt_text_win_col = m
-      end
-      table.insert(diag_messages, d.message)
-      text_per_line[d.lnum] = diag_messages
-    end
-
-    for line, texts in pairs(text_per_line) do
-      vim.api.nvim_buf_set_extmark(bufnr, vt_ns_id, line, 0, {
-        virt_text = vim.tbl_map(function(t)
-          return { t, "Normal" }
-        end, texts),
-        virt_text_win_col = virt_text_win_col,
-      })
-    end
-  end,
-  hide = function(namespace, bufnr)
-    local ns = vt_ns_ids[namespace]
-    if ns then
-      vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
-    end
-  end,
-}
-]]
