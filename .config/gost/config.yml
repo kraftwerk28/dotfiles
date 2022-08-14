@@ -29,6 +29,8 @@ blocks:
   - name: shell
     command: ~/.config/sway/bar-scripts/air_alerts.py
     json: true
+    on_click: |
+      [ $BUTTON = Left ] && xdg-open 'https://alerts.in.ua'
 
   - name: shell
     command: ~/.config/sway/bar-scripts/weather.sh

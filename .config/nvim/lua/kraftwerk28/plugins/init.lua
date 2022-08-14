@@ -223,7 +223,13 @@ local function load(use)
       vim.keymap.set("v", "<Leader>ea", "<Plug>(EasyAlign)")
     end,
   })
-  use({ "mfussenegger/nvim-dap" })
+
+  use({
+    "mfussenegger/nvim-dap",
+    config = function()
+      require("kraftwerk28.plugins.dap")
+    end,
+  })
 
   use({
     "jose-elias-alvarez/null-ls.nvim",

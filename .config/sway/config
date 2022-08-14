@@ -458,7 +458,7 @@ output $external_hdmi position 0 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color
-output $laptop   background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
