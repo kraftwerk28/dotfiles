@@ -1,4 +1,5 @@
-" NOTE: this file 
+" NOTE: this file must remain in vimL, as it is sourced by Ideavim which
+" doesn't support lua
 set termguicolors
 set background=dark
 set hidden
