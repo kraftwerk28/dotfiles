@@ -23,21 +23,27 @@ local lsp, fn, api = vim.lsp, vim.fn, vim.api
 -- highlight {"DiagnosticsError", fg = "Red"}
 -- api.nvim_set_hl(ns, "FloatBorder", { fg = "Gray" })
 
-fn.sign_define("DiagnosticSignHint", {
-  text = vim.g.diagnostic_signs.HINT,
-  texthl = "DiagnosticSignHint",
-})
-fn.sign_define("DiagnosticSignInfo", {
-  text = vim.g.diagnostic_signs.INFO,
-  texthl = "DiagnosticSignInfo",
-})
-fn.sign_define("DiagnosticSignWarn", {
-  text = vim.g.diagnostic_signs.WARN,
-  texthl = "DiagnosticSignWarn",
-})
-fn.sign_define("DiagnosticSignError", {
-  text = vim.g.diagnostic_signs.ERROR,
-  texthl = "DiagnosticSignError",
+fn.sign_define({
+  {
+    name = "DiagnosticSignHint",
+    text = vim.g.diagnostic_signs.HINT,
+    texthl = "DiagnosticSignHint",
+  },
+  {
+    name = "DiagnosticSignInfo",
+    text = vim.g.diagnostic_signs.INFO,
+    texthl = "DiagnosticSignInfo",
+  },
+  {
+    name = "DiagnosticSignWarn",
+    text = vim.g.diagnostic_signs.WARN,
+    texthl = "DiagnosticSignWarn",
+  },
+  {
+    name = "DiagnosticSignError",
+    text = vim.g.diagnostic_signs.ERROR,
+    texthl = "DiagnosticSignError",
+  },
 })
 
 local function override_hl(name, val)

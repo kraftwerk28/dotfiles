@@ -64,15 +64,8 @@ m("n", "<Leader>dr", dap.repl.open)
 -- `DapStopped` to indicate where the debugee is stopped (default: `→`)
 -- `DapBreakpointRejected` to indicate breakpoints rejected by the debug adapter (default: `R`)
 
-vim.fn.sign_define("DapBreakpoint", {
-  text = "",
-  texthl = "Error",
-})
-vim.fn.sign_define("DapBreakpointCondition", {
-  text = "",
-  texthl = "Boolean",
-})
-vim.fn.sign_define("DapStopped", {
-  text = "",
-  texthl = "Define",
+vim.fn.sign_define({
+  { name = "DapBreakpoint", text = "", texthl = "Error" },
+  { name = "DapBreakpointCondition", text = "", texthl = "Boolean" },
+  { name = "DapStopped", text = "", texthl = "Define" },
 })
