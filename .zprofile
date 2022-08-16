@@ -1,7 +1,7 @@
 env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
 if [[ -x "$env_gen" ]]; then
 	while read -r line; do
-		eval export "$line"
+		eval "export $line"
 	done < <("$env_gen")
 fi
 
@@ -69,11 +69,20 @@ export NVIM_LISTEN_PORT=6969
 
 export CMAKE_EXPORT_COMPILE_COMMANDS=1
 
+# Start sway automatically on tty1
 if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
+	export GTK_USE_PORTAL=1
+	export MOZ_ENABLE_WAYLAND=1
+	export QT_QPA_PLATFORM=wayland
+	export QT_QPA_PLATFORMTHEME=qt5ct
+	export XDG_CURRENT_DESKTOP=sway
+	export _JAVA_AWT_WM_NONREPARENTING=1
+	# export WLR_RENDERER=vulkan
+
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date -Is).log"
-	# export WLR_RENDERER=vulkan
+
 	exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \

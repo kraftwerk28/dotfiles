@@ -386,8 +386,8 @@ mouse_resizing_mode eight_direction
 
 # Cursor {{{
 # Path int /usr/share/icons
-set $cursor_theme "Simp1e-Breeze-Snow"
-set $cursor_size 32
+set $cursor_theme "Breeze_Snow"
+set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
@@ -421,11 +421,10 @@ for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
-for_window [title="xeyes"] floating enable; sticky enable
+for_window [title="xeyes"] floating enable, border normal $border_width, sticky enable
 for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
-# for_window [tiling app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^foot_floating$"] floating enable
 for_window [app_id="^gnome-calculator$"] floating enable
 for_window [app_id="^org.gnome.Calculator$"] floating enable
