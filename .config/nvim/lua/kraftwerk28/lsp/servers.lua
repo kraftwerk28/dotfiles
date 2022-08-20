@@ -118,6 +118,10 @@ lspconfig.tsserver.setup({
     c.documentRangeFormattingProvider = false
   end,
   capabilities = make_cpb(),
+  -- init_options = {
+  --   logVerbosity = "verbose",
+  --   maxTsServerMemory = 4096,
+  -- },
 })
 
 -- lspconfig.flow.setup {

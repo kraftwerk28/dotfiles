@@ -399,11 +399,11 @@ exec_always {
 # }}}
 
 # Autostart {{{
-exec {
-	# blueman-applet
-	kdeconnect-indicator
-	$scripts/enhance.lua
-}
+exec $scripts/enhance.lua
+# exec {
+# 	blueman-applet
+# 	kdeconnect-indicator
+# }
 
 exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
 	"workspace 5, layout tabbed," \

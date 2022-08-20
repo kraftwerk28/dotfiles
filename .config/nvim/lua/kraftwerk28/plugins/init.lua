@@ -160,7 +160,7 @@ local function load(use)
     requires = { "b0o/schemastore.nvim" },
     -- "~/projects/neovim/nvim-lspconfig",
     config = function()
-      require("kraftwerk28.plugins.lsp_servers")
+      require("kraftwerk28.lsp.servers")
     end,
   })
 
