@@ -37,13 +37,12 @@ local ok, err = pcall(function()
   --   colors = { hint = "orange", error = "#ff0000" },
   --   hide_inactive_statusline = false,
   -- })
-  -- require("onedark").setup({ style = "darker" })
-  -- require("onedark").load()
+  require("onedark").setup({})
 
-  -- local colorscheme = "github_dark_default"
-  local colorscheme = "kanagawa"
-  -- local colorscheme = "base16-gruvbox-light-medium"
-  vim.cmd("colorscheme " .. colorscheme)
+  -- vim.cmd("colorscheme github_dark_default")
+  -- vim.cmd("colorscheme base16-gruvbox-light-medium")
+  -- vim.cmd("colorscheme kanagawa")
+  vim.cmd("colorscheme onedark")
 end)
 
 if not ok then
@@ -77,6 +76,10 @@ load("kraftwerk28.tabline")
 load("kraftwerk28.statusline")
 load("kraftwerk28.filetype")
 load("kraftwerk28.plugins")
+
+load("kraftwerk28.netrw")
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 au("TextYankPost", {
   callback = function()

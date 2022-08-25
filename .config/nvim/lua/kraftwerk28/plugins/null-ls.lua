@@ -48,7 +48,7 @@ local porth_diagnostic = h.make_builtin({
   filetypes = { "porth" },
   method = m.internal.DIAGNOSTICS,
   generator_opts = {
-    command = vim.env.HOME .. "/projects/porth/porth",
+    command = "porth",
     args = function(p)
       return { "com", p.temp_path }
     end,
@@ -91,7 +91,6 @@ require("null-ls").setup({
     b.formatting.prettier.with({
       filetypes = { "graphql" },
     }),
-
     b.diagnostics.luacheck.with({
       args = vim.tbl_flatten({
         "--formatter",
@@ -107,7 +106,6 @@ require("null-ls").setup({
       }),
     }),
     b.formatting.stylua,
-
     b.diagnostics.shellcheck.with({
       condition = function()
         return vim.fn.expand("%:t") ~= "PKGBUILD"
@@ -118,7 +116,6 @@ require("null-ls").setup({
         return vim.fn.expand("%:t") ~= "PKGBUILD"
       end,
     }),
-
     porth_diagnostic,
     jq_format,
     -- b.formatting.sqlformat,

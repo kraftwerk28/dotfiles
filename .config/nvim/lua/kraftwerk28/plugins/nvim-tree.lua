@@ -1,25 +1,17 @@
 local nt = require("nvim-tree")
+local api = require("nvim-tree.api")
 
 m("n", "<F3>", function()
-  if vim.o.filetype == "NvimTree" then
-    return ":NvimTreeClose<CR>"
-  else
-    return ":NvimTreeOpen<CR>"
-  end
-end, { silent = true, expr = true })
+  api.tree.toggle()
+end)
 
 m("n", "<Leader><F3>", function()
-  if vim.o.filetype == "NvimTree" then
-    return ":NvimTreeClose<CR>"
-  else
-    return ":NvimTreeFindFile<CR>"
-  end
-end, { silent = true, expr = true })
+  api.tree.toggle(true)
+end)
 
 nt.setup({
-  disable_netrw = false,
-  hijack_netrw = true,
-  hijack_cursor = true,
+  -- disable_netrw = false,
+  hijack_netrw = false,
   git = {
     ignore = false,
   },
@@ -47,16 +39,23 @@ nt.setup({
           symlink = "",
           symlink_open = "",
         },
-        git = {
-          unstaged = "✗",
-          staged = "✓",
-          unmerged = "",
-          renamed = "➜",
-          untracked = "",
-          deleted = "",
-          ignored = "",
-        },
+        -- git = {
+        --   unstaged = "✗",
+        --   staged = "✓",
+        --   unmerged = "",
+        --   renamed = "➜",
+        --   untracked = "",
+        --   deleted = "",
+        --   ignored = "",
+        -- },
       },
     },
   },
+  on_attach = function(bufnr)
+    m:withopt({ buffer = bufnr }, function()
+      -- Simulate ranger's behavior
+      m("n", "h", api.node.open.edit)
+      m("n", "l", api.node.open.edit)
+    end)
+  end,
 })

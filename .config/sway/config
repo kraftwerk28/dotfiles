@@ -20,14 +20,12 @@ set $right l
 bindsym --to-code {
 	$mod+Return exec foot
 	$modr+Return exec foot
-	$mod+Shift+Return exec foot \
-		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
-	$modr+Shift+Return exec foot \
-		--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$mod+Shift+Return exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$modr+Shift+Return exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	$mod+f2 exec foot $SHELL -i -c "cd $HOME/.config/sway && nvim config"
-}
 
-bindsym --to-code {
+	$mod+Control+Shift+f exec nautilus --new-window
+
 	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
 	# based on this variable
 	$mod+p exec env -u XDG_CURRENT_DESKTOP \
@@ -195,39 +193,49 @@ bindsym {
 }
 
 bindsym --to-code $mod+r mode "resize"
-mode "resize" bindsym {
-	$left  resize shrink width  20px
-	$down  resize grow   height 20px
-	$up    resize shrink height 20px
-	$right resize grow   width  20px
-	Return mode default
-	Escape mode default
+mode "resize" {
+	bindsym {
+		$left  resize shrink width  20px
+		$down  resize grow   height 20px
+		$up    resize shrink height 20px
+		$right resize grow   width  20px
+		Return mode default
+		Escape mode default
+	}
 }
 
 bindsym --to-code $mod+f12 mode "nested sway"
-mode "nested sway" bindsym {
-	$mod+f12 mode default
+mode "nested sway" {
+	bindsym $mod+f12 mode default
 }
 
 bindsym --to-code $mod+Shift+w mode "move workspace"
-mode "move workspace" bindsym --to-code {
-	$left  move workspace to output left,  mode default
-	$right move workspace to output right, mode default
-	Escape mode default
+mode "move workspace" {
+	bindsym --to-code {
+		$left  move workspace to output left,  mode default
+		$right move workspace to output right, mode default
+		Escape mode default
+	}
 }
 
 bindsym --to-code $mod+Shift+b mode "set window border"
-mode "set window border" bindsym --to-code {
-	n border normal, mode default
-	p border pixel, mode default
-	Escape mode default
+mode "set window border" {
+	bindsym --to-code {
+		n border normal, mode default
+		p border pixel, mode default
+		Escape mode default
+	}
 }
 
 bindsym --to-code $mod+Shift+o mode "manage output"
-mode "manage output" bindsym --to-code {
-	t output - toggle, mode default
-	a output * enable, mode default
-	Escape mode default
+mode "manage output" {
+	bindsym --to-code {
+		# t nop output toggle, mode default
+		# a nop output enable_all, mode default
+		t output - toggle, mode default
+		a output * enable, mode default
+		Escape mode default
+	}
 }
 
 # }}}
@@ -436,8 +444,8 @@ set $laptop eDP-1
 set $external_usb DP-1
 set $external_hdmi DP-3
 
-bindswitch lid:on  output $laptop disable
-bindswitch lid:off output $laptop enable
+# bindswitch lid:on  output $laptop disable
+# bindswitch lid:off output $laptop enable
 # output $laptop scale 1.2
 # output $laptop scale 1
 # output $laptop   position 0    1700

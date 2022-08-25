@@ -7,22 +7,11 @@ local function load(use)
     requires = { "nvim-lua/plenary.nvim" },
   })
 
-  -- use {
-  --   disable = true,
-  --   "~/projects/neovim/wpm.nvim",
-  --   config = function()
-  --     require("wpm").setup()
-  --   end,
-  -- }
-
   -- Themes
-  use({ "navarasu/onedark.nvim" })
+  use("navarasu/onedark.nvim")
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
-  use({
-    -- "~/projects/neovim/nvim-base16",
-    "RRethy/nvim-base16",
-    -- disable = true,
-  })
+  -- use("~/projects/neovim/nvim-base16")
+  use("RRethy/nvim-base16")
   use({ "projekt0n/github-nvim-theme" })
   use({ "rebelot/kanagawa.nvim" })
 
@@ -31,12 +20,16 @@ local function load(use)
   use({
     "tpope/vim-surround",
     config = function()
-      local char2nr = vim.fn.char2nr
-      vim.g["surround_" .. char2nr("r")] = "{'\r'}"
-      vim.g["surround_" .. char2nr("j")] = "{/* \r */}"
-      vim.g["surround_" .. char2nr("c")] = "/* \r */"
-      vim.g["surround_" .. char2nr("l")] = "[[\r]]"
-      vim.g["surround_" .. char2nr("i")] = "\1before: \1\r\2after: \2"
+      local surr = setmetatable({}, {
+        __newindex = function(_, k, v)
+          vim.g["surround_" .. vim.fn.char2nr(k)] = v
+        end,
+      })
+      surr["r"] = "{'\r'}"
+      surr["j"] = "{/* \r */}"
+      surr["c"] = "/* \r */"
+      surr["l"] = "[[\r]]"
+      surr["i"] = "\1before: \1\r\2after: \2"
     end,
   })
 
@@ -47,10 +40,11 @@ local function load(use)
         "default",
         { prefer_single_line_comments = true }
       )
-      local opt = { silent = true, remap = true }
-      vim.keymap.set("n", "<C-/>", "gcc", opt)
-      vim.keymap.set("i", "<C-/>", "<C-O>:normal! gcc<CR>", opt)
-      vim.keymap.set("x", "<C-/>", "gcgv", opt)
+      m:withopt({ silent = true, remap = true }, function()
+        m("n", "<C-/>", "gcc")
+        m("i", "<C-/>", "<C-O>:normal! gcc<CR>")
+        m("x", "<C-/>", "gcgv")
+      end)
     end,
   })
 
@@ -78,13 +72,15 @@ local function load(use)
     "tpope/vim-fugitive",
     requires = { "tpope/vim-rhubarb", "tommcdo/vim-fubitive" },
     config = function()
-      vim.keymap.set("n", "<Leader>gs", "<Cmd>vert Git<CR>")
-      vim.keymap.set({ "n", "v" }, "<Leader>gb", ":GBrowse<CR>")
+      m:withopt({ silent = true }, function()
+        m("n", "<Leader>gs", "<Cmd>vert Git<CR>")
+        m({ "n", "v" }, "<Leader>gb", ":GBrowse<CR>")
 
-      -- Merge conflicts
-      vim.keymap.set("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
-      vim.keymap.set("n", "<Leader>gh", "<Cmd>diffget //2<CR>")
-      vim.keymap.set("n", "<Leader>gl", "<Cmd>diffget //3<CR>")
+        -- Merge conflicts
+        m("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
+        m("n", "<Leader>gh", "<Cmd>diffget //2<CR>")
+        m("n", "<Leader>gl", "<Cmd>diffget //3<CR>")
+      end)
     end,
   })
 
@@ -200,7 +196,7 @@ local function load(use)
     "kyazdani42/nvim-tree.lua",
     requires = { "kyazdani42/nvim-web-devicons", opt = true },
     config = function()
-      require("kraftwerk28.plugins.nvimtree")
+      require("kraftwerk28.plugins.nvim-tree")
     end,
   })
 
@@ -235,7 +231,7 @@ local function load(use)
     "jose-elias-alvarez/null-ls.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("kraftwerk28.plugins.null_ls")
+      require("kraftwerk28.plugins.null-ls")
     end,
   })
 

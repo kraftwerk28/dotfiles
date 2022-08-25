@@ -38,42 +38,38 @@ m("n", "<C-Down>", "<C-F>M")
 m("v", ">", ">gv")
 m("v", "<", "<gv")
 
-m:opt({ silent = true })
+m:withopt({ silent = true }, function()
+  -- Buffer navigation
+  m("n", "<M-]>", "<Cmd>bnext<CR>")
+  m("n", "<M-[>", "<Cmd>bprevious<CR>")
 
--- Buffer navigation
-m("n", "<M-]>", "<Cmd>bnext<CR>")
-m("n", "<M-[>", "<Cmd>bprevious<CR>")
+  -- Tab navigation
+  m("n", "th", "<Cmd>tabprevious<CR>")
+  m("n", "tj", "<Cmd>tablast<CR>")
+  m("n", "tk", "<Cmd>tabfirst<CR>")
+  m("n", "tl", "<Cmd>tabnext<CR>")
+  m("n", "tt", "<Cmd>tabnew<CR>")
+  m("n", "td", "<Cmd>tabclose<CR>")
+  m("n", "tH", "<Cmd>-tabmove<CR>")
+  m("n", "tL", "<Cmd>+tabmove<CR>")
 
--- Tab navigation
-m("n", "th", "<Cmd>tabprevious<CR>")
-m("n", "tj", "<Cmd>tablast<CR>")
-m("n", "tk", "<Cmd>tabfirst<CR>")
-m("n", "tl", "<Cmd>tabnext<CR>")
-m("n", "tt", "<Cmd>tabnew<CR>")
-m("n", "td", "<Cmd>tabclose<CR>")
-m("n", "tH", "<Cmd>-tabmove<CR>")
-m("n", "tL", "<Cmd>+tabmove<CR>")
-
-for i = 1, 9 do
-  m("n", ("<M-%d>"):format(i), ("<Cmd>%dtabnext<CR>"):format(i))
-end
-
-m:unopt()
+  for i = 1, 9 do
+    m("n", ("<M-%d>"):format(i), ("<Cmd>%dtabnext<CR>"):format(i))
+  end
+end)
 
 m("n", "<Leader>hs", function()
   lo.hlsearch = not lo.hlsearch:get()
 end)
 
-m:opt({ silent = true })
+m:withopt({ silent = true }, function()
+  m("n", "<Leader>w", "<Cmd>wall<CR>")
 
-m("n", "<Leader>w", "<Cmd>wall<CR>")
-
-m("n", "<M-k>", "<Cmd>m-2<CR>")
-m("n", "<M-j>", "<Cmd>m+1<CR>")
-m("v", "<M-k>", ":m'<-2<CR>gv")
-m("v", "<M-j>", ":m'>+1<CR>gv")
-
-m:unopt()
+  m("n", "<M-k>", "<Cmd>m-2<CR>")
+  m("n", "<M-j>", "<Cmd>m+1<CR>")
+  m("v", "<M-k>", ":m'<-2<CR>gv")
+  m("v", "<M-j>", ":m'>+1<CR>gv")
+end)
 
 m("i", "<C-BS>", "<C-W>")
 m("v", "/", [["vy/<C-R>v<CR>]])

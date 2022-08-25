@@ -125,28 +125,28 @@ ls.config.set_config({
   updateevents = "TextChanged,TextChangedI",
 })
 
-m:opt({ silent = true })
-m({ "s", "i" }, "<C-L>", function()
-  if ls.expand_or_jumpable() then
-    return "<Plug>luasnip-expand-or-jump"
-  else
-    return "<C-L>"
-  end
-end, { silent = true, expr = true })
+m:withopt({ silent = true, expr = true }, function()
+  m({ "s", "i" }, "<C-L>", function()
+    if ls.expand_or_jumpable() then
+      return "<Plug>luasnip-expand-or-jump"
+    else
+      return "<C-L>"
+    end
+  end)
 
-m({ "s", "i" }, "<C-H>", function()
-  if ls.jumpable(-1) then
-    return "<Plug>luasnip-jump-prev"
-  else
-    return "<C-H>"
-  end
-end, { silent = true, expr = true })
+  m({ "s", "i" }, "<C-H>", function()
+    if ls.jumpable(-1) then
+      return "<Plug>luasnip-jump-prev"
+    else
+      return "<C-H>"
+    end
+  end)
 
-m({ "s", "i" }, "<C-;>", function()
-  if ls.choice_active() then
-    return "<Plug>luasnip-next-choice"
-  else
-    return "<C-;>"
-  end
-end, { silent = true, expr = true })
-m:unopt()
+  m({ "s", "i" }, "<C-;>", function()
+    if ls.choice_active() then
+      return "<Plug>luasnip-next-choice"
+    else
+      return "<C-;>"
+    end
+  end)
+end)

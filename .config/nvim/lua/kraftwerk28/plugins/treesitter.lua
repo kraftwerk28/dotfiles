@@ -91,6 +91,7 @@ local enabled_linux = {
   "surface",
   "svelte",
   "swift",
+  -- "sql",
   "teal",
   "tlaplus",
   "todotxt",

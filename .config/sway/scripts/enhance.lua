@@ -39,6 +39,7 @@ ipc:main(function()
     end
     ipc:command("workspace " .. focused_ws)
   end)
+
   ipc.cmd:on("tab", function(arg)
     local tabbed_node = ipc:get_tree():walk_focus(function(n)
       return n.layout == "tabbed"
@@ -80,6 +81,22 @@ ipc:main(function()
       ipc:command(("[con_id=%s] floating enable"):format(event.container.id))
     end)
   end)
+
+  -- ipc.cmd:on("output", function(arg1)
+  --   local outputs = ipc:get_outputs()
+  --   local focused
+  --   for _, outp in ipairs(outputs) do
+  --     if outp.focused then
+  --       focused = outp
+  --       break
+  --     end
+  --   end
+  --   if arg1 == "toggle" then
+  --     ipc:command(("output %s toggle"):format(focused.name))
+  --   elseif arg1 == "enable_all" then
+  --     ipc:command("output * enable")
+  --   end
+  -- end)
 
   ipc:on("window::focus", function(event)
     previous_focused = current_focused

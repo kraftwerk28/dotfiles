@@ -1,14 +1,25 @@
 _G.m = setmetatable({
-  opt = function(self, o)
-    self.o = o
-  end,
-  unopt = function(self)
-    self.o = nil
+  opt_stack = {},
+  withopt = function(self, opts, fn)
+    vim.validate({ opts = { opts, "t" }, fn = { fn, "f" } })
+    table.insert(self.opt_stack, opts)
+    fn()
+    table.remove(self.opt_stack)
   end,
 }, {
   __call = function(self, mode, lhs, rhs, opts)
-    opts = vim.tbl_extend("force", self.o or {}, opts or {})
-    vim.keymap.set(mode, lhs, rhs, opts)
+    vim.validate({
+      mode = { mode, { "s", "t" } },
+      lhs = { lhs, "s" },
+      rhs = { rhs, { "s", "f" } },
+      opts = { opts, "t", true },
+    })
+    local merged = {}
+    for _, o in ipairs(self.opt_stack) do
+      merged = vim.tbl_extend("force", merged, o)
+    end
+    merged = vim.tbl_extend("force", merged, opts or {})
+    vim.keymap.set(mode, lhs, rhs, merged)
   end,
 })
 
