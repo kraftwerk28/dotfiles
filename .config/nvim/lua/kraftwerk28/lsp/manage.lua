@@ -61,6 +61,24 @@ local function restart_server()
   end)
 end
 
-m("n", "<Leader>lsta", start_server)
-m("n", "<Leader>lsto", stop_server)
-m("n", "<Leader>lr", restart_server)
+local actions = {
+  start = start_server,
+  stop = stop_server,
+  restart = restart_server,
+}
+
+vim.api.nvim_create_user_command("Lsp", function(arg)
+  local f = actions[arg.args]
+  if f ~= nil then
+    f()
+  end
+end, {
+  nargs = 1,
+  complete = function()
+    return vim.tbl_keys(actions)
+  end,
+})
+
+-- m("n", "<Leader>lsta", start_server)
+-- m("n", "<Leader>lsto", stop_server)
+-- m("n", "<Leader>lr", restart_server)

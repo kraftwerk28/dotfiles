@@ -2,29 +2,6 @@ local lsp, fn, api = vim.lsp, vim.fn, vim.api
 
 require("kraftwerk28.lsp.manage")
 
--- api.create_user_command("LspLog", function()
---   vim.cmd("edit " .. vim.lsp.get_log_path())
--- end, { nargs = 0 })
-
--- highlight {"DiagnosticUnderlineHint", gui = "undercurl"}
--- highlight {"DiagnosticUnderlineInformation", gui = "undercurl"}
--- highlight {
---   "DiagnosticUnderlineWarning",
---   gui = "undercurl",
---   -- guisp = "Orange",
--- }
--- highlight {"DiagnosticsUnderlineError", gui = "undercurl", guisp = "Red"}
--- highlight {"DiagnosticUnderlineError", gui = "undercurl"}
--- --
-
--- local ns = api.nvim_create_namespace("lsp-hl")
-
--- highlight {"DiagnosticsHint", fg = "Yellow"}
--- api.nvim_set_hl(ns, "DiagnosticInfo", { fg = "LightBlue" })
--- highlight {"DiagnosticWarn", guifg = "Orange"}
--- highlight {"DiagnosticsError", fg = "Red"}
--- api.nvim_set_hl(ns, "FloatBorder", { fg = "Gray" })
-
 fn.sign_define({
   {
     name = "DiagnosticSignHint",

@@ -37,7 +37,10 @@ local ok, err = pcall(function()
   --   colors = { hint = "orange", error = "#ff0000" },
   --   hide_inactive_statusline = false,
   -- })
-  require("onedark").setup({})
+  require("onedark").setup({
+    style = "warmer",
+    ending_tildes = true,
+  })
 
   -- vim.cmd("colorscheme github_dark_default")
   -- vim.cmd("colorscheme base16-gruvbox-light-medium")

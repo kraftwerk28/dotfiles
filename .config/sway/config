@@ -360,6 +360,8 @@ input type:pointer {
 	accel_profile flat
 }
 
+# input type:keyboard { # Crashes firefox on sway reload
+
 input type:keyboard {
 	xkb_layout "us(altgr-intl),ua"
 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
@@ -367,12 +369,34 @@ input type:keyboard {
 	repeat_rate 25
 }
 
+# input "1:1:AT_Translated_Set_2_keyboard" {
+# 	xkb_layout "us(altgr-intl),ua"
+# 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
+# 	repeat_delay 300
+# 	repeat_rate 25
+# }
+
+# input "1452:591:Keychron_Keychron_K3" {
+# 	xkb_layout "us(altgr-intl),ua"
+# 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
+# 	repeat_delay 300
+# 	repeat_rate 25
+# }
+
+# input "1452:591:Keychron_K3" {
+# 	xkb_layout "us(altgr-intl),ua"
+# 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
+# 	repeat_delay 300
+# 	repeat_rate 25
+# }
+
 input type:touchpad {
 	tap enabled
 	natural_scroll enabled
 	click_method clickfinger
 	dwt enabled
 }
+
 # }}}
 
 # Various options {{{
@@ -470,33 +494,9 @@ output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue
 output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
 
-# exec swayidle -w \
-# 	# timeout 300 'swaylock -f -c 000000' \
-# 	timeout 6 'swaymsg "output * power off"' \
-# 	resume 'swaymsg "output * power on"'
-# 	# before-sleep 'swaylock -f -c 000000'
-
-# swaylock ... && swaymsg output "*" power off
-# swayidle \
-# 	timeout 300 'if pgrep swaylock; then swaymsg output "*" power off' \
-# 	resume 'then swaymsg output "*" power on'
-
-# bindswitch lid:toggle exec swaylock \
-# 	--image $HOME/Pictures/scp_wallpaper_1.jpg \
-# 	--font "Hack Bold" \
-# 	--indicator-radius 96 \
-# 	--indicator-thickness 16 \
-# 	--scaling fill \
-# 	--ring-color "00000000" \
-# 	--key-hl-color "ffffff" \
-# 	--inside-color "000000"
-
-# bindswitch lid:on \
-# 	input type:keyboard events disabled, \
-# 	input type:pointer  events disabled
-# bindswitch lid:off \
-# 	input type:keyboard events enabled, \
-# 	input type:pointer  events enabled
+exec swayidle -w \
+	timeout $((3 * 60)) 'swaymsg "output * power off"' \
+	resume 'swaymsg "output * power on"'
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 

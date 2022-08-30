@@ -42,7 +42,7 @@ local function load(use)
       )
       m:withopt({ silent = true, remap = true }, function()
         m("n", "<C-/>", "gcc")
-        m("i", "<C-/>", "<C-O>:normal! gcc<CR>")
+        m("i", "<C-/>", "<C-O>:normal gcc<CR>")
         m("x", "<C-/>", "gcgv")
       end)
     end,

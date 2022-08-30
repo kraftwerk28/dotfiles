@@ -54,8 +54,21 @@ nt.setup({
   on_attach = function(bufnr)
     m:withopt({ buffer = bufnr }, function()
       -- Simulate ranger's behavior
-      m("n", "h", api.node.open.edit)
-      m("n", "l", api.node.open.edit)
+      m("n", "o", "<Nop>")
+      m("n", "h", function()
+        local node = api.tree.get_node_under_cursor()
+        if node.open then
+          api.node.open.edit()
+        else
+          api.node.navigate.parent_close()
+        end
+      end)
+      m("n", "l", function()
+        local node = api.tree.get_node_under_cursor()
+        if not node.open then
+          api.node.open.edit()
+        end
+      end)
     end)
   end,
 })

@@ -2,6 +2,8 @@
 
 fpath+=("$HOME/.zfunc")
 
+dot_config="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+
 # zmodload zsh/zprof
 # setopt xtrace
 
@@ -32,7 +34,7 @@ requires () {
 }
 
 plug () {
-	for c in {/usr/share/zsh/plugins,$HOME/.config/zsh/plugins}/$1/$1.plugin.zsh; do
+	for c in {/usr/share/zsh/plugins,$dot_config/plugins}/$1/$1.plugin.zsh; do
 		if [[ -f $c ]]; then
 			source "$c"
 			return
@@ -69,10 +71,14 @@ KEYTIMEOUT=true
 
 compinit
 
-zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' add-space false
+zstyle ':completion:*' menu select
 zstyle ':completion:*' special-dirs true
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' completer _complete _approximate
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/.zcompcache"
 
 # FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
 HISTFILE="$HOME/.zsh_history"
@@ -88,29 +94,15 @@ if [[ $TILIX_ID ]] || [[ $VTE_VERSION ]]; then
 	source "/etc/profile.d/vte.sh"
 fi
 
-NO_THEME=1
-for cfg in ${XDG_CONFIG_HOME:-~/.config}/zsh/*.zsh; do
-	if [[ $cfg =~ theme\.zsh$ && -n $NO_THEME ]]; then
-		continue
-	fi
-	source "$cfg"
-done
+source "$dot_config/alias.zsh"
+source "$dot_config/completion_scripts.zsh"
+source "$dot_config/dotfiles.zsh"
+source "$dot_config/idle_notifier.zsh"
+source "$dot_config/prompt.zsh"
 
 WORDCHARS='-'
 
-bindkeys () {
-	# bindkey -v "^[[A" history-search-backward
-	# bindkey -v "^[[B" history-search-forward
-	# bindkey -v "^R" history-incremental-search-backward
-	# bindkey -v "^[r" history-incremental-search-forward
-	bindkey -M viins '^R' fzf_history_search
-	bindkey -M viins '^ ' autosuggest-accept # Control+Space
-	bindkey -M viins '^[[Z' reverse-menu-complete # Shift+Tab
-	bindkey -M viins "^H" backward-kill-word
-	# bindkey -v "^H" vi-backward-kill-word # Shift+Backspace
-	bindkey -M viins -s '^[l' $'ls\n'
-	bindkey -M viins '^I' complete-word
-}
+bindkeys () { source "$dot_config/bindkey.zsh" }
 
 zvm_after_init_commands=(bindkeys)
 

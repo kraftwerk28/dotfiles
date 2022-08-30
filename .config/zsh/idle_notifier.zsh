@@ -32,7 +32,7 @@ remember_time() {
 
 notify_on_exit() {
 	local exit_code=$?
-	if [[ -z $PREEXEC_TIMESTAMP ]]; then
+	if [[ -z $PREEXEC_TIMESTAMP || -z $SWAYSOCK ]]; then
 		return
 	fi
 	local diff="$(( $(date +%s) - PREEXEC_TIMESTAMP ))"
