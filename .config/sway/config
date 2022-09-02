@@ -443,10 +443,6 @@ exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
 
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
-# exec swayidle \
-# 	after-resume 'swaymsg output "*" power on'
-# }}}
-
 # Window rules {{{
 for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
 for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky enable
@@ -494,9 +490,7 @@ output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue
 output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
 
-exec swayidle -w \
-	timeout $((3 * 60)) 'swaymsg "output * power off"' \
-	resume 'swaymsg "output * power on"'
+exec $scripts/swayidle.sh
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 

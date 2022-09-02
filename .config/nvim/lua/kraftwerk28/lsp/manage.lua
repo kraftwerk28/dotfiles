@@ -13,7 +13,7 @@ local function start_server()
     return
   end
   vim.ui.select(matching, {
-    prompt_title = "Start LSP server",
+    prompt = "Start LSP server",
   }, function(name)
     if name == nil then
       return
@@ -25,7 +25,7 @@ end
 local function stop_server()
   local clients = vim.lsp.get_active_clients()
   vim.ui.select(clients, {
-    prompt = "Restart LSP server",
+    prompt = "Stop LSP server",
     format_item = function(c)
       return ("%s %s"):format(c.name, c.config.root_dir)
     end,
@@ -61,24 +61,23 @@ local function restart_server()
   end)
 end
 
-local actions = {
-  start = start_server,
-  stop = stop_server,
-  restart = restart_server,
-}
+-- local actions = {
+--   start = start_server,
+--   stop = stop_server,
+--   restart = restart_server,
+-- }
+-- vim.api.nvim_create_user_command("Lsp", function(arg)
+--   local f = actions[arg.args]
+--   if f ~= nil then
+--     f()
+--   end
+-- end, {
+--   nargs = 1,
+--   complete = function()
+--     return vim.tbl_keys(actions)
+--   end,
+-- })
 
-vim.api.nvim_create_user_command("Lsp", function(arg)
-  local f = actions[arg.args]
-  if f ~= nil then
-    f()
-  end
-end, {
-  nargs = 1,
-  complete = function()
-    return vim.tbl_keys(actions)
-  end,
-})
-
--- m("n", "<Leader>lsta", start_server)
--- m("n", "<Leader>lsto", stop_server)
--- m("n", "<Leader>lr", restart_server)
+m("n", "<Leader>lsta", start_server)
+m("n", "<Leader>lsto", stop_server)
+m("n", "<Leader>lr", restart_server)
