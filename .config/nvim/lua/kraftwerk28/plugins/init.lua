@@ -133,6 +133,7 @@ local function load(use)
   use("adimit/prolog.vim")
   use("digitaltoad/vim-pug")
   use("bfrg/vim-jq")
+  use("lifepillar/pgsql.vim")
 
   use({
     -- "~/projects/neovim/nvim-treesitter",

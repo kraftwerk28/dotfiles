@@ -23,7 +23,7 @@ vim.g.diagnostic_signs = {
   INFO = " ",
   HINT = " ",
 }
-vim.g.sql_type_default = "sqlanywhere"
+vim.g.sql_type_default = "pgsql"
 
 pcall(vim.cmd, "source .nvimrc")
 
