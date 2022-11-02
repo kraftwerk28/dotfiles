@@ -33,7 +33,7 @@ cmp.setup({
           return ret
         end,
       },
-      max_item_count = 8,
+      max_item_count = 10,
       keyword_length = 5,
     },
   }),

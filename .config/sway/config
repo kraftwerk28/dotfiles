@@ -25,6 +25,7 @@ bindsym --to-code {
 	$mod+f2 exec foot $SHELL -i -c "cd $HOME/.config/sway && nvim config"
 
 	$mod+Control+Shift+f exec nautilus --new-window
+	$mod+Control+Shift+b exec firefox
 
 	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
 	# based on this variable
@@ -88,8 +89,8 @@ bindsym --to-code {
 	$mod+v splitv
 	$mod+f fullscreen
 	$mod+Shift+f floating toggle
-	$mod+a focus parent
-	$mod+Control+a focus child
+	$mod+Control+Shift+p focus parent
+	$mod+Control+Shift+c focus child
 	$mod+Shift+a focus mode_toggle
 }
 
@@ -180,28 +181,32 @@ bindsym {
 	XF86AudioLowerVolume  exec $scripts/volume-control.sh down
 	XF86AudioMute         exec $scripts/volume-control.sh toggle
 	Control+XF86AudioMute exec $scripts/volume-control.sh toggle-mic
+
 	--to-code --no-repeat $mod+m exec $scripts/volume-control.sh unmute-down
 	--to-code --release   $mod+m exec $scripts/volume-control.sh unmute-up
+
 	XF86MonBrightnessDown exec $scripts/backlight-control.sh down
 	XF86MonBrightnessUp   exec $scripts/backlight-control.sh up
-	XF86AudioPlay         exec playerctl play-pause
-	XF86AudioNext         exec playerctl next
-	XF86AudioPrev         exec playerctl previous
+
+	XF86AudioPlay exec playerctl play-pause
+	XF86AudioNext exec playerctl next
+	XF86AudioPrev exec playerctl previous
+
 	Print         exec grimvshot --notify --swaynag --area
 	Shift+Print   exec grimvshot --notify --swaynag --window
 	Control+Print exec grimvshot --notify --swaynag --screen
+
+	XF86PowerOff exec $scripts/suspend.sh
 }
 
 bindsym --to-code $mod+r mode "resize"
 mode "resize" {
-	bindsym {
-		$left  resize shrink width  20px
-		$down  resize grow   height 20px
-		$up    resize shrink height 20px
-		$right resize grow   width  20px
-		Return mode default
-		Escape mode default
-	}
+	bindsym $left  resize shrink width  20px
+	bindsym $down  resize grow   height 20px
+	bindsym $up    resize shrink height 20px
+	bindsym $right resize grow   width  20px
+	bindsym Return mode default
+	bindsym Escape mode default
 }
 
 bindsym --to-code $mod+f12 mode "nested sway"
@@ -211,31 +216,26 @@ mode "nested sway" {
 
 bindsym --to-code $mod+Shift+w mode "move workspace"
 mode "move workspace" {
-	bindsym --to-code {
-		$left  move workspace to output left,  mode default
-		$right move workspace to output right, mode default
-		Escape mode default
-	}
+	bindsym --to-code $left  move workspace to output left,  mode default
+	bindsym --to-code $right move workspace to output right, mode default
+	bindsym Escape mode default
 }
 
 bindsym --to-code $mod+Shift+b mode "set window border"
 mode "set window border" {
-	bindsym --to-code {
-		n border normal, mode default
-		p border pixel, mode default
-		Escape mode default
-	}
+	bindsym --to-code n border normal, mode default
+	bindsym --to-code p border pixel, mode default
+	bindsym Escape mode default
 }
 
 bindsym --to-code $mod+Shift+o mode "manage output"
 mode "manage output" {
-	bindsym --to-code {
-		# t nop output toggle, mode default
-		# a nop output enable_all, mode default
-		t output - toggle, mode default
-		a output * enable, mode default
-		Escape mode default
-	}
+	# bindsym --to-code t nop output toggle, mode default
+	# bindsym --to-code a nop output enable_all, mode default
+	bindsym --to-code t output - toggle, mode default
+	bindsym --to-code a output * enable, mode default
+	bindsym --to-code r output * disable, output * enable, mode default
+	bindsym Escape mode default
 }
 
 # }}}
@@ -406,27 +406,27 @@ smart_gaps on
 # gaps outer 0
 floating_modifier $mod
 smart_borders no_gaps
-default_border pixel $border_width
+default_border normal $border_width
 default_floating_border normal $border_width
 titlebar_padding 8 1
-focus_wrapping yes
+focus_wrapping workspace
 focus_follows_mouse no
 font Monospace Bold 10
-# kraftwerk28's patch only
+
+# kraftwerk28's patch only:
 mouse_resizing_mode eight_direction
+
 # }}}
 
 # Cursor {{{
 # Path int /usr/share/icons
-set $cursor_theme "Breeze_Snow"
+set $cursor_theme "xcursor-breeze-snow"
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
 	gsettings set org.gnome.desktop.interface cursor-size $cursor_size
-	# sed -i -r \
-	# 	's/^Inherits=.+/Inherits='$cursor_theme'/' \
-	# 	~/.icons/default/index.theme 2>/dev/null
+	sed -i -r 's/^Inherits=.+/Inherits='$cursor_theme'/' ~/.icons/default/index.theme
 }
 # }}}
 
@@ -436,16 +436,18 @@ exec $scripts/enhance.lua
 # 	blueman-applet
 # 	kdeconnect-indicator
 # }
-
 exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
 	"workspace 5, layout tabbed," \
 	"exec telegram-desktop, exec foot weechat, exec thunderbird"
-
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec $scripts/swayidle.sh
+# }}}
 
 # Window rules {{{
 for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
-for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, sticky enable
+for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, resize set 0 0, sticky enable
+for_window [app_id="firefox" title="^Developer Tools"] floating enable
+
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
@@ -485,12 +487,14 @@ output $external_hdmi position 0 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color
-output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # }}}
 
-exec $scripts/swayidle.sh
+# Wallpapers {{{
+# output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+# output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+output * background #000000 solid_color
+# }}}
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 

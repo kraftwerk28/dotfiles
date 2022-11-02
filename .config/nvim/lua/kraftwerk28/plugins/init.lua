@@ -8,12 +8,13 @@ local function load(use)
   })
 
   -- Themes
-  use("navarasu/onedark.nvim")
+  use({ "navarasu/onedark.nvim", disable = true })
+  use({ "ellisonleao/gruvbox.nvim", disable = false })
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   -- use("~/projects/neovim/nvim-base16")
-  use("RRethy/nvim-base16")
-  use({ "projekt0n/github-nvim-theme" })
-  use({ "rebelot/kanagawa.nvim" })
+  use({ "RRethy/nvim-base16", disable = false })
+  use({ "projekt0n/github-nvim-theme", disable = false })
+  use({ "rebelot/kanagawa.nvim", disable = false })
 
   use({ "kyazdani42/nvim-web-devicons" })
 
@@ -59,6 +60,7 @@ local function load(use)
 
   use({
     "stevearc/dressing.nvim",
+    disable = true,
     config = function()
       require("dressing").setup({
         input = {
@@ -72,15 +74,7 @@ local function load(use)
     "tpope/vim-fugitive",
     requires = { "tpope/vim-rhubarb", "tommcdo/vim-fubitive" },
     config = function()
-      m:withopt({ silent = true }, function()
-        m("n", "<Leader>gs", "<Cmd>vert Git<CR>")
-        m({ "n", "v" }, "<Leader>gb", ":GBrowse<CR>")
-
-        -- Merge conflicts
-        m("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
-        m("n", "<Leader>gh", "<Cmd>diffget //2<CR>")
-        m("n", "<Leader>gl", "<Cmd>diffget //3<CR>")
-      end)
+      require("kraftwerk28.plugins.fugitive")
     end,
   })
 
@@ -94,28 +88,6 @@ local function load(use)
     end,
   })
 
-  -- Still missing some features
-  -- use {
-  --   "TimUntersberger/neogit",
-  --   requires = {"nvim-lua/plenary.nvim"},
-  --   config = function()
-  --     local neogit = require("neogit")
-  --     local opts = {
-  --       -- commit_popup = {kind = "vsplit"},
-  --       kind = "vsplit",
-  --       mappings = {
-  --         status = {
-  --           ["="] = "Toggle",
-  --           ["X"] = "Discard",
-  --           ["<tab>"] = "",
-  --           ["x"] = "",
-  --         },
-  --       },
-  --     }
-  --     neogit.setup(opts)
-  --   end,
-  -- }
-
   use({
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -125,15 +97,16 @@ local function load(use)
   use("mattn/emmet-vim")
 
   -- Missing / not ready to use languages in tree-sitter
-  use("neovimhaskell/haskell-vim")
+  use({ "neovimhaskell/haskell-vim", disable = true })
   use("editorconfig/editorconfig-vim")
-  use("elixir-editors/vim-elixir")
+  use({ "elixir-editors/vim-elixir", disable = true })
   use("chr4/nginx.vim")
   -- use {"tpope/vim-markdown"}
   use("adimit/prolog.vim")
-  use("digitaltoad/vim-pug")
+  use({ "digitaltoad/vim-pug", disable = true })
   use("bfrg/vim-jq")
   use("lifepillar/pgsql.vim")
+  use({ "GEverding/vim-hocon", disable = true })
 
   use({
     -- "~/projects/neovim/nvim-treesitter",
@@ -203,21 +176,22 @@ local function load(use)
 
   use({ "equalsraf/neovim-gui-shim", opt = true })
 
-  -- use {
-  --   "ray-x/lsp_signature.nvim",
-  --   config = function()
-  --     require("lsp_signature").setup {
-  --       floating_window = true,
-  --       floating_window_above_cur_line = false,
-  --       hint_enable = false,
-  --     }
-  --   end,
-  -- }
+  use({
+    "ray-x/lsp_signature.nvim",
+    disable = true,
+    config = function()
+      require("lsp_signature").setup({
+        floating_window = true,
+        floating_window_above_cur_line = false,
+        hint_enable = false,
+      })
+    end,
+  })
 
   use({
     "junegunn/vim-easy-align",
     config = function()
-      vim.keymap.set("v", "<Leader>ea", "<Plug>(EasyAlign)")
+      m({ "v", "n" }, "<Leader>ea", "<Plug>(EasyAlign)")
     end,
   })
 
@@ -277,6 +251,13 @@ local function load(use)
   })
 
   use({
+    "johmsalas/text-case.nvim",
+    config = function()
+      require("kraftwerk28.plugins.textcase")
+    end,
+  })
+
+  use({
     "nvim-neorg/neorg",
     disable = true,
     requires = { "nvim-lua/plenary.nvim" },
@@ -300,10 +281,9 @@ local function load(use)
 end
 
 local function bootstrap()
-  local fn, api = vim.fn, vim.api
-  local packer_install_path = fn.stdpath("data")
+  local packer_install_path = vim.fn.stdpath("data")
     .. "/site/pack/packer/opt/packer.nvim"
-  local not_installed = fn.empty(fn.glob(packer_install_path)) == 1
+  local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) == 1
 
   if not_installed then
     print("`packer.nvim` is not installed, installing...")
@@ -328,14 +308,26 @@ local function bootstrap()
     },
   })
 
-  api.nvim_create_autocmd("BufWritePost", {
-    pattern = "kraftwerk28/plugins/*.lua",
+  local augroup = vim.api.nvim_create_augroup("packer", {})
+
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*/plugins/init.lua",
     callback = function(arg)
       vim.cmd("source " .. arg.file)
       packer.compile()
     end,
-    group = api.nvim_create_augroup("packer", {}),
+    group = augroup,
   })
+
+  -- api.nvim_create_autocmd("BufWritePost", {
+  --   pattern = "kraftwerk28/plugins/*.lua",
+  --   callback = function(arg)
+  --     print("Compiling plugins...")
+  --     vim.cmd("source " .. arg.file)
+  --     packer.compile()
+  --   end,
+  --   group = api.nvim_create_augroup("packer", {}),
+  -- })
 
   if not_installed then
     packer.sync()

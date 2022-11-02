@@ -1,12 +1,10 @@
-local api, fn = vim.api, vim.fn
-
 require("kraftwerk28.globals")
 
 local utils = require("kraftwerk28.utils")
 local load = utils.load
 
 local min_version = "nvim-0.8"
-if fn.has(min_version) == 0 then
+if vim.fn.has(min_version) == 0 then
   print("At least " .. min_version .. " is required for this config.")
   return
 end
@@ -25,8 +23,6 @@ vim.g.diagnostic_signs = {
 }
 vim.g.sql_type_default = "pgsql"
 
-pcall(vim.cmd, "source .nvimrc")
-
 vim.cmd("runtime opts.vim")
 
 local ok, err = pcall(function()
@@ -37,15 +33,17 @@ local ok, err = pcall(function()
   --   colors = { hint = "orange", error = "#ff0000" },
   --   hide_inactive_statusline = false,
   -- })
-  require("onedark").setup({
-    style = "warmer",
-    ending_tildes = true,
-  })
+  -- require("onedark").setup({
+  --   style = "warmer",
+  --   ending_tildes = true,
+  -- })
 
   -- vim.cmd("colorscheme github_dark_default")
+  -- vim.cmd("colorscheme base16-gruvbox-dark-medium")
   -- vim.cmd("colorscheme base16-gruvbox-light-medium")
   -- vim.cmd("colorscheme kanagawa")
-  vim.cmd("colorscheme onedark")
+  -- vim.cmd("colorscheme onedark")
+  vim.cmd("colorscheme gruvbox")
 end)
 
 if not ok then
@@ -56,13 +54,13 @@ _G.reload_config = function()
   local rtp_lua_path = table.concat(
     vim.tbl_flatten(vim.tbl_map(function(p)
       return { p .. "/lua/?.lua", p .. "/lua/?/init.lua" }
-    end, api.nvim_list_runtime_paths())),
+    end, vim.api.nvim_list_runtime_paths())),
     ";"
   )
 
   for k in pairs(package.loaded) do
     local spath = package.searchpath(k, rtp_lua_path)
-    if spath and spath:find(fn.stdpath("config"), 1, true) then
+    if spath and spath:find(vim.fn.stdpath("config"), 1, true) then
       print(("Reloading %s (%s)"):format(k, spath))
       package.loaded[k] = nil
     end
@@ -70,7 +68,7 @@ _G.reload_config = function()
 
   vim.cmd("runtime! init.vim")
   vim.cmd("runtime! plugin/**/*.{vim,lua}")
-  api.nvim_exec_autocmds({ "FileType" }, {})
+  vim.api.nvim_exec_autocmds({ "FileType" }, {})
 end
 
 load("kraftwerk28.map")
@@ -84,6 +82,12 @@ load("kraftwerk28.netrw")
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
 
+au("VimEnter", {
+  callback = function()
+    pcall(vim.cmd, "source .nvimrc")
+  end
+})
+
 au("TextYankPost", {
   callback = function()
     local highlight = require("vim.highlight")
@@ -96,18 +100,18 @@ au("TextYankPost", {
 au("FileType", {
   pattern = { "help", "qf", "fugitive", "git", "fugitiveblame" },
   callback = function()
-    vim.keymap.set("n", "q", "<Cmd>:bdelete<CR>", {
+    vim.keymap.set("n", "q", "<Cmd>bdelete<CR>", {
       buffer = true,
       silent = true,
     })
   end,
-  group = api.nvim_create_augroup("aux_win_close", {}),
+  group = vim.api.nvim_create_augroup("aux_win_close", {}),
 })
 
 local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
 local function set_nu(relative)
   return function()
-    if fn.win_gettype() == "popup" then
+    if vim.fn.win_gettype() == "popup" then
       return
     end
     if vim.tbl_contains(no_line_number_ft, vim.bo.filetype) then
@@ -130,17 +134,17 @@ au({ "BufLeave", "WinLeave", "FocusLost" }, {
 })
 
 -- set 'makeprg' for some projects
-if fn.glob("meson.build") ~= "" then
+if vim.fn.glob("meson.build") ~= "" then
   o.makeprg = "meson compile -C build"
-elseif fn.glob("go.mod") ~= "" then
+elseif vim.fn.glob("go.mod") ~= "" then
   o.makeprg = "go build"
 end
 
 -- Restore cursor position
 au("BufReadPost", {
   callback = function()
-    local pos = fn.line([['"]])
-    if pos > 0 and pos <= fn.line("$") then
+    local pos = vim.fn.line([['"]])
+    if pos > 0 and pos <= vim.fn.line("$") then
       vim.cmd([[normal! g`"]])
     end
   end,
@@ -178,6 +182,6 @@ au("FocusLost", {
 
 au("FocusGained", {
   callback = function()
-    fn.system("pwd > /tmp/last_pwd")
+    vim.fn.system("pwd > /tmp/last_pwd")
   end,
 })

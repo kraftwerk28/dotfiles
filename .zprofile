@@ -5,7 +5,6 @@ if [[ -x "$env_gen" ]]; then
 	done < <("$env_gen")
 fi
 
-export QT_QPA_PLATFORMTHEME="qt5ct"
 export EDITOR="/usr/bin/nvim"
 export PAGER="less -i"
 export MANPAGER="nvim +Man!"
@@ -44,10 +43,6 @@ export PATH="$PATH:$HOME/.luarocks/bin/"
 # export LUA_PATH="$LUA_PATH;"
 # export LUA_CPATH="$LUA_CPATH;"
 
-export NODE_PATH="$HOME/.npm-global/lib/node_modules"
-# export PATH="$PATH:$HOME/.npm-global/bin"
-export NVS_HOME="$HOME/.nvs"
-
 export PATH="$PATH:$HOME/.cabal/bin/"
 export PATH="$PATH:$HOME/.ghcup/bin/"
 
@@ -55,12 +50,14 @@ export NVIM_LISTEN_PORT=6969
 
 export CMAKE_EXPORT_COMPILE_COMMANDS=1
 
+export QT_QPA_PLATFORMTHEME="qt5ct"
+
 if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	export GTK_USE_PORTAL=1
 	export MOZ_ENABLE_WAYLAND=1
-	export QT_QPA_PLATFORM=wayland
-	export QT_QPA_PLATFORMTHEME=qt5ct
-	export XDG_CURRENT_DESKTOP=sway
+	export QT_QPA_PLATFORM="wayland;xcb"
+	export QT_QPA_PLATFORMTHEME="qt5ct"
+	export XDG_CURRENT_DESKTOP="sway"
 	export _JAVA_AWT_WM_NONREPARENTING=1
 	# export WLR_RENDERER=vulkan
 

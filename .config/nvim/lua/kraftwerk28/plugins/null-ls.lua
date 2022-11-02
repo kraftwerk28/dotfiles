@@ -82,15 +82,24 @@ local jq_format = h.make_builtin({
   factory = h.formatter_factory,
 })
 
+local eslint_filetypes = {
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact",
+  "svelte",
+  "vue",
+}
+
+local prettier_filetypes = { "graphql" }
+
 require("null-ls").setup({
   fallback_severity = vim.diagnostic.severity.WARN,
   sources = {
-    b.diagnostics.eslint_d,
-    b.formatting.eslint_d,
-    b.code_actions.eslint_d,
-    b.formatting.prettier.with({
-      filetypes = { "graphql" },
-    }),
+    b.diagnostics.eslint_d.with({ filetypes = eslint_filetypes }),
+    b.formatting.eslint_d.with({ filetypes = eslint_filetypes }),
+    b.code_actions.eslint_d.with({ filetypes = eslint_filetypes }),
+    b.formatting.prettier.with({ filetypes = prettier_filetypes }),
     b.diagnostics.luacheck.with({
       args = vim.tbl_flatten({
         "--formatter",
@@ -108,7 +117,8 @@ require("null-ls").setup({
     b.formatting.stylua,
     b.diagnostics.shellcheck.with({
       condition = function()
-        return vim.fn.expand("%:t") ~= "PKGBUILD"
+        local f = vim.fn.expand("%:t")
+        return f ~= "PKGBUILD" and f:match("^.env") == nil
       end,
     }),
     b.code_actions.shellcheck.with({
@@ -116,8 +126,10 @@ require("null-ls").setup({
         return vim.fn.expand("%:t") ~= "PKGBUILD"
       end,
     }),
+    -- b.diagnostics.cspell,
     porth_diagnostic,
     jq_format,
+    -- bitbucket_comments,
     -- b.formatting.sqlformat,
     -- b.formatting.xmllint,
   },

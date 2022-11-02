@@ -24,15 +24,52 @@ local function tab_label(tabnr)
   return " " .. text .. " "
 end
 
+local function get_tab_info(tabnr)
+  local focused_winnr = api.nvim_tabpage_get_win(tabnr)
+  local focused_bufnr = api.nvim_win_get_buf(focused_winnr)
+  local focused_bufname = api.nvim_buf_get_name(focused_bufnr)
+  local unsaved = false
+  for _, winnr in ipairs(api.nvim_tabpage_list_wins(tabnr)) do
+    local bufnr = api.nvim_win_get_buf(winnr)
+    if api.nvim_buf_get_option(bufnr, "modified") then
+      unsaved = true
+      break
+    end
+  end
+  return {
+    path = vim.fn.fnamemodify(focused_bufname, ":."),
+    empty = focused_bufname == "",
+    unsaved = unsaved,
+  }
+end
+
 local function build_tabline()
   local current_tab = api.nvim_get_current_tabpage()
   local str = ""
-  for i, tab_nr in ipairs(api.nvim_list_tabpages()) do
-    local hl_group = tab_nr == current_tab and "TabLineSel" or "TabLine"
-    str = str .. "%#" .. hl_group .. "#%" .. i .. "T" .. tab_label(tab_nr)
+  for i, tabnr in ipairs(api.nvim_list_tabpages()) do
+    local hl_group = tabnr == current_tab and "TabLineSel" or "TabLine"
+    local info = get_tab_info(tabnr)
+    local text
+    if info.empty then
+      text = " [Empty] "
+    else
+      text = " " .. info.path .. " "
+    end
+    if info.unsaved then
+      text = " " .. UNSAVED_MARK .. text
+    end
+    str = str .. "%#" .. hl_group .. "#%" .. i .. "T" .. text
   end
   str = str .. "%#TabLineFill#"
   return str
+end
+
+_G.SwitchBuffer = function(_, nclicks, button, modifiers)
+  vim.pretty_print({
+    nclicks = nclicks,
+    button = button,
+    modifiers = modifiers,
+  })
 end
 
 -- local tabline_sel = utils.get_highlight("TabLineSel")

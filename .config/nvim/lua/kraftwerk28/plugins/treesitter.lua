@@ -1,130 +1,38 @@
-local enabled_linux = {
-  "bash",
-  -- "beancount",
-  -- "bibtex",
-  "c",
-  "c_sharp",
-  "clojure",
-  "cmake",
-  "comment",
-  "commonlisp",
-  -- "cooklang",
-  "cpp",
-  "css",
-  "cuda",
-  "d",
-  "dart",
-  "devicetree",
-  -- "dockerfile",
-  "dot",
-  "eex",
-  "elixir",
-  "elm",
-  -- "elvish",
-  "fennel",
-  "fish",
-  -- "foam",
-  "fortran",
-  -- "fusion",
-  "gdscript",
-  -- "gleam",
-  -- "glimmer",
-  "glsl",
-  "go",
-  "godot_resource",
-  "gomod",
-  "gowork",
-  "graphql",
-  "hack",
-  "haskell",
-  "hcl",
-  -- "heex",
-  "help",
-  "hjson",
-  -- "hocon",
-  "html",
-  "http",
-  "java",
-  "javascript",
-  "jsdoc",
-  "json",
-  "json5",
-  "jsonc",
-  "julia",
-  "kotlin",
-  -- "lalrpop",
-  "latex",
-  "ledger",
-  "llvm",
-  "lua",
-  "make",
-  "markdown",
-  "ninja",
-  "nix",
-  "ocaml",
-  "ocaml_interface",
-  "ocamllex",
-  "pascal",
-  "perl",
-  "php",
-  "phpdoc",
-  -- "pioasm",
-  "prisma",
-  "pug",
-  "python",
-  "ql",
-  "query",
-  "r",
-  "rasi",
-  "regex",
-  "rego",
-  "rst",
-  "ruby",
-  "rust",
-  "scala",
-  "scheme",
-  "scss",
-  -- "slint",
-  "solidity",
-  "sparql",
-  "supercollider",
-  "surface",
-  "svelte",
-  "swift",
-  -- "sql",
-  "teal",
-  "tlaplus",
-  "todotxt",
-  "toml",
-  "tsx",
-  "turtle",
-  "typescript",
-  "vala",
-  "verilog",
-  -- "vim",
-  "vue",
-  "yaml",
-  "yang",
-  "zig",
-}
-
-local enabled_windows = {
-  "java",
-  "kotlin",
-  "javascript",
-  "lua",
-  "python",
-}
-
 local ensure_installed
 if vim.fn.has("unix") == 1 then
-  ensure_installed = enabled_linux
+  local disabled = {
+    "beancount",
+    "bibtex",
+    "cooklang",
+    "dockerfile",
+    "elvish",
+    "foam",
+    "fusion",
+    "gleam",
+    "glimmer",
+    "heex",
+    -- "hocon",
+    "lalrpop",
+    "pioasm",
+    "slint",
+    "sql",
+  }
+  ensure_installed = vim.tbl_filter(function(parser)
+    return not vim.tbl_contains(disabled, parser)
+  end, require("nvim-treesitter.parsers").available_parsers())
 elseif vim.fn.has("win64") == 1 then
-  ensure_installed = enabled_windows
+  ensure_installed = {
+    "java",
+    "kotlin",
+    "javascript",
+    "lua",
+    "python",
+  }
 end
 
 do
-  local install_dir = require("nvim-treesitter.configs").get_parser_install_dir()
+  local install_dir =
+    require("nvim-treesitter.configs").get_parser_install_dir()
   local so_files = vim.split(vim.fn.glob(install_dir .. "/*.so"), "\n")
   local existing = vim.tbl_map(function(it)
     return vim.fn.fnamemodify(it, ":t:r")
@@ -181,9 +89,9 @@ do
 end
 
 local ts_cms = require("ts_context_commentstring.internal")
-vim.api.nvim_create_autocmd("CursorMoved", {
-  callback = ts_cms.update_commentstring,
-})
+-- vim.api.nvim_create_autocmd("CursorMoved", {
+--   callback = ts_cms.update_commentstring,
+-- })
 
 require("nvim-treesitter.configs").setup({
   ensure_installed = ensure_installed,
@@ -223,7 +131,7 @@ require("nvim-treesitter.configs").setup({
     },
   },
   context_commentstring = {
-    enable = true,
+    enable = false,
     enable_autocmd = false,
   },
 })

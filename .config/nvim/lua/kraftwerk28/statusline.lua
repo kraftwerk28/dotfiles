@@ -28,8 +28,6 @@ local stl_hl = { cache = {} }
 function stl_hl:load_base_hl()
   self.stl = api.nvim_get_hl_by_name("StatusLine", true)
   self.stl_nc = api.nvim_get_hl_by_name("StatusLineNC", true)
-  self.stl.reverse = nil
-  self.stl_nc.reverse = nil
   for hl, _ in pairs(stl_hl.cache) do
     self:load(hl)
   end
@@ -41,26 +39,28 @@ api.nvim_create_autocmd("ColorScheme", {
   end,
 })
 
+local function bg_color(hl)
+  if hl.reverse then
+    return hl.foreground
+  else
+    return hl.background
+  end
+end
+
 stl_hl:load_base_hl()
 
 function stl_hl:load(name)
   local hl = api.nvim_get_hl_by_name(name, true)
-  api.nvim_set_hl(
-    0,
-    "Stl" .. name,
-    vim.tbl_extend("force", self.stl, {
-      fg = hl.foreground,
-      bg = stl_hl.stl.background,
-    })
-  )
-  api.nvim_set_hl(
-    0,
-    "Stl" .. name .. "NC",
-    vim.tbl_extend("force", self.stl_nc, {
-      fg = hl.foreground,
-      bg = stl_hl.stl_nc.background,
-    })
-  )
+  local stl_name = "Stl" .. name
+  local stl_nc_name = "Stl" .. name .. "NC"
+  vim.api.nvim_set_hl(0, stl_name, {
+    fg = hl.foreground,
+    bg = bg_color(stl_hl.stl),
+  })
+  vim.api.nvim_set_hl(0, stl_nc_name, {
+    fg = hl.foreground,
+    bg = bg_color(stl_hl.stl_nc),
+  })
 end
 
 function stl_hl:get(name, focused)

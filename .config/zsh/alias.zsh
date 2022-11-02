@@ -43,13 +43,8 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
-mkcd () {
-	if [[ -z "$1" ]]; then
-		echo "Usage: mkcd <dir>" 1>&2
-		return 1
-	fi
-	mkdir -p $1
-	cd $1
-}
-
 alias ssh='TERM=xterm-256color ssh'
+
+alias yt-dlp='yt-dlp --no-mtime'
+
+alias dco='docker compose'

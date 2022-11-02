@@ -18,6 +18,8 @@ unsetopt prompt_sp
 # Autoloads
 autoload -U add-zsh-hook edit-command-line compinit
 
+zle -N edit-command-line
+
 requires () {
 	local banner="$(basename "$0"): please install:"
 	local failed=false
@@ -40,7 +42,7 @@ plug () {
 			return
 		fi
 	done
-	echo "Plugin $1 not found, please install it." >&2
+	echo "Could not load plugin '$1'" >&2
 }
 
 zvm_config () {
@@ -51,12 +53,12 @@ zvm_config () {
 	ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
 	ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 	# ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-	# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-	# ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+	# ZVM_INSERT_MODE_CURSOR=$ZVM_NORMAL_MODE_CURSOR
+	# ZVM_VISUAL_MODE_CURSOR=$ZVM_NORMAL_MODE_CURSOR
 }
 
 plug zsh-autosuggestions
-plug zsh-z
+# plug zsh-z
 plug zsh-vi-mode
 plug zsh-fzf-history-search
 
@@ -75,8 +77,7 @@ zstyle ':completion:*' add-space false
 zstyle ':completion:*' menu select
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' completer _complete _approximate
-# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/.zcompcache"
 
@@ -102,9 +103,15 @@ source "$dot_config/prompt.zsh"
 
 WORDCHARS='-'
 
-bindkeys () { source "$dot_config/bindkey.zsh" }
+bindkeys () {
+	source "$dot_config/bindkey.zsh"
+}
 
-zvm_after_init_commands=(bindkeys)
+if [[ -z $ZVM_INIT_DONE ]]; then
+	bindkeys
+else
+	zvm_after_init_commands=(bindkeys)
+fi
 
 dump_cwd () {
 	[[ $PWD != $HOME ]] && echo $PWD > /tmp/last_pwd
@@ -122,7 +129,7 @@ c() {
 }
 
 set_title() {
-	echo -n $'\E]2;'"$(sed 's/\\/\\\\/g' <<<$1)"$'\E\\'
+	printf '\e]2;%s\e\\' $1
 }
 
 set_window_title() {
@@ -163,6 +170,17 @@ updatenvim () {
 	)
 	popd
 }
+
+mkcd () {
+	if [[ -z "$1" ]]; then
+		echo "Usage: mkcd <dir>" 1>&2
+		return 1
+	fi
+	mkdir -p "$1"
+	cd "$1"
+}
+
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 
 # It requires to be sourced at the end
 # plug zsh-syntax-highlighting

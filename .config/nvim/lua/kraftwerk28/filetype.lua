@@ -10,6 +10,7 @@ vim.filetype.add({
     http = "rest",
     mts = "typescript",
     mtsx = "typescriptreact",
+    strace = "strace",
   },
   filename = {
     ["tsconfig.json"] = "jsonc",
@@ -28,51 +29,73 @@ vim.filetype.add({
 local ftconfig = {
   {
     { "go", "make", "c", "cpp", "meson" },
-    { shiftwidth = 4, tabstop = 4, expandtab = false },
+    { tabstop = 4, expandtab = false },
   },
 
   {
-    { "java", "kotlin", "groovy", "csharp", "cabal", "python" },
-    { shiftwidth = 4, tabstop = 4, expandtab = true },
+    { "cabal", "csharp", "dockerfile", "groovy", "java", "kotlin", "python" },
+    { tabstop = 4, expandtab = true },
   },
 
   {
     {
+      "graphql",
+      "haskell",
       "javascript",
-      "typescript",
       "javascriptreact",
-      "typescriptreact",
-      "svelte",
       "json",
       "jsonc",
-      "vim",
-      "yaml",
-      "haskell",
       "lisp",
       "lua",
-      "graphql",
       "markdown",
+      "typescript",
+      "typescriptreact",
+      "vim",
+      "yaml",
     },
-    { shiftwidth = 2, tabstop = 2, expandtab = true },
+    { tabstop = 2, expandtab = true },
   },
 
-  { { "jess" }, { commentstring = "; %s" } },
+  {
+    { "jess" },
+    { commentstring = "; %s" },
+  },
 
-  { { "json", "jsonc", "cjson" }, { commentstring = "// %s" } },
+  {
+    { "json", "jsonc", "cjson" },
+    { commentstring = "// %s" },
+  },
 
-  { { "asm" }, { shiftwidth = 8, tabstop = 8, expandtab = false } },
+  {
+    { "asm" },
+    { tabstop = 8, expandtab = false },
+  },
 
-  { { "help" }, { conceallevel = 0 } },
+  {
+    { "help" },
+    { conceallevel = 0 },
+  },
 
   -- { { "markdown" }, { conceallevel = 2 } },
 
-  { { "graphql" }, { commentstring = "# %s" } },
-
-  { { "dosini", "confini" }, { commentstring = "; %s" } },
+  {
+    { "graphql" },
+    { commentstring = "# %s" },
+  },
 
   {
-    { "python", "typescript", "typescriptreact" },
+    { "dosini", "confini" },
+    { commentstring = "; %s" },
+  },
+
+  {
+    { "python" },
     { indentexpr = "nvim_treesitter#indent()" },
+  },
+
+  {
+    { "hocon" },
+    { commentstring = "# %s", cindent = true, cinoptions = "+0" },
   },
 }
 

@@ -1,13 +1,30 @@
-#!/usr/bin/env python
 import json
-import msgpack
 import os
 import re
-import requests
 import time
+
+import msgpack
+import requests
 
 name_re = re.compile(os.getenv("ALERTS_LOC_REGEX") or r".*", re.IGNORECASE)
 state_re = re.compile(r"\s+область$", re.IGNORECASE)
+last_status = None
+
+
+def out(states=None, loading=False):
+    global last_status
+    if states == []:
+        obj = {"full_text": ""}
+    elif states and not loading:
+        obj = {"full_text": "䀘 " + ", ".join(states), "urgent": True}
+    elif loading and last_status:
+        obj = {"full_text": "䀘 " + ", ".join(last_status) + "  ", "urgent": True}
+    else:
+        obj = {"full_text": "䀘  "}
+    if states != last_status:
+        last_status = states
+    print(json.dumps(obj))
+
 
 while True:
     try:
@@ -18,6 +35,7 @@ while True:
         locs = r.json()
         break
     except Exception:
+        out(loading=True)
         time.sleep(5)
 
 while True:
@@ -38,11 +56,8 @@ while True:
             statename = loc.get("title", None)
             if name_re.search(statename):
                 states.append(state_re.sub("", statename))
-        if states:
-            obj = {"full_text": "䀘 " + ", ".join(states), "urgent": True}
-            print(json.dumps(obj), flush=True)
-        else:
-            print(json.dumps({"full_text": ""}), flush=True)
+        out(states)
         time.sleep(30)
     except Exception:
+        out(loading=True)
         time.sleep(5)

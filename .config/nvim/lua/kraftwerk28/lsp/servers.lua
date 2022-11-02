@@ -6,9 +6,7 @@ local cmp_lsp = require("cmp_nvim_lsp")
 local fn = vim.fn
 
 local function make_cpb()
-  local ret = vim.lsp.protocol.make_client_capabilities()
-  ret = cmp_lsp.update_capabilities(ret)
-  return ret
+  return cmp_lsp.default_capabilities()
 end
 
 local function find_compile_commands()
@@ -85,26 +83,7 @@ lspconfig.hls.setup({
   capabilities = make_cpb(),
 })
 
-do
-  -- local pyls_settings = {
-  --   plugins = {
-  --     jedi_completion = {enabled = true},
-  --     jedi_hover = {enabled = true},
-  --     jedi_references = {enabled = true},
-  --     jedi_signature_help = {enabled = true},
-  --     jedi_symbols = {enabled = true, all_scopes = true},
-  --     yapf = {enabled = false},
-  --     pylint = {enabled = false},
-  --     pycodestyle = {enabled = false},
-  --     pydocstyle = {enabled = false},
-  --     mccabe = {enabled = false},
-  --     preload = {enabled = false},
-  --     rope_completion = {enabled = false},
-  --     pyflakes = {enabled = false},
-  --   },
-  -- }
-  lspconfig.pylsp.setup({ capabilities = make_cpb() })
-end
+lspconfig.pylsp.setup({ capabilities = make_cpb() })
 
 lspconfig.rust_analyzer.setup({
   capabilities = make_cpb(),
@@ -207,13 +186,11 @@ lspconfig.yamlls.setup({
     yaml = {
       format = {
         enable = true,
-      },
-      schemaStore = {
-        enable = true,
-        url = "https://www.schemastore.org/json",
+        singleQuote = false,
       },
       hover = true,
       completion = true,
+      validate = true,
     },
   },
   capabilities = make_cpb(),
@@ -232,6 +209,8 @@ lspconfig.cssls.setup({ capabilities = make_cpb() })
 lspconfig.solargraph.setup({})
 
 -- lspconfig.emmet_ls.setup {}
+
+lspconfig.erlangls.setup({})
 
 if fn.has("win64") == 1 then
   local jdt_base = fn.expand(
