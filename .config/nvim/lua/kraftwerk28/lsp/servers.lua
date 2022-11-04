@@ -284,3 +284,7 @@ end
 --     capabilities = make_cpb(),
 --   })
 -- end
+
+lspconfig.rescriptls.setup({
+  cmd = { "rescript-ls", "--stdio" },
+})
