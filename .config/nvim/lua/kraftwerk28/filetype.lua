@@ -29,12 +29,12 @@ vim.filetype.add({
 local ftconfig = {
   {
     { "go", "make", "c", "cpp", "meson" },
-    { tabstop = 4, expandtab = false },
+    { expandtab = false },
   },
 
   {
     { "cabal", "csharp", "dockerfile", "groovy", "java", "kotlin", "python" },
-    { tabstop = 4, expandtab = true },
+    { expandtab = true },
   },
 
   {
@@ -53,12 +53,7 @@ local ftconfig = {
       "vim",
       "yaml",
     },
-    { tabstop = 2, expandtab = true },
-  },
-
-  {
-    { "jess" },
-    { commentstring = "; %s" },
+    { shiftwidth = 2, expandtab = true },
   },
 
   {
@@ -66,32 +61,21 @@ local ftconfig = {
     { commentstring = "// %s" },
   },
 
-  {
-    { "asm" },
-    { tabstop = 8, expandtab = false },
-  },
+  { { "asm" }, { tabstop = 8 } },
+
+  { { "help" }, { conceallevel = 0 } },
+
+  { { "graphql" }, { commentstring = "# %s" } },
 
   {
-    { "help" },
-    { conceallevel = 0 },
-  },
-
-  -- { { "markdown" }, { conceallevel = 2 } },
-
-  {
-    { "graphql" },
-    { commentstring = "# %s" },
-  },
-
-  {
-    { "dosini", "confini" },
+    { "dosini", "confini", "jess" },
     { commentstring = "; %s" },
   },
 
-  {
-    { "python" },
-    { indentexpr = "nvim_treesitter#indent()" },
-  },
+  -- {
+  --   { "python" },
+  --   { indentexpr = "nvim_treesitter#indent()" },
+  -- },
 
   {
     { "hocon" },

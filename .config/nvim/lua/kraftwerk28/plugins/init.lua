@@ -12,9 +12,9 @@ local function load(use)
   use({ "ellisonleao/gruvbox.nvim", disable = false })
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   -- use("~/projects/neovim/nvim-base16")
-  use({ "RRethy/nvim-base16", disable = false })
-  use({ "projekt0n/github-nvim-theme", disable = false })
-  use({ "rebelot/kanagawa.nvim", disable = false })
+  use({ "RRethy/nvim-base16", disable = true })
+  use({ "projekt0n/github-nvim-theme", disable = true })
+  use({ "rebelot/kanagawa.nvim", disable = true })
 
   use({ "kyazdani42/nvim-web-devicons" })
 
@@ -98,7 +98,6 @@ local function load(use)
 
   -- Missing / not ready to use languages in tree-sitter
   use({ "neovimhaskell/haskell-vim", disable = true })
-  use("editorconfig/editorconfig-vim")
   use({ "elixir-editors/vim-elixir", disable = true })
   use("chr4/nginx.vim")
   -- use {"tpope/vim-markdown"}
@@ -252,30 +251,9 @@ local function load(use)
 
   use({
     "johmsalas/text-case.nvim",
+    disable = true,
     config = function()
       require("kraftwerk28.plugins.textcase")
-    end,
-  })
-
-  use({
-    "nvim-neorg/neorg",
-    disable = true,
-    requires = { "nvim-lua/plenary.nvim" },
-    after = { "nvim-treesitter" },
-    config = function()
-      require("neorg").setup({
-        load = {
-          ["core.defaults"] = {},
-          ["core.norg.concealer"] = {},
-          ["core.norg.dirman"] = {
-            config = {
-              workspaces = {
-                my_workspace = "~/notes",
-              },
-            },
-          },
-        },
-      })
     end,
   })
 end
@@ -318,16 +296,6 @@ local function bootstrap()
     end,
     group = augroup,
   })
-
-  -- api.nvim_create_autocmd("BufWritePost", {
-  --   pattern = "kraftwerk28/plugins/*.lua",
-  --   callback = function(arg)
-  --     print("Compiling plugins...")
-  --     vim.cmd("source " .. arg.file)
-  --     packer.compile()
-  --   end,
-  --   group = api.nvim_create_augroup("packer", {}),
-  -- })
 
   if not_installed then
     packer.sync()

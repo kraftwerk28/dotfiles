@@ -180,6 +180,14 @@ mkcd () {
 	cd "$1"
 }
 
+yt-dlp () {
+	args=("$@")
+	if (( $# == 0 )) && wl-paste -l | grep "text/plain" >/dev/null; then
+		args+=("$(wl-paste)")
+	fi
+	/usr/bin/yt-dlp "${args[@]}"
+}
+
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 
 # It requires to be sourced at the end

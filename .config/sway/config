@@ -167,12 +167,6 @@ bindsym --to-code {
 bindsym {
 	$mod+i exec $scripts/rofi-window-switch.sh
 	$mod+o exec $scripts/rename-workspace.sh
-
-	$mod+Shift+e exec swaynag \
-		--type warning \
-		--message "You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session." \
-		--button "Yes, exit sway" "swaymsg exit" \
-		--no-dock
 }
 
 # Various multimedia keys
@@ -273,43 +267,43 @@ mode "manage output" {
 # }
 
 # Same as above, but via variables
-set {
-	$focused_title_border #4c7899
-	$focused_title_bg #285577
-	$focused_title_text #ffffff
-	$focused_indicator #2e9ef4
-	$focused_border #285577
-
-	$unfocused_title_border #444444
-	$unfocused_title_bg #222222
-	$unfocused_title_text #888888
-	$unfocused_indicator #666666
-	$unfocused_border #444444
-
-	$urgent_title_border #2f343a
-	$urgent_title_bg #900000
-	$urgent_title_text #ffffff
-	$urgent_indicator #900000
-	$urgent_border #900000
-}
-
 # set {
-# 	$focused_title_border "#ee6600"
-# 	$focused_title_bg "#884400"
-# 	$focused_title_text "#ffffff"
-# 	$focused_indicator "#ff0044"
-# 	$focused_border $focused_title_border
-# 	$unfocused_title_border "#333333"
-# 	$unfocused_title_bg "#222222"
-# 	$unfocused_title_text "#bbbbbb"
-# 	$unfocused_indicator "#882200"
-# 	$unfocused_border $unfocused_title_border
-# 	$urgent_title_border "#bb0000"
-# 	$urgent_title_bg "#880000"
-# 	$urgent_title_text "#ffffff"
-# 	$urgent_indicator "#dd0000"
-# 	$urgent_border $urgent_title_border
+# 	$focused_title_border #4c7899
+# 	$focused_title_bg #285577
+# 	$focused_title_text #ffffff
+# 	$focused_indicator #2e9ef4
+# 	$focused_border #285577
+
+# 	$unfocused_title_border #444444
+# 	$unfocused_title_bg #222222
+# 	$unfocused_title_text #888888
+# 	$unfocused_indicator #666666
+# 	$unfocused_border #444444
+
+# 	$urgent_title_border #2f343a
+# 	$urgent_title_bg #900000
+# 	$urgent_title_text #ffffff
+# 	$urgent_indicator #900000
+# 	$urgent_border #900000
 # }
+
+set {
+	$focused_title_border "#ee6600"
+	$focused_title_bg "#884400"
+	$focused_title_text "#ffffff"
+	$focused_indicator "#ff0044"
+	$focused_border $focused_title_border
+	$unfocused_title_border "#333333"
+	$unfocused_title_bg "#222222"
+	$unfocused_title_text "#bbbbbb"
+	$unfocused_indicator "#882200"
+	$unfocused_border $unfocused_title_border
+	$urgent_title_border "#bb0000"
+	$urgent_title_bg "#880000"
+	$urgent_title_text "#ffffff"
+	$urgent_indicator "#dd0000"
+	$urgent_border $urgent_title_border
+}
 
 # Set colors from theme variables
 client.focused           $focused_title_border   $focused_title_bg   $focused_title_text   $focused_indicator   $focused_border
@@ -459,6 +453,7 @@ for_window [app_id="^foot_floating$"] floating enable
 for_window [app_id="^gnome-calculator$"] floating enable
 for_window [app_id="^org.gnome.Calculator$"] floating enable
 for_window [title="^FX: Track"] floating enable
+for_window [app_id="xdg-desktop-portal-gtk"] floating enable
 # }}}
 
 # Output configuration {{{

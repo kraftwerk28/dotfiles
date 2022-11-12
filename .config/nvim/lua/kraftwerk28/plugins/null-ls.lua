@@ -91,46 +91,50 @@ local eslint_filetypes = {
   "vue",
 }
 
-local prettier_filetypes = { "graphql" }
+local sources = {
+  b.diagnostics.eslint_d.with({ filetypes = eslint_filetypes }),
+  b.code_actions.eslint_d.with({ filetypes = eslint_filetypes }),
+  b.diagnostics.luacheck.with({
+    args = vim.tbl_flatten({
+      "--formatter",
+      "plain",
+      "--codes",
+      "--ranges",
+      "--globals",
+      -- See lua/kraftwerk28/globals.lua
+      { "vim", "o", "lo", "go", "m", "au", "aug" },
+      "--filename",
+      "$FILENAME",
+      "-",
+    }),
+  }),
+  b.formatting.stylua,
+  b.diagnostics.shellcheck.with({
+    condition = function()
+      local f = vim.fn.expand("%:t")
+      return f ~= "PKGBUILD" and f:match("^.env") == nil
+    end,
+  }),
+  b.code_actions.shellcheck.with({
+    condition = function()
+      return vim.fn.expand("%:t") ~= "PKGBUILD"
+    end,
+  }),
+  -- b.diagnostics.cspell,
+  porth_diagnostic,
+  jq_format,
+  -- bitbucket_comments,
+  -- b.formatting.sqlformat,
+  -- b.formatting.xmllint,
+}
+
+if vim.fn.executable("prettierd") == 1 then
+  table.insert(sources, b.formatting.prettierd)
+else
+  table.insert(sources, b.formatting.prettier)
+end
 
 require("null-ls").setup({
   fallback_severity = vim.diagnostic.severity.WARN,
-  sources = {
-    b.diagnostics.eslint_d.with({ filetypes = eslint_filetypes }),
-    b.formatting.eslint_d.with({ filetypes = eslint_filetypes }),
-    b.code_actions.eslint_d.with({ filetypes = eslint_filetypes }),
-    b.formatting.prettier.with({ filetypes = prettier_filetypes }),
-    b.diagnostics.luacheck.with({
-      args = vim.tbl_flatten({
-        "--formatter",
-        "plain",
-        "--codes",
-        "--ranges",
-        "--globals",
-        -- See lua/kraftwerk28/globals.lua
-        { "vim", "o", "lo", "go", "m", "au", "aug" },
-        "--filename",
-        "$FILENAME",
-        "-",
-      }),
-    }),
-    b.formatting.stylua,
-    b.diagnostics.shellcheck.with({
-      condition = function()
-        local f = vim.fn.expand("%:t")
-        return f ~= "PKGBUILD" and f:match("^.env") == nil
-      end,
-    }),
-    b.code_actions.shellcheck.with({
-      condition = function()
-        return vim.fn.expand("%:t") ~= "PKGBUILD"
-      end,
-    }),
-    -- b.diagnostics.cspell,
-    porth_diagnostic,
-    jq_format,
-    -- bitbucket_comments,
-    -- b.formatting.sqlformat,
-    -- b.formatting.xmllint,
-  },
+  sources = sources,
 })

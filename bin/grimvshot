@@ -31,23 +31,31 @@ while (( $# > 0 )); do
 		*) usage;;
 	esac
 done
+
 [[ -z $ACTION ]] && usage
+
 RECT_QUERY='"\(.rect.x),\(.rect.y - .deco_rect.height) \(.rect.width)x\(.rect.height + .deco_rect.height)"'
+
 case $ACTION in
 	--area)
-		grim -c -o "$(get_focused_output)" - | imv -f - &
+		bake="$(mktemp /tmp/grimvshot-XXXXXX.png)"
+		grim -c -o "$(get_focused_output)" "$bake"
+		imv -f "$bake" &
 		IMV_PID=$!
 		if ! GEOM="$(slurp)"; then
 			kill "$IMV_PID"
+			rm "$bake"
 			exit
 		fi
 		;;
 	--window)
-		grim -c -o "$(get_focused_output)" - | imv -f - &
+		bake="$(mktemp /tmp/grimvshot-XXXXXX.png)"
+		grim -c -o "$(get_focused_output)" "$bake"
+		imv -f "$bake" &
 		IMV_PID=$!
-		if ! GEOM=$(swaymsg -t get_tree | jq -r \
-			'.. | select(.pid? and .visible?) | '"$RECT_QUERY" | slurp); then
+		if ! GEOM=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | '"$RECT_QUERY" | slurp); then
 			kill "$IMV_PID"
+			rm "$bake"
 			exit
 		fi
 		;;
@@ -57,8 +65,14 @@ case $ACTION in
 			| select(.focused)
 			| '"$RECT_QUERY")";;
 esac
+
+if [[ -n $bake ]]; then
+	rm "$bake"
+fi
+
 [[ -n $OUTPUT ]] && args+=(-o "$OUTPUT")
 [[ -n $GEOM ]] && args+=(-g "$GEOM")
+
 if [[ -n $RUN_SWAYNAG ]]; then
 	FILE=${FILE:-"$(mktemp /tmp/grimvshot-XXXXXX.png)"}
 	grim "${args[@]}" "$FILE"
@@ -67,7 +81,9 @@ elif [[ -n $COPY ]]; then
 else
 	grim "${args[@]}" "$FILE"
 fi
+
 [[ -n $IMV_PID ]] && kill "$IMV_PID"
+
 if [[ -n $RUN_SWAYNAG ]]; then
 	case $(swaynag \
 		-t warning \
@@ -84,6 +100,7 @@ if [[ -n $RUN_SWAYNAG ]]; then
 		*) exit;;
 	esac
 fi
+
 if [[ -n $NOTIFY ]]; then
 	if [[ -n $COPY ]]; then
 		notify-send "Screenshot copied to clipboard"

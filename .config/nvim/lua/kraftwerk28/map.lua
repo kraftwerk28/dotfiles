@@ -54,12 +54,14 @@ m:withopt({ silent = true }, function()
   m("n", "tL", "<Cmd>+tabmove<CR>")
 
   for i = 1, 9 do
-    m("n", ("<M-%d>"):format(i), ("<Cmd>%dtabnext<CR>"):format(i))
+    local lhs = ("<M-%d>"):format(i)
+    local rhs = ("<Cmd>%dtabnext<CR>"):format(i)
+    m("n", lhs, rhs, { silent = true })
   end
 end)
 
 m("n", "<Leader>hs", function()
-  lo.hlsearch = not lo.hlsearch:get()
+  vim.opt_local.hlsearch = not vim.opt_local.hlsearch:get()
 end)
 
 m:withopt({ silent = true }, function()

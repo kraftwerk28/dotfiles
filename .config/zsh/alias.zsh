@@ -45,6 +45,6 @@ alias -g ......='../../../../..'
 
 alias ssh='TERM=xterm-256color ssh'
 
-alias yt-dlp='yt-dlp --no-mtime'
+# alias yt-dlp='yt-dlp --no-mtime'
 
 alias dco='docker compose'
