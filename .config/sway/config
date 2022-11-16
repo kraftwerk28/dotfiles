@@ -226,9 +226,9 @@ bindsym --to-code $mod+Shift+o mode "manage output"
 mode "manage output" {
 	# bindsym --to-code t nop output toggle, mode default
 	# bindsym --to-code a nop output enable_all, mode default
-	bindsym --to-code t output - toggle, mode default
-	bindsym --to-code a output * enable, mode default
-	bindsym --to-code r output * disable, output * enable, mode default
+	bindsym --to-code t exec $scripts/manage-output.sh toggle_current, mode default
+	bindsym --to-code a exec $scripts/manage-output.sh enable_all, mode default
+	bindsym --to-code r exec $scripts/manage-output.sh disable_all, mode default
 	bindsym Escape mode default
 }
 

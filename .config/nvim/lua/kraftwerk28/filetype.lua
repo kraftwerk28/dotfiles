@@ -61,11 +61,11 @@ local ftconfig = {
     { commentstring = "// %s" },
   },
 
-  { { "asm" }, { tabstop = 8 } },
+  { "asm", { tabstop = 8 } },
 
-  { { "help" }, { conceallevel = 0 } },
+  { "help", { conceallevel = 0 } },
 
-  { { "graphql" }, { commentstring = "# %s" } },
+  { "graphql", { commentstring = "# %s" } },
 
   {
     { "dosini", "confini", "jess" },
@@ -78,9 +78,13 @@ local ftconfig = {
   -- },
 
   {
-    { "hocon" },
+    "hocon",
     { commentstring = "# %s", cindent = true, cinoptions = "+0" },
   },
+
+  { "erlang", { expandtab = true, shiftwidth = 4 } },
+
+  { { "c", "sh", "bash" }, { keywordprg = ":Man" } },
 }
 
 local filetype_opts = aug("filetype_opts")
@@ -90,7 +94,7 @@ for _, cfg in ipairs(ftconfig) do
     pattern = filetypes,
     callback = function()
       for name, value in pairs(opts) do
-        lo[name] = value
+        vim.opt_local[name] = value
       end
     end,
     group = filetype_opts,

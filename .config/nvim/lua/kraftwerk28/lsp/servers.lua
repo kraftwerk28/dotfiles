@@ -31,9 +31,11 @@ if not configs.mesonls then
   }
 end
 
-lspconfig.mesonls.setup({})
+-- lspconfig.mesonls.setup({})
 
-lspconfig.als.setup({})
+lspconfig.als.setup({
+  capabilities = make_cpb(),
+})
 
 lspconfig.arduino_language_server.setup({
   cmd = {
@@ -47,7 +49,9 @@ lspconfig.arduino_language_server.setup({
   },
 })
 
-lspconfig.awk_ls.setup({})
+lspconfig.awk_ls.setup({
+  capabilities = make_cpb(),
+})
 
 lspconfig.denols.setup({
   autostart = false,
@@ -83,7 +87,9 @@ lspconfig.hls.setup({
   capabilities = make_cpb(),
 })
 
-lspconfig.pylsp.setup({ capabilities = make_cpb() })
+lspconfig.pylsp.setup({
+  capabilities = make_cpb(),
+})
 
 lspconfig.rust_analyzer.setup({
   capabilities = make_cpb(),
@@ -196,7 +202,9 @@ lspconfig.yamlls.setup({
   capabilities = make_cpb(),
 })
 
-lspconfig.cssls.setup({ capabilities = make_cpb() })
+lspconfig.cssls.setup({
+  capabilities = make_cpb(),
+})
 
 -- lspconfig.html.setup {
 --   cmd = {"vscode-html-languageserver", "--stdio"}
@@ -206,11 +214,20 @@ lspconfig.cssls.setup({ capabilities = make_cpb() })
 --   filetypes = {"bash", "sh", "zsh"}
 -- }
 
-lspconfig.solargraph.setup({})
+lspconfig.solargraph.setup({
+  capabilities = make_cpb(),
+})
 
 -- lspconfig.emmet_ls.setup {}
 
-lspconfig.erlangls.setup({})
+lspconfig.erlangls.setup({
+  capabilities = make_cpb(),
+})
+
+lspconfig.rescriptls.setup({
+  cmd = { "rescript-ls", "--stdio" },
+  capabilities = make_cpb(),
+})
 
 if fn.has("win64") == 1 then
   local jdt_base = fn.expand(
@@ -284,7 +301,3 @@ end
 --     capabilities = make_cpb(),
 --   })
 -- end
-
-lspconfig.rescriptls.setup({
-  cmd = { "rescript-ls", "--stdio" },
-})

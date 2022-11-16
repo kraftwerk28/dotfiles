@@ -35,6 +35,7 @@ set shortmess+=c
 set diffopt+=vertical
 set scrolloff=3
 set nobackup backupcopy=yes writebackup
+set keywordprg=
 
 " highlight! Cursor gui=reverse guifg=NONE guibg=NONE
 " highlight Cursor gui=NONE guifg=bg guibg=fg

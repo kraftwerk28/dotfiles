@@ -8,7 +8,7 @@ fi
 export EDITOR="/usr/bin/nvim"
 export PAGER="less -i"
 export MANPAGER="nvim +Man!"
-export TERMINAL="$(which foot)"
+export TERM="alacritty"
 
 export PATH="$HOME/bin:$PATH"
 
@@ -53,6 +53,7 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
 if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
+	export TERM="foot"
 	export GTK_USE_PORTAL=1
 	export MOZ_ENABLE_WAYLAND=1
 	export QT_QPA_PLATFORM="wayland;xcb"
