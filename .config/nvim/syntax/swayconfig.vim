@@ -4,6 +4,7 @@
 " Version: 0.1
 " Last Change: 2022 Jan 15
 
+finish
 if exists("b:current_syntax")
   finish
 endif

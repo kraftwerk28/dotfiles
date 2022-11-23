@@ -13,7 +13,15 @@
 --   end
 -- end
 
--- local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+parser_config.sway = {
+  install_info = {
+    url = "~/projects/tree-sitter/tree-sitter-sway",
+    files = { "src/parser.c" },
+  },
+  filetype = "swayconfig",
+}
 
 -- local ts_cms = require("ts_context_commentstring.internal")
 -- vim.api.nvim_create_autocmd("CursorMoved", {

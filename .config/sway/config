@@ -493,4 +493,4 @@ output * background #000000 solid_color
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 
-# vim: filetype= commentstring=#\ %s foldmethod=marker foldlevel=0
+# vim: filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0
