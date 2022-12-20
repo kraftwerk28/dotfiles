@@ -1,6 +1,6 @@
 m:withopt({ silent = true }, function()
   m("n", "<Leader>gs", "<Cmd>vert Git<CR>")
-  m({ "n", "v" }, "<Leader>gb", ":GBrowse<CR>")
+  m({ "n", "v" }, "<Leader>gb", ":GBrowse!<CR>")
   -- Merge conflicts
   m("n", "<Leader>gm", "<Cmd>Gdiffsplit!<CR>")
   m("n", "<Leader>gh", "<Cmd>diffget //2<CR>")

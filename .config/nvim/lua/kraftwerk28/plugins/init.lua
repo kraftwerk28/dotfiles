@@ -9,12 +9,12 @@ local function load(use)
 
   -- Themes
   use({ "navarasu/onedark.nvim", disable = true })
-  use({ "ellisonleao/gruvbox.nvim", disable = false })
+  use({ "ellisonleao/gruvbox.nvim", disable = true })
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   -- use("~/projects/neovim/nvim-base16")
   use({ "RRethy/nvim-base16", disable = true })
   use({ "projekt0n/github-nvim-theme", disable = true })
-  use({ "rebelot/kanagawa.nvim", disable = true })
+  use({ "rebelot/kanagawa.nvim", disable = false })
 
   use({ "kyazdani42/nvim-web-devicons" })
 
@@ -254,6 +254,13 @@ local function load(use)
     disable = true,
     config = function()
       require("kraftwerk28.plugins.textcase")
+    end,
+  })
+
+  use({
+    "folke/twilight.nvim",
+    config = function()
+      require("twilight").setup()
     end,
   })
 end

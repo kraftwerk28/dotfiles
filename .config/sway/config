@@ -1,12 +1,12 @@
 set $scripts "$HOME/.config/sway/scripts"
 
 # Key bindings {{{
-set $mod  Mod4
-set $modr Mod5
-set $left  h
-set $down  j
-set $up    k
-set $right l
+set $mod	Mod4
+set $modr	Mod5
+set	$left	h
+set	$down	j
+set	$up		k
+set	$right	l
 
 # bindsym --to-code {
 # 	$mod+Return exec alacritty
@@ -18,8 +18,8 @@ set $right l
 # }
 
 bindsym --to-code {
-	$mod+Return exec foot
-	$modr+Return exec foot
+	$mod+Return		exec foot
+	$modr+Return	exec foot
 	$mod+Shift+Return exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	$modr+Shift+Return exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	$mod+f2 exec foot $SHELL -i -c "cd $HOME/.config/sway && nvim config"
@@ -29,14 +29,12 @@ bindsym --to-code {
 
 	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
 	# based on this variable
-	$mod+p exec env -u XDG_CURRENT_DESKTOP \
-		rofi -i -show drun -run-command 'swaymsg exec "{cmd}"', \
-		input type:keyboard xkb_switch_layout 0
+	$mod+p exec $scripts/rofi-drun.sh, input type:keyboard xkb_switch_layout 0
 
-	$mod+$left   focus left
-	$mod+$down   focus down
-	$mod+$up     focus up
-	$mod+$right  focus right
+	$mod+$left	focus left
+	$mod+$down	focus down
+	$mod+$up	focus up
+	$mod+$right	focus right
 
 	$mod+Control+h nop tab prev
 	$mod+Control+l nop tab next
@@ -59,24 +57,24 @@ bindsym --to-code {
 	$modr+Control+7 nop tab 7
 	$modr+Control+8 nop tab 8
 
-	$mod+Shift+$left  move left
-	$mod+Shift+$down  move down
-	$mod+Shift+$up    move up
-	$mod+Shift+$right move right
+	$mod+Shift+$left	move left
+	$mod+Shift+$down	move down
+	$mod+Shift+$up		move up
+	$mod+Shift+$right	move right
 
-	$mod+Bracketleft  workspace prev
-	$mod+Bracketright workspace next
-	$modr+Bracketleft  workspace prev
-	$modr+Bracketright workspace next
+	$mod+Bracketleft	workspace prev
+	$mod+Bracketright	workspace next
+	$modr+Bracketleft	workspace prev
+	$modr+Bracketright	workspace next
 
-	$mod+Shift+Bracketleft  nop workspace prev
-	$mod+Shift+Bracketright nop workspace next
+	$mod+Shift+Bracketleft	nop workspace prev
+	$mod+Shift+Bracketright	nop workspace next
 
 	# TODO: rewrite using lua framework
-	$mod+Control+Up    exec $scripts/push-window.sh top
-	$mod+Control+Right exec $scripts/push-window.sh right
-	$mod+Control+Down  exec $scripts/push-window.sh bottom
-	$mod+Control+Left  exec $scripts/push-window.sh left
+	$mod+Control+Up		exec $scripts/push-window.sh top
+	$mod+Control+Right	exec $scripts/push-window.sh right
+	$mod+Control+Down	exec $scripts/push-window.sh bottom
+	$mod+Control+Left	exec $scripts/push-window.sh left
 
 	$mod+s layout stacking
 	$mod+w layout tabbed
@@ -98,21 +96,21 @@ bindsym --to-code {
 set $cursor_lg_delta 50
 set $cursor_sm_delta 10
 bindsym --to-code {
-	$mod+Control+Alt+Up    seat * cursor move 0 -$cursor_lg_delta
-	$mod+Control+Alt+Right seat * cursor move $cursor_lg_delta  0
-	$mod+Control+Alt+Down  seat * cursor move 0  $cursor_lg_delta
-	$mod+Control+Alt+Left  seat * cursor move -$cursor_lg_delta 0
+	$mod+Control+Alt+Up		seat * cursor move 0 -$cursor_lg_delta
+	$mod+Control+Alt+Right	seat * cursor move $cursor_lg_delta  0
+	$mod+Control+Alt+Down	seat * cursor move 0  $cursor_lg_delta
+	$mod+Control+Alt+Left	seat * cursor move -$cursor_lg_delta 0
 
-	$mod+Alt+Up            seat * cursor move 0 -$cursor_sm_delta
-	$mod+Alt+Right         seat * cursor move $cursor_sm_delta  0
-	$mod+Alt+Down          seat * cursor move 0  $cursor_sm_delta
-	$mod+Alt+Left          seat * cursor move -$cursor_sm_delta 0
+	$mod+Alt+Up		seat * cursor move 0 -$cursor_sm_delta
+	$mod+Alt+Right	seat * cursor move $cursor_sm_delta  0
+	$mod+Alt+Down	seat * cursor move 0  $cursor_sm_delta
+	$mod+Alt+Left	seat * cursor move -$cursor_sm_delta 0
 
 	# Mouse button control (doesn't work well though):
-	--no-repeat $mod+Alt+Period seat * cursor press   button1
-	--release   $mod+Alt+Period seat * cursor release button1
-	--no-repeat $mod+Alt+Slash  seat * cursor press   button3
-	--release   $mod+Alt+Slash  seat * cursor release button3
+	--no-repeat	$mod+Alt+Period	seat * cursor press		button1
+	--release	$mod+Alt+Period	seat * cursor release	button1
+	--no-repeat	$mod+Alt+Slash	seat * cursor press		button3
+	--release	$mod+Alt+Slash	seat * cursor release	button3
 
 	$mod+1 workspace number 1
 	$mod+2 workspace number 2
@@ -171,36 +169,36 @@ bindsym {
 
 # Various multimedia keys
 bindsym {
-	XF86AudioRaiseVolume  exec $scripts/volume-control.sh up
-	XF86AudioLowerVolume  exec $scripts/volume-control.sh down
-	XF86AudioMute         exec $scripts/volume-control.sh toggle
-	Control+XF86AudioMute exec $scripts/volume-control.sh toggle-mic
+	XF86AudioRaiseVolume	exec $scripts/volume-control.sh up
+	XF86AudioLowerVolume	exec $scripts/volume-control.sh down
+	XF86AudioMute			exec $scripts/volume-control.sh toggle
+	Control+XF86AudioMute	exec $scripts/volume-control.sh toggle-mic
 
-	--to-code --no-repeat $mod+m exec $scripts/volume-control.sh unmute-down
-	--to-code --release   $mod+m exec $scripts/volume-control.sh unmute-up
+	--to-code --no-repeat $mod+m	exec $scripts/volume-control.sh unmute-down
+	--to-code --release $mod+m		exec $scripts/volume-control.sh unmute-up
 
-	XF86MonBrightnessDown exec $scripts/backlight-control.sh down
-	XF86MonBrightnessUp   exec $scripts/backlight-control.sh up
+	XF86MonBrightnessDown	exec $scripts/backlight-control.sh down
+	XF86MonBrightnessUp		exec $scripts/backlight-control.sh up
 
 	XF86AudioPlay exec playerctl play-pause
 	XF86AudioNext exec playerctl next
 	XF86AudioPrev exec playerctl previous
 
-	Print         exec grimvshot --notify --swaynag --area
-	Shift+Print   exec grimvshot --notify --swaynag --window
-	Control+Print exec grimvshot --notify --swaynag --screen
+	Print			exec grimvshot --notify --swaynag --area
+	Shift+Print		exec grimvshot --notify --swaynag --window
+	Control+Print	exec grimvshot --notify --swaynag --screen
 
 	XF86PowerOff exec $scripts/suspend.sh
 }
 
 bindsym --to-code $mod+r mode "resize"
 mode "resize" {
-	bindsym $left  resize shrink width  20px
-	bindsym $down  resize grow   height 20px
-	bindsym $up    resize shrink height 20px
-	bindsym $right resize grow   width  20px
-	bindsym Return mode default
-	bindsym Escape mode default
+	bindsym $left	resize shrink width  20px
+	bindsym $down	resize grow   height 20px
+	bindsym $up		resize shrink height 20px
+	bindsym $right	resize grow   width  20px
+	bindsym Return	mode default
+	bindsym Escape	mode default
 }
 
 bindsym --to-code $mod+f12 mode "nested sway"
@@ -210,8 +208,8 @@ mode "nested sway" {
 
 bindsym --to-code $mod+Shift+w mode "move workspace"
 mode "move workspace" {
-	bindsym --to-code $left  move workspace to output left,  mode default
-	bindsym --to-code $right move workspace to output right, mode default
+	bindsym --to-code $left		move workspace to output left,	mode default
+	bindsym --to-code $right	move workspace to output right,	mode default
 	bindsym Escape mode default
 }
 
@@ -288,29 +286,29 @@ mode "manage output" {
 # }
 
 set {
-	$focused_title_border "#ee6600"
-	$focused_title_bg "#884400"
-	$focused_title_text "#ffffff"
-	$focused_indicator "#ff0044"
-	$focused_border $focused_title_border
-	$unfocused_title_border "#333333"
-	$unfocused_title_bg "#222222"
-	$unfocused_title_text "#bbbbbb"
-	$unfocused_indicator "#882200"
-	$unfocused_border $unfocused_title_border
-	$urgent_title_border "#bb0000"
-	$urgent_title_bg "#880000"
-	$urgent_title_text "#ffffff"
-	$urgent_indicator "#dd0000"
-	$urgent_border $urgent_title_border
+	$focused_title_border	"#ee6600"
+	$focused_title_bg		"#884400"
+	$focused_title_text		"#ffffff"
+	$focused_indicator		"#ff0044"
+	$focused_border			$focused_title_border
+	$unfocused_title_border	"#333333"
+	$unfocused_title_bg		"#222222"
+	$unfocused_title_text	"#bbbbbb"
+	$unfocused_indicator	"#882200"
+	$unfocused_border		$unfocused_title_border
+	$urgent_title_border	"#bb0000"
+	$urgent_title_bg		"#880000"
+	$urgent_title_text		"#ffffff"
+	$urgent_indicator		"#dd0000"
+	$urgent_border			$urgent_title_border
 }
 
 # Set colors from theme variables
-client.focused           $focused_title_border   $focused_title_bg   $focused_title_text   $focused_indicator   $focused_border
-client.focused_inactive  $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
-client.focused_tab_title $focused_title_border   $focused_title_bg   $focused_title_text
-client.unfocused         $unfocused_title_border $unfocused_title_bg $unfocused_title_text $unfocused_indicator $unfocused_border
-client.urgent            $urgent_title_border    $urgent_title_bg    $urgent_title_text    $urgent_indicator    $urgent_border
+client.focused				$focused_title_border	$focused_title_bg	$focused_title_text		$focused_indicator		$focused_border
+client.focused_inactive		$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
+client.focused_tab_title	$focused_title_border	$focused_title_bg	$focused_title_text
+client.unfocused			$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
+client.urgent				$urgent_title_border	$urgent_title_bg	$urgent_title_text		$urgent_indicator		$urgent_border
 
 # client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 # client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
@@ -488,9 +486,10 @@ output $external_hdmi position 0 0
 # output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-output * background #000000 solid_color
+# output * background #000000 solid_color
+output * background /home/kraftwerk28/Pictures/telegram-math.png tile
 # }}}
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
 
-# vim: filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0
+# vim: noet sw=0 filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0

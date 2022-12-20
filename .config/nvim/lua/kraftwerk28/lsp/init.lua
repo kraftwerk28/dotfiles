@@ -30,10 +30,10 @@ local function override_hl(name, val)
   api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
 end
 
--- override_hl("DiagnosticUnderlineError", { underline = true, undercurl = false })
--- override_hl("DiagnosticUnderlineWarn", { underline = true, undercurl = false })
--- override_hl("DiagnosticUnderlineHint", { underline = true, undercurl = false })
--- override_hl("DiagnosticUnderlineInfo", { underline = true, undercurl = false })
+override_hl("DiagnosticUnderlineError", { underline = true, undercurl = false })
+override_hl("DiagnosticUnderlineWarn", { underline = true, undercurl = false })
+override_hl("DiagnosticUnderlineHint", { underline = true, undercurl = false })
+override_hl("DiagnosticUnderlineInfo", { underline = true, undercurl = false })
 
 local tb = require("telescope.builtin")
 

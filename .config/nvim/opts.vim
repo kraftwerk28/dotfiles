@@ -34,8 +34,10 @@ set title
 set shortmess+=c
 set diffopt+=vertical
 set scrolloff=3
-set nobackup backupcopy=yes writebackup
-set keywordprg=
+
+set writebackup " Enable backup feature
+set nobackup " Delete backup file after saving
+set backupcopy=yes " Copy & write to current, instead of renaming
 
 " highlight! Cursor gui=reverse guifg=NONE guibg=NONE
 " highlight Cursor gui=NONE guifg=bg guibg=fg

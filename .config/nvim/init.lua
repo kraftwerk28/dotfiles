@@ -41,9 +41,9 @@ local ok, err = pcall(function()
   -- vim.cmd("colorscheme github_dark_default")
   -- vim.cmd("colorscheme base16-gruvbox-dark-medium")
   -- vim.cmd("colorscheme base16-gruvbox-light-medium")
-  -- vim.cmd("colorscheme kanagawa")
+  vim.cmd("colorscheme kanagawa")
   -- vim.cmd("colorscheme onedark")
-  vim.cmd("colorscheme gruvbox")
+  -- vim.cmd("colorscheme gruvbox")
 end)
 
 if not ok then
@@ -85,7 +85,7 @@ load("kraftwerk28.netrw")
 au("VimEnter", {
   callback = function()
     pcall(vim.cmd, "source .nvimrc")
-  end
+  end,
 })
 
 au("TextYankPost", {
@@ -185,3 +185,58 @@ au("FocusGained", {
     vim.fn.system("pwd > /tmp/last_pwd")
   end,
 })
+
+do
+  local resize_timer
+  local resize_winids
+
+  local function redraw_manpages()
+    local current_winid = vim.api.nvim_get_current_win()
+    if
+      resize_winids == nil
+      or not vim.api.nvim_win_is_valid(current_winid)
+      or not vim.tbl_contains(resize_winids, current_winid)
+    then
+      return
+    end
+    local bufid = vim.api.nvim_win_get_buf(current_winid)
+    local ft = vim.api.nvim_buf_get_option(bufid, "filetype")
+    if ft == "man" then
+      local bufname = vim.api.nvim_buf_get_name(bufid)
+      local winview = vim.fn.winsaveview()
+      require("man").read_page(vim.fn.matchstr(bufname, "man://\\zs.*"))
+      vim.fn.winrestview(winview)
+    end
+    resize_timer = nil
+    resize_winids = nil
+  end
+
+  au("WinResized", {
+    callback = function()
+      if resize_timer ~= nil then
+        resize_timer:stop()
+      end
+      resize_winids = vim.v.event.windows
+      resize_timer = vim.defer_fn(redraw_manpages, 1000)
+    end,
+  })
+end
+
+-- params.match:
+-- {
+--   params = {
+--     buf = 3,
+--     event = "BufReadCmd",
+--     file = "man://sway(5)",
+--     group = 29,
+--     id = 66,
+--     match = "man://sway(5)"
+--   }
+-- }
+-- vim.api.nvim_create_autocmd('BufReadCmd', {
+--   group = augroup,
+--   pattern = 'man://*',
+--   callback = function(params)
+--     require('man').read_page(vim.fn.matchstr(params.match, 'man://\\zs.*'))
+--   end,
+-- })

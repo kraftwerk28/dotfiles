@@ -27,16 +27,36 @@ vim.filetype.add({
 
 -- Set options for filetypes
 local ftconfig = {
-  {
-    { "go", "make", "c", "cpp", "meson" },
-    { expandtab = false },
-  },
 
+  -- Indentation options
   {
-    { "cabal", "csharp", "dockerfile", "groovy", "java", "kotlin", "python" },
-    { expandtab = true },
+    {
+      "go",
+      "make",
+      "c",
+      "cpp",
+      "meson",
+      "svelte",
+      "bash",
+      "sh",
+      "hocon",
+    },
+    { expandtab = false, shiftwidth = 0 },
   },
-
+  {
+    {
+      "cabal",
+      "csharp",
+      "dockerfile",
+      "groovy",
+      "java",
+      "kotlin",
+      "python",
+      "erlang",
+      "elixir",
+    },
+    { expandtab = true, shiftwidth = 4 },
+  },
   {
     {
       "graphql",
@@ -53,38 +73,32 @@ local ftconfig = {
       "vim",
       "yaml",
     },
-    { shiftwidth = 2, expandtab = true },
+    { expandtab = true, shiftwidth = 2 },
   },
+  { "asm", { expandtab = false, tabstop = 8, shiftwidth = 0 } },
 
+  -- Misc options
   {
     { "json", "jsonc", "cjson" },
     { commentstring = "// %s" },
   },
-
-  { "asm", { tabstop = 8 } },
-
   { "help", { conceallevel = 0 } },
-
   { "graphql", { commentstring = "# %s" } },
-
   {
     { "dosini", "confini", "jess" },
     { commentstring = "; %s" },
   },
-
-  -- {
-  --   { "python" },
-  --   { indentexpr = "nvim_treesitter#indent()" },
-  -- },
-
   {
     "hocon",
     { commentstring = "# %s", cindent = true, cinoptions = "+0" },
   },
 
-  { "erlang", { expandtab = true, shiftwidth = 4 } },
+  {
+    { "c", "sh", "bash" },
+    { keywordprg = ":Man" },
+  },
 
-  { { "c", "sh", "bash" }, { keywordprg = ":Man" } },
+  { { "sml" }, { commentstring = "(* %s *)" } },
 }
 
 local filetype_opts = aug("filetype_opts")

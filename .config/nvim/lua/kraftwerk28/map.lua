@@ -80,3 +80,25 @@ m("n", "H", "<Nop>")
 m("n", "dbo", "<Cmd>%bd<CR><C-O>")
 m("n", "dba", "<Cmd>%bd<CR>")
 m("n", "dbb", "<C-W>s<Cmd>bd<CR>")
+
+-- Remap annoying K to <Leader>K
+m("n", "<Leader>K", "K")
+m("n", "K", "<Nop>")
+
+m("n", "<Leader>t", function()
+  local tr = {
+    ["true"] = "false",
+    ["True"] = "False",
+    ["1"] = "0",
+    ["yes"] = "no",
+    ["Yes"] = "No",
+  }
+  local cword = vim.fn.expand("<cword>")
+  for lhs, rhs in pairs(tr) do
+    if cword == lhs then
+      return "ciw" .. rhs .. "<Esc>"
+    elseif cword == rhs then
+      return "ciw" .. lhs .. "<Esc>"
+    end
+  end
+end, { expr = true })
