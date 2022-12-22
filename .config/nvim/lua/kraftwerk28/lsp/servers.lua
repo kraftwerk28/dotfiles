@@ -173,6 +173,12 @@ end
 
 lspconfig.svelte.setup({
   capabilities = make_cpb(),
+  on_attach = function(client)
+    local c = client.server_capabilities
+    -- Formatting is handled by prettier through null-ls
+    c.documentFormattingProvider = false
+    c.documentRangeFormattingProvider = false
+  end,
 })
 
 lspconfig.jsonls.setup({

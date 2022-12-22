@@ -128,10 +128,14 @@ local sources = {
   -- b.formatting.xmllint,
 }
 
+local prettier_fmt = b.formatting.prettierd.with({
+  extra_filetypes = { "svelte" },
+})
+
 if vim.fn.executable("prettierd") == 1 then
-  table.insert(sources, b.formatting.prettierd)
+  table.insert(sources, prettier_fmt)
 else
-  table.insert(sources, b.formatting.prettier)
+  table.insert(sources, prettier_fmt)
 end
 
 require("null-ls").setup({

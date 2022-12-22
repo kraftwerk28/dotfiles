@@ -433,6 +433,7 @@ exec [ "$NO_AUTOSTART" != 1 ] && swaymsg \
 	"exec telegram-desktop, exec foot weechat, exec thunderbird"
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec $scripts/swayidle.sh
+exec libinput-gestures-setup start
 # }}}
 
 # Window rules {{{

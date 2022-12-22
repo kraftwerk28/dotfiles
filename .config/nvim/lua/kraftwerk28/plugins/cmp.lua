@@ -51,6 +51,7 @@ cmp.setup({
         nvim_lsp = "[LSP]",
         path = "[path]",
         luasnip = "[snip]",
+        calc = "[calc]",
       },
     }),
   },
