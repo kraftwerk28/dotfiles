@@ -35,12 +35,13 @@ local function load(use)
   })
 
   use({
-    "b3nj5m1n/kommentary",
+    "numToStr/Comment.nvim",
     config = function()
-      require("kommentary.config").configure_language(
-        "default",
-        { prefer_single_line_comments = true }
-      )
+      require("Comment").setup({
+        pre_hook = require(
+          "ts_context_commentstring.integrations.comment_nvim"
+        ).create_pre_hook(),
+      })
       m:withopt({ silent = true, remap = true }, function()
         m("n", "<C-/>", "gcc")
         m("i", "<C-/>", "<C-O>:normal gcc<CR>")

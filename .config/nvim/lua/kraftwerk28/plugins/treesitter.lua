@@ -23,11 +23,6 @@ local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 --   filetype = "swayconfig",
 -- }
 
--- local ts_cms = require("ts_context_commentstring.internal")
--- vim.api.nvim_create_autocmd("CursorMoved", {
---   callback = ts_cms.update_commentstring,
--- })
-
 local config = {
   -- ensure_installed = ensure_installed,
   highlight = {
@@ -66,7 +61,7 @@ local config = {
     },
   },
   context_commentstring = {
-    enable = false,
+    enable = true,
     enable_autocmd = false,
   },
 }

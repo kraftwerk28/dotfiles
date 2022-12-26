@@ -190,7 +190,5 @@ yt-dlp () {
 
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 
-bindkey -M viins -s '^K' '^ureset\n'
-
 # It requires to be sourced at the end
 # plug zsh-syntax-highlighting

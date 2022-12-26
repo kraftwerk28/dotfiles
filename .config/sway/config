@@ -329,7 +329,7 @@ client.urgent				$urgent_title_border	$urgent_title_bg	$urgent_title_text		$urge
 
 bar {
 	status_command gost
-	font Monospace 11
+	font Hack Nerd Font 11
 	height 0
 	position bottom
 	icon_theme "Papirus"
@@ -403,7 +403,7 @@ default_floating_border normal $border_width
 titlebar_padding 8 1
 focus_wrapping workspace
 focus_follows_mouse no
-font Monospace Bold 10
+font Hack Nerd Font Bold 10
 
 # kraftwerk28's patch only:
 mouse_resizing_mode eight_direction
