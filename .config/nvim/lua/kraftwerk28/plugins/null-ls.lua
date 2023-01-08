@@ -92,6 +92,9 @@ local eslint_filetypes = {
 }
 
 local sources = {
+  b.formatting.prettierd.with({
+    extra_filetypes = { "svelte" },
+  }),
   b.diagnostics.eslint_d.with({ filetypes = eslint_filetypes }),
   b.code_actions.eslint_d.with({ filetypes = eslint_filetypes }),
   b.diagnostics.luacheck.with({
@@ -120,23 +123,15 @@ local sources = {
       return vim.fn.expand("%:t") ~= "PKGBUILD"
     end,
   }),
+  b.formatting.black,
   -- b.diagnostics.cspell,
+  -- b.formatting.sqlformat,
+  -- b.formatting.xmllint,
+
   porth_diagnostic,
   jq_format,
   -- bitbucket_comments,
-  -- b.formatting.sqlformat,
-  -- b.formatting.xmllint,
 }
-
-local prettier_fmt = b.formatting.prettierd.with({
-  extra_filetypes = { "svelte" },
-})
-
-if vim.fn.executable("prettierd") == 1 then
-  table.insert(sources, prettier_fmt)
-else
-  table.insert(sources, prettier_fmt)
-end
 
 require("null-ls").setup({
   fallback_severity = vim.diagnostic.severity.WARN,

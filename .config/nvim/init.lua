@@ -82,11 +82,12 @@ load("kraftwerk28.netrw")
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
 
-au("VimEnter", {
-  callback = function()
-    pcall(vim.cmd, "source .nvimrc")
-  end,
-})
+pcall(vim.cmd, "source .nvimrc")
+-- au("VimEnter", {
+--   callback = function()
+--     pcall(vim.cmd, "source .nvimrc")
+--   end,
+-- })
 
 au("TextYankPost", {
   callback = function()

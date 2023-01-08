@@ -9,7 +9,8 @@ set tabstop=4
 set shiftwidth=0
 set autoindent smartindent
 set list
-let &listchars = "tab:  ,lead:·,trail:·"
+" let &listchars = "tab:  ,trail:·"
+let &listchars = "tab:> ,trail:·"
 set cursorline
 set mouse=a mousemodel=extend
 set clipboard=unnamedplus

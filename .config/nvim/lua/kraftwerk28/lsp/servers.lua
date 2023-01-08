@@ -20,7 +20,7 @@ local function find_compile_commands()
   return fn.fnamemodify(ccj[1], ":p:h")
 end
 
-if not configs.mesonls then
+if configs.mesonls == nil then
   configs.mesonls = {
     default_config = {
       cmd = { "/home/kraftwerk28/projects/meson/mesonls/__main__.py" },
@@ -64,19 +64,21 @@ lspconfig.denols.setup({
 })
 
 lspconfig.gopls.setup({
-  handlers = {
-    ["textDocument/publishDiagnostics"] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics,
-      {
-        update_in_insert = true,
-        virtual_text = { spacing = 2, prefix = "" },
-      }
-    ),
-  },
+  -- handlers = {
+  --   ["textDocument/publishDiagnostics"] = vim.lsp.with(
+  --     vim.lsp.diagnostic.on_publish_diagnostics,
+  --     {
+  --       update_in_insert = true,
+  --       virtual_text = { spacing = 2, prefix = "" },
+  --     }
+  --   ),
+  -- },
   capabilities = make_cpb(),
 })
 
-lspconfig.graphql.setup({ capabilities = make_cpb() })
+lspconfig.graphql.setup({
+  capabilities = make_cpb(),
+})
 
 lspconfig.hls.setup({
   settings = {
@@ -89,6 +91,11 @@ lspconfig.hls.setup({
 
 lspconfig.pylsp.setup({
   capabilities = make_cpb(),
+  on_attach = function(client)
+    -- Formatting is handled by black
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
 
 lspconfig.rust_analyzer.setup({
@@ -97,15 +104,20 @@ lspconfig.rust_analyzer.setup({
 
 lspconfig.tsserver.setup({
   on_attach = function(client)
-    local c = client.server_capabilities
-    -- Formatting is handled by prettier through null-ls
-    c.documentFormattingProvider = false
-    c.documentRangeFormattingProvider = false
+    -- Formatting is handled by null-ls prettier
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+    client.server_capabilities.semanticTokensProvider = nil
   end,
   capabilities = make_cpb(),
   init_options = {
+    hostInfo = "neovim",
+    plugins = {},
     preferences = {
       importModuleSpecifierPreference = "relative",
+    },
+    tsserver = {
+      logVerbosity = "verbose",
     },
   },
 })

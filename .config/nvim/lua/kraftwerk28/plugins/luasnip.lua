@@ -1,5 +1,4 @@
--- Parse vim-snippets
--- require("luasnip.loaders.from_snipmate").lazy_load()
+require("luasnip.loaders.from_snipmate").lazy_load()
 local ls = require("luasnip")
 local fmt = require("luasnip.extras.fmt")
 local extras = require("luasnip.extras")
@@ -26,16 +25,6 @@ local ecma_snippets = {
       i(0),
     })
   ),
-  -- ls.snippet("cl", fmt.fmta("console.log(<>)")),
-  -- ls.snippet("ce", fmt.fmta("console.error(<>)")),
-  -- ls.snippet("cw", fmt.fmta("console.warn(<>)")),
-  -- ls.snippet(
-  --   "cl",
-  --   fmt.fmta(
-  --     "console.<>(<>)",
-  --     { c(1, { t("log"), t("warn"), t("error"), t("dir") }), i(0) }
-  --   )
-  -- ),
   ls.snippet(
     "tsignore",
     c(1, { t("// @ts-expect-error"), t("// @ts-ignore") })

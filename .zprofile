@@ -66,6 +66,9 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	mkdir -p "$sway_logdir"
 	logfile="${sway_logdir}/sway-$(date -Is).log"
 
+	# Remove logs older than 7 days
+	find "$sway_logdir" -type f -mtime +7 -name '*.log' -execdir rm '{}' \;
+
 	exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \
