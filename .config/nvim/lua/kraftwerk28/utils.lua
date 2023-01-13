@@ -90,7 +90,7 @@ end
 M.defglobalfn = setmetatable({ c = 0 }, {
   __call = function(self, f)
     vim.validate({ fn = { f, "f" } })
-    local name = "_lua_fn_" .. self.c
+    local name = "_globalfn_" .. self.c
     _G[name] = f
     self.c = self.c + 1
     return name

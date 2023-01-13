@@ -83,13 +83,13 @@ load("kraftwerk28.netrw")
 -- vim.g.loaded_netrwPlugin = 1
 
 pcall(vim.cmd, "source .nvimrc")
--- au("VimEnter", {
+-- autocmd"VimEnter", {
 --   callback = function()
 --     pcall(vim.cmd, "source .nvimrc")
 --   end,
 -- })
 
-au("TextYankPost", {
+autocmd("TextYankPost", {
   callback = function()
     local highlight = require("vim.highlight")
     if highlight then
@@ -98,7 +98,7 @@ au("TextYankPost", {
   end,
 })
 
-au("FileType", {
+autocmd("FileType", {
   pattern = { "help", "qf", "fugitive", "git", "fugitiveblame" },
   callback = function()
     vim.keymap.set("n", "q", "<Cmd>bdelete<CR>", {
@@ -106,7 +106,7 @@ au("FileType", {
       silent = true,
     })
   end,
-  group = vim.api.nvim_create_augroup("aux_win_close", {}),
+  group = augroup("aux_win_close"),
 })
 
 local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
@@ -123,13 +123,13 @@ local function set_nu(relative)
   end
 end
 
-local number_augroup = aug("number")
-au({ "BufEnter", "WinEnter", "FocusGained" }, {
+local number_augroup = augroup("number")
+autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
   callback = set_nu(true),
   group = number_augroup,
 })
 
-au({ "BufLeave", "WinLeave", "FocusLost" }, {
+autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
   callback = set_nu(false),
   group = number_augroup,
 })
@@ -142,7 +142,7 @@ elseif vim.fn.glob("go.mod") ~= "" then
 end
 
 -- Restore cursor position
-au("BufReadPost", {
+autocmd("BufReadPost", {
   callback = function()
     local pos = vim.fn.line([['"]])
     if pos > 0 and pos <= vim.fn.line("$") then
@@ -151,7 +151,7 @@ au("BufReadPost", {
   end,
 })
 
-au("BufWinEnter", {
+autocmd("BufWinEnter", {
   callback = function()
     if vim.o.filetype == "help" then
       vim.cmd("wincmd L | 82wincmd |")
@@ -175,13 +175,13 @@ au("BufWinEnter", {
   end,
 })
 
-au("FocusLost", {
+autocmd("FocusLost", {
   callback = function()
     vim.cmd("silent! wall")
   end,
 })
 
-au("FocusGained", {
+autocmd("FocusGained", {
   callback = function()
     vim.fn.system("pwd > /tmp/last_pwd")
   end,
@@ -212,7 +212,7 @@ do
     resize_winids = nil
   end
 
-  au("WinResized", {
+  autocmd("WinResized", {
     callback = function()
       if resize_timer ~= nil then
         resize_timer:stop()

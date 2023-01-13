@@ -101,10 +101,10 @@ local ftconfig = {
   { { "sml" }, { commentstring = "(* %s *)" } },
 }
 
-local filetype_opts = aug("filetype_opts")
+local filetype_opts = augroup("filetype_opts")
 for _, cfg in ipairs(ftconfig) do
   local filetypes, opts = cfg[1], cfg[2]
-  au("FileType", {
+  autocmd("FileType", {
     pattern = filetypes,
     callback = function()
       for name, value in pairs(opts) do

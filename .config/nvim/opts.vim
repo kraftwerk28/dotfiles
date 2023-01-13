@@ -4,23 +4,20 @@ set termguicolors
 set background=dark
 set hidden
 set noexpandtab
-set softtabstop=0
-set tabstop=4
-set shiftwidth=0
+set softtabstop=0 tabstop=4 shiftwidth=0
 set autoindent smartindent
 set list
 " let &listchars = "tab:  ,trail:·"
-let &listchars = "tab:> ,trail:·"
+let &listchars = 'tab:> ,trail:·'
 set cursorline
 set mouse=a mousemodel=extend
 set clipboard=unnamedplus
 set completeopt=menu,menuone,noselect
 set incsearch nohlsearch
 set ignorecase smartcase
-set wildmenu
-set wildmode=full
-set signcolumn=auto
-set autoread autowrite autowriteall
+set wildmenu wildmode=full
+set signcolumn=number
+set autoread autowriteall
 set foldlevel=99
 set foldmethod=indent
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
@@ -50,4 +47,3 @@ set guicursor=a:blinkon1-Cursor,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
 " ЙЦУКЕНГШЩЗХЇҐФІВАПРОЛДЖЄЯЧСМИТЬБЮ
 " QWERTYUIOP{}|ASDFGHJKL:"ZXCVBNM<>
 let &langmap = 'йцукенгшщзхїґфівапролджєячсмитьбю;qwertyuiop[]\\asdfghjkl\;''zxcvbnm\,.,ЙЦУКЕНГШЩЗХЇҐФІВАПРОЛДЖЄЯЧСМИТЬБЮ;QWERTYUIOP{}\|ASDFGHJKL:\"ZXCVBNM<>'
-" set langmap=ФИСВУАПРШОЛДЬТЩЗЙКІЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz

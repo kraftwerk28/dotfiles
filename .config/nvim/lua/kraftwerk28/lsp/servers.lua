@@ -116,9 +116,7 @@ lspconfig.tsserver.setup({
     preferences = {
       importModuleSpecifierPreference = "relative",
     },
-    tsserver = {
-      logVerbosity = "verbose",
-    },
+    tsserver = {},
   },
 })
 

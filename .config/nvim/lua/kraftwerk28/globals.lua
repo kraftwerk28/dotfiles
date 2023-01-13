@@ -33,11 +33,10 @@ _G.A = setmetatable({}, {
   end,
 })
 
-_G.au = function(...)
+_G.autocmd = function(...)
   return vim.api.nvim_create_autocmd(...)
 end
 
-_G.aug = function(name, opts)
-  opts = opts or {}
-  return vim.api.nvim_create_augroup(name, opts)
+_G.augroup = function(name, opts)
+  return vim.api.nvim_create_augroup(name, opts or {})
 end

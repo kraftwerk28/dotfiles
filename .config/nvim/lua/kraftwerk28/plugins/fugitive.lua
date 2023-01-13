@@ -7,7 +7,7 @@ m:withopt({ silent = true }, function()
   m("n", "<Leader>gl", "<Cmd>diffget //3<CR>")
 end)
 
-au("FileType", {
+autocmd("FileType", {
   pattern = "fugitive",
   callback = function()
     m("n", "<Leader>gp", "<Cmd>Git push origin HEAD<CR>", { buffer = true })

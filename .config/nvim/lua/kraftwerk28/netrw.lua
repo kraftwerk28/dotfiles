@@ -7,7 +7,7 @@ for k, v in pairs(opts) do
   vim.g["netrw_" .. k] = v
 end
 
-au("FileType", {
+autocmd("FileType", {
   pattern = "netrw",
   callback = function()
     m("n", "o", "<CR>", { remap = true, buffer = true })

@@ -3,7 +3,7 @@ local actions = require("telescope.actions")
 local builtin = require("telescope.builtin")
 
 -- Erase word with <C-W> in floating window, like before
-au("FileType", {
+autocmd("FileType", {
   pattern = "TelescopePrompt",
   callback = function()
     m:withopt({ buffer = true }, function()

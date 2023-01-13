@@ -1,23 +1,23 @@
-local fn = vim.fn
-
-m("x", "p", function()
-  fn.setreg("a", fn.getreg("+"))
+-- Do not replace `+` register's contents when cutting text
+vim.keymap.set("x", "p", function()
+  vim.fn.setreg("a", vim.fn.getreg("+"))
   vim.cmd("normal! " .. vim.v.count1 .. "p")
-  fn.setreg("+", fn.getreg("a"))
+  vim.fn.setreg("+", vim.fn.getreg("a"))
 end)
 
-m("x", "P", function()
-  fn.setreg("a", fn.getreg("+"))
+-- Do not replace `+` register's contents when cutting text
+vim.keymap.set("x", "P", function()
+  vim.fn.setreg("a", vim.fn.getreg("+"))
   vim.cmd("normal! " .. vim.v.count1 .. "p")
-  fn.setreg("+", fn.getreg("a"))
+  vim.fn.setreg("+", vim.fn.getreg("a"))
 end)
 
-au("TextYankPost", {
+autocmd("TextYankPost", {
   pattern = "svg,xml,html",
   callback = function()
-    m("i", "</>", "</<C-X><C-O><C-N>", { buffer = true })
+    vim.keymap.set("i", "</>", "</<C-X><C-O><C-N>", { buffer = true })
   end,
-  group = aug("tag_completion", {}),
+  group = augroup("tag_completion", {}),
 })
 
 m("n", "j", function()
@@ -28,73 +28,72 @@ m("n", "k", function()
   return vim.v.count1 > 1 and "k" or "gk"
 end, { expr = true })
 
-m("n", "<Down>", "<C-E>")
-m("n", "<Up>", "<C-Y>")
-m("n", "<S-Up>", "<C-U>M")
-m("n", "<S-Down>", "<C-D>M")
-m("n", "<C-Up>", "<C-B>M")
-m("n", "<C-Down>", "<C-F>M")
+vim.keymap.set("n", "<Down>", "<C-E>")
+vim.keymap.set("n", "<Up>", "<C-Y>")
+vim.keymap.set("n", "<S-Up>", "<C-U>M")
+vim.keymap.set("n", "<S-Down>", "<C-D>M")
+vim.keymap.set("n", "<C-Up>", "<C-B>M")
+vim.keymap.set("n", "<C-Down>", "<C-F>M")
 
-m("v", ">", ">gv")
-m("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
+vim.keymap.set("v", "<", "<gv")
 
-m:withopt({ silent = true }, function()
-  -- Buffer navigation
-  m("n", "<M-]>", "<Cmd>bnext<CR>")
-  m("n", "<M-[>", "<Cmd>bprevious<CR>")
+local silent = { silent = true }
 
-  -- Tab navigation
-  m("n", "th", "<Cmd>tabprevious<CR>")
-  m("n", "tj", "<Cmd>tablast<CR>")
-  m("n", "tk", "<Cmd>tabfirst<CR>")
-  m("n", "tl", "<Cmd>tabnext<CR>")
-  m("n", "tt", "<Cmd>tabnew<CR>")
-  m("n", "td", "<Cmd>tabclose<CR>")
-  m("n", "tH", "<Cmd>-tabmove<CR>")
-  m("n", "tL", "<Cmd>+tabmove<CR>")
+-- Buffer navigation
+vim.keymap.set("n", "<M-]>", "<Cmd>bnext<CR>", silent)
+vim.keymap.set("n", "<M-[>", "<Cmd>bprevious<CR>", silent)
 
-  for i = 1, 9 do
-    local lhs = ("<M-%d>"):format(i)
-    local rhs = ("<Cmd>%dtabnext<CR>"):format(i)
-    m("n", lhs, rhs, { silent = true })
-  end
-end)
+-- Tab navigation
+vim.keymap.set("n", "th", "<Cmd>tabprevious<CR>", silent)
+vim.keymap.set("n", "tj", "<Cmd>tablast<CR>", silent)
+vim.keymap.set("n", "tk", "<Cmd>tabfirst<CR>", silent)
+vim.keymap.set("n", "tl", "<Cmd>tabnext<CR>", silent)
+vim.keymap.set("n", "tt", "<Cmd>tabnew<CR>", silent)
+vim.keymap.set("n", "td", "<Cmd>tabclose<CR>", silent)
+vim.keymap.set("n", "tH", "<Cmd>-tabmove<CR>", silent)
+vim.keymap.set("n", "tL", "<Cmd>+tabmove<CR>", silent)
+
+for i = 1, 9 do
+  local lhs = ("<M-%d>"):format(i)
+  local rhs = ("<Cmd>%dtabnext<CR>"):format(i)
+  vim.keymap.set("n", lhs, rhs, silent)
+end
 
 m("n", "<Leader>hs", function()
   vim.opt_local.hlsearch = not vim.opt_local.hlsearch:get()
 end)
 
-m:withopt({ silent = true }, function()
-  m("n", "<Leader>w", "<Cmd>wall<CR>")
+vim.keymap.set("n", "<Leader>w", "<Cmd>wall<CR>", silent)
 
-  m("n", "<M-k>", "<Cmd>m-2<CR>")
-  m("n", "<M-j>", "<Cmd>m+1<CR>")
-  m("v", "<M-k>", ":m'<-2<CR>gv")
-  m("v", "<M-j>", ":m'>+1<CR>gv")
-end)
+vim.keymap.set("n", "<M-k>", "<Cmd>m-2<CR>", silent)
+vim.keymap.set("n", "<M-j>", "<Cmd>m+1<CR>", silent)
+vim.keymap.set("v", "<M-k>", ":m'<-2<CR>gv", silent)
+vim.keymap.set("v", "<M-j>", ":m'>+1<CR>gv", silent)
 
-m("i", "<C-BS>", "<C-W>")
-m("v", "/", [["vy/<C-R>v<CR>]])
-m("n", "<Leader>ma", ":<C-U>vertical Man ")
-m("n", "H", "<Nop>")
-m("n", "dbo", "<Cmd>%bd<CR><C-O>")
-m("n", "dba", "<Cmd>%bd<CR>")
-m("n", "dbb", "<C-W>s<Cmd>bd<CR>")
+vim.keymap.set("i", "<C-BS>", "<C-W>")
+vim.keymap.set("v", "/", [["vy/<C-R>v<CR>]])
+vim.keymap.set("n", "<Leader>ma", ":<C-U>vertical Man ")
+vim.keymap.set("n", "H", "<Nop>")
+vim.keymap.set("n", "dbo", "<Cmd>%bd<CR><C-O>")
+vim.keymap.set("n", "dba", "<Cmd>%bd<CR>")
+vim.keymap.set("n", "dbb", "<C-W>s<Cmd>bd<CR>")
 
 -- Remap annoying K to <Leader>K
-m("n", "<Leader>K", "K")
-m("n", "K", "<Nop>")
+vim.keymap.set("n", "<Leader>K", "K")
+vim.keymap.set("n", "K", "<Nop>")
 
-m("n", "<Leader>t", function()
-  local tr = {
-    ["true"] = "false",
-    ["True"] = "False",
-    ["1"] = "0",
-    ["yes"] = "no",
-    ["Yes"] = "No",
-  }
+-- Toggle common boolean-like values
+local boolean_map = {
+  ["true"] = "false",
+  ["True"] = "False",
+  ["1"] = "0",
+  ["yes"] = "no",
+  ["Yes"] = "No",
+}
+vim.keymap.set("n", "<Leader>t", function()
   local cword = vim.fn.expand("<cword>")
-  for lhs, rhs in pairs(tr) do
+  for lhs, rhs in pairs(boolean_map) do
     if cword == lhs then
       return "ciw" .. rhs .. "<Esc>"
     elseif cword == rhs then
