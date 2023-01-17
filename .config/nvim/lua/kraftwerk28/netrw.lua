@@ -10,6 +10,6 @@ end
 autocmd("FileType", {
   pattern = "netrw",
   callback = function()
-    m("n", "o", "<CR>", { remap = true, buffer = true })
+    vim.keymap.set("n", "o", "<CR>", { remap = true, buffer = true })
   end,
 })

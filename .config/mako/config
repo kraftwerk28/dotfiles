@@ -1,5 +1,16 @@
 font=monospace 11
-sort=-time
 default-timeout=5000
 icon-path=/usr/share/icons/Papirus-Dark
 layer=overlay
+anchor=bottom-right
+
+background-color=#285577FF
+border-color=#4C7899FF
+
+[urgency=low]
+background-color=#006000FF
+border-color=#002000FF
+
+[urgency=critical]
+background-color=#800000FF
+border-color=#400000FF

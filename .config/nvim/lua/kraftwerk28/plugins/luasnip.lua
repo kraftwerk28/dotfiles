@@ -115,7 +115,10 @@ ls.add_snippets("c", c_cpp_snippets)
 ls.add_snippets("cpp", c_cpp_snippets)
 
 ls.add_snippets("all", {
-  ls.snippet("uuid", {
+  ls.snippet({
+    trig = "uuid",
+    dscr = { "Generate UUID using `uuidgen`" },
+  }, {
     f(function()
       local raw = vim.fn.system("uuidgen")
       return vim.trim(raw)

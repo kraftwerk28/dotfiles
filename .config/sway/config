@@ -184,9 +184,10 @@ bindsym {
 	XF86AudioNext exec playerctl next
 	XF86AudioPrev exec playerctl previous
 
-	Print			exec grimvshot --notify --swaynag --area
-	Shift+Print		exec grimvshot --notify --swaynag --window
-	Control+Print	exec grimvshot --notify --swaynag --screen
+	Print				exec grimvshot --notify --swaynag --area
+	Shift+Print			exec grimvshot --notify --swaynag --window
+	Control+Print		exec grimvshot --notify --swaynag --screen
+	Control+Shift+Print	exec grimvshot --notify --swaynag --active
 
 	XF86PowerOff exec $scripts/suspend.sh
 }

@@ -37,21 +37,19 @@ override_hl("DiagnosticUnderlineInfo", { underline = true, undercurl = false })
 
 local tb = require("telescope.builtin")
 
-m:withopt({ silent = true }, function()
-  m("n", "<Leader>f", function()
-    vim.lsp.buf.format({ timeout_ms = 5000, async = false })
-  end)
-  -- m("v", "<Leader>f", vim.lsp.buf.range_formatting)
-  m("n", "<Leader>ah", vim.lsp.buf.hover)
-  m("n", "<Leader>aj", tb.lsp_definitions)
-  m("n", "<Leader>ae", function()
-    vim.diagnostic.open_float({ border = vim.g.borderchars })
-  end)
-  m("n", "<Leader>aa", vim.lsp.buf.code_action)
-  m("n", "<Leader>as", tb.lsp_document_symbols)
-  m("n", "<F2>", vim.lsp.buf.rename)
-  m("i", "<C-S>", vim.lsp.buf.signature_help)
-end)
+local mopt = { silent = true }
+vim.keymap.set("n", "<Leader>f", function()
+  vim.lsp.buf.format({ timeout_ms = 5000, async = false }, mopt)
+end, mopt)
+vim.keymap.set("n", "<Leader>ah", vim.lsp.buf.hover, mopt)
+vim.keymap.set("n", "<Leader>aj", tb.lsp_definitions, mopt)
+vim.keymap.set("n", "<Leader>ae", function()
+  vim.diagnostic.open_float({ border = vim.g.borderchars }, mopt)
+end, mopt)
+vim.keymap.set("n", "<Leader>aa", vim.lsp.buf.code_action, mopt)
+vim.keymap.set("n", "<Leader>as", tb.lsp_document_symbols, mopt)
+vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, mopt)
+vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, mopt)
 
 do
   local m = "textDocument/signatureHelp"
@@ -63,12 +61,12 @@ do
   lsp.handlers[m] = lsp.with(lsp.handlers[m], { border = vim.g.borderchars })
 end
 
-do
-  local m = "textDocument/publishDiagnostics"
-  lsp.handlers[m] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = {
-      spacing = 2,
-      prefix = "",
-    },
-  })
-end
+-- do
+--   local m = "textDocument/publishDiagnostics"
+--   lsp.handlers[m] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
+--     virtual_text = {
+--       spacing = 2,
+--       prefix = "",
+--     },
+--   })
+-- end

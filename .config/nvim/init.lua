@@ -71,19 +71,20 @@ _G.reload_config = function()
   vim.api.nvim_exec_autocmds({ "FileType" }, {})
 end
 
-load("kraftwerk28.map")
-load("kraftwerk28.lsp")
-load("kraftwerk28.tabline")
-load("kraftwerk28.statusline")
-load("kraftwerk28.filetype")
-load("kraftwerk28.plugins")
+require("kraftwerk28.map")
+require("kraftwerk28.lsp")
+require("kraftwerk28.tabline")
+require("kraftwerk28.statusline")
+require("kraftwerk28.filetype")
+require("kraftwerk28.plugins")
+require("kraftwerk28.notify")
 
-load("kraftwerk28.netrw")
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
+-- require("kraftwerk28.netrw")
 
 pcall(vim.cmd, "source .nvimrc")
--- autocmd"VimEnter", {
+-- autocmd("VimEnter", {
 --   callback = function()
 --     pcall(vim.cmd, "source .nvimrc")
 --   end,

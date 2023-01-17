@@ -20,11 +20,11 @@ autocmd("TextYankPost", {
   group = augroup("tag_completion", {}),
 })
 
-m("n", "j", function()
+vim.keymap.set("n", "j", function()
   return vim.v.count1 > 1 and "j" or "gj"
 end, { expr = true })
 
-m("n", "k", function()
+vim.keymap.set("n", "k", function()
   return vim.v.count1 > 1 and "k" or "gk"
 end, { expr = true })
 
@@ -60,7 +60,7 @@ for i = 1, 9 do
   vim.keymap.set("n", lhs, rhs, silent)
 end
 
-m("n", "<Leader>hs", function()
+vim.keymap.set("n", "<Leader>hs", function()
   vim.opt_local.hlsearch = not vim.opt_local.hlsearch:get()
 end)
 

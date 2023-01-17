@@ -64,13 +64,13 @@ local function build_tabline()
   return str
 end
 
-_G.SwitchBuffer = function(_, nclicks, button, modifiers)
-  vim.pretty_print({
-    nclicks = nclicks,
-    button = button,
-    modifiers = modifiers,
-  })
-end
+-- _G.SwitchBuffer = function(_, nclicks, button, modifiers)
+--   vim.pretty_print({
+--     nclicks = nclicks,
+--     button = button,
+--     modifiers = modifiers,
+--   })
+-- end
 
 -- local tabline_sel = utils.get_highlight("TabLineSel")
 -- tabline_sel.gui = "reverse,bold"

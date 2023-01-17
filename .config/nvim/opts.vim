@@ -5,7 +5,7 @@ set background=dark
 set hidden
 set noexpandtab
 set softtabstop=0 tabstop=4 shiftwidth=0
-set autoindent smartindent
+set autoindent
 set list
 " let &listchars = "tab:  ,trail:·"
 let &listchars = 'tab:> ,trail:·'

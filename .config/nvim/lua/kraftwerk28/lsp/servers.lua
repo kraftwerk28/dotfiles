@@ -89,13 +89,17 @@ lspconfig.hls.setup({
   capabilities = make_cpb(),
 })
 
-lspconfig.pylsp.setup({
+-- lspconfig.pylsp.setup({
+--   capabilities = make_cpb(),
+--   on_attach = function(client)
+--     -- Formatting is handled by black
+--     client.server_capabilities.documentFormattingProvider = false
+--     client.server_capabilities.documentRangeFormattingProvider = false
+--   end,
+-- })
+
+lspconfig.pyright.setup({
   capabilities = make_cpb(),
-  on_attach = function(client)
-    -- Formatting is handled by black
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-  end,
 })
 
 lspconfig.rust_analyzer.setup({
@@ -131,8 +135,6 @@ lspconfig.tsserver.setup({
 --     ".git",
 --   },
 -- }
-
--- lspconfig.pyright.setup {}
 
 -- lspconfig.sumneko_lua.setup {
 --   cmd = {

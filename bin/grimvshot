@@ -17,24 +17,33 @@ get_focused_output() {
 	swaymsg -t get_outputs | jq -r '.[] | select(.focused).name'
 }
 
-while (( $# > 0 )); do
-	arg=$1
-	shift
-	case $arg in
+get_default_savefile() {
+	echo "$(xdg-user-dir PICTURES)/grim-$(date -Ins).png"
+}
+
+optstr=$(getopt -o o: -l notify,swaynag,cursor,copy,file:,output:,active,area,screen,window,focused -- "$@")
+# echo "$optstr"
+# exit
+eval set -- "$optstr"
+
+while :; do
+	case $1 in
 		--notify) NOTIFY=1;;
 		--swaynag) RUN_SWAYNAG=1;;
 		--cursor) WITH_CURSOR=1;;
 		--copy) COPY=1;;
-		-o|--file) FILE=$1; shift;;
-		--output) OUTPUT=$1; shift;;
-		--active|--area|--screen|--window) ACTION=$arg;;
-		*) usage;;
+		-o|--file) FILE=$2; shift;;
+		--output) OUTPUT=$2; shift;;
+		--active|--area|--screen|--window|--focused) ACTION=$1;;
+		--) shift; break;;
 	esac
+	shift
 done
 
 [[ -z $ACTION ]] && usage
 
-RECT_QUERY='"\(.rect.x),\(.rect.y - .deco_rect.height) \(.rect.width)x\(.rect.height + .deco_rect.height)"'
+ALL_NODES='recurse(.nodes[], .floating_nodes[])'
+TO_RECT='"\(.rect.x),\(.rect.y - .deco_rect.height) \(.rect.width)x\(.rect.height + .deco_rect.height)"'
 
 case $ACTION in
 	--area)
@@ -53,17 +62,14 @@ case $ACTION in
 		grim -c -o "$(get_focused_output)" "$bake"
 		imv -f "$bake" &
 		IMV_PID=$!
-		if ! GEOM=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | '"$RECT_QUERY" | slurp); then
+		if ! GEOM=$(swaymsg -t get_tree | jq -r "$ALL_NODES | select(.pid? and .visible?) | $TO_RECT" | slurp); then
 			kill "$IMV_PID"
 			rm "$bake"
 			exit
 		fi
 		;;
 	--active)
-		GEOM="$(swaymsg -t get_tree | jq -r \
-			' .recurse(.nodes[], floating_nodes[])
-			| select(.focused)
-			| '"$RECT_QUERY")";;
+		GEOM="$(swaymsg -t get_tree | jq -r "$ALL_NODES | select(.focused) | $TO_RECT")";;
 esac
 
 if [[ -n $bake ]]; then
@@ -74,12 +80,16 @@ fi
 [[ -n $GEOM ]] && args+=(-g "$GEOM")
 
 if [[ -n $RUN_SWAYNAG ]]; then
-	FILE=${FILE:-"$(mktemp /tmp/grimvshot-XXXXXX.png)"}
-	grim "${args[@]}" "$FILE"
+	TMPFILE="$(mktemp /tmp/grimvshot-XXXXXX.png)"
+	FILE="$(get_default_savefile)"
+	grim "${args[@]}" "$TMPFILE"
 elif [[ -n $COPY ]]; then
 	grim "${args[@]}" - | wl-copy
+	echo "Screenshot copied to clipboard"
 else
+	FILE=${FILE:-$(get_default_savefile)}
 	grim "${args[@]}" "$FILE"
+	echo "Screenshot saved to $FILE"
 fi
 
 [[ -n $IMV_PID ]] && kill "$IMV_PID"
@@ -94,9 +104,9 @@ if [[ -n $RUN_SWAYNAG ]]; then
 		-Z Save 'echo save' \
 		-Z Edit 'echo edit'
 	) in
-		copy) COPY=1; wl-copy < "$FILE";;
-		save) mv "$FILE" "$(xdg-user-dir PICTURES)/grim-$(date -Ins).png";;
-		edit) swappy -f "$FILE"; exit;;
+		copy) COPY=1; wl-copy < "$TMPFILE";;
+		save) mv "$TMPFILE" "$FILE";;
+		edit) swappy -f "$TMPFILE"; exit;;
 		*) exit;;
 	esac
 fi

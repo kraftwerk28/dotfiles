@@ -42,11 +42,10 @@ local function load(use)
           "ts_context_commentstring.integrations.comment_nvim"
         ).create_pre_hook(),
       })
-      m:withopt({ silent = true, remap = true }, function()
-        m("n", "<C-/>", "gcc")
-        m("i", "<C-/>", "<C-O>:normal gcc<CR>")
-        m("x", "<C-/>", "gcgv")
-      end)
+      local mopt = { silent = true, remap = true }
+      vim.keymap.set("n", "<C-/>", "gcc", mopt)
+      vim.keymap.set("i", "<C-/>", "<C-O>:normal gcc<CR>", mopt)
+      vim.keymap.set("x", "<C-/>", "gcgv", mopt)
     end,
   })
 
@@ -191,7 +190,7 @@ local function load(use)
   use({
     "junegunn/vim-easy-align",
     config = function()
-      m({ "v", "n" }, "<Leader>ea", "<Plug>(EasyAlign)")
+      vim.keymap.set({ "v", "n" }, "<Leader>ea", "<Plug>(EasyAlign)")
     end,
   })
 
@@ -310,4 +309,4 @@ local function bootstrap()
   end
 end
 
-return bootstrap
+bootstrap()

@@ -78,6 +78,6 @@ end
 --   end,
 -- })
 
-m("n", "<Leader>lsta", start_server)
-m("n", "<Leader>lsto", stop_server)
-m("n", "<Leader>lr", restart_server)
+vim.keymap.set("n", "<Leader>lsta", start_server)
+vim.keymap.set("n", "<Leader>lsto", stop_server)
+vim.keymap.set("n", "<Leader>lr", restart_server)

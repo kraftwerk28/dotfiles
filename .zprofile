@@ -61,6 +61,7 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	export XDG_CURRENT_DESKTOP="sway"
 	export _JAVA_AWT_WM_NONREPARENTING=1
 	# export WLR_RENDERER=vulkan
+	export WLR_DRM_NO_ATOMIC=1
 
 	sway_logdir="${HOME}/sway.d"
 	mkdir -p "$sway_logdir"

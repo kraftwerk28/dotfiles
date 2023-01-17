@@ -6,18 +6,36 @@ local builtin = require("telescope.builtin")
 autocmd("FileType", {
   pattern = "TelescopePrompt",
   callback = function()
-    m:withopt({ buffer = true }, function()
-      m("i", "<C-W>", "<C-S-W>")
-      m("i", "<C-BS>", "<C-S-W>")
-    end)
+    vim.keymap.set("i", "<C-W>", "<C-S-W>", { buffer = true })
+    vim.keymap.set("i", "<C-BS>", "<C-S-W>", { buffer = true })
   end,
 })
 
-m("n", "<C-P>", builtin.find_files)
-m("n", "<Leader>rg", builtin.live_grep)
-m("n", "<Leader>b", builtin.buffers)
-m("n", "<Leader>ad", builtin.diagnostics)
-m("n", "<Leader>he", builtin.help_tags)
+vim.keymap.set("n", "<C-P>", function()
+  builtin.find_files({
+    previewer = false,
+    theme = "dropdown",
+    hidden = true,
+    no_ignore = false,
+  })
+end)
+
+vim.keymap.set("n", "<Leader>rg", function()
+  builtin.live_grep({
+    additional_args = { "--sort=path" },
+  })
+end)
+
+-- Like live_grep, but no regex
+vim.keymap.set("n", "<Leader>rs", function()
+  builtin.live_grep({
+    additional_args = { "--fixed-strings", "--sort=path" },
+  })
+end)
+
+vim.keymap.set("n", "<Leader>b", builtin.buffers)
+vim.keymap.set("n", "<Leader>ad", builtin.diagnostics)
+vim.keymap.set("n", "<Leader>he", builtin.help_tags)
 
 telescope.setup({
   defaults = {
@@ -39,19 +57,6 @@ telescope.setup({
         ["<C-J>"] = actions.move_selection_next,
         ["<Esc>"] = actions.close,
       },
-    },
-  },
-  pickers = {
-    find_files = {
-      previewer = false,
-      theme = "dropdown",
-      hidden = true, -- show hidden files
-      no_ignore = false,
-    },
-    live_grep = {
-      additional_args = function()
-        return { "--sort", "path" }
-      end,
     },
   },
   extensions = {
