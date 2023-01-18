@@ -14,3 +14,6 @@ border-color=#002000FF
 [urgency=critical]
 background-color=#800000FF
 border-color=#400000FF
+
+[category=anchor-center]
+anchor=center

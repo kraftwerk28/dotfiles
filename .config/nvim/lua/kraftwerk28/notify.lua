@@ -12,6 +12,7 @@ vim.notify = function(msg, level)
   end
   level = level or vim.log.levels.INFO
   local urgency = levelmap[level] or "normal"
+  msg = msg:gsub([["]], [[\"]])
   local cmd = ([[notify-send -i nvim -u %s "%s"]]):format(urgency, msg)
   vim.fn.system(cmd)
 end

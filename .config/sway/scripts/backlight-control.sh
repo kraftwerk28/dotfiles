@@ -37,6 +37,7 @@ case $method in
 esac
 
 notify-send \
+	-c anchor-center \
 	-h "string:x-canonical-private-synchronous:backlight" \
 	-h "int:value:${cur}" \
 	-t "2000" \
