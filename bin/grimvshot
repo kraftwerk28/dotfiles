@@ -22,8 +22,6 @@ get_default_savefile() {
 }
 
 optstr=$(getopt -o o: -l notify,swaynag,cursor,copy,file:,output:,active,area,screen,window,focused -- "$@")
-# echo "$optstr"
-# exit
 eval set -- "$optstr"
 
 while :; do
