@@ -104,7 +104,7 @@ if [[ -n $RUN_SWAYNAG ]]; then
 	) in
 		copy) COPY=1; wl-copy < "$TMPFILE";;
 		save) mv "$TMPFILE" "$FILE";;
-		edit) swappy -f "$TMPFILE"; exit;;
+		edit) exec swappy -f "$TMPFILE";;
 		*) exit;;
 	esac
 fi

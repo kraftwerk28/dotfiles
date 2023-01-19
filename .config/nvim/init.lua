@@ -188,6 +188,7 @@ autocmd("FocusGained", {
   end,
 })
 
+-- Redraw manpage for the current window width
 do
   local resize_timer
   local resize_winids

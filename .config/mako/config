@@ -33,4 +33,12 @@ anchor=bottom-right
 [category=neovim]
 height=300
 
+[category=progress]
+font=monospace 14
+anchor=center
+padding=2
+actions=0
+history=0
+text-alignment=center
+
 # vim: ft=confini
