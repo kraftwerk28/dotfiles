@@ -17,3 +17,20 @@ border-color=#400000FF
 
 [category=anchor-center]
 anchor=center
+
+[category=anchor-top-center]
+anchor=top-center
+
+[category=anchor-bottom-center]
+anchor=bottom-center
+
+[category=anchor-top]
+anchor=top-right
+
+[category=anchor-bottom]
+anchor=bottom-right
+
+[category=neovim]
+height=300
+
+# vim: ft=confini

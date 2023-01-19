@@ -14,6 +14,6 @@ vim.notify = function(msg, level)
   level = level or vim.log.levels.INFO
   local urgency = levelmap[level] or "normal"
   uv.spawn("notify-send", {
-    args = { "-i", "nvim", "-u", urgency, msg },
+    args = { "-c", "neovim", "-i", "nvim", "-u", urgency, msg },
   })
 end
