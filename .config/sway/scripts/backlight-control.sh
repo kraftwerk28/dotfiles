@@ -37,6 +37,7 @@ case $method in
 esac
 
 notify-send \
+	-e \
 	-c progress \
 	-h "string:x-canonical-private-synchronous:backlight" \
 	-h "int:value:${cur}" \

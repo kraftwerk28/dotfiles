@@ -6,13 +6,15 @@ local levelmap = {
   [vim.log.levels.WARN] = "normal",
 }
 
-vim.notify = function(msg, level)
+local stock_notify = vim.notify
+
+vim.notify = function(msg, level, opts)
+  stock_notify(msg, level, opts)
   if level == vim.log.levels.OFF then
     return
   end
+  local urgency = levelmap[level or vim.log.levels.INFO] or "normal"
   local uv = vim.loop
-  level = level or vim.log.levels.INFO
-  local urgency = levelmap[level] or "normal"
   uv.spawn("notify-send", {
     args = { "-c", "neovim", "-i", "nvim", "-u", urgency, msg },
   })

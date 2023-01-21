@@ -17,8 +17,8 @@ function ipc:get_keyboard_inputs()
   return r
 end
 
-ipc:main(function()
-  ipc.cmd:on("workspace", function(arg)
+ipc:main(function(ipc)
+  ipc.cmd:on("workspace", function(ipc, arg)
     local ws = ipc:get_workspaces()
     local focused_ws
     for _, w in ipairs(ws) do
@@ -40,7 +40,7 @@ ipc:main(function()
     ipc:command("workspace " .. focused_ws)
   end)
 
-  ipc.cmd:on("tab", function(arg)
+  ipc.cmd:on("tab", function(ipc, arg)
     local tabbed_node = ipc:get_tree():walk_focus(function(n)
       return n.layout == "tabbed"
     end)
@@ -64,19 +64,19 @@ ipc:main(function()
     if not focused_index or not tabbed_node.nodes[focused_index] then
       return
     end
-    local to_be_focused =
-      i3.wrap_node(tabbed_node.nodes[focused_index]):walk_focus()
+    local to_be_focused = i3.wrap_node(tabbed_node.nodes[focused_index])
+      :walk_focus()
     ipc:command(("[con_id=%d] focus"):format(to_be_focused.id))
   end)
 
-  ipc.cmd:on("focus_prev", function()
+  ipc.cmd:on("focus_prev", function(ipc)
     if not previous_focused then
       return
     end
     ipc:command(("[con_id=%d] focus"):format(previous_focused))
   end)
 
-  ipc.cmd:on("next_float", function()
+  ipc.cmd:on("next_float", function(ipc)
     ipc:once("window::new", function(event)
       ipc:command(("[con_id=%s] floating enable"):format(event.container.id))
     end)
@@ -98,7 +98,7 @@ ipc:main(function()
   --   end
   -- end)
 
-  ipc:on("window::focus", function(event)
+  ipc:on("window::focus", function(ipc, event)
     previous_focused = current_focused
     local con_id = event.container.id
     local inputs = ipc:get_keyboard_inputs()
@@ -136,13 +136,13 @@ ipc:main(function()
     current_focused = con_id
   end)
 
-  ipc:on("window::close", function(event)
+  ipc:on("window::close", function(ipc, event)
     windows[event.container.id] = nil
   end)
 
   -- When using nested sway, it's convenient to exit special mode which
   -- disables all bindings in "outer" sway
-  ipc:on("window", function(event)
+  ipc:on("window", function(ipc, event)
     if event.container.app_id == "wlroots" then
       if event.change == "new" then
         ipc:command("mode nested_sway")
@@ -152,7 +152,7 @@ ipc:main(function()
     end
   end)
 
-  ipc:on("workspace::init", function()
+  ipc:on("workspace::init", function(ipc)
     for _, input in ipairs(ipc:get_keyboard_inputs()) do
       ipc:command(
         ('input "%s" xkb_switch_layout %d'):format(input.identifier, 0)

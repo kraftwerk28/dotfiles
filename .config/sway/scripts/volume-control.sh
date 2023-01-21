@@ -11,6 +11,7 @@ report () {
 		no) icon="墳";;
 	esac
 	notify-send \
+		-e \
 		-c progress \
 		-h "string:x-canonical-private-synchronous:volume" \
 		-h "int:value:${v}" \
