@@ -8,11 +8,8 @@ dot_config="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 # setopt xtrace
 
 # Options
-setopt auto_menu complete_in_word always_to_end promptsubst
-setopt appendhistory auto_pushd pushd_ignore_dups pushd_minus auto_cd
-setopt extended_history hist_expire_dups_first hist_ignore_dups
-setopt hist_ignore_space hist_verify share_history nonomatch interactivecomments
-setopt hist_ignore_dups hist_ignore_all_dups hist_find_no_dups
+setopt auto_menu complete_in_word always_to_end promptsubst auto_pushd pushd_ignore_dups pushd_minus auto_cd nonomatch interactivecomments magic_equal_subst
+setopt appendhistory hist_ignore_dups hist_ignore_all_dups hist_find_no_dups hist_ignore_space hist_verify share_history extended_history hist_expire_dups_first hist_ignore_dups
 unsetopt prompt_sp
 
 # Autoloads

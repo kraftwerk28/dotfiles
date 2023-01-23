@@ -52,8 +52,17 @@ vimode_rlabel () {
 }
 
 filepath='%F{#ffa500}%(4~|…/%2~|%~)'
-exit_status=" %(?:%B%F{green}\$:%B%F{red}\$)%b%f"
-PS1="${filepath}\${vcs_info_msg_0_}${exit_status} "
-# RPS1="\$(vimode_rlabel)%f"
+exit_status=' %(?:%B%F{green}$:%B%F{red}$)%b%f'
+PROMPT="$filepath"'${vcs_info_msg_0_}'"$exit_status "
+RPROMPT='%F{magenta}${CMD_ELAPSED_TIME}%b%f'
 
 add-zsh-hook precmd vcs_info
+
+set_elapsed_time () {
+	if [[ -z $CMD_EXEC_TIME ]]; then
+		return
+	fi
+	CMD_ELAPSED_TIME="$(TZ=GMT+0 date -d "@$CMD_EXEC_TIME" +'%Hh %Mm %Ss' | sed 's#00\S\s*##g')"
+}
+
+add-zsh-hook precmd set_elapsed_time
