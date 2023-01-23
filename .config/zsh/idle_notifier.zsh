@@ -32,10 +32,13 @@ remember_time () {
 
 notify_on_exit () {
 	local exit_code=$?
-	if [[ -z $PREEXEC_TIMESTAMP || -z $SWAYSOCK ]]; then
+	if [[ -z $PREEXEC_TIMESTAMP ]]; then
 		return
 	fi
 	CMD_EXEC_TIME=$(( $(date +%s) - PREEXEC_TIMESTAMP ))
+	if [[ -z $SWAYSOCK ]]; then
+		return
+	fi
 	if (( CMD_EXEC_TIME >= NOTIFY_COMMAND_COMPLETED_TRESHOLD )) && ! is_shell_focused; then
 		if (( exit_code == 0 )); then
 			local title="Command succeeded"
