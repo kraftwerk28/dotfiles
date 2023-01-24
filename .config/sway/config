@@ -292,7 +292,7 @@ set {
 	$focused_title_text		"#ffffff"
 	$focused_indicator		"#ff0044"
 	$focused_border			$focused_title_border
-	$unfocused_title_border	"#333333"
+	$unfocused_title_border	"#555555"
 	$unfocused_title_bg		"#222222"
 	$unfocused_title_text	"#bbbbbb"
 	$unfocused_indicator	"#882200"
