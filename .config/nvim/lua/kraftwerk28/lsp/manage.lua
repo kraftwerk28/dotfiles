@@ -2,7 +2,7 @@ local function start_server()
   local matching = {}
   for name, client in pairs(require("lspconfig.configs")) do
     for _, ft in ipairs(client.filetypes) do
-      if ft == vim.opt_local.filetype:get() then
+      if ft == vim.bo.filetype then
         table.insert(matching, name)
         break
       end

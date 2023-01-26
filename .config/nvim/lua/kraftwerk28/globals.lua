@@ -23,10 +23,6 @@ _G.m = setmetatable({
   end,
 })
 
-_G.o = vim.opt
-_G.lo = vim.opt_local
-_G.go = vim.opt_global
-
 _G.A = setmetatable({}, {
   __index = function(_, k)
     return vim.api["nvim_" .. k]

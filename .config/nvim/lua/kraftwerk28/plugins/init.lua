@@ -9,7 +9,7 @@ local function load(use)
 
   -- Themes
   use({ "navarasu/onedark.nvim", disable = true })
-  use({ "ellisonleao/gruvbox.nvim", disable = true })
+  use({ "ellisonleao/gruvbox.nvim", disable = false })
   -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   -- use("~/projects/neovim/nvim-base16")
   use({ "RRethy/nvim-base16", disable = true })

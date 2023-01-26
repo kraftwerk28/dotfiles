@@ -105,7 +105,7 @@ local sources = {
       "--ranges",
       "--globals",
       -- See lua/kraftwerk28/globals.lua
-      { "vim", "o", "lo", "go", "m", "autocmd", "augroup" },
+      { "vim", "m", "autocmd", "augroup" },
       "--filename",
       "$FILENAME",
       "-",

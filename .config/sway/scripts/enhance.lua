@@ -18,6 +18,8 @@ function ipc:get_keyboard_inputs()
 end
 
 ipc:main(function(ipc)
+  current_focused = ipc:get_tree():find_focused().id
+
   ipc.cmd:on("workspace", function(ipc, arg)
     local ws = ipc:get_workspaces()
     local focused_ws
@@ -99,8 +101,12 @@ ipc:main(function(ipc)
   -- end)
 
   ipc:on("window::focus", function(ipc, event)
-    previous_focused = current_focused
     local con_id = event.container.id
+
+    if con_id ~= current_focused then
+      previous_focused, current_focused = current_focused, con_id
+    end
+
     local inputs = ipc:get_keyboard_inputs()
     local input_layouting = {}
     for _, input in ipairs(inputs) do
@@ -133,7 +139,6 @@ ipc:main(function(ipc)
     if #commands > 0 then
       ipc:command(table.concat(commands, ", "))
     end
-    current_focused = con_id
   end)
 
   ipc:on("window::close", function(ipc, event)

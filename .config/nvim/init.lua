@@ -1,8 +1,5 @@
 require("kraftwerk28.globals")
 
-local utils = require("kraftwerk28.utils")
-local load = utils.load
-
 local min_version = "nvim-0.8"
 if vim.fn.has(min_version) == 0 then
   print("At least " .. min_version .. " is required for this config.")
@@ -23,7 +20,7 @@ vim.g.diagnostic_signs = {
 }
 vim.g.sql_type_default = "pgsql"
 
-vim.cmd("runtime opts.vim")
+vim.cmd.runtime("opts.vim")
 
 local ok, err = pcall(function()
   -- require("github-theme").setup({
@@ -33,6 +30,7 @@ local ok, err = pcall(function()
   --   colors = { hint = "orange", error = "#ff0000" },
   --   hide_inactive_statusline = false,
   -- })
+
   -- require("onedark").setup({
   --   style = "warmer",
   --   ending_tildes = true,
@@ -41,9 +39,9 @@ local ok, err = pcall(function()
   -- vim.cmd("colorscheme github_dark_default")
   -- vim.cmd("colorscheme base16-gruvbox-dark-medium")
   -- vim.cmd("colorscheme base16-gruvbox-light-medium")
-  vim.cmd("colorscheme kanagawa")
+  -- vim.cmd("colorscheme kanagawa")
   -- vim.cmd("colorscheme onedark")
-  -- vim.cmd("colorscheme gruvbox")
+  vim.cmd("colorscheme gruvbox")
 end)
 
 if not ok then
@@ -71,24 +69,23 @@ _G.reload_config = function()
   vim.api.nvim_exec_autocmds({ "FileType" }, {})
 end
 
-require("kraftwerk28.map")
-require("kraftwerk28.lsp")
-require("kraftwerk28.tabline")
-require("kraftwerk28.statusline")
-require("kraftwerk28.filetype")
-require("kraftwerk28.plugins")
-require("kraftwerk28.notify")
+local function load(mod)
+  local ok, err = pcall(require, mod)
+  if not ok then
+    vim.api.nvim_err_write(err)
+  end
+end
 
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
--- require("kraftwerk28.netrw")
+load("kraftwerk28.map")
+load("kraftwerk28.lsp")
+load("kraftwerk28.tabline")
+load("kraftwerk28.statusline")
+load("kraftwerk28.filetype")
+load("kraftwerk28.plugins")
+load("kraftwerk28.notify")
+-- load("kraftwerk28.netrw")
 
 pcall(vim.cmd, "source .nvimrc")
--- autocmd("VimEnter", {
---   callback = function()
---     pcall(vim.cmd, "source .nvimrc")
---   end,
--- })
 
 autocmd("TextYankPost", {
   callback = function()
@@ -99,39 +96,37 @@ autocmd("TextYankPost", {
   end,
 })
 
-autocmd("FileType", {
-  pattern = { "help", "qf", "fugitive", "git", "fugitiveblame" },
-  callback = function()
-    vim.keymap.set("n", "q", "<Cmd>bdelete<CR>", {
-      buffer = true,
-      silent = true,
-    })
-  end,
-  group = augroup("aux_win_close"),
-})
-
 local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
-local function set_nu(relative)
-  return function()
-    if vim.fn.win_gettype() == "popup" then
-      return
-    end
-    if vim.tbl_contains(no_line_number_ft, vim.bo.filetype) then
-      return
-    end
-    vim.o.number = true
-    vim.o.relativenumber = relative
-  end
-end
 
 local number_augroup = augroup("number")
+
 autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
-  callback = set_nu(true),
+  -- callback = set_nu(true),
+  callback = function()
+    if
+      vim.fn.win_gettype() ~= ""
+      or vim.tbl_contains(no_line_number_ft, vim.bo.filetype)
+    then
+      return
+    end
+    vim.wo.number = true
+    vim.wo.relativenumber = true
+  end,
   group = number_augroup,
 })
 
 autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
-  callback = set_nu(false),
+  -- callback = set_nu(false),
+  callback = function()
+    if
+      vim.fn.win_gettype() ~= ""
+      or vim.tbl_contains(no_line_number_ft, vim.bo.filetype)
+    then
+      return
+    end
+    vim.wo.number = true
+    vim.wo.relativenumber = false
+  end,
   group = number_augroup,
 })
 
@@ -184,46 +179,46 @@ autocmd("FocusLost", {
 
 autocmd("FocusGained", {
   callback = function()
-    vim.fn.system("pwd > /tmp/last_pwd")
+    vim.fn.writefile({ vim.fn.getcwd() }, "/tmp/last_pwd")
   end,
 })
 
 -- Redraw manpage for the current window width
-do
-  local resize_timer
-  local resize_winids
-
-  local function redraw_manpages()
-    local current_winid = vim.api.nvim_get_current_win()
-    if
-      resize_winids == nil
-      or not vim.api.nvim_win_is_valid(current_winid)
-      or not vim.tbl_contains(resize_winids, current_winid)
-    then
-      return
-    end
-    local bufid = vim.api.nvim_win_get_buf(current_winid)
-    local ft = vim.api.nvim_buf_get_option(bufid, "filetype")
-    if ft == "man" then
-      local bufname = vim.api.nvim_buf_get_name(bufid)
-      local winview = vim.fn.winsaveview()
-      require("man").read_page(vim.fn.matchstr(bufname, "man://\\zs.*"))
-      vim.fn.winrestview(winview)
-    end
-    resize_timer = nil
-    resize_winids = nil
-  end
-
-  autocmd("WinResized", {
-    callback = function()
-      if resize_timer ~= nil then
-        resize_timer:stop()
-      end
-      resize_winids = vim.v.event.windows
-      resize_timer = vim.defer_fn(redraw_manpages, 1000)
-    end,
-  })
-end
+-- do
+--   local resize_timer
+--   local resize_winids
+--
+--   local function redraw_manpages()
+--     local current_winid = vim.api.nvim_get_current_win()
+--     if
+--       resize_winids == nil
+--       or not vim.api.nvim_win_is_valid(current_winid)
+--       or not vim.tbl_contains(resize_winids, current_winid)
+--     then
+--       return
+--     end
+--     local bufid = vim.api.nvim_win_get_buf(current_winid)
+--     local ft = vim.api.nvim_buf_get_option(bufid, "filetype")
+--     if ft == "man" then
+--       local bufname = vim.api.nvim_buf_get_name(bufid)
+--       local winview = vim.fn.winsaveview()
+--       require("man").read_page(vim.fn.matchstr(bufname, "man://\\zs.*"))
+--       vim.fn.winrestview(winview)
+--     end
+--     resize_timer = nil
+--     resize_winids = nil
+--   end
+--
+--   autocmd("WinResized", {
+--     callback = function()
+--       if resize_timer ~= nil then
+--         resize_timer:stop()
+--       end
+--       resize_winids = vim.v.event.windows
+--       resize_timer = vim.defer_fn(redraw_manpages, 1000)
+--     end,
+--   })
+-- end
 
 -- params.match:
 -- {

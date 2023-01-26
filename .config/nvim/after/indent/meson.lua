@@ -1,3 +1,3 @@
-vim.opt_local.indentexpr = ""
-vim.opt_local.cindent = true
-vim.opt_local.cinoptions = "(1s,m1"
+vim.bo.indentexpr = ""
+vim.bo.cindent = true
+vim.bo.cinoptions = "(1s,m1"

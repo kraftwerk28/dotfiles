@@ -402,7 +402,7 @@ smart_borders no_gaps
 default_border normal $border_width
 default_floating_border normal $border_width
 titlebar_padding 8 1
-focus_wrapping workspace
+focus_wrapping yes
 focus_follows_mouse no
 font Monospace Bold 10
 

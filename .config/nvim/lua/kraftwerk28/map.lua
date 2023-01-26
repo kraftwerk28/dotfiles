@@ -61,7 +61,7 @@ for i = 1, 9 do
 end
 
 vim.keymap.set("n", "<Leader>hs", function()
-  vim.opt_local.hlsearch = not vim.opt_local.hlsearch:get()
+  vim.o.hlsearch = not vim.o.hlsearch
 end)
 
 vim.keymap.set("n", "<Leader>w", "<Cmd>wall<CR>", silent)
