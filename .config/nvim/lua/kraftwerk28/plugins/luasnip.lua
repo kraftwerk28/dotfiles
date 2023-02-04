@@ -1,4 +1,3 @@
-local from_snipmate = require("luasnip.loaders.from_snipmate")
 local ls = require("luasnip")
 local fmt = require("luasnip.extras.fmt")
 local extras = require("luasnip.extras")
@@ -10,8 +9,6 @@ local t = ls.text_node
 local sn = ls.snippet_node
 local rep = extras.rep
 local d = ls.dynamic_node
-
--- ls.filetype_extend("all", { "_" })
 
 local ecma_snippets = {
   ls.snippet(
@@ -124,13 +121,20 @@ ls.add_snippets("all", {
       return vim.trim(raw)
     end),
   }),
+
+  ls.snippet({
+    trig = "unixnow",
+    dscr = { "Current UNIX epoch" },
+  }, {
+    f(function()
+      local raw = vim.fn.system("date +%s")
+      return vim.trim(raw)
+    end),
+  }),
 })
 
-from_snipmate.lazy_load()
-
-ls.config.set_config({
-  updateevents = "TextChanged,TextChangedI",
-})
+-- require("luasnip.loaders.from_snipmate").lazy_load()
+-- ls.filetype_extend("all", { "_" })
 
 local mapopt = { silent = true, expr = true }
 

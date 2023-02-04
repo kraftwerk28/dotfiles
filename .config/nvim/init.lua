@@ -36,12 +36,17 @@ local ok, err = pcall(function()
   --   ending_tildes = true,
   -- })
 
+  require("base16-colorscheme").with_config({
+    telescope = false,
+  })
+
   -- vim.cmd("colorscheme github_dark_default")
-  -- vim.cmd("colorscheme base16-gruvbox-dark-medium")
-  -- vim.cmd("colorscheme base16-gruvbox-light-medium")
-  -- vim.cmd("colorscheme kanagawa")
-  -- vim.cmd("colorscheme onedark")
-  vim.cmd("colorscheme gruvbox")
+  vim.cmd.colorscheme("base16-eighties")
+  -- vim.cmd.colorscheme("base16-gruvbox-dark-medium")
+  -- vim.cmd.colorscheme("base16-gruvbox-light-medium")
+  -- vim.cmd.colorscheme("kanagawa")
+  -- vim.cmd.colorscheme("onedark")
+  -- vim.cmd.colorscheme("gruvbox")
 end)
 
 if not ok then
@@ -132,9 +137,9 @@ autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
 
 -- set 'makeprg' for some projects
 if vim.fn.glob("meson.build") ~= "" then
-  o.makeprg = "meson compile -C build"
+  vim.o.makeprg = "meson compile -C build"
 elseif vim.fn.glob("go.mod") ~= "" then
-  o.makeprg = "go build"
+  vim.o.makeprg = "go build"
 end
 
 -- Restore cursor position

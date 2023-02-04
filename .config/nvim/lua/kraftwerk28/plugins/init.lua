@@ -8,12 +8,10 @@ local function load(use)
   })
 
   -- Themes
-  use({ "navarasu/onedark.nvim", disable = true })
+  use({ "navarasu/onedark.nvim", disable = false })
   use({ "ellisonleao/gruvbox.nvim", disable = false })
-  -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
-  -- use("~/projects/neovim/nvim-base16")
-  use({ "RRethy/nvim-base16", disable = true })
-  use({ "projekt0n/github-nvim-theme", disable = true })
+  use({ "RRethy/nvim-base16", disable = false })
+  use({ "projekt0n/github-nvim-theme", disable = false })
   use({ "rebelot/kanagawa.nvim", disable = false })
 
   use({ "kyazdani42/nvim-web-devicons" })

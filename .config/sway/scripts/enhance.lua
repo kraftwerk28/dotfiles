@@ -102,7 +102,6 @@ ipc:main(function(ipc)
 
   ipc:on("window::focus", function(ipc, event)
     local con_id = event.container.id
-
     if con_id ~= current_focused then
       previous_focused, current_focused = current_focused, con_id
     end

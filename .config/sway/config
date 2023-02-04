@@ -29,7 +29,7 @@ bindsym --to-code {
 
 	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
 	# based on this variable
-	$mod+p exec $scripts/rofi-drun.sh, input type:keyboard xkb_switch_layout 0
+	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -drun-use-desktop-cache -show drun -run-command 'swaymsg exec "{cmd}"'
 
 	$mod+$left	focus left
 	$mod+$down	focus down
@@ -413,7 +413,7 @@ mouse_resizing_mode eight_direction
 
 # Cursor {{{
 # Path int /usr/share/icons
-set $cursor_theme "xcursor-breeze-snow"
+set $cursor_theme "xcursor-breeze"
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {

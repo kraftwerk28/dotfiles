@@ -52,6 +52,8 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=1
 
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
+export SUDO_PROMPT=$'\a[sudo] password for %p: '
+
 if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	export TERM="foot"
 	export GTK_USE_PORTAL=1

@@ -16,7 +16,7 @@ set completeopt=menu,menuone,noselect
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
-set signcolumn=number
+set signcolumn=auto
 set autoread autowriteall
 set foldlevel=99
 set foldmethod=indent

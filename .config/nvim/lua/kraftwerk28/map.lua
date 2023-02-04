@@ -101,3 +101,7 @@ vim.keymap.set("n", "<Leader>t", function()
     end
   end
 end, { expr = true })
+
+-- Quickfix
+vim.keymap.set("n", "<Leader>qj", "<Cmd>cnext<CR>")
+vim.keymap.set("n", "<Leader>qk", "<Cmd>cprev<CR>")

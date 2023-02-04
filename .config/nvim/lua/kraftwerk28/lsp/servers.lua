@@ -120,7 +120,17 @@ lspconfig.tsserver.setup({
     preferences = {
       importModuleSpecifierPreference = "relative",
     },
-    tsserver = {},
+    tsserver = {
+      -- /**
+      --  * Verbosity of the information logged into the `tsserver` log files.
+      --  *
+      --  * Log levels from least to most amount of details: `'terse'`, `'normal'`, `'requestTime`', `'verbose'`.
+      --  * Enabling particular level also enables all lower levels.
+      --  *
+      --  * @default 'off'
+      --  */
+      logVerbosity = "verbose",
+    },
   },
 })
 
@@ -186,10 +196,10 @@ end
 lspconfig.svelte.setup({
   capabilities = make_cpb(),
   on_attach = function(client)
-    local c = client.server_capabilities
     -- Formatting is handled by prettier through null-ls
-    c.documentFormattingProvider = false
-    c.documentRangeFormattingProvider = false
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+    client.server_capabilities.semanticTokensProvider = nil
   end,
 })
 

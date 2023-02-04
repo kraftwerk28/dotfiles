@@ -222,6 +222,7 @@ local function make_stl(focused)
   end
 
   stl:space()
+
   return stl:render()
 end
 
