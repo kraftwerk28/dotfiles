@@ -454,6 +454,7 @@ for_window [app_id="^gnome-calculator$"] floating enable
 for_window [app_id="^org.gnome.Calculator$"] floating enable
 for_window [title="^FX: Track"] floating enable
 for_window [app_id="xdg-desktop-portal-gtk"] floating enable
+for_window [class="jetbrains-studio" title="win[0-9]+"] floating enable
 # }}}
 
 # Output configuration {{{

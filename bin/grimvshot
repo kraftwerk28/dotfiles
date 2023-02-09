@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Make a screenshot of either [focused] window, arbitrary rectangular area or a whole output.
 set -eo pipefail
 if (( $(pgrep -x grimvshot | wc -l) > 2 )); then
 	# Prevent running it multiple times
@@ -8,7 +10,7 @@ fi
 usage () {
 	echo \
 		"Usage: $(basename "$0") [--notify] [--cursor] [--swaynag] [--copy]" \
-		"[-o|--file <FILE>] [--output <OUTPUT>]" \
+		"[-o|--file <FILE>] [--output=<OUTPUT>]" \
 		"[--active|--area|--screen|--window]" >&2
 	exit 1
 }
@@ -21,7 +23,7 @@ get_default_savefile() {
 	echo "$(xdg-user-dir PICTURES)/grim-$(date -Ins).png"
 }
 
-optstr=$(getopt -o o: -l notify,swaynag,cursor,copy,file:,output:,active,area,screen,window,focused -- "$@")
+optstr=$(getopt -o ho: -l help,notify,swaynag,cursor,copy,file:,output:,active,area,screen,window,focused -- "$@")
 eval set -- "$optstr"
 
 while :; do
@@ -32,7 +34,8 @@ while :; do
 		--copy) COPY=1;;
 		-o|--file) FILE=$2; shift;;
 		--output) OUTPUT=$2; shift;;
-		--active|--area|--screen|--window|--focused) ACTION=$1;;
+		--active|--area|--screen|--window) ACTION=$1;;
+		-h|--help) usage;;
 		--) shift; break;;
 	esac
 	shift
