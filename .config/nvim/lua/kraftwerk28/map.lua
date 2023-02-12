@@ -80,8 +80,8 @@ vim.keymap.set("n", "dba", "<Cmd>%bd<CR>")
 vim.keymap.set("n", "dbb", "<C-W>s<Cmd>bd<CR>")
 
 -- Remap annoying K to <Leader>K
-vim.keymap.set("n", "<Leader>K", "K")
-vim.keymap.set("n", "K", "<Nop>")
+-- vim.keymap.set("n", "<Leader>K", "K")
+-- vim.keymap.set("n", "K", "<Nop>")
 
 -- Toggle common boolean-like values
 local boolean_map = {

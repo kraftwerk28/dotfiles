@@ -31,7 +31,8 @@ set inccommand=nosplit
 set title
 set shortmess+=c
 set diffopt+=vertical
-set scrolloff=3
+set scrolloff=0
+set exrc
 
 set writebackup " Enable backup feature
 set nobackup " Delete backup file after saving

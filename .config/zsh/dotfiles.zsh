@@ -1,4 +1,4 @@
-alias dotfiles="git --git-dir=$HOME/projects/dotfiles/ --work-tree=$HOME/"
+alias dotfiles="git --git-dir=$HOME/projects/dotfiles --work-tree=$HOME"
 
 dotfilesupd () {
 	dotfiles add -u && \

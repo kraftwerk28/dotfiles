@@ -8,10 +8,8 @@ end
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
--- stylua: ignore start
 -- vim.g.borderchars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
--- stylua: ignore end
 vim.g.diagnostic_signs = {
   ERROR = " ",
   WARN = " ",
@@ -20,38 +18,8 @@ vim.g.diagnostic_signs = {
 }
 vim.g.sql_type_default = "pgsql"
 
+-- Load options
 vim.cmd.runtime("opts.vim")
-
-local ok, err = pcall(function()
-  -- require("github-theme").setup({
-  --   theme_style = "dark_default",
-  --   -- function_style = "italic",
-  --   -- sidebars = { "qf", "vista_kind", "terminal", "packer" },
-  --   colors = { hint = "orange", error = "#ff0000" },
-  --   hide_inactive_statusline = false,
-  -- })
-
-  -- require("onedark").setup({
-  --   style = "warmer",
-  --   ending_tildes = true,
-  -- })
-
-  require("base16-colorscheme").with_config({
-    telescope = false,
-  })
-
-  -- vim.cmd("colorscheme github_dark_default")
-  vim.cmd.colorscheme("base16-eighties")
-  -- vim.cmd.colorscheme("base16-gruvbox-dark-medium")
-  -- vim.cmd.colorscheme("base16-gruvbox-light-medium")
-  -- vim.cmd.colorscheme("kanagawa")
-  -- vim.cmd.colorscheme("onedark")
-  -- vim.cmd.colorscheme("gruvbox")
-end)
-
-if not ok then
-  print(err)
-end
 
 _G.reload_config = function()
   local rtp_lua_path = table.concat(
@@ -81,58 +49,21 @@ local function load(mod)
   end
 end
 
+load("kraftwerk28.theme")
 load("kraftwerk28.map")
 load("kraftwerk28.lsp")
 load("kraftwerk28.tabline")
 load("kraftwerk28.statusline")
 load("kraftwerk28.filetype")
-load("kraftwerk28.plugins")
 load("kraftwerk28.notify")
+load("kraftwerk28.linenumber")
+load("kraftwerk28.plugins")
 -- load("kraftwerk28.netrw")
-
-pcall(vim.cmd, "source .nvimrc")
 
 autocmd("TextYankPost", {
   callback = function()
-    local highlight = require("vim.highlight")
-    if highlight then
-      highlight.on_yank({ timeout = 1000 })
-    end
+    require("vim.highlight").on_yank({ timeout = 1000 })
   end,
-})
-
-local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
-
-local number_augroup = augroup("number")
-
-autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
-  -- callback = set_nu(true),
-  callback = function()
-    if
-      vim.fn.win_gettype() ~= ""
-      or vim.tbl_contains(no_line_number_ft, vim.bo.filetype)
-    then
-      return
-    end
-    vim.wo.number = true
-    vim.wo.relativenumber = true
-  end,
-  group = number_augroup,
-})
-
-autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
-  -- callback = set_nu(false),
-  callback = function()
-    if
-      vim.fn.win_gettype() ~= ""
-      or vim.tbl_contains(no_line_number_ft, vim.bo.filetype)
-    then
-      return
-    end
-    vim.wo.number = true
-    vim.wo.relativenumber = false
-  end,
-  group = number_augroup,
 })
 
 -- set 'makeprg' for some projects
@@ -156,22 +87,6 @@ autocmd("BufWinEnter", {
   callback = function()
     if vim.o.filetype == "help" then
       vim.cmd("wincmd L | 82wincmd |")
-      -- elseif vim.bo.filetype == "man" then
-      --   TODO:
-      --   local wins = vim.tbl_filter(
-      --     function(w)
-      --       local b = api.nvim_win_get_buf(w)
-      --       local ft = api.nvim_buf_get_option(b, "filetype")
-      --       print(b, ft)
-      --       return ft ~= "" and ft ~= "man"
-      --     end,
-      --     api.nvim_tabpage_list_wins(0)
-      --   )
-      --   print(vim.inspect(wins))
-      --   if #wins == 0 then
-      --     -- print("should go to the right")
-      --     vim.cmd("wincmd L | 82wincmd |")
-      --   end
     end
   end,
 })

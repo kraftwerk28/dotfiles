@@ -5,10 +5,17 @@ if [[ -x "$env_gen" ]]; then
 	done < <("$env_gen")
 fi
 
-export EDITOR="/usr/bin/nvim"
+if (( $+commands[nvim] )); then
+	export EDITOR="nvim"
+	export VISUAL="nvim"
+	export MANPAGER="nvim +Man!"
+fi
+
 export PAGER="less -i"
-export MANPAGER="nvim +Man!"
-export TERM="alacritty"
+
+if (( $+commands[alacritty] )); then
+	export TERM=alacritty
+fi
 
 export PATH="$HOME/bin:$PATH"
 
@@ -53,3 +60,7 @@ export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
 export SUDO_PROMPT=$'\a[sudo] password for %p: '
+
+# Make `null` values bold red instead of dim dark in jq colored output
+# https://github.com/stedolan/jq/issues/1972#issuecomment-721667377
+export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
