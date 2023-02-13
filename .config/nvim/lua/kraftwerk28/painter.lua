@@ -1,11 +1,9 @@
 -- The purpose if this class is to solve vim's problem of highlight groups with
--- 'transparent' background. For example, the statusline by default has
--- StatusLine highlight group (StatusLineNC for an unfocused window). If we try
--- to put an element into it with a highlight before (i.e. %#HLname#sometext), whose
--- background doesn't match the background of StatusLine, it would create a
--- 'hole' in statusline row. By instantiating this class and indexing it's
--- instance with a highlight group, it'd generate a new one on the fly, with
--- matching background of 'base' highlight group. For example:
+-- 'transparent' background. For example, a statusline by default uses
+-- StatusLine hl group (StatusLineNC for an unfocused window). If we try to put
+-- an element with a highlight group before (i.e. %#HLname#sometext), whose
+-- background color doesn't match the background of StatusLine, it would create
+-- a 'hole' in statusline's row. Below is an example of workaround:
 --
 -- ```lua
 -- local p = Painter:new({
