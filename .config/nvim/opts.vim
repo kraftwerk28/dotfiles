@@ -33,6 +33,7 @@ set shortmess+=c
 set diffopt+=vertical
 set scrolloff=0
 set exrc
+set keywordprg=
 
 set writebackup " Enable backup feature
 set nobackup " Delete backup file after saving

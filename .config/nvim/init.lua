@@ -1,10 +1,10 @@
-require("kraftwerk28.globals")
-
 local min_version = "nvim-0.8"
 if vim.fn.has(min_version) == 0 then
   print("At least " .. min_version .. " is required for this config.")
   return
 end
+
+require("kraftwerk28.globals")
 
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
@@ -45,15 +45,13 @@ end
 local function load(mod)
   local ok, err = pcall(require, mod)
   if not ok then
-    print(err)
+    vim.notify(err, vim.log.levels.ERROR)
   end
-  -- if not ok then
-  --   vim.api.nvim_err_write(err)
-  -- end
 end
 
 load("kraftwerk28.theme")
 load("kraftwerk28.map")
+load("kraftwerk28.autocommand")
 load("kraftwerk28.lsp")
 load("kraftwerk28.lsp.servers")
 load("kraftwerk28.tabline")
@@ -63,49 +61,6 @@ load("kraftwerk28.notify")
 load("kraftwerk28.linenumber")
 load("kraftwerk28.plugins")
 -- load("kraftwerk28.netrw")
-
-autocmd("TextYankPost", {
-  callback = function()
-    require("vim.highlight").on_yank({ timeout = 1000 })
-  end,
-})
-
--- set 'makeprg' for some projects
-if vim.fn.glob("meson.build") ~= "" then
-  vim.o.makeprg = "meson compile -C build"
-elseif vim.fn.glob("go.mod") ~= "" then
-  vim.o.makeprg = "go build"
-end
-
--- Restore cursor position
-autocmd("BufReadPost", {
-  callback = function()
-    local pos = vim.fn.line([['"]])
-    if pos > 0 and pos <= vim.fn.line("$") then
-      vim.cmd([[normal! g`"]])
-    end
-  end,
-})
-
-autocmd("BufWinEnter", {
-  callback = function()
-    if vim.o.filetype == "help" then
-      vim.cmd("wincmd L | 82wincmd |")
-    end
-  end,
-})
-
-autocmd("FocusLost", {
-  callback = function()
-    vim.cmd("silent! wall")
-  end,
-})
-
-autocmd("FocusGained", {
-  callback = function()
-    vim.fn.writefile({ vim.fn.getcwd() }, "/tmp/last_pwd")
-  end,
-})
 
 -- Redraw manpage for the current window width
 -- do
