@@ -1,7 +1,7 @@
--- The purpose if this class is to solve vim's problem of highlight groups with
+-- The purpose of this class is to solve vim's problem of highlight groups with
 -- 'transparent' background. For example, a statusline by default uses
--- StatusLine hl group (StatusLineNC for an unfocused window). If we try to put
--- an element with a highlight group before (i.e. %#HLname#sometext), whose
+-- StatusLine hl group (StatusLineNC for an unfocused window); if we try to put
+-- an element with highlight group before (i.e. %#HLname#sometext), whose
 -- background color doesn't match the background of StatusLine, it would create
 -- a 'hole' in statusline's row. Below is an example of workaround:
 --
