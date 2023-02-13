@@ -20,22 +20,20 @@ vim.keymap.set("n", "<C-P>", function()
   })
 end)
 
-vim.keymap.set("n", "<Leader>rg", function()
+vim.keymap.set("n", "<C-P>", function()
   builtin.live_grep({
     additional_args = { "--sort=path" },
   })
 end)
 
 -- Like live_grep, but no regex
-vim.keymap.set("n", "<Leader>rs", function()
+vim.keymap.set("n", "<M-P>", function()
   builtin.live_grep({
     additional_args = { "--fixed-strings", "--sort=path" },
   })
 end)
 
-vim.keymap.set("n", "<Leader>b", builtin.buffers)
-vim.keymap.set("n", "<Leader>ad", builtin.diagnostics)
-vim.keymap.set("n", "<Leader>he", builtin.help_tags)
+vim.keymap.set("n", "<F1>", builtin.help_tags)
 
 telescope.setup({
   defaults = {

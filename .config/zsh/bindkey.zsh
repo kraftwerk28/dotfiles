@@ -10,14 +10,15 @@ KEYTIMEOUT=5 # 50ms, same as default 'ttimeoutlen' in neovim
 # $ZVM_CURSOR_BLINKING_BEAM) style='\e[5 q';;
 # $ZVM_CURSOR_USER_DEFAULT) style='\e[0 q';;
 
-_keymap_handler() {
-	case "$KEYMAP" in
-		viins|main) echo -en "\e[5 q";;
-		*) echo -en "\e[1 q";;
-	esac
-}
-zle -N zle-keymap-select _keymap_handler
-zle -N zle-line-init _keymap_handler
+# _keymap_handler() {
+# 	case "$KEYMAP" in
+# 		viins|main) echo -en "\e[5 q";;
+# 		visual|viopp) echo -en "\e[3 q";;
+# 		*) echo -en "\e[1 q";;
+# 	esac
+# }
+# zle -N zle-keymap-select _keymap_handler
+# zle -N zle-line-init _keymap_handler
 
 # bindkey -v "^[[A" history-search-backward
 # bindkey -v "^[[B" history-search-forward
@@ -37,5 +38,3 @@ bindkey -M viins '^[e' edit-command-line
 
 bindkey -M viins '^R' fzf_history_search
 bindkey -M viins '^S' history-incremental-search-forward
-bindkey -M viins '^P' up-line-or-history
-bindkey -M viins '^N' down-line-or-history

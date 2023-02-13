@@ -70,7 +70,10 @@ local function load(use)
 
   use({
     "tpope/vim-fugitive",
-    requires = { "tpope/vim-rhubarb", "tommcdo/vim-fubitive" },
+    requires = {
+      "tpope/vim-rhubarb",
+      "tommcdo/vim-fubitive",
+    },
     config = function()
       require("kraftwerk28.plugins.fugitive")
     end,
@@ -123,12 +126,22 @@ local function load(use)
   })
 
   use({
-    "neovim/nvim-lspconfig",
-    requires = { "b0o/schemastore.nvim" },
-    -- "~/projects/neovim/nvim-lspconfig",
+    "j-hui/fidget.nvim",
     config = function()
-      require("kraftwerk28.lsp.servers")
+      require("fidget").setup({
+        text = {
+          spinner = "dots",
+        },
+      })
     end,
+  })
+
+  use({
+    "neovim/nvim-lspconfig",
+    requires = {
+      "b0o/schemastore.nvim",
+    },
+    -- "~/projects/neovim/nvim-lspconfig",
   })
 
   use({

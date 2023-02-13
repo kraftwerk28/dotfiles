@@ -15,10 +15,11 @@ require("base16-colorscheme").with_config({
   telescope = false,
 })
 
--- vim.cmd("colorscheme github_dark_default")
-vim.cmd.colorscheme("base16-eighties")
 -- vim.cmd.colorscheme("base16-gruvbox-dark-medium")
 -- vim.cmd.colorscheme("base16-gruvbox-light-medium")
+vim.cmd.colorscheme("base16-eighties")
+
+-- vim.cmd.colorscheme("github_dark_default")
 -- vim.cmd.colorscheme("kanagawa")
 -- vim.cmd.colorscheme("onedark")
 -- vim.cmd.colorscheme("gruvbox")

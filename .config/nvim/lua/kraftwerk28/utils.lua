@@ -1,18 +1,17 @@
 local M = {}
-local fn, api = vim.fn, vim.api
 
 function M.debounce(func, timeout)
   local timer_id
   return function(...)
     if timer_id ~= nil then
-      fn.timer_stop(timer_id)
+      vim.fn.timer_stop(timer_id)
     end
     local args = { ... }
     local function cb()
       func(args)
       timer_id = nil
     end
-    timer_id = fn.timer_start(timeout, cb)
+    timer_id = vim.fn.timer_start(timeout, cb)
   end
 end
 
@@ -31,7 +30,7 @@ function M.throttle(func, timeout)
           did_call = false
         end
       end
-      timer_id = fn.timer_start(timeout, cb)
+      timer_id = vim.fn.timer_start(timeout, cb)
     else
       did_call = true
     end
@@ -67,8 +66,8 @@ end
 function M.load(path)
   local ok, mod = pcall(require, path)
   if not ok then
-    api.nvim_err_writeln("Error loadding " .. path)
-    api.nvim_err_writeln(mod)
+    vim.api.nvim_err_writeln("Error loadding " .. path)
+    vim.api.nvim_err_writeln(mod)
     return
   end
   local loadfn
@@ -81,8 +80,8 @@ function M.load(path)
   end
   local ok, err = pcall(loadfn)
   if not ok then
-    api.nvim_err_writeln("Error loading module " .. path)
-    api.nvim_err_writeln(err)
+    vim.api.nvim_err_writeln("Error loading module " .. path)
+    vim.api.nvim_err_writeln(err)
     return
   end
 end

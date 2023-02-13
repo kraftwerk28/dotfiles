@@ -52,6 +52,7 @@ end
 load("kraftwerk28.theme")
 load("kraftwerk28.map")
 load("kraftwerk28.lsp")
+load("kraftwerk28.lsp.servers")
 load("kraftwerk28.tabline")
 load("kraftwerk28.statusline")
 load("kraftwerk28.filetype")

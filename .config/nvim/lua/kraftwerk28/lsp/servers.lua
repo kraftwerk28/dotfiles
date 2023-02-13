@@ -111,6 +111,7 @@ lspconfig.tsserver.setup({
     -- Formatting is handled by null-ls prettier
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
+    -- NOTE: semantic tokens cause recent tsserver versions to be extremely slow
     client.server_capabilities.semanticTokensProvider = nil
   end,
   capabilities = make_cpb(),
@@ -129,7 +130,7 @@ lspconfig.tsserver.setup({
       --  *
       --  * @default 'off'
       --  */
-      logVerbosity = "verbose",
+      -- logVerbosity = "verbose",
     },
   },
 })

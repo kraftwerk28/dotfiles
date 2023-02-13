@@ -1,3 +1,4 @@
+echo "[$(date -Is)] Soursing .zshenv" >> /tmp/zsh_order
 env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
 if [[ -x "$env_gen" ]]; then
 	while read -r line; do
@@ -13,7 +14,7 @@ fi
 
 export PAGER="less -i"
 
-if (( $+commands[alacritty] )); then
+if (( $+commands[alacritty] )) && [[ -z $TERM ]]; then
 	export TERM=alacritty
 fi
 

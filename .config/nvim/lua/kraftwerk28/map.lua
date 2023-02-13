@@ -28,6 +28,9 @@ vim.keymap.set("n", "k", function()
   return vim.v.count1 > 1 and "k" or "gk"
 end, { expr = true })
 
+vim.keymap.set("n", "gj", "j")
+vim.keymap.set("n", "gk", "k")
+
 vim.keymap.set("n", "<Down>", "<C-E>")
 vim.keymap.set("n", "<Up>", "<C-Y>")
 vim.keymap.set("n", "<S-Up>", "<C-U>M")
@@ -91,7 +94,7 @@ local boolean_map = {
   ["yes"] = "no",
   ["Yes"] = "No",
 }
-vim.keymap.set("n", "<Leader>t", function()
+vim.keymap.set("n", "<Leader>tt", function()
   local cword = vim.fn.expand("<cword>")
   for lhs, rhs in pairs(boolean_map) do
     if cword == lhs then

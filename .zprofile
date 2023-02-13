@@ -1,3 +1,4 @@
+echo "[$(date -Is)] Soursing .zprofile" >> /tmp/zsh_order
 if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	# Wayland-specific variables
 	export TERM="foot"
