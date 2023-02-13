@@ -20,14 +20,14 @@ vim.keymap.set("n", "<C-P>", function()
   })
 end)
 
-vim.keymap.set("n", "<C-P>", function()
+vim.keymap.set("n", "<Leader>rg", function()
   builtin.live_grep({
     additional_args = { "--sort=path" },
   })
 end)
 
 -- Like live_grep, but no regex
-vim.keymap.set("n", "<M-P>", function()
+vim.keymap.set("n", "<Leader>rs", function()
   builtin.live_grep({
     additional_args = { "--fixed-strings", "--sort=path" },
   })

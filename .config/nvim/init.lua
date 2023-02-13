@@ -45,8 +45,11 @@ end
 local function load(mod)
   local ok, err = pcall(require, mod)
   if not ok then
-    vim.api.nvim_err_write(err)
+    print(err)
   end
+  -- if not ok then
+  --   vim.api.nvim_err_write(err)
+  -- end
 end
 
 load("kraftwerk28.theme")

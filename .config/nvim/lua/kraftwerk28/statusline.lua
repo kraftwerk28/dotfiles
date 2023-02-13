@@ -1,7 +1,8 @@
 local utils = require("kraftwerk28.utils")
-local fn, api = vim.fn, vim.api
+local fn = vim.fn
 local devicons = require("nvim-web-devicons")
 local ts = require("nvim-treesitter")
+local Painter = require("kraftwerk28.painter")
 
 -- Who needs mode label in statusline?
 -- local mode_labels = {
@@ -23,59 +24,85 @@ local ts = require("nvim-treesitter")
 
 local format_icons = { dos = " ", mac = " ", unix = " " }
 
-local stl_hl = { cache = {} }
+-- local stl_hl = { cache = {} }
+--
+-- function stl_hl:load_base_hl()
+--   self.stl = api.nvim_get_hl_by_name("StatusLine", true)
+--   self.stl_nc = api.nvim_get_hl_by_name("StatusLineNC", true)
+--   for hl, _ in pairs(stl_hl.cache) do
+--     self:load(hl)
+--   end
+-- end
+--
+-- api.nvim_create_autocmd("ColorScheme", {
+--   callback = function()
+--     stl_hl:load_base_hl()
+--   end,
+-- })
+--
+-- local function bg_color(hl)
+--   if hl.reverse then
+--     return hl.foreground
+--   else
+--     return hl.background
+--   end
+-- end
+--
+-- stl_hl:load_base_hl()
+--
+-- function stl_hl:load(name)
+--   local hl = api.nvim_get_hl_by_name(name, true)
+--   local stl_name = "Stl" .. name
+--   local stl_nc_name = "Stl" .. name .. "NC"
+--   vim.api.nvim_set_hl(0, stl_name, {
+--     fg = hl.foreground,
+--     bg = bg_color(stl_hl.stl),
+--   })
+--   vim.api.nvim_set_hl(0, stl_nc_name, {
+--     fg = hl.foreground,
+--     bg = bg_color(stl_hl.stl_nc),
+--   })
+-- end
+--
+-- function stl_hl:get(name, focused)
+--   if not self.cache[name] then
+--     self:load(name)
+--     self.cache[name] = true
+--   end
+--   return focused and "Stl" .. name or "Stl" .. name .. "NC"
+-- end
 
-function stl_hl:load_base_hl()
-  self.stl = api.nvim_get_hl_by_name("StatusLine", true)
-  self.stl_nc = api.nvim_get_hl_by_name("StatusLineNC", true)
-  for hl, _ in pairs(stl_hl.cache) do
-    self:load(hl)
-  end
-end
-
-api.nvim_create_autocmd("ColorScheme", {
-  callback = function()
-    stl_hl:load_base_hl()
+local stl_painter = Painter:new({
+  base = "StatusLine",
+  get_name = function(name)
+    return "Stl" .. name
   end,
 })
 
-local function bg_color(hl)
-  if hl.reverse then
-    return hl.foreground
+local stl_nc_painter = Painter:new({
+  base = "StatusLineNC",
+  get_name = function(name)
+    return "Stl" .. name .. "NC"
+  end,
+})
+
+local function stl_hl(name, is_focused)
+  if is_focused then
+    return stl_painter[name]
   else
-    return hl.background
+    return stl_nc_painter[name]
   end
-end
-
-stl_hl:load_base_hl()
-
-function stl_hl:load(name)
-  local hl = api.nvim_get_hl_by_name(name, true)
-  local stl_name = "Stl" .. name
-  local stl_nc_name = "Stl" .. name .. "NC"
-  vim.api.nvim_set_hl(0, stl_name, {
-    fg = hl.foreground,
-    bg = bg_color(stl_hl.stl),
-  })
-  vim.api.nvim_set_hl(0, stl_nc_name, {
-    fg = hl.foreground,
-    bg = bg_color(stl_hl.stl_nc),
-  })
-end
-
-function stl_hl:get(name, focused)
-  if not self.cache[name] then
-    self:load(name)
-    self.cache[name] = true
-  end
-  return focused and "Stl" .. name or "Stl" .. name .. "NC"
 end
 
 local Statusline = {}
 Statusline.__index = Statusline
 
 function Statusline:new(focused)
-  return setmetatable({ parts = {}, focused = focused, groups = {} }, self)
+  return setmetatable({
+    parts = {},
+    focused = focused,
+    groups = {},
+  }, self)
 end
 
 function Statusline:add(opts)
@@ -94,7 +121,7 @@ function Statusline:add(opts)
     res = body
   end
   if opts.highlight then
-    res = "%#" .. stl_hl:get(opts.highlight, self.focused) .. "#" .. res
+    res = "%#" .. stl_hl(opts.highlight, self.focused) .. "#" .. res
     if #self.groups == 0 then
       res = res .. "%*" -- Reset highlight
     end
@@ -146,7 +173,7 @@ local function make_stl(focused)
       local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
       local icon, icon_highlight = devicons.get_icon(filename, fileext)
       if icon then
-        local hl = stl_hl:get(icon_highlight, focused)
+        local hl = stl_hl(icon_highlight, focused)
         return "%#" .. hl .. "#" .. icon .. "%*"
       end
     end,
@@ -187,10 +214,10 @@ local function make_stl(focused)
       function()
         if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
           -- return " "
-          return "%#" .. stl_hl:get("Error", focused) .. "# "
+          return "%#" .. stl_hl("Error", focused) .. "# "
         else
           -- return " "
-          return "%#" .. stl_hl:get("String", focused) .. "# "
+          return "%#" .. stl_hl("String", focused) .. "# "
         end
       end,
       eval = true,
@@ -201,16 +228,17 @@ local function make_stl(focused)
       { "DiagnosticInfo", "INFO" },
       { "DiagnosticHint", "HINT" },
     }) do
+      local hl_name, diagnostic_name = it[1], it[2]
       stl:add({
         function()
           local count = #vim.diagnostic.get(0, {
-            severity = vim.diagnostic.severity[it[2]],
+            severity = vim.diagnostic.severity[diagnostic_name],
           })
           if count > 0 then
-            return vim.g.diagnostic_signs[it[2]] .. count .. " "
+            return vim.g.diagnostic_signs[diagnostic_name] .. count .. " "
           end
         end,
-        highlight = it[1],
+        highlight = hl_name,
       })
     end
   end)
@@ -239,4 +267,4 @@ end
 
 -- vim.opt.laststatus = 0
 -- vim.opt.winbar = "%!v:lua."..utils.defglobalfn(stl).."()"
-vim.opt.statusline = "%!v:lua." .. utils.defglobalfn(stl) .. "()"
+vim.go.statusline = "%!v:lua." .. utils.defglobalfn(stl) .. "()"
