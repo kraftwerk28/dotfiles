@@ -13,6 +13,7 @@ local function load(use)
   use({ "RRethy/nvim-base16", disable = false })
   use({ "projekt0n/github-nvim-theme", disable = false })
   use({ "rebelot/kanagawa.nvim", disable = false })
+  use({ "Shatur/neovim-ayu", disable = false })
 
   use({ "kyazdani42/nvim-web-devicons" })
 
@@ -132,6 +133,9 @@ local function load(use)
         text = {
           spinner = "dots",
         },
+        window = {
+          relative = "editor",
+        },
       })
     end,
   })
@@ -222,7 +226,7 @@ local function load(use)
 
   use({
     "iamcco/markdown-preview.nvim",
-    run = "cd app && npm install",
+    run = "cd app && npm install && curl -fsS -o ~/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim/app/_static/mermaid.min.js https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js",
     ft = { "markdown" },
     config = function()
       vim.g.mkdp_filetypes = { "markdown" }
@@ -286,8 +290,7 @@ local function bootstrap()
     vim.fn.system({
       "git",
       "clone",
-      "--depth",
-      "1",
+      "--depth=1",
       "https://github.com/wbthomason/packer.nvim",
       packer_install_path,
     })

@@ -55,7 +55,7 @@ autocmd("FocusGained", {
 })
 
 autocmd("FileType", {
-  pattern = { "man", "c" },
+  pattern = { "man", "c", "bash", "zsh", "sh" },
   callback = function()
     vim.bo.keywordprg = ":Man"
   end,

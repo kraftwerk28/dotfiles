@@ -1,7 +1,6 @@
 " NOTE: this file must remain in vimL, as it is sourced by Ideavim which
 " doesn't support lua
 set termguicolors
-set background=dark
 set hidden
 set noexpandtab
 set softtabstop=0 tabstop=4 shiftwidth=0
