@@ -1,5 +1,3 @@
-echo "[$(date -Is)] Soursing .zshrc" >> /tmp/zsh_order
-
 # fpath+=("$HOME/.zfunc")
 
 dot_config="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
