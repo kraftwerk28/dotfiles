@@ -89,18 +89,18 @@ lspconfig.hls.setup({
   capabilities = make_cpb(),
 })
 
--- lspconfig.pylsp.setup({
---   capabilities = make_cpb(),
---   on_attach = function(client)
---     -- Formatting is handled by black
---     client.server_capabilities.documentFormattingProvider = false
---     client.server_capabilities.documentRangeFormattingProvider = false
---   end,
--- })
-
-lspconfig.pyright.setup({
+lspconfig.pylsp.setup({
   capabilities = make_cpb(),
+  on_attach = function(client)
+    -- Formatting is handled by black
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
+
+-- lspconfig.pyright.setup({
+--   capabilities = make_cpb(),
+-- })
 
 lspconfig.rust_analyzer.setup({
   capabilities = make_cpb(),

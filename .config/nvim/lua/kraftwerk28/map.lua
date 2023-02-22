@@ -3,29 +3,27 @@ vim.keymap.set("x", "p", function()
   vim.fn.setreg("a", vim.fn.getreg("+"))
   vim.cmd("normal! " .. vim.v.count1 .. "p")
   vim.fn.setreg("+", vim.fn.getreg("a"))
-end)
+end, { desc = "Paste, but don't pollute `+` register" })
 
 -- Do not replace `+` register's contents when cutting text
 vim.keymap.set("x", "P", function()
   vim.fn.setreg("a", vim.fn.getreg("+"))
   vim.cmd("normal! " .. vim.v.count1 .. "p")
   vim.fn.setreg("+", vim.fn.getreg("a"))
-end)
-
-autocmd("TextYankPost", {
-  pattern = "svg,xml,html",
-  callback = function()
-    vim.keymap.set("i", "</>", "</<C-X><C-O><C-N>", { buffer = true })
-  end,
-  group = augroup("tag_completion", {}),
-})
+end, { desc = "Paste, but don't pollute `+` register" })
 
 vim.keymap.set("n", "j", function()
-  return vim.v.count1 > 1 and "j" or "gj"
+  if vim.v.count1 > 1 then
+    return "j"
+  end
+  return "gj"
 end, { expr = true })
 
 vim.keymap.set("n", "k", function()
-  return vim.v.count1 > 1 and "k" or "gk"
+  if vim.v.count1 > 1 then
+    return "K"
+  end
+  return "gk"
 end, { expr = true })
 
 vim.keymap.set("n", "gj", "j")
@@ -93,6 +91,8 @@ local boolean_map = {
   ["1"] = "0",
   ["yes"] = "no",
   ["Yes"] = "No",
+  ["On"] = "Off",
+  ["on"] = "off",
 }
 vim.keymap.set("n", "<Leader>tt", function()
   local cword = vim.fn.expand("<cword>")
@@ -103,8 +103,12 @@ vim.keymap.set("n", "<Leader>tt", function()
       return "ciw" .. lhs .. "<Esc>"
     end
   end
-end, { expr = true })
+end, { expr = true, desc = "Toggle common boolean literals" })
 
 -- Quickfix
 vim.keymap.set("n", "<Leader>qj", "<Cmd>cnext<CR>")
 vim.keymap.set("n", "<Leader>qk", "<Cmd>cprev<CR>")
+
+vim.keymap.set("n", "<Leader>/", [[/^\s*\<\><Left><Left>]], {
+  desc = "Useful mapping for searching for commands (i.e. bash builtings) in manpages",
+})

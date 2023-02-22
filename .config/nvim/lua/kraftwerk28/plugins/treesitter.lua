@@ -57,7 +57,7 @@ local config = {
       },
     },
     move = {
-      enable = false,
+      enable = true,
     },
   },
   context_commentstring = {

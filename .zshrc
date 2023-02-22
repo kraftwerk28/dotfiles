@@ -31,8 +31,6 @@ unsetopt PROMPT_SP
 # Autoloads
 autoload -U add-zsh-hook
 
-# zle -N edit-command-line
-
 requires() {
 	local banner="$(basename "$0"): please install:"
 	local failed=false
@@ -85,6 +83,8 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 plug zsh-fzf-history-search
 ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS="--reverse --height=10 --cycle"
 
+ZVM_INIT_MODE=sourcing
+ZVM_TERM=xterm-256color # TERM=foot lacks cursor shaping
 plug zsh-vi-mode
 ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
@@ -92,10 +92,10 @@ ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-ZVM_TERM=xterm-256color # TERM=foot removes cursor shaping
-zvm_after_init_commands+=("source $dot_config/bindkey.zsh")
 
-# FIXME: setting `setopt BASH_REMATCH` breaks df<motion> in zsh-vi-mode
+# NOTE: sourced AFTER zsh-vi-mode
+source "$dot_config/bindkey.zsh"
+
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000

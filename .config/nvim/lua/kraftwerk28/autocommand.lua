@@ -61,3 +61,11 @@ autocmd("FileType", {
   end,
   group = group,
 })
+
+autocmd("TextYankPost", {
+  pattern = "svg,xml,html",
+  callback = function()
+    vim.keymap.set("i", "</>", "</<C-X><C-O><C-N>", { buffer = true })
+  end,
+  group = group,
+})

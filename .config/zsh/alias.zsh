@@ -1,4 +1,4 @@
-if requires nvim; then
+if (( $+commands[nvim] )); then
 	alias vim="nvim"
 	alias vi="nvim"
 	alias v="nvim"
@@ -6,25 +6,16 @@ if requires nvim; then
 	alias vin="nvim"
 fi
 
-if requires lsd; then
+if (( $+commands[lsd] )); then
 	alias ls="lsd -F"
 	alias la="lsd -Fah"
 	alias ll="lsd -Flh"
 	alias l="lsd -Flah"
 fi
 
-# if type bat > /dev/null; then
-# 	alias less="bat"
-# fi
 alias less="less -i"
 
-if requires bat; then
-	alias cat="bat -p --color never --paging never"
-fi
-
-alias serves="serve \
-	--ssl-cert ~/ca-tmp/localhost.crt \
-	--ssl-key ~/ca-tmp/localhost.key"
+(( $+commands[bat] )) && alias cat="bat -p --color never --paging never"
 
 # if [[ -d /usr/lib/jvm ]]; then
 # 	for dir in /usr/lib/jvm/*; do
@@ -34,9 +25,11 @@ alias serves="serve \
 # 	done
 # fi
 
-alias gst="git status"
-alias gco="git checkout"
-alias gcb="git checkout -b"
+if (( $+commands[git] )); then
+	alias gst="git status"
+	alias gco="git checkout"
+	alias gcb="git checkout -b"
+fi
 
 alias -g ...='../..'
 alias -g ....='../../..'
@@ -45,6 +38,6 @@ alias -g ......='../../../../..'
 
 alias ssh='TERM=xterm-256color ssh'
 
-# alias yt-dlp='yt-dlp --no-mtime'
-
-alias dco='docker compose'
+if (( $+commands[docker] )); then
+	alias dco='docker compose'
+fi

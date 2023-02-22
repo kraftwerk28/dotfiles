@@ -26,6 +26,12 @@ require("ayu").setup({
 -- vim.cmd.colorscheme("base16-gruvbox-light-medium")
 -- vim.cmd.colorscheme("base16-eighties")
 
+-- require("gruvbox").setup({
+--   overrides = {
+--     Cursor = { reverse = true },
+--   },
+-- })
+
 -- vim.cmd.colorscheme("github_dark_default")
 -- vim.cmd.colorscheme("kanagawa")
 -- vim.cmd.colorscheme("onedark")
