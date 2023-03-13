@@ -5,6 +5,12 @@ if [[ -x "$env_gen" ]]; then
 	done < <("$env_gen")
 fi
 
+# See https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
 if (( $+commands[nvim] )); then
 	export EDITOR="nvim"
 	export VISUAL="nvim"
@@ -22,7 +28,8 @@ export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export RUSTC_WRAPPER="sccache"
 
-export JAVA_HOME="/usr/lib/jvm/default"
+# export JAVA_HOME="/usr/lib/jvm/default"
+# export PATH="/usr/lib/jvm/default/bin:$PATH"
 
 export ANDROID_HOME="$HOME/Android/Sdk"
 export PATH="$PATH:$ANDROID_HOME/emulator"

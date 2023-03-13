@@ -114,15 +114,15 @@ autocmd("LspAttach", {
       })
     end
     if cap.documentSymbolProvider then
-      vim.keymap.set("n", "<Leader>ds", tb.lsp_document_symbols, {
+      vim.keymap.set("n", "<Leader>gds", tb.lsp_document_symbols, {
         buffer = true,
-        desc = "[D]ocument [S]ymbols",
+        desc = "[G]oto [D]ocument [S]ymbols",
       })
     end
     if cap.workspaceSymbolProvider then
-      vim.keymap.set("n", "<Leader>ws", tb.lsp_workspace_symbols, {
+      vim.keymap.set("n", "<Leader>gws", tb.lsp_workspace_symbols, {
         buffer = true,
-        desc = "[W]orkspace [S]ymbols",
+        desc = "[G]oto [W]orkspace [S]ymbols",
       })
     end
   end,

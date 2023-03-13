@@ -33,7 +33,7 @@ require("ayu").setup({
 -- })
 
 -- vim.cmd.colorscheme("github_dark_default")
--- vim.cmd.colorscheme("kanagawa")
+vim.cmd.colorscheme("kanagawa")
 -- vim.cmd.colorscheme("onedark")
 -- vim.cmd.colorscheme("gruvbox")
-vim.cmd.colorscheme("ayu")
+-- vim.cmd.colorscheme("ayu")

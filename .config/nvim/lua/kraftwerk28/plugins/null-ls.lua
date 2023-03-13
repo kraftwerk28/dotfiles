@@ -124,6 +124,7 @@ local sources = {
     end,
   }),
   b.formatting.black,
+  b.formatting.pg_format,
   -- b.diagnostics.cspell,
   -- b.formatting.sqlformat,
   -- b.formatting.xmllint,

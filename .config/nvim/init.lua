@@ -64,57 +64,44 @@ load("kraftwerk28.plugins")
 -- load("kraftwerk28.netrw")
 
 -- Redraw manpage for the current window width
--- do
---   local resize_timer
---   local resize_winids
---
---   local function redraw_manpages()
---     local current_winid = vim.api.nvim_get_current_win()
---     if
---       resize_winids == nil
---       or not vim.api.nvim_win_is_valid(current_winid)
---       or not vim.tbl_contains(resize_winids, current_winid)
---     then
---       return
---     end
---     local bufid = vim.api.nvim_win_get_buf(current_winid)
---     local ft = vim.api.nvim_buf_get_option(bufid, "filetype")
---     if ft == "man" then
---       local bufname = vim.api.nvim_buf_get_name(bufid)
---       local winview = vim.fn.winsaveview()
---       require("man").read_page(vim.fn.matchstr(bufname, "man://\\zs.*"))
---       vim.fn.winrestview(winview)
---     end
---     resize_timer = nil
---     resize_winids = nil
---   end
---
---   autocmd("WinResized", {
---     callback = function()
---       if resize_timer ~= nil then
---         resize_timer:stop()
---       end
---       resize_winids = vim.v.event.windows
---       resize_timer = vim.defer_fn(redraw_manpages, 1000)
---     end,
---   })
--- end
+do
+  local resize_timer, resized_winids
 
--- params.match:
--- {
---   params = {
---     buf = 3,
---     event = "BufReadCmd",
---     file = "man://sway(5)",
---     group = 29,
---     id = 66,
---     match = "man://sway(5)"
---   }
--- }
--- vim.api.nvim_create_autocmd('BufReadCmd', {
---   group = augroup,
---   pattern = 'man://*',
---   callback = function(params)
---     require('man').read_page(vim.fn.matchstr(params.match, 'man://\\zs.*'))
---   end,
--- })
+  local function redraw_manpages()
+    if resized_winids == nil then
+      return
+    end
+    local current_winid = vim.api.nvim_get_current_win()
+    for _, winid in ipairs(resized_winids) do
+      if vim.api.nvim_win_is_valid(winid) then
+        local buf = vim.api.nvim_win_get_buf(winid)
+        if
+          vim.api.nvim_buf_get_option(buf, "filetype") == "man"
+          and vim.api.nvim_buf_get_var(buf, "pager") == false
+        then
+          local bufname = vim.api.nvim_buf_get_name(buf)
+          local ref = vim.fn.matchstr(bufname, "man://\\zs.*")
+          if ref ~= "" then
+            vim.api.nvim_set_current_win(winid)
+            local winview = vim.fn.winsaveview()
+            pcall(require("man").read_page, ref)
+            vim.fn.winrestview(winview)
+          end
+        end
+      end
+    end
+    vim.api.nvim_set_current_win(current_winid)
+    resize_timer, resized_winids = nil, nil
+  end
+
+  vim.api.nvim_create_autocmd("WinResized", {
+    callback = function()
+      if resize_timer ~= nil then
+        resize_timer:stop()
+      end
+      resized_winids = vim.v.event.windows
+      resize_timer =
+        vim.defer_fn(redraw_manpages, vim.g.man_redraw_debounce_ms or 1000)
+    end,
+  })
+end

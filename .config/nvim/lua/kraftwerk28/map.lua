@@ -21,7 +21,7 @@ end, { expr = true })
 
 vim.keymap.set("n", "k", function()
   if vim.v.count1 > 1 then
-    return "K"
+    return "k"
   end
   return "gk"
 end, { expr = true })
@@ -56,8 +56,8 @@ vim.keymap.set("n", "tH", "<Cmd>-tabmove<CR>", silent)
 vim.keymap.set("n", "tL", "<Cmd>+tabmove<CR>", silent)
 
 for i = 1, 9 do
-  local lhs = ("<M-%d>"):format(i)
-  local rhs = ("<Cmd>%dtabnext<CR>"):format(i)
+  local lhs = "<M-" .. i .. ">"
+  local rhs = "<Cmd>silent! " .. i .. "tabnext<CR>"
   vim.keymap.set("n", lhs, rhs, silent)
 end
 
@@ -65,7 +65,7 @@ vim.keymap.set("n", "<Leader>hs", function()
   vim.o.hlsearch = not vim.o.hlsearch
 end)
 
-vim.keymap.set("n", "<Leader>w", "<Cmd>wall<CR>", silent)
+vim.keymap.set("n", "<Leader>w", "<Cmd>silent! wall<CR>", silent)
 
 vim.keymap.set("n", "<M-k>", "<Cmd>m-2<CR>", silent)
 vim.keymap.set("n", "<M-j>", "<Cmd>m+1<CR>", silent)
@@ -82,7 +82,7 @@ vim.keymap.set("n", "dbb", "<C-W>s<Cmd>bd<CR>")
 
 -- Remap annoying K to <Leader>K
 -- vim.keymap.set("n", "<Leader>K", "K")
--- vim.keymap.set("n", "K", "<Nop>")
+vim.keymap.set("n", "K", "<Nop>")
 
 -- Toggle common boolean-like values
 local boolean_map = {
@@ -94,16 +94,37 @@ local boolean_map = {
   ["On"] = "Off",
   ["on"] = "off",
 }
-vim.keymap.set("n", "<Leader>tt", function()
+
+vim.keymap.set("n", "<Leader>t", function()
   local cword = vim.fn.expand("<cword>")
   for lhs, rhs in pairs(boolean_map) do
     if cword == lhs then
-      return "ciw" .. rhs .. "<Esc>"
+      vim.cmd("normal! ciw" .. rhs)
+      return
     elseif cword == rhs then
-      return "ciw" .. lhs .. "<Esc>"
+      vim.cmd("normal! ciw" .. lhs)
+      return
     end
   end
-end, { expr = true, desc = "Toggle common boolean literals" })
+  -- try to toggle markdown checkmark
+  local line = vim.api.nvim_get_current_line()
+  local md_check_start, md_check_end = line:find("%[ %]")
+  if md_check_start then
+    local new_line = line:sub(1, md_check_start - 1)
+      .. "[x]"
+      .. line:sub(md_check_end + 1)
+    vim.api.nvim_set_current_line(new_line)
+    return
+  end
+  md_check_start, md_check_end = line:find("%[x%]")
+  if md_check_start then
+    local new_line = line:sub(1, md_check_start - 1)
+      .. "[ ]"
+      .. line:sub(md_check_end + 1)
+    vim.api.nvim_set_current_line(new_line)
+    return
+  end
+end, { desc = "Toggle common boolean literals" })
 
 -- Quickfix
 vim.keymap.set("n", "<Leader>qj", "<Cmd>cnext<CR>")

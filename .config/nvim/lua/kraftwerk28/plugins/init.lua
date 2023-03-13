@@ -101,7 +101,6 @@ local function load(use)
   -- Missing / not ready to use languages in tree-sitter
   use({ "neovimhaskell/haskell-vim", disable = true })
   use({ "elixir-editors/vim-elixir", disable = true })
-  use("chr4/nginx.vim")
   -- use {"tpope/vim-markdown"}
   use("adimit/prolog.vim")
   use({ "digitaltoad/vim-pug", disable = true })

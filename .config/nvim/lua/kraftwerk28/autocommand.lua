@@ -69,3 +69,11 @@ autocmd("TextYankPost", {
   end,
   group = group,
 })
+
+autocmd("FileType", {
+  pattern = { "man", "c", "bash", "zsh", "sh" },
+  callback = function()
+    vim.keymap.set("n", "K", "K", { buffer = true })
+  end,
+  group = group,
+})
