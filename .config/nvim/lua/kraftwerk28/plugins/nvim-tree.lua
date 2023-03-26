@@ -52,6 +52,8 @@ nt.setup({
     },
   },
   on_attach = function(bufnr)
+    api.config.mappings.default_on_attach(bufnr)
+
     local mopt = { buffer = bufnr }
     -- Simulate ranger keymaps
     vim.keymap.set("n", "o", "<Nop>", mopt)

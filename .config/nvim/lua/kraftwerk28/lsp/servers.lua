@@ -83,7 +83,8 @@ lspconfig.graphql.setup({
 lspconfig.hls.setup({
   settings = {
     haskell = {
-      formattingProvider = "brittany",
+      -- formattingProvider = "brittany",
+      formattingProvider = "ormolu",
     },
   },
   capabilities = make_cpb(),

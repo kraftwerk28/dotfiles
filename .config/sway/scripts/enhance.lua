@@ -1,7 +1,10 @@
 #!/usr/bin/env luajit
 local i3 = require("i3ipc")
 
+-- Used for focus_prev command
+local focus_history = {}
 local current_focused, previous_focused
+
 -- { con_id => { input_identifier => layout_index } }
 local windows = {}
 
@@ -102,10 +105,13 @@ ipc:main(function(ipc)
 
   ipc:on("window::focus", function(ipc, event)
     local con_id = event.container.id
+    table.insert(focus_history, con_id)
+
     if con_id ~= current_focused then
       previous_focused, current_focused = current_focused, con_id
     end
 
+    -- Remember keyboard layouts for previous window
     local inputs = ipc:get_keyboard_inputs()
     local input_layouting = {}
     for _, input in ipairs(inputs) do
@@ -114,6 +120,8 @@ ipc:main(function(ipc)
     if previous_focused ~= nil and previous_focused ~= con_id then
       windows[previous_focused] = input_layouting
     end
+
+    -- Set layouts for current window
     local cached_layouts = windows[con_id]
     local commands = {}
     if cached_layouts ~= nil then

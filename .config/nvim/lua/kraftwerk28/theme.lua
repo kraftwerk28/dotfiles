@@ -14,9 +14,9 @@ vim.o.background = "dark"
 --   ending_tildes = true,
 -- })
 
-require("ayu").setup({
-  mirage = true,
-})
+-- require("ayu").setup({
+--   mirage = true,
+-- })
 
 -- require("base16-colorscheme").with_config({
 --   telescope = false,

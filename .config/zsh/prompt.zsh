@@ -16,7 +16,7 @@ git_info () {
 
 autoload -Uz vcs_info 
 
-zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%b%F{yellow}%b%f%m%Q%%b'
+zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%F{magenta}%b%f%m%Q%%b'
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git+set-message:*:*' hooks check-dirty
 # zstyle ':vcs_info:git:*' unstagedstr '%B%F{red}✗'
@@ -51,7 +51,7 @@ vimode_rlabel () {
 	esac
 }
 
-filepath='%F{#ffa500}%(4~|…/%2~|%~)'
+filepath='%F{yellow}%(4~|…/%2~|%~)%f'
 exit_status=' %(?:%B%F{green}$:%B%F{red}$)%b%f'
 PROMPT="$filepath"'${vcs_info_msg_0_}'"$exit_status "
 RPROMPT='%F{magenta}${CMD_ELAPSED_TIME}%b%f'
