@@ -411,8 +411,8 @@ input type:touchpad {
 # Various options {{{
 set $border_width 2
 smart_gaps on
-# gaps inner 6
-# gaps outer 0
+gaps inner 4
+gaps outer 0
 floating_modifier $mod
 smart_borders no_gaps
 default_border normal $border_width
@@ -445,12 +445,14 @@ exec $scripts/autostart.sh
 exec $scripts/swayidle.sh
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec libinput-gestures-setup restart
+# exec wl-paste -t text --watch clipman store 
 # }}}
 
 # Window rules {{{
-for_window [app_id="firefox" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
-for_window [app_id="firefox" title="Sharing Indicator$"] floating enable, resize set 0 0, sticky enable
-for_window [app_id="firefox" title="^Developer Tools"] floating enable
+for_window [app_id="^firefox$" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
+for_window [app_id="^firefox$" title="Sharing Indicator$"] floating enable, resize set 0 0, sticky enable
+for_window [app_id="^firefox$" title="^Developer Tools"] floating enable
+for_window [app_id="^firefox$"] border pixel $border_width
 
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
