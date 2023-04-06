@@ -124,9 +124,17 @@ local sources = {
     end,
   }),
   b.formatting.black,
-  b.formatting.pg_format,
+
+  -- b.formatting.pg_format,
   -- b.diagnostics.cspell,
   -- b.formatting.sqlformat,
+
+  b.formatting.sql_formatter.with({
+    args = {
+      "-c",
+      vim.fn.expand("$XDG_CONFIG_HOME/sql-formatter/postgresql.json"),
+    },
+  }),
   -- b.formatting.xmllint,
 
   porth_diagnostic,

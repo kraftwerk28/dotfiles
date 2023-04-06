@@ -229,12 +229,14 @@ local function load(use)
     ft = { "markdown" },
     config = function()
       vim.g.mkdp_filetypes = { "markdown" }
-      local fn = [[
-        function! MkdpOpenInNewWindow(url) abort
-          execute 'silent !firefox -ssb --new-window ' .. a:url
-        endfunction
-      ]]
-      vim.api.nvim_exec(fn, false)
+      vim.api.nvim_exec(
+        [[
+          function! MkdpOpenInNewWindow(url) abort
+            execute printf('silent! !firefox -P markdown-preview --new-window=%s &', a:url)
+          endfunction
+        ]],
+        false
+      )
       vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
     end,
   })

@@ -1,11 +1,10 @@
 local lspconfig = require("lspconfig")
-local configs = require("lspconfig.configs")
 local root_pattern = require("lspconfig.util").root_pattern
 local cmp_lsp = require("cmp_nvim_lsp")
 
 local fn = vim.fn
 
-local function make_cpb()
+local function cmp_capabilities()
   return cmp_lsp.default_capabilities()
 end
 
@@ -20,21 +19,24 @@ local function find_compile_commands()
   return fn.fnamemodify(ccj[1], ":p:h")
 end
 
-if configs.mesonls == nil then
-  configs.mesonls = {
-    default_config = {
-      cmd = { "/home/kraftwerk28/projects/meson/mesonls/__main__.py" },
-      filetypes = { "meson" },
-      root_dir = root_pattern({ "meson.build" }),
-      settings = {},
-    },
-  }
-end
+-- local configs = require("lspconfig.configs")
+-- if configs.mesonls == nil then
+--   configs.mesonls = {
+--     default_config = {
+--       cmd = { "/home/kraftwerk28/projects/meson/mesonls/__main__.py" },
+--       filetypes = { "meson" },
+--       root_dir = root_pattern({ "meson.build" }),
+--       settings = {},
+--     },
+--   }
+-- end
 
--- lspconfig.mesonls.setup({})
+-- lspconfig.mesonls.setup({
+--   capabilities = cmp_capabilities(),
+-- })
 
 lspconfig.als.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.arduino_language_server.setup({
@@ -50,7 +52,7 @@ lspconfig.arduino_language_server.setup({
 })
 
 lspconfig.awk_ls.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.denols.setup({
@@ -60,7 +62,7 @@ lspconfig.denols.setup({
     lint = true,
     unstable = false,
   },
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.gopls.setup({
@@ -73,11 +75,11 @@ lspconfig.gopls.setup({
   --     }
   --   ),
   -- },
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.graphql.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.hls.setup({
@@ -87,11 +89,11 @@ lspconfig.hls.setup({
       formattingProvider = "ormolu",
     },
   },
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.pylsp.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
   on_attach = function(client)
     -- Formatting is handled by black
     client.server_capabilities.documentFormattingProvider = false
@@ -100,22 +102,15 @@ lspconfig.pylsp.setup({
 })
 
 -- lspconfig.pyright.setup({
---   capabilities = make_cpb(),
+--   capabilities = cmp_capabilities(),
 -- })
 
 lspconfig.rust_analyzer.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.tsserver.setup({
-  on_attach = function(client)
-    -- Formatting is handled by null-ls prettier
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-    -- NOTE: semantic tokens cause recent tsserver versions to be extremely slow
-    client.server_capabilities.semanticTokensProvider = nil
-  end,
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
   init_options = {
     hostInfo = "neovim",
     plugins = {},
@@ -178,11 +173,8 @@ do
   local cmd = { "clangd", "--background-index" }
   local ccj = find_compile_commands()
   if ccj then
-    table.insert(cmd, "--compile-commands-dir")
-    table.insert(cmd, ccj)
+    table.insert(cmd, "--compile-commands-dir=" .. ccj)
   end
-  local cpb = make_cpb()
-  cpb.offsetEncoding = { "utf-16" }
   lspconfig.clangd.setup({
     cmd = cmd,
     root_dir = root_pattern({
@@ -191,18 +183,21 @@ do
       "meson_options.txt",
       ".git",
     }),
-    capabilities = cpb,
+    capabilities = cmp_capabilities(),
   })
 end
 
 lspconfig.svelte.setup({
-  capabilities = make_cpb(),
-  on_attach = function(client)
-    -- Formatting is handled by prettier through null-ls
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-    client.server_capabilities.semanticTokensProvider = nil
-  end,
+  capabilities = cmp_capabilities(),
+  settings = {
+    svelte = {
+      plugin = {
+        typescript = {
+          semanticTokens = { enable = false },
+        },
+      },
+    },
+  },
 })
 
 lspconfig.jsonls.setup({
@@ -214,7 +209,7 @@ lspconfig.jsonls.setup({
       },
     },
   },
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.yamlls.setup({
@@ -229,11 +224,11 @@ lspconfig.yamlls.setup({
       validate = true,
     },
   },
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.cssls.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 -- lspconfig.html.setup {
@@ -245,18 +240,18 @@ lspconfig.cssls.setup({
 -- }
 
 lspconfig.solargraph.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 -- lspconfig.emmet_ls.setup {}
 
 lspconfig.erlangls.setup({
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 lspconfig.rescriptls.setup({
   cmd = { "rescript-ls", "--stdio" },
-  capabilities = make_cpb(),
+  capabilities = cmp_capabilities(),
 })
 
 if fn.has("win64") == 1 then
@@ -328,6 +323,6 @@ end
 --     cmd_env = cmd_env,
 --     settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },
 --     root_dir = root_pattern({ "build.gradle", "build.gradle.kts" }),
---     capabilities = make_cpb(),
+--     capabilities = cmp_capabilities(),
 --   })
 -- end

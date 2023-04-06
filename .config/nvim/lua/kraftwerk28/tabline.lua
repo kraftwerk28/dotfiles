@@ -65,7 +65,7 @@ local function build_tabline()
 end
 
 -- _G.SwitchBuffer = function(_, nclicks, button, modifiers)
---   vim.pretty_print({
+--   vim.print({
 --     nclicks = nclicks,
 --     button = button,
 --     modifiers = modifiers,

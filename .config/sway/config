@@ -169,6 +169,17 @@ bindsym --to-code {
 	$modr+Control+7 nop tab 7
 	$modr+Control+8 nop tab 8
 
+	# Marking
+	$mod+Shift+F7	mark --replace --toggle	F7
+	$mod+Shift+F8	mark --replace --toggle	F8
+	$mod+Shift+F9	mark --replace --toggle	F9
+	$mod+Shift+F10	mark --replace --toggle	F10
+	$mod+Shift+F11	mark --replace --toggle	F11
+	$mod+F7		[con_mark="F7"]		focus
+	$mod+F8		[con_mark="F8"]		focus
+	$mod+F9		[con_mark="F9"]		focus
+	$mod+F10	[con_mark="F10"]	focus
+	$mod+F11	[con_mark="F11"]	focus
 }
 
 bindsym {
