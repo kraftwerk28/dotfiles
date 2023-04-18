@@ -109,7 +109,6 @@ fi
 if [[ -n $RUN_SWAYNAG ]]; then
 	case $(swaynag \
 		-t warning \
-		--no-dock \
 		-y overlay \
 		-m 'Choose action' \
 		-Z Copy 'echo copy' \

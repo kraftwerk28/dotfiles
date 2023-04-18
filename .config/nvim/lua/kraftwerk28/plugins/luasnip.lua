@@ -136,7 +136,7 @@ ls.add_snippets("all", {
 -- require("luasnip.loaders.from_snipmate").lazy_load()
 -- ls.filetype_extend("all", { "_" })
 
-local mapopt = { silent = true, expr = true }
+local opt = { silent = true, expr = true }
 
 vim.keymap.set({ "s", "i" }, "<C-L>", function()
   if ls.expand_or_jumpable() then
@@ -144,7 +144,7 @@ vim.keymap.set({ "s", "i" }, "<C-L>", function()
   else
     return "<C-L>"
   end
-end, mapopt)
+end, opt)
 
 vim.keymap.set({ "s", "i" }, "<C-H>", function()
   if ls.jumpable(-1) then
@@ -152,7 +152,7 @@ vim.keymap.set({ "s", "i" }, "<C-H>", function()
   else
     return "<C-H>"
   end
-end, mapopt)
+end, opt)
 
 vim.keymap.set({ "s", "i" }, "<C-;>", function()
   if ls.choice_active() then
@@ -160,4 +160,4 @@ vim.keymap.set({ "s", "i" }, "<C-;>", function()
   else
     return "<C-;>"
   end
-end, mapopt)
+end, opt)

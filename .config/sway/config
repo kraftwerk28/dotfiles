@@ -433,14 +433,11 @@ focus_wrapping yes
 focus_follows_mouse no
 font Monospace Bold 10
 
-# kraftwerk28's patch only:
-mouse_resizing_mode eight_direction
-
 # }}}
 
 # Cursor {{{
 # Path int /usr/share/icons
-set $cursor_theme "xcursor-breeze-snow"
+set $cursor_theme "xcursor-breeze"
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
@@ -517,5 +514,11 @@ output * background /home/kraftwerk28/Pictures/telegram-math.png tile
 # }}}
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
+
+# See https://github.com/swaywm/sway/wiki#gtk-applications-take-20-seconds-to-start
+exec_always dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
+# kraftwerk28's patch only:
+mouse_resizing_mode eight_direction
 
 # vim: noet sw=0 filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0

@@ -131,8 +131,8 @@ local sources = {
 
   b.formatting.sql_formatter.with({
     args = {
-      "-c",
-      vim.fn.expand("$XDG_CONFIG_HOME/sql-formatter/postgresql.json"),
+      "--config="
+        .. vim.fn.expand("$XDG_CONFIG_HOME/sql-formatter/postgresql.json"),
     },
   }),
   -- b.formatting.xmllint,

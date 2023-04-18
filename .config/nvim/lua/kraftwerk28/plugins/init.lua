@@ -116,6 +116,7 @@ local function load(use)
       "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
       "JoosepAlviste/nvim-ts-context-commentstring",
+      "windwp/nvim-ts-autotag",
     },
     run = function()
       vim.cmd("TSUpdate")

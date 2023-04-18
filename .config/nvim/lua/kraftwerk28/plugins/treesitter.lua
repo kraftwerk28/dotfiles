@@ -13,25 +13,14 @@
 --   end
 -- end
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-
--- parser_config.sway = {
---   install_info = {
---     url = "~/projects/tree-sitter/tree-sitter-sway",
---     files = { "src/parser.c" },
---   },
---   filetype = "swayconfig",
--- }
-
 local config = {
-  -- ensure_installed = ensure_installed,
   highlight = {
     enable = true,
-  },
-  playground = {
-    enable = true,
-    updatetime = 25,
-    persist_queries = false,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
   },
   incremental_selection = {
     enable = true,
@@ -41,9 +30,13 @@ local config = {
       node_decremental = "(",
     },
   },
-  -- indent = {
-  --   enable = true,
-  -- },
+
+  -- Third-party modules
+  playground = {
+    enable = true,
+    updatetime = 25,
+    persist_queries = false,
+  },
   textobjects = {
     select = {
       enable = true,
@@ -95,5 +88,10 @@ if vim.fn.has("win64") == 1 then
     "python",
   }
 end
+
+-- Enable nvim-treesitter's folding
+-- vim.o.foldmethod = "expr"
+-- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.o.foldenable = false
 
 require("nvim-treesitter.configs").setup(config)

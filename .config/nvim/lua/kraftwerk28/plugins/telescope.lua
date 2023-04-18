@@ -38,6 +38,7 @@ vim.keymap.set("n", "<F1>", builtin.help_tags)
 telescope.setup({
   defaults = {
     borderchars = (function()
+      -- Telescope has slightly different borderchar array format
       local a, b, c, d, e, f, g, h = unpack(vim.g.borderchars)
       return { b, d, f, h, a, c, e, g }
     end)(),

@@ -15,10 +15,10 @@ set completeopt=menu,menuone,noselect
 set incsearch nohlsearch
 set ignorecase smartcase
 set wildmenu wildmode=full
-set signcolumn=auto
+set signcolumn=yes
 set autoread autowriteall
-set foldlevel=99
 set foldmethod=indent
+set foldlevel=99
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set foldignore=
 set secure

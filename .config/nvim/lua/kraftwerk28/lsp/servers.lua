@@ -129,6 +129,11 @@ lspconfig.tsserver.setup({
       -- logVerbosity = "verbose",
     },
   },
+  on_attach = function(client)
+    -- Formatting is handled by null-ls (prettier)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
 
 -- lspconfig.flow.setup {
@@ -198,6 +203,11 @@ lspconfig.svelte.setup({
       },
     },
   },
+  on_attach = function(client)
+    -- Formatting is handled by null-ls (prettier)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
 
 lspconfig.jsonls.setup({

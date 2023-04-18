@@ -2,12 +2,16 @@ local nt = require("nvim-tree")
 local api = require("nvim-tree.api")
 
 vim.keymap.set("n", "<F3>", function()
-  api.tree.toggle()
-end)
+  if vim.bo.filetype == "NvimTree" then
+    api.tree.close()
+  else
+    api.tree.open()
+  end
+end, { desc = "Toggle nvim-tree" })
 
 vim.keymap.set("n", "<Leader><F3>", function()
-  api.tree.toggle(true)
-end)
+  api.tree.open({ find_file = true })
+end, { desc = "Open/focus nvim-tree, revealing current buffer in tree" })
 
 nt.setup({
   -- disable_netrw = false,
@@ -21,7 +25,7 @@ nt.setup({
   },
   actions = {
     open_file = {
-      quit_on_open = true,
+      quit_on_open = false,
       resize_window = false,
     },
   },
@@ -54,9 +58,11 @@ nt.setup({
   on_attach = function(bufnr)
     api.config.mappings.default_on_attach(bufnr)
 
-    local mopt = { buffer = bufnr }
     -- Simulate ranger keymaps
-    vim.keymap.set("n", "o", "<Nop>", mopt)
+    local opt = { buffer = bufnr }
+
+    vim.keymap.set("n", "o", "<Nop>", opt)
+
     vim.keymap.set("n", "h", function()
       local node = api.tree.get_node_under_cursor()
       if node.open then
@@ -64,12 +70,13 @@ nt.setup({
       else
         api.node.navigate.parent_close()
       end
-    end, mopt)
+    end, opt)
+
     vim.keymap.set("n", "l", function()
       local node = api.tree.get_node_under_cursor()
       if not node.open then
         api.node.open.edit()
       end
-    end, mopt)
+    end, opt)
   end,
 })
