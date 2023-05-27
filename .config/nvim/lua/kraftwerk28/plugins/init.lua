@@ -11,7 +11,7 @@ local function load(use)
   use({ "navarasu/onedark.nvim", disable = false })
   use({ "ellisonleao/gruvbox.nvim", disable = false })
   use({ "RRethy/nvim-base16", disable = false })
-  use({ "projekt0n/github-nvim-theme", disable = false })
+  use({ "projekt0n/github-nvim-theme" })
   use({ "rebelot/kanagawa.nvim", disable = false })
   use({ "Shatur/neovim-ayu", disable = false })
 
@@ -255,6 +255,7 @@ local function load(use)
 
   use({
     "p00f/clangd_extensions.nvim",
+    disable = true,
     config = function()
       require("clangd_extensions").setup()
     end,

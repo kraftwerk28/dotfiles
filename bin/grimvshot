@@ -9,8 +9,8 @@ fi
 usage() {
 	echo -e \
 		"Usage:\n\t$(basename "$0") [--notify] [--cursor] [--swaynag] [--copy]" \
-		"[-o <FILE>|--file=<FILE>] [--output=<OUTPUT>]" \
-		"--active|--area|--screen|--window" >&2
+		"[-o <FILE>|--file=<FILE>] [--wl-output=<OUTPUT>]" \
+		"--active|--area|--output|--screen|--window" >&2
 	exit 1
 }
 
@@ -30,7 +30,7 @@ check_required() {
 	fi
 }
 
-optstr=$(getopt -o ho: -l help,notify,swaynag,cursor,copy,file:,output:,active,area,screen,window,focused -- "$@")
+optstr=$(getopt -o ho: -l help,notify,swaynag,cursor,copy,file:,wl-output:,active,area,output,screen,window,focused -- "$@")
 eval set -- "$optstr"
 
 while :; do
@@ -40,8 +40,8 @@ while :; do
 		--cursor) WITH_CURSOR=1;;
 		--copy) COPY=1;;
 		-o|--file) FILE=$2; shift;;
-		--output) OUTPUT=$2; shift;;
-		--active|--area|--screen|--window) ACTION=$1;;
+		--wl-output) OUTPUT=$2; shift;;
+		--active|--area|--screen|--window|--output) ACTION=$1;;
 		-h|--help) usage;;
 		--) shift; break;;
 	esac
@@ -87,7 +87,11 @@ if [[ -n $bake ]]; then
 fi
 
 grim_args=()
-[[ -n $OUTPUT ]] && grim_args+=(-o "$OUTPUT")
+if [[ -n $OUTPUT ]]; then
+	grim_args+=(-o "$OUTPUT")
+elif [[ $ACTION == '--output' ]]; then
+	grim_args+=(-o "$(get_focused_output)")
+fi
 [[ -n $GEOM ]] && grim_args+=(-g "$GEOM")
 [[ $WITH_CURSOR == 1 ]] && grim_args+=(-c)
 

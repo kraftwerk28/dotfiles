@@ -8,7 +8,7 @@ set autoindent
 set list
 " let &listchars = "tab:  ,trail:·"
 let &listchars = 'tab:> ,trail:·'
-set cursorline
+set nocursorline
 set mouse=a mousemodel=extend
 set clipboard=unnamedplus
 set completeopt=menu,menuone,noselect

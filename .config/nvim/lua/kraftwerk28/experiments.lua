@@ -260,3 +260,24 @@ vim.diagnostic.handlers["virtual_text"] = {
   end,
 }
 ]]
+
+_G.reload_config = function()
+  local rtp_lua_path = table.concat(
+    vim.tbl_flatten(vim.tbl_map(function(p)
+      return { p .. "/lua/?.lua", p .. "/lua/?/init.lua" }
+    end, vim.api.nvim_list_runtime_paths())),
+    ";"
+  )
+
+  for k in pairs(package.loaded) do
+    local spath = package.searchpath(k, rtp_lua_path)
+    if spath and spath:find(vim.fn.stdpath("config"), 1, true) then
+      print(("Reloading %s (%s)"):format(k, spath))
+      package.loaded[k] = nil
+    end
+  end
+
+  vim.cmd("runtime! init.vim")
+  vim.cmd("runtime! plugin/**/*.{vim,lua}")
+  vim.api.nvim_exec_autocmds({ "FileType" }, {})
+end

@@ -50,4 +50,4 @@ local scarlett_usb = {
   },
 }
 
-table.insert(alsa_monitor.rules, scarlett_usb)
+-- table.insert(alsa_monitor.rules, scarlett_usb)

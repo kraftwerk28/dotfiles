@@ -174,23 +174,20 @@ lspconfig.tsserver.setup({
 --   },
 -- }
 
-do
-  local cmd = { "clangd", "--background-index" }
-  local ccj = find_compile_commands()
-  if ccj then
-    table.insert(cmd, "--compile-commands-dir=" .. ccj)
-  end
-  lspconfig.clangd.setup({
-    cmd = cmd,
-    root_dir = root_pattern({
-      "CMakeLists.txt",
-      "meson.build",
-      "meson_options.txt",
-      ".git",
-    }),
-    capabilities = cmp_capabilities(),
-  })
-end
+-- do
+--   local cmd = { "clangd", "--background-index" }
+--   local ccj = find_compile_commands()
+--   if ccj then
+--     table.insert(cmd, "--compile-commands-dir=" .. ccj)
+--   end
+-- end
+
+lspconfig.clangd.setup({
+  capabilities = cmp_capabilities(),
+  settings = {
+    ["C_Cpp.dimInactiveRegions"] = false,
+  },
+})
 
 lspconfig.svelte.setup({
   capabilities = cmp_capabilities(),
@@ -220,6 +217,11 @@ lspconfig.jsonls.setup({
     },
   },
   capabilities = cmp_capabilities(),
+  on_attach = function(client)
+    -- Formatting is handled by null-ls (jq)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
 
 lspconfig.yamlls.setup({

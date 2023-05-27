@@ -172,5 +172,7 @@ yt-dlp () {
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 
-# It requires to be sourced at the end
+alias get_idf='source /opt/esp-idf/export.sh'
+
+# It is required to source it at the end
 # plug zsh-syntax-highlighting
