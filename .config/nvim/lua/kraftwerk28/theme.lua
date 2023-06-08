@@ -1,20 +1,15 @@
-vim.o.background = "dark"
--- vim.o.background = "light"
+vim.o.background = "light"
 
-require("github-theme").setup({
-  -- theme_style = "dark_default",
-  -- function_style = "italic",
-  -- sidebars = { "qf", "vista_kind", "terminal", "packer" },
-  -- colors = { hint = "orange", error = "#ff0000" },
-  options = {
-    hide_nc_statusline = false,
-  },
-  groups = {
-    github_dark = {
-      StatusLine = { link = "ColorColumn" },
-    },
-  },
-})
+-- require("github-theme").setup({
+--   options = {
+--     hide_nc_statusline = false,
+--   },
+--   groups = {
+--     github_dark = {
+--       StatusLine = { link = "ColorColumn" },
+--     },
+--   },
+-- })
 
 -- require("onedark").setup({
 --   style = "warmer",
@@ -33,15 +28,19 @@ require("github-theme").setup({
 -- vim.cmd.colorscheme("base16-gruvbox-light-medium")
 -- vim.cmd.colorscheme("base16-eighties")
 
+require("gruvbox").setup({
+  contrast = "soft", -- can be "hard", "soft" or empty string
+})
+
 -- require("gruvbox").setup({
 --   overrides = {
 --     Cursor = { reverse = true },
 --   },
 -- })
 
-vim.cmd.colorscheme("github_dark")
+-- vim.cmd.colorscheme("github_dark")
 -- vim.cmd.colorscheme("kanagawa-dragon")
 -- vim.cmd.colorscheme("kanagawa-lotus")
 -- vim.cmd.colorscheme("onedark")
--- vim.cmd.colorscheme("gruvbox")
+vim.cmd.colorscheme("gruvbox")
 -- vim.cmd.colorscheme("ayu")

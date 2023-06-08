@@ -281,6 +281,8 @@ local function load(use)
       require("twilight").setup()
     end,
   })
+
+  use({ "marilari88/twoslash-queries.nvim" })
 end
 
 local function bootstrap()

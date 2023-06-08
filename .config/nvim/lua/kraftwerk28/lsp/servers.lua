@@ -129,10 +129,11 @@ lspconfig.tsserver.setup({
       -- logVerbosity = "verbose",
     },
   },
-  on_attach = function(client)
+  on_attach = function(client, bufnr)
     -- Formatting is handled by null-ls (prettier)
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
+    require("twoslash-queries").attach(client, bufnr)
   end,
 })
 
@@ -183,10 +184,25 @@ lspconfig.tsserver.setup({
 -- end
 
 lspconfig.clangd.setup({
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--query-driver=/home/kraftwerk28/.espressif/tools/xtensa-esp32-elf/esp-*/xtensa-esp32-elf/bin/xtensa-esp32-elf-*",
+  },
   capabilities = cmp_capabilities(),
   settings = {
     ["C_Cpp.dimInactiveRegions"] = false,
   },
+  root_dir = root_pattern({
+    ".clangd",
+    ".clang-tidy",
+    ".clang-format",
+    "compile_commands.json",
+    "build/compile_commands.json",
+    "compile_flags.txt",
+    "configure.ac",
+    ".git",
+  }),
 })
 
 lspconfig.svelte.setup({

@@ -172,7 +172,10 @@ yt-dlp () {
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 
-alias get_idf='source /opt/esp-idf/export.sh'
+get_idf () {
+	source /opt/esp-idf/export.sh
+	# sudo sysctl -w dev.tty.legacy_tiocsti=1
+}
 
 # It is required to source it at the end
 # plug zsh-syntax-highlighting

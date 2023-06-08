@@ -54,15 +54,33 @@ vimode_rlabel () {
 filepath='%(4~|…/%2~|%~)%f'
 exit_status=' %(?:%B%F{green}$:%B%F{red}$)%b%f'
 PROMPT="$filepath"'${vcs_info_msg_0_}'"$exit_status "
-RPROMPT='%F{magenta}${CMD_ELAPSED_TIME}%b%f'
+RPROMPT='%F{magenta}${exec_time_prompt}%b%f'
 
 add-zsh-hook precmd vcs_info
 
-set_elapsed_time () {
-	if [[ -z $CMD_EXEC_TIME ]]; then
-		return
-	fi
-	CMD_ELAPSED_TIME="$(TZ=GMT+0 date -d "@$CMD_EXEC_TIME" +'%Hh %Mm %Ss' | sed 's#00\S\s*##g')"
+_exec_time_preexec() {
+	cmd_exec_time=$SECONDS
 }
 
-add-zsh-hook precmd set_elapsed_time
+_exec_time_precmd() {
+	if [[ -z $cmd_exec_time ]]; then
+		return
+	fi
+	local seconds=$(( SECONDS - cmd_exec_time ))
+	unset exec_time_prompt
+	if (( seconds >= 3600 )); then
+		exec_time_prompt="$((seconds / 3600))h"
+		seconds=$((seconds % 3600))
+	fi
+	if ((seconds >= 60)); then
+		exec_time_prompt="${exec_time_prompt}$((seconds / 60))m"
+		seconds=$((seconds % 60))
+	fi
+	if ((seconds > 0)); then
+		exec_time_prompt="${exec_time_prompt}${seconds}s"
+	fi
+	unset cmd_exec_time
+}
+
+add-zsh-hook preexec _exec_time_preexec
+add-zsh-hook precmd _exec_time_precmd
