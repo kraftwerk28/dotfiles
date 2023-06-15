@@ -6,8 +6,13 @@ set noexpandtab
 set softtabstop=0 tabstop=4 shiftwidth=0
 set autoindent
 set list
+
 " let &listchars = "tab:  ,trail:·"
-let &listchars = 'tab:> ,trail:·'
+" let &listchars = 'tab:> ,trail:·'
+
+" Requires Nerd Font
+let &listchars = 'tab:\uf178 ,trail:·'
+
 set nocursorline
 set mouse=a mousemodel=extend
 set clipboard=unnamedplus

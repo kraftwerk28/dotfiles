@@ -54,7 +54,7 @@ vimode_rlabel () {
 filepath='%(4~|…/%2~|%~)%f'
 exit_status=' %(?:%B%F{green}$:%B%F{red}$)%b%f'
 PROMPT="$filepath"'${vcs_info_msg_0_}'"$exit_status "
-RPROMPT='%F{magenta}${exec_time_prompt}%b%f'
+RPROMPT='%F{magenta}${exec_time_prompt}%b%f $(printf %-3d $?)'
 
 add-zsh-hook precmd vcs_info
 
