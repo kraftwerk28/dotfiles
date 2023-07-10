@@ -175,11 +175,11 @@ bindsym --to-code {
 	$mod+Shift+F9	mark --replace --toggle	F9
 	$mod+Shift+F10	mark --replace --toggle	F10
 	$mod+Shift+F11	mark --replace --toggle	F11
-	$mod+F7		[con_mark="F7"]		focus
-	$mod+F8		[con_mark="F8"]		focus
-	$mod+F9		[con_mark="F9"]		focus
-	$mod+F10	[con_mark="F10"]	focus
-	$mod+F11	[con_mark="F11"]	focus
+	$mod+F7			[con_mark="F7"]		focus
+	$mod+F8			[con_mark="F8"]		focus
+	$mod+F9			[con_mark="F9"]		focus
+	$mod+F10		[con_mark="F10"]	focus
+	$mod+F11		[con_mark="F11"]	focus
 }
 
 bindsym {
@@ -234,20 +234,22 @@ mode "move workspace" {
 	bindsym Escape mode default
 }
 
-bindsym --to-code $mod+Shift+b mode "set window border"
-mode "set window border" {
-	bindsym --to-code n border normal, mode default
-	bindsym --to-code p border pixel, mode default
+set $mode_window_border "set window border ([n]one, n[o]rmal, [c]sd, [p]ixel)"
+bindsym --to-code $mod+Shift+b mode $mode_window_border
+mode $mode_window_border {
+	bindsym n	border none,	mode default
+	bindsym o	border normal,	mode default
+	bindsym c	border csd,		mode default
+	bindsym p	border pixel,	mode default
 	bindsym Escape mode default
 }
 
-bindsym --to-code $mod+Shift+o mode "manage output"
-mode "manage output" {
-	# bindsym --to-code t nop output toggle, mode default
-	# bindsym --to-code a nop output enable_all, mode default
-	bindsym --to-code t exec $scripts/manage-output.sh toggle_current, mode default
-	bindsym --to-code a exec $scripts/manage-output.sh enable_all, mode default
-	bindsym --to-code r exec $scripts/manage-output.sh disable_all, mode default
+set $mode_manage_output "manage output ([t]oggle, enable [a]ll, [d]isable all)"
+bindsym --to-code $mod+Shift+o mode $mode_manage_output
+mode $mode_manage_output {
+	bindsym --to-code t exec $scripts/manage-output.sh toggle_current,	mode default
+	bindsym --to-code a exec $scripts/manage-output.sh enable_all,		mode default
+	bindsym --to-code d exec $scripts/manage-output.sh disable_all,		mode default
 	bindsym Escape mode default
 }
 
@@ -437,8 +439,8 @@ font Monospace Bold 10
 
 # Cursor {{{
 # Path int /usr/share/icons
-set $cursor_theme "Adwaita"
-# set $cursor_theme "xcursor-breeze-snow"
+# set $cursor_theme "Adwaita"
+set $cursor_theme "xcursor-breeze-snow"
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
@@ -522,4 +524,4 @@ exec_always dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY
 # kraftwerk28's patch only:
 mouse_resizing_mode eight_direction
 
-# vim: noet sw=0 filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0
+# vim: noexpandtab shiftwidth=0 tabstop=4 filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0
