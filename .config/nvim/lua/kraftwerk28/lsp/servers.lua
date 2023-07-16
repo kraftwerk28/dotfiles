@@ -187,7 +187,8 @@ lspconfig.clangd.setup({
   cmd = {
     "clangd",
     "--background-index",
-    "--query-driver=/home/kraftwerk28/.espressif/tools/xtensa-esp32-elf/esp-*/xtensa-esp32-elf/bin/xtensa-esp32-elf-*",
+    -- FIXME: ESP-IDF projects still complain about platform-specific flags
+    -- "--query-driver=/home/kraftwerk28/.espressif/tools/xtensa-esp32-elf/esp-*/xtensa-esp32-elf/bin/xtensa-esp32-elf-*",
   },
   capabilities = cmp_capabilities(),
   settings = {

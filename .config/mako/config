@@ -35,7 +35,7 @@ height=300
 
 [category=progress]
 font=monospace 14
-anchor=center
+anchor=bottom-right
 padding=2
 actions=0
 history=0

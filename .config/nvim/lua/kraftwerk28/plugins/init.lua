@@ -84,9 +84,7 @@ local function load(use)
     "lewis6991/gitsigns.nvim",
     requires = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("gitsigns").setup({
-        keymaps = {},
-      })
+      require("gitsigns").setup()
     end,
   })
 
@@ -128,6 +126,7 @@ local function load(use)
 
   use({
     "j-hui/fidget.nvim",
+    tag = "legacy",
     config = function()
       require("fidget").setup({
         text = {

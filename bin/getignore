@@ -1,9 +1,0 @@
-#!/bin/bash
-repoinfo=$(curl -s "https://api.github.com/repos/github/gitignore/contents")
-list=$(jq -r '.[] | select(.name | endswith(".gitignore")).name | sub(".gitignore$"; "")' <<< "$repoinfo")
-if chosen=$(rofi -dmenu -i -no-custom <<< "$list"); then
-	curl -s -f ".gitignore" \
-		"https://raw.githubusercontent.com/github/gitignore/master/${chosen}.gitignore" \
-		>> ".gitignore"
-	echo "Done."
-fi
