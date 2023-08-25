@@ -64,15 +64,15 @@ local function build_tabline()
   return str
 end
 
-api.nvim_set_hl(
-  0,
-  "TabLineSel",
-  vim.tbl_extend(
-    "force",
-    api.nvim_get_hl(0, { name = "TabLineSel" }),
-    { reverse = true }
-  )
-)
+-- api.nvim_set_hl(
+--   0,
+--   "TabLineSel",
+--   vim.tbl_extend(
+--     "force",
+--     api.nvim_get_hl(0, { name = "TabLineSel" }),
+--     { reverse = true }
+--   )
+-- )
 
 -- _G.SwitchBuffer = function(_, nclicks, button, modifiers)
 --   vim.print({

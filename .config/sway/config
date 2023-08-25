@@ -13,10 +13,10 @@ set $cursor_sm_delta 10
 
 bindsym --to-code {
 	# Terminal launching
-	$mod+Return		exec foot
-	$modr+Return	exec foot
-	$mod+Shift+Return exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
-	$modr+Shift+Return exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$mod+Return			exec foot
+	$modr+Return		exec foot
+	$mod+Shift+Return	exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$modr+Shift+Return	exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	# $mod+Return exec alacritty
 	# $mod+Shift+Return exec alacritty \
 	# 	--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
@@ -32,20 +32,20 @@ bindsym --to-code {
 
 
 	# Window control
-	$mod+$left	focus left
-	$mod+$down	focus down
-	$mod+$up	focus up
-	$mod+$right	focus right
+	--no-repeat $mod+$left	focus left
+	--no-repeat $mod+$down	focus down
+	--no-repeat $mod+$up	focus up
+	--no-repeat $mod+$right	focus right
 
-	$mod+Shift+$left	move left
-	$mod+Shift+$down	move down
-	$mod+Shift+$up		move up
-	$mod+Shift+$right	move right
+	--no-repeat $mod+Shift+$left	move left
+	--no-repeat $mod+Shift+$down	move down
+	--no-repeat $mod+Shift+$up		move up
+	--no-repeat $mod+Shift+$right	move right
 
-	$mod+Bracketleft	workspace prev
-	$mod+Bracketright	workspace next
-	$modr+Bracketleft	workspace prev
-	$modr+Bracketright	workspace next
+	--no-repeat $mod+Bracketleft	workspace prev
+	--no-repeat $mod+Bracketright	workspace next
+	--no-repeat $modr+Bracketleft	workspace prev
+	--no-repeat $modr+Bracketright	workspace next
 
 	# TODO: rewrite using lua framework
 	$mod+Control+Up		exec $scripts/push-window.sh top
@@ -57,15 +57,15 @@ bindsym --to-code {
 	$mod+w layout tabbed
 	$mod+e layout toggle split
 
-	$mod+Shift+q kill
-	$mod+Shift+c reload
+	--no-repeat $mod+Shift+q kill
+	--no-repeat $mod+Shift+c reload
 	$mod+c move position center
 	$mod+b splith
 	$mod+v splitv
-	$mod+f fullscreen
-	$mod+Shift+f floating toggle
-	$mod+Control+Shift+p focus parent
-	$mod+Control+Shift+c focus child
+	--no-repeat $mod+f fullscreen
+	--no-repeat $mod+Shift+f floating toggle
+	--no-repeat $mod+Control+Shift+p focus parent
+	--no-repeat $mod+Control+Shift+c focus child
 	$mod+Shift+a focus mode_toggle
 
 
@@ -138,8 +138,8 @@ bindsym --to-code {
 
 
 	# Programs
-	$mod+F2 exec nautilus --new-window
-	$mod+F4 exec firefox
+	--no-repeat $mod+F2 exec nautilus --new-window
+	--no-repeat $mod+F4 exec firefox
 
 
 	# i3ipc control via binding subscription
@@ -180,6 +180,8 @@ bindsym --to-code {
 	$mod+F9			[con_mark="F9"]		focus
 	$mod+F10		[con_mark="F10"]	focus
 	$mod+F11		[con_mark="F11"]	focus
+
+	--no-repeat $mod+Shift+backslash exec $scripts/pipecam.sh
 }
 
 bindsym {
@@ -247,9 +249,9 @@ mode $mode_window_border {
 set $mode_manage_output "manage output ([t]oggle, enable [a]ll, [d]isable all)"
 bindsym --to-code $mod+Shift+o mode $mode_manage_output
 mode $mode_manage_output {
-	bindsym --to-code t exec $scripts/manage-output.sh toggle_current,	mode default
-	bindsym --to-code a exec $scripts/manage-output.sh enable_all,		mode default
-	bindsym --to-code d exec $scripts/manage-output.sh disable_all,		mode default
+	bindsym --no-repeat --to-code t output - toggle, mode default
+	bindsym --no-repeat --to-code a output * enable, mode default
+	bindsym --no-repeat --to-code d output * disable, mode default
 	bindsym Escape mode default
 }
 
@@ -424,7 +426,7 @@ input type:touchpad {
 # Various options {{{
 set $border_width 2
 smart_gaps on
-gaps inner 4
+gaps inner 0
 gaps outer 0
 floating_modifier $mod
 smart_borders no_gaps
@@ -439,7 +441,8 @@ font Monospace Bold 10
 
 # Cursor {{{
 # set $cursor_theme "Adwaita"
-set $cursor_theme "xcursor-breeze"
+# set $cursor_theme "xcursor-breeze"
+set $cursor_theme "Posy_Cursor"
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
@@ -511,8 +514,8 @@ output $external_hdmi position 0 0
 # output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-# output * background #000000 solid_color
-output * background /home/kraftwerk28/Pictures/telegram-math.png tile
+output * background #000000 solid_color
+# output * background /home/kraftwerk28/Pictures/telegram-math.png tile
 # }}}
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"

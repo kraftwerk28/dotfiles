@@ -183,28 +183,44 @@ lspconfig.tsserver.setup({
 --   end
 -- end
 
-lspconfig.clangd.setup({
-  cmd = {
-    "clangd",
-    "--background-index",
-    -- FIXME: ESP-IDF projects still complain about platform-specific flags
-    -- "--query-driver=/home/kraftwerk28/.espressif/tools/xtensa-esp32-elf/esp-*/xtensa-esp32-elf/bin/xtensa-esp32-elf-*",
-  },
-  capabilities = cmp_capabilities(),
-  settings = {
-    ["C_Cpp.dimInactiveRegions"] = false,
-  },
-  root_dir = root_pattern({
-    ".clangd",
-    ".clang-tidy",
-    ".clang-format",
-    "compile_commands.json",
-    "build/compile_commands.json",
-    "compile_flags.txt",
-    "configure.ac",
-    ".git",
-  }),
-})
+do
+  local query_drivers = {
+    host = "/usr/bin/{gcc,g++,c++,cpp}",
+    stm32 = "/usr/bin/arm-none-eabi-{gcc,g++,c++,cpp}",
+    esp32 = "/home/kraftwerk28/.espressif/tools/xtensa-esp32*-elf/*/*/bin/xtensa-esp32*-elf-{gcc,g++,c++,cpp}",
+  }
+
+  lspconfig.clangd.setup({
+    cmd = {
+      "clangd",
+      "--background-index",
+      "--header-insertion=never",
+      "-j",
+      "8",
+      "--pch-storage=memory",
+      -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
+    },
+    capabilities = cmp_capabilities(),
+    settings = {
+      ["C_Cpp.dimInactiveRegions"] = false,
+    },
+    root_dir = root_pattern({
+      ".clangd",
+      ".clang-tidy",
+      ".clang-format",
+      "compile_commands.json",
+      "build/compile_commands.json",
+      "compile_flags.txt",
+      "configure.ac",
+      ".git",
+    }),
+    on_attach = function()
+      -- local ih = require("clangd_extensions.inlay_hints")
+      -- ih.setup_autocmd()
+      -- ih.set_inlay_hints()
+    end,
+  })
+end
 
 lspconfig.svelte.setup({
   capabilities = cmp_capabilities(),

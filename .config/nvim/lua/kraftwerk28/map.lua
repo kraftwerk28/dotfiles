@@ -133,3 +133,5 @@ vim.keymap.set("n", "<Leader>qk", "<Cmd>cprev<CR>")
 vim.keymap.set("n", "<Leader>/", [[/^\s*\<\><Left><Left>]], {
   desc = "Useful mapping for searching for commands (i.e. bash builtings) in manpages",
 })
+
+vim.keymap.set("i", "<D-Space>", "<Nop>")

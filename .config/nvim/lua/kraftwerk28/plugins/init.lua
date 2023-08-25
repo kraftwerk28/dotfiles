@@ -42,8 +42,8 @@ local function load(use)
         ).create_pre_hook(),
       })
       local mopt = { silent = true, remap = true }
-      vim.keymap.set("n", "<C-/>", "gcc", mopt)
-      vim.keymap.set("i", "<C-/>", "<C-O>:normal gcc<CR>", mopt)
+      vim.keymap.set("n", "<C-/>", "gccj", mopt)
+      vim.keymap.set("i", "<C-/>", "<Cmd>:normal gcc<CR>", mopt)
       vim.keymap.set("x", "<C-/>", "gcgv", mopt)
     end,
   })

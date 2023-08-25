@@ -136,6 +136,11 @@ local sources = {
     },
   }),
   -- b.formatting.xmllint,
+  b.formatting.shfmt.with({
+    args = {
+      "--binary-next-line",
+    },
+  }),
 
   porth_diagnostic,
   jq_format,

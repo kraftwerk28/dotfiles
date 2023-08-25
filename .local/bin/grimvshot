@@ -18,7 +18,7 @@ get_focused_output() {
 	swaymsg -t get_outputs | jq -r '.[] | select(.focused).name'
 }
 
-get_default_savefile() {
+get_default_savefile () {
 	echo "$(xdg-user-dir PICTURES)/grim-$(date -Ins).png"
 }
 

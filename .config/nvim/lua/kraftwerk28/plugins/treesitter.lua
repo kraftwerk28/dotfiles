@@ -91,7 +91,7 @@ end
 
 -- Enable nvim-treesitter's folding
 -- vim.o.foldmethod = "expr"
--- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 -- vim.o.foldenable = false
 
 require("nvim-treesitter.configs").setup(config)
