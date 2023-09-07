@@ -15,6 +15,9 @@ dap.adapters.delve = {
   },
 }
 
+dap.adapters.lldb = {
+}
+
 dap.configurations.python = {
   {
     type = "python",
@@ -50,6 +53,10 @@ dap.configurations.go = {
     program = "./${relativeFileDirname}",
   },
 }
+
+-- dap.configurations.c = {
+--   type = "lldb",
+-- }
 
 -- vim.keymap.set("n", "<Leader>dt", dap.toggle_breakpoint)
 -- vim.keymap.set("n", "<Leader>dc", dap.continue)

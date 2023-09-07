@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Viber
+Comment=Viber VoIP and messenger
+Exec=env QTWEBENGINE_DISABLE_SANDBOX=1 QT_QPA_PLATFORM=xcb viber %u
+Icon=viber.png
+Terminal=false
+Type=Application
+Categories=Network;InstantMessaging;P2P;
+MimeType=x-scheme-handler/viber;

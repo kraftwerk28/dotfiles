@@ -1,0 +1,9 @@
+tabset 4
+
+set history save on
+set history size 50000
+set history remove-duplicates 100
+set history filename ~/.gdbhistory
+
+set debuginfod enabled off
+set confirm off

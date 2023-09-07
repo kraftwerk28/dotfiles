@@ -441,14 +441,14 @@ font Monospace Bold 10
 
 # Cursor {{{
 # set $cursor_theme "Adwaita"
-# set $cursor_theme "xcursor-breeze"
-set $cursor_theme "Posy_Cursor"
+set $cursor_theme "xcursor-breeze"
+# set $cursor_theme "Posy_Cursor"
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
 	gsettings set org.gnome.desktop.interface cursor-size $cursor_size
-	sed -i -r 's/^Inherits=.+/Inherits='$cursor_theme'/' ~/.icons/default/index.theme
+	sed -i -r 's/^Inherits.*$/Inherits='$cursor_theme'/' ~/.icons/default/index.theme
 }
 # }}}
 
