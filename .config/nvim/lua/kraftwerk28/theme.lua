@@ -37,7 +37,6 @@ require("github-theme").setup({
 -- vim.cmd.colorscheme("base16-gruvbox-dark-medium")
 -- vim.cmd.colorscheme("base16-gruvbox-light-medium")
 -- vim.cmd.colorscheme("base16-eighties")
--- vim.cmd.colorscheme("github_dark_dimmed")
 vim.cmd.colorscheme("github_dark")
 -- vim.cmd.colorscheme("kanagawa-dragon")
 -- vim.cmd.colorscheme("kanagawa-lotus")

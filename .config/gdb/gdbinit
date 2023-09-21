@@ -1,4 +1,5 @@
 tabset 4
+tui disable
 
 set history save on
 set history size 50000

@@ -161,7 +161,7 @@ mkcd () {
 	cd "$1"
 }
 
-yt-dlp () {
+ytd () {
 	args=("$@")
 	if (( $# == 0 )) && wl-paste -l | grep "text/plain" >/dev/null; then
 		args+=("$(wl-paste)")

@@ -11,7 +11,9 @@ set list
 " let &listchars = 'tab:> ,trail:·'
 
 " Requires Nerd Font
-let &listchars = 'tab:\uf178 ,trail:·'
+" let &listchars = 'tab:\uf178 ,trail:·'
+" let &listchars = 'tab:\u00bb ,trail:·'
+let &listchars = 'tab:» ,trail:·'
 
 set nocursorline
 set mouse=a mousemodel=extend
