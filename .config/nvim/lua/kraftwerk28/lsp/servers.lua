@@ -299,6 +299,10 @@ lspconfig.rescriptls.setup({
   capabilities = cmp_capabilities(),
 })
 
+lspconfig.volar.setup({
+  capabilities = cmp_capabilities(),
+})
+
 if fn.has("win64") == 1 then
   local jdt_base = fn.expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"

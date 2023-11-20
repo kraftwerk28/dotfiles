@@ -28,6 +28,7 @@ set foldmethod=indent
 set foldlevel=99
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set foldignore=
+let &foldtext = 'v:lua.vim.treesitter.foldtext()'
 set secure
 set splitbelow splitright
 set regexpengine=0
@@ -40,6 +41,11 @@ set diffopt+=vertical
 set scrolloff=0
 set exrc
 set keywordprg=
+set jumpoptions+=view
+
+" These are set solely for which-key.nvim plugin to work properly
+set timeout
+set timeoutlen=250
 
 set writebackup " Enable backup feature
 set nobackup " Delete backup file after saving

@@ -441,9 +441,11 @@ font Monospace Bold 10
 
 # Cursor {{{
 # set $cursor_theme "Adwaita"
-set $cursor_theme "xcursor-breeze"
-# set $cursor_theme "Posy_Cursor"
-set $cursor_size 24
+# set $cursor_theme "xcursor-breeze"
+# set $cursor_theme xcursor-breeze-snow
+set $cursor_theme Bibata-Original-Ice
+# set $cursor_theme /usr/share/icons/Bibata-Modern-Ice
+set $cursor_size 28
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
@@ -462,10 +464,12 @@ exec libinput-gestures-setup restart
 # }}}
 
 # Window rules {{{
+for_window [app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^firefox$" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
 for_window [app_id="^firefox$" title="Sharing Indicator$"] floating enable, resize set 0 0, sticky enable
 for_window [app_id="^firefox$" title="^Developer Tools"] floating enable
-for_window [app_id="^firefox$"] border pixel $border_width
+for_window [app_id="^firefox$" title="Bitwarden"] floating enable
+# Extension: (Bitwarden - Free Password Manager) - Bitwarden — Mozilla Firefox
 
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
@@ -474,12 +478,15 @@ for_window [title="xeyes"] floating enable, border normal $border_width, sticky 
 for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
-for_window [app_id="^foot_floating$"] floating enable
 for_window [app_id="^gnome-calculator$"] floating enable
 for_window [app_id="^org.gnome.Calculator$"] floating enable
 for_window [title="^FX: Track"] floating enable
 for_window [app_id="xdg-desktop-portal-gtk"] floating enable
 for_window [class="jetbrains-studio" title="win[0-9]+"] floating enable
+
+# Prevent accidental closing of terminal windows (only through ^D)
+# for_window [app_id="^foot$"] unbindsym --to-code $mod+Shift+q
+for_window [app_id="^foot_floating$"] floating enable
 # }}}
 
 # Output configuration {{{

@@ -24,83 +24,13 @@ local Painter = require("kraftwerk28.painter")
 
 local format_icons = { dos = " ", mac = " ", unix = " " }
 
--- local stl_hl = { cache = {} }
---
--- function stl_hl:load_base_hl()
---   self.stl = api.nvim_get_hl_by_name("StatusLine", true)
---   self.stl_nc = api.nvim_get_hl_by_name("StatusLineNC", true)
---   for hl, _ in pairs(stl_hl.cache) do
---     self:load(hl)
---   end
--- end
---
--- api.nvim_create_autocmd("ColorScheme", {
---   callback = function()
---     stl_hl:load_base_hl()
---   end,
--- })
---
--- local function bg_color(hl)
---   if hl.reverse then
---     return hl.foreground
---   else
---     return hl.background
---   end
--- end
---
--- stl_hl:load_base_hl()
---
--- function stl_hl:load(name)
---   local hl = api.nvim_get_hl_by_name(name, true)
---   local stl_name = "Stl" .. name
---   local stl_nc_name = "Stl" .. name .. "NC"
---   vim.api.nvim_set_hl(0, stl_name, {
---     fg = hl.foreground,
---     bg = bg_color(stl_hl.stl),
---   })
---   vim.api.nvim_set_hl(0, stl_nc_name, {
---     fg = hl.foreground,
---     bg = bg_color(stl_hl.stl_nc),
---   })
--- end
---
--- function stl_hl:get(name, focused)
---   if not self.cache[name] then
---     self:load(name)
---     self.cache[name] = true
---   end
---   return focused and "Stl" .. name or "Stl" .. name .. "NC"
--- end
-
-local stl_painter = Painter:new({
-  base = "StatusLine",
-  get_name = function(name)
-    return "Stl" .. name
-  end,
-})
-
-local stl_nc_painter = Painter:new({
-  base = "StatusLineNC",
-  get_name = function(name)
-    return "Stl" .. name .. "NC"
-  end,
-})
-
-local function stl_hl(name, is_focused)
-  if is_focused then
-    return stl_painter[name]
-  else
-    return stl_nc_painter[name]
-  end
-end
-
 local Statusline = {}
 Statusline.__index = Statusline
 
-function Statusline:new(focused)
+function Statusline:new(args)
   return setmetatable({
     parts = {},
-    focused = focused,
+    painter = args.painter,
     groups = {},
   }, self)
 end
@@ -121,7 +51,7 @@ function Statusline:add(opts)
     res = body
   end
   if opts.highlight then
-    res = "%#" .. stl_hl(opts.highlight, self.focused) .. "#" .. res
+    res = "%#" .. self.painter[opts.highlight] .. "#" .. res
     if #self.groups == 0 then
       res = res .. "%*" -- Reset highlight
     end
@@ -150,7 +80,24 @@ function Statusline:render()
 end
 
 local function make_stl(focused)
-  local stl = Statusline:new(focused)
+  local painter
+  if focused then
+    painter = Painter:new({
+      base = "StatusLine",
+      get_name = function(name)
+        return "Stl" .. name
+      end,
+    })
+  else
+    painter = Painter:new({
+      base = "StatusLineNC",
+      get_name = function(name)
+        return "Stl" .. name .. "NC"
+      end,
+    })
+  end
+
+  local stl = Statusline:new({ painter = painter })
 
   stl:space()
   stl:add({
@@ -173,7 +120,7 @@ local function make_stl(focused)
       local filename, fileext = fn.expand("%:t"), fn.expand("%:e")
       local icon, icon_highlight = devicons.get_icon(filename, fileext)
       if icon then
-        local hl = stl_hl(icon_highlight, focused)
+        local hl = painter[icon_highlight]
         return "%#" .. hl .. "#" .. icon .. "%*"
       end
     end,
@@ -213,11 +160,9 @@ local function make_stl(focused)
     stl:add({
       function()
         if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-          -- return " "
-          return "%#" .. stl_hl("Error", focused) .. "# "
+          return "%#" .. painter["Error"] .. "# "
         else
-          -- return " "
-          return "%#" .. stl_hl("String", focused) .. "# "
+          return "%#" .. painter["String"] .. "# "
         end
       end,
       eval = true,
@@ -244,8 +189,18 @@ local function make_stl(focused)
   end)
 
   if focused then
+    -- stl:add({
+    --   function()
+    --     local search = vim.fn.searchcount()
+    --   end,
+    -- })
+
+    -- Character under cursor's hex
     stl:add({ "(0x%04.B)" })
+
     stl:space()
+
+    -- current line / total lines : current column
     stl:add({ "%4.l/%-4.L:%3.c" })
   end
 
