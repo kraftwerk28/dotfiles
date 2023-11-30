@@ -20,6 +20,8 @@ KEYTIMEOUT=5 # 50ms, same as default 'ttimeoutlen' in neovim
 # zle -N zle-keymap-select _keymap_handler
 # zle -N zle-line-init _keymap_handler
 
+bindkey '^P' up-history
+bindkey '^N' down-history
 # bindkey -v "^[[A" history-search-backward
 # bindkey -v "^[[B" history-search-forward
 # bindkey -v "^R" history-incremental-search-backward

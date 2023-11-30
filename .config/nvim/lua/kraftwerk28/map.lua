@@ -86,18 +86,21 @@ vim.keymap.set("n", "K", "<Nop>")
 
 -- Toggle common boolean-like values
 local boolean_map = {
-  ["true"] = "false",
-  ["True"] = "False",
-  ["1"] = "0",
-  ["yes"] = "no",
-  ["Yes"] = "No",
-  ["On"] = "Off",
-  ["on"] = "off",
+  { "true", "false" },
+  { "1", "0" },
+  { "yes", "no" },
+  { "Yes", "No" },
+  { "On", "Off" },
+  { "on", "off" },
+  { "disable", "enable" },
+  { "DISABLE", "ENABLE" },
 }
 
 vim.keymap.set("n", "<Leader>t", function()
+  -- Try to toggle word from above `boolean_map`
   local cword = vim.fn.expand("<cword>")
-  for lhs, rhs in pairs(boolean_map) do
+  for _, pair in ipairs(boolean_map) do
+    local lhs, rhs = pair[1], pair[2]
     if cword == lhs then
       vim.cmd("normal! ciw" .. rhs)
       return
@@ -106,7 +109,8 @@ vim.keymap.set("n", "<Leader>t", function()
       return
     end
   end
-  -- try to toggle markdown checkmark
+
+  -- Try to toggle markdown checkmark
   local line = vim.api.nvim_get_current_line()
   local md_check_start, md_check_end = line:find("%[ %]")
   if md_check_start then
