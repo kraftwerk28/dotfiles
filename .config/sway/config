@@ -441,9 +441,9 @@ font Monospace Bold 10
 
 # Cursor {{{
 # set $cursor_theme "Adwaita"
-# set $cursor_theme "xcursor-breeze"
+set $cursor_theme "xcursor-breeze"
 # set $cursor_theme xcursor-breeze-snow
-set $cursor_theme Bibata-Original-Classic
+# set $cursor_theme Bibata-Original-Classic
 # set $cursor_theme /usr/share/icons/Bibata-Modern-Ice
 set $cursor_size 28
 seat * xcursor_theme $cursor_theme $cursor_size

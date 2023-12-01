@@ -87,6 +87,7 @@ vim.keymap.set("n", "K", "<Nop>")
 -- Toggle common boolean-like values
 local boolean_map = {
   { "true", "false" },
+  { "True", "False" },
   { "1", "0" },
   { "yes", "no" },
   { "Yes", "No" },
