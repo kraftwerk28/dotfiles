@@ -2,10 +2,10 @@ local cmp = require("cmp")
 local lspkind = require("lspkind")
 local luasnip = require("luasnip")
 
-cmp.register_source(
-  "conventional_commit",
-  require("kraftwerk28.cmp_conventional_commit")
-)
+-- cmp.register_source(
+--   "conventional_commit",
+--   require("kraftwerk28.cmp_conventional_commit")
+-- )
 
 cmp.setup({
   mapping = {
@@ -62,11 +62,18 @@ cmp.setup({
       },
     }),
   },
-  enabled = function()
-    return vim.opt.buftype ~= "prompt"
-      and vim.opt.filetype ~= "asm"
-      and vim.fn.win_gettype() == ""
-  end,
+  -- enabled = function()
+  --   if vim.fn.win_gettype() ~= "" then
+  --     return false
+  --   end
+  --   if vim.bo.filetype == "asm" then
+  --     return false
+  --   end
+  --   if vim.bo.buftype == "prompt" then
+  --     return false
+  --   end
+  --   return true
+  -- end,
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)

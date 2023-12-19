@@ -121,6 +121,8 @@ local function load(use)
     end,
     config = function()
       require("kraftwerk28.plugins.treesitter")
+      require("ts_context_commentstring").setup()
+      vim.g.skip_ts_context_commentstring_module = true
     end,
   })
 

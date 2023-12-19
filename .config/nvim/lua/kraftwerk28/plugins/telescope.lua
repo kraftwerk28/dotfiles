@@ -13,23 +13,38 @@ autocmd("FileType", {
 
 vim.keymap.set("n", "<C-P>", function()
   builtin.find_files({
+    find_command = {
+      "fd",
+      "--type=file",
+      "--color=never",
+      "--exclude=.git",
+    },
     previewer = false,
     theme = "dropdown",
     hidden = true,
-    no_ignore = false,
+    -- no_ignore = false,
   })
 end)
 
 vim.keymap.set("n", "<Leader>rg", function()
   builtin.live_grep({
-    additional_args = { "--sort=path" },
+    additional_args = {
+      "--sort=path",
+      "--hidden",
+      "--glob=!.git/",
+    },
   })
 end)
 
 -- Like live_grep, but no regex
 vim.keymap.set("n", "<Leader>rs", function()
   builtin.live_grep({
-    additional_args = { "--fixed-strings", "--sort=path" },
+    additional_args = {
+      "--fixed-strings",
+      "--sort=path",
+      "--hidden",
+      "--glob=!.git/",
+    },
   })
 end)
 
@@ -37,11 +52,11 @@ vim.keymap.set("n", "<F1>", builtin.help_tags)
 
 telescope.setup({
   defaults = {
-    borderchars = (function()
-      -- Telescope has slightly different borderchar array format
-      local a, b, c, d, e, f, g, h = unpack(vim.g.borderchars)
-      return { b, d, f, h, a, c, e, g }
-    end)(),
+    -- borderchars = (function()
+    --   -- Telescope has slightly different borderchar array format
+    --   local a, b, c, d, e, f, g, h = unpack(vim.g.borderchars)
+    --   return { b, d, f, h, a, c, e, g }
+    -- end)(),
     sorting_strategy = "ascending",
     prompt_prefix = " ",
     layout_strategy = "horizontal",
