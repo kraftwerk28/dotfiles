@@ -22,14 +22,14 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	# export WLR_RENDERER=vulkan
 	export WLR_DRM_NO_ATOMIC=1
 
-	sway_logdir="${HOME}/sway.d"
-	mkdir -p "$sway_logdir"
-	logfile="${sway_logdir}/sway-$(date -Is).log"
-
+	# Setup logging
+	logfile="$XDG_STATE_HOME/sway/$(date -Is).log"
+	mkdir -p "$(dirname $logfile)"
 	# Remove logs older than 14 days
-	find "$sway_logdir" -type f -mtime +14 -name '*.log' -execdir rm '{}' \;
+	find "$(dirname $logfile)" -maxdepth 1 -type f -mtime +14 -name '*.log' -execdir rm -v '{}' \;
+	conffile="$XDG_CONFIG_HOME/sway/config"
 
-	exec sway --unsupported-gpu &> "$logfile"
+	exec sway --unsupported-gpu --config=$conffile &> "$logfile"
 
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \

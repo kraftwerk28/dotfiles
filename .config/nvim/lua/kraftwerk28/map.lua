@@ -135,7 +135,7 @@ end, { desc = "Toggle common boolean literals" })
 vim.keymap.set("n", "<Leader>qj", "<Cmd>cnext<CR>")
 vim.keymap.set("n", "<Leader>qk", "<Cmd>cprev<CR>")
 
-vim.keymap.set("n", "<Leader>/", [[/^\s*\<\><Left><Left>]], {
+vim.keymap.set("n", "<Leader>/", [[/^\s*\<]], {
   desc = "Useful mapping for searching for commands (i.e. bash builtings) in manpages",
 })
 

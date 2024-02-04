@@ -111,18 +111,19 @@ local function load(use)
     "nvim-treesitter/nvim-treesitter",
     -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
     requires = {
-      "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
       "JoosepAlviste/nvim-ts-context-commentstring",
       "windwp/nvim-ts-autotag",
+      "nvim-treesitter/nvim-treesitter-context",
     },
     run = function()
       vim.cmd("TSUpdate")
     end,
     config = function()
       require("kraftwerk28.plugins.treesitter")
-      require("ts_context_commentstring").setup()
       vim.g.skip_ts_context_commentstring_module = true
+      require("ts_context_commentstring").setup()
+      require("treesitter-context").setup()
     end,
   })
 

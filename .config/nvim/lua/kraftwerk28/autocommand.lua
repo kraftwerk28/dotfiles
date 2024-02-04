@@ -1,4 +1,4 @@
-local group = augroup("init.lua")
+local group = augroup("autocommand.lua")
 
 autocmd("VimEnter", {
   callback = function()
@@ -74,6 +74,16 @@ autocmd("FileType", {
   pattern = { "man", "c", "bash", "zsh", "sh", "help" },
   callback = function()
     vim.keymap.set("n", "K", "K", { buffer = true })
+  end,
+  group = group,
+})
+
+autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function()
+    -- Enable nvim-treesitter's folding
+    vim.wo.foldmethod = "expr"
+    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
   end,
   group = group,
 })

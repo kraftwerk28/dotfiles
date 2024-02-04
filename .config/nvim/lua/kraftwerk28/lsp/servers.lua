@@ -39,17 +39,23 @@ lspconfig.als.setup({
   capabilities = cmp_capabilities(),
 })
 
-lspconfig.arduino_language_server.setup({
-  cmd = {
+do
+  local cmd = {
     "arduino-language-server",
-    "-clangd",
-    fn.exepath("clangd"),
-    "-cli",
-    fn.exepath("arduino-cli"),
-    "-cli-config",
-    fn.expand("~/.arduino15/arduino-cli.yaml"),
-  },
-})
+    "-clangd=" .. vim.fn.exepath("clangd"),
+    "-cli=" .. vim.fn.exepath("arduino-cli"),
+    "-cli-config=" .. vim.fn.expand("~/.arduino15/arduino-cli.yaml"),
+  }
+  local format_cfg = vim.fs.find(".clang-format", { upward = true })[1]
+  if format_cfg then
+    table.insert(cmd, "-format-conf-path=" .. format_cfg)
+  end
+  lspconfig.arduino_language_server.setup({
+    cmd = cmd,
+    -- NOTE: default capabilities are not empty, do not overwrite them
+    -- capabilities = cmp_capabilities(),
+  })
+end
 
 lspconfig.awk_ls.setup({
   capabilities = cmp_capabilities(),
@@ -92,7 +98,16 @@ lspconfig.hls.setup({
   capabilities = cmp_capabilities(),
 })
 
-lspconfig.pylsp.setup({
+-- lspconfig.pylsp.setup({
+--   capabilities = cmp_capabilities(),
+--   on_attach = function(client)
+--     -- Formatting is handled by black
+--     client.server_capabilities.documentFormattingProvider = false
+--     client.server_capabilities.documentRangeFormattingProvider = false
+--   end,
+-- })
+
+lspconfig.pyright.setup({
   capabilities = cmp_capabilities(),
   on_attach = function(client)
     -- Formatting is handled by black
@@ -100,10 +115,6 @@ lspconfig.pylsp.setup({
     client.server_capabilities.documentRangeFormattingProvider = false
   end,
 })
-
--- lspconfig.pyright.setup({
---   capabilities = cmp_capabilities(),
--- })
 
 lspconfig.rust_analyzer.setup({
   capabilities = cmp_capabilities(),
@@ -205,20 +216,16 @@ do
       ["C_Cpp.dimInactiveRegions"] = false,
     },
     root_dir = root_pattern({
-      ".clangd",
-      ".clang-tidy",
-      ".clang-format",
       "compile_commands.json",
       "build/compile_commands.json",
       "compile_flags.txt",
+      ".clangd",
+      ".clang-tidy",
+      ".clang-format",
       "configure.ac",
       ".git",
     }),
-    on_attach = function()
-      -- local ih = require("clangd_extensions.inlay_hints")
-      -- ih.setup_autocmd()
-      -- ih.set_inlay_hints()
-    end,
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
   })
 end
 
@@ -301,7 +308,14 @@ lspconfig.rescriptls.setup({
 
 lspconfig.volar.setup({
   capabilities = cmp_capabilities(),
+  on_attach = function(client)
+    -- Formatting is handled by null-ls (prettier)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
+
+lspconfig.elmls.setup({})
 
 if fn.has("win64") == 1 then
   local jdt_base = fn.expand(

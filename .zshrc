@@ -64,6 +64,7 @@ source "$dot_config/alias.zsh"
 source "$dot_config/dotfiles.zsh"
 source "$dot_config/idle_notifier.zsh"
 source "$dot_config/prompt.zsh"
+source "$dot_config/venv.zsh"
 
 plug() {
 	local files=($dot_config/plugins/$1/*.plugin.zsh(N))
@@ -169,8 +170,16 @@ ytd () {
 	/usr/bin/yt-dlp "${args[@]}"
 }
 
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-(( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
+if which zoxide &> /dev/null; then
+	eval "$(zoxide init zsh)"
+fi
+
+if which fnm &> /dev/null; then
+	eval "$(fnm env --use-on-cd)"
+fi
+
+# FIXME: for some reason, this doesn't work
+# (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 
 get_idf () {
 	source /opt/esp-idf/export.sh

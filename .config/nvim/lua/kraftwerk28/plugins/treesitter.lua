@@ -1,18 +1,3 @@
--- do
---   local install_dir =
---     require("nvim-treesitter.configs").get_parser_install_dir()
---   local so_files = vim.split(vim.fn.glob(install_dir .. "/*.so"), "\n")
---   local existing = vim.tbl_map(function(it)
---     return vim.fn.fnamemodify(it, ":t:r")
---   end, so_files)
---   local redundant = vim.tbl_filter(function(lng)
---     return not vim.tbl_contains(ensure_installed, lng)
---   end, existing)
---   if #redundant > 0 then
---     require("nvim-treesitter.install").uninstall(redundant)
---   end
--- end
-
 local config = {
   highlight = {
     enable = true,
@@ -30,29 +15,22 @@ local config = {
       node_decremental = "(",
     },
   },
-
-  -- Third-party modules
-  playground = {
-    enable = true,
-    updatetime = 25,
-    persist_queries = false,
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      lookbehind = true,
-      keymaps = {
-        ["aa"] = "@parameter.outer",
-        ["ia"] = "@parameter.inner",
-        ["ib"] = "@block.inner",
-        ["ab"] = "@block.outer",
-      },
-    },
-    move = {
-      enable = true,
-    },
-  },
+  -- textobjects = {
+  --   select = {
+  --     enable = true,
+  --     lookahead = true,
+  --     lookbehind = true,
+  --     keymaps = {
+  --       ["aa"] = "@parameter.outer",
+  --       ["ia"] = "@parameter.inner",
+  --       ["ib"] = "@block.inner",
+  --       ["ab"] = "@block.outer",
+  --     },
+  --   },
+  --   move = {
+  --     enable = true,
+  --   },
+  -- },
 }
 
 if vim.fn.has("unix") == 1 then
@@ -158,9 +136,7 @@ if vim.fn.has("unix") == 1 then
     "yaml",
     "zig",
   }
-end
-
-if vim.fn.has("win64") == 1 then
+elseif vim.fn.has("win64") == 1 then
   config.ensure_installed = {
     "java",
     "kotlin",
@@ -169,10 +145,5 @@ if vim.fn.has("win64") == 1 then
     "python",
   }
 end
-
--- Enable nvim-treesitter's folding
--- vim.o.foldmethod = "expr"
-vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
--- vim.o.foldenable = false
 
 require("nvim-treesitter.configs").setup(config)

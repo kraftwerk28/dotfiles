@@ -103,6 +103,11 @@ blocks:
 
   - <<: *bat_common
     name: battery
+    format: " {state_icon}{percentage:3*%}"
+    upower_device: headset_dev_00_16_94_38_8F_21
+
+  - <<: *bat_common
+    name: battery
     format: "{is_charging$}{state_icon}{percentage:3*%}"
 
   - name: sway_layout

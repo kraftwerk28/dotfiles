@@ -4,6 +4,7 @@
 [core]
 	editor = nvim
 	pager = less
+	; compression = 0
 [alias]
 	nvcommit = commit --no-verify
 	poosh = push origin HEAD

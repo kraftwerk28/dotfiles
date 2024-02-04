@@ -31,8 +31,9 @@ bindkey -M viins '^[[Z' reverse-menu-complete # Shift+Tab
 bindkey -M viins "^H" backward-kill-word
 # bindkey -v "^H" vi-backward-kill-word # Shift+Backspace
 bindkey -M viins '^I' complete-word
-bindkey -M viins -s '^[l' '^uls\n'
-bindkey -M viins -s '^[r' '^uranger\n'
+
+bindkey -M viins -s '^[l' '^Uls^M'
+bindkey -M viins -s '^[r' '^Uranger^M'
 
 autoload -U edit-command-line
 zle -N edit-command-line
@@ -40,3 +41,5 @@ bindkey -M viins '^[e' edit-command-line
 
 bindkey -M viins '^R' fzf_history_search
 bindkey -M viins '^S' history-incremental-search-forward
+
+bindkey -M viins -r '^D'
