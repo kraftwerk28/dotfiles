@@ -9,7 +9,7 @@ require("kraftwerk28.globals")
 vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- vim.g.borderchars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
-vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
+-- vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
 vim.g.diagnostic_signs = {
   ERROR = " ",
   WARN = " ",

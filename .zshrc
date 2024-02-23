@@ -182,7 +182,7 @@ fi
 # (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"
 
 get_idf () {
-	source /opt/esp-idf/export.sh
+	source ~/projects/embedded/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
 }
 

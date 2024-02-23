@@ -297,49 +297,54 @@ local function load(use)
       })
     end,
   })
-end
 
-local function bootstrap()
-  local packer_install_path = vim.fn.stdpath("data")
-    .. "/site/pack/packer/opt/packer.nvim"
-  local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) == 1
-
-  if not_installed then
-    print("`packer.nvim` is not installed, installing...")
-    vim.fn.system({
-      "git",
-      "clone",
-      "--depth=1",
-      "https://github.com/wbthomason/packer.nvim",
-      packer_install_path,
-    })
-  end
-
-  vim.cmd("packadd packer.nvim")
-  local packer = require("packer")
-
-  packer.startup({
-    load,
-    config = {
-      git = { clone_timeout = 240 },
-      autoremove = true,
-    },
-  })
-
-  local augroup = vim.api.nvim_create_augroup("packer", {})
-
-  vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*/plugins/init.lua",
-    callback = function(arg)
-      vim.cmd("source " .. arg.file)
-      packer.compile()
+  use({
+    "nvim-lualine/lualine.nvim",
+    requires = { "nvim-tree/nvim-web-devicons", "nvim-lua/lsp-status.nvim" },
+    config = function()
+      require("kraftwerk28.plugins.lualine")
     end,
-    group = augroup,
   })
-
-  if not_installed then
-    packer.sync()
-  end
 end
 
-bootstrap()
+-- Bootstrap
+local packer_install_path = vim.fn.stdpath("data")
+  .. "/site/pack/packer/opt/packer.nvim"
+local not_installed = vim.fn.empty(vim.fn.glob(packer_install_path)) == 1
+
+if not_installed then
+  print("`packer.nvim` is not installed, installing...")
+  vim.fn.system({
+    "git",
+    "clone",
+    "--depth=1",
+    "https://github.com/wbthomason/packer.nvim",
+    packer_install_path,
+  })
+end
+
+vim.cmd("packadd packer.nvim")
+local packer = require("packer")
+
+packer.startup({
+  load,
+  config = {
+    git = { clone_timeout = 240 },
+    autoremove = true,
+  },
+})
+
+local augroup = vim.api.nvim_create_augroup("packer", {})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*/plugins/init.lua",
+  callback = function(arg)
+    vim.cmd("source " .. arg.file)
+    packer.compile()
+  end,
+  group = augroup,
+})
+
+if not_installed then
+  packer.sync()
+end
