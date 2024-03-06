@@ -15,7 +15,7 @@ set list
 " let &listchars = 'tab:\u00bb ,trail:·'
 let &listchars = 'tab:» ,trail:·'
 
-set nocursorline
+set cursorline nocursorcolumn
 set mouse=a mousemodel=extend
 set clipboard=unnamedplus
 set completeopt=menu,menuone,noselect

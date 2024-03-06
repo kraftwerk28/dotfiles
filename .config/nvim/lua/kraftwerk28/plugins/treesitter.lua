@@ -15,6 +15,9 @@ local config = {
       node_decremental = "(",
     },
   },
+  blockmark = {
+    enable = true,
+  },
   -- textobjects = {
   --   select = {
   --     enable = true,
@@ -147,3 +150,8 @@ elseif vim.fn.has("win64") == 1 then
 end
 
 require("nvim-treesitter.configs").setup(config)
+
+vim.g.skip_ts_context_commentstring_module = true
+require("ts_context_commentstring").setup()
+require("treesitter-context").setup()
+-- require("kraftwerk28.plugins.treesitter_blockmark")

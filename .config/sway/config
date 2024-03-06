@@ -468,7 +468,6 @@ for_window [app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^firefox$" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
 for_window [app_id="^firefox$" title="Sharing Indicator$"] floating enable, resize set 0 0, sticky enable
 for_window [app_id="^firefox$" title="^Developer Tools"] floating enable
-for_window [app_id="^firefox$" title="Bitwarden"] floating enable
 # Extension: (Bitwarden - Free Password Manager) - Bitwarden — Mozilla Firefox
 
 for_window [app_id="pavucontrol"] floating enable

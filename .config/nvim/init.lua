@@ -48,7 +48,7 @@ load("kraftwerk28.lsp")
 load("kraftwerk28.lsp.servers")
 load("kraftwerk28.lsp.manage")
 load("kraftwerk28.tabline")
-load("kraftwerk28.statusline")
+-- load("kraftwerk28.statusline")
 load("kraftwerk28.filetype")
 load("kraftwerk28.notify")
 load("kraftwerk28.linenumber")
@@ -67,9 +67,7 @@ do
     for _, winid in ipairs(resized_winids) do
       if vim.api.nvim_win_is_valid(winid) then
         local buf = vim.api.nvim_win_get_buf(winid)
-        if
-          vim.bo[buf].filetype == 'man' and vim.b[buf].pager == false
-        then
+        if vim.bo[buf].filetype == "man" and vim.b[buf].pager == false then
           local bufname = vim.api.nvim_buf_get_name(buf)
           local ref = vim.fn.matchstr(bufname, "man://\\zs.*")
           if ref ~= "" then

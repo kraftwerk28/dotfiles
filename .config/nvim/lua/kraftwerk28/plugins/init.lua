@@ -121,24 +121,6 @@ local function load(use)
     end,
     config = function()
       require("kraftwerk28.plugins.treesitter")
-      vim.g.skip_ts_context_commentstring_module = true
-      require("ts_context_commentstring").setup()
-      require("treesitter-context").setup()
-    end,
-  })
-
-  use({
-    "j-hui/fidget.nvim",
-    tag = "legacy",
-    config = function()
-      require("fidget").setup({
-        text = {
-          spinner = "dots",
-        },
-        window = {
-          relative = "editor",
-        },
-      })
     end,
   })
 
@@ -300,7 +282,10 @@ local function load(use)
 
   use({
     "nvim-lualine/lualine.nvim",
-    requires = { "nvim-tree/nvim-web-devicons", "nvim-lua/lsp-status.nvim" },
+    requires = {
+      "nvim-tree/nvim-web-devicons",
+      "arkav/lualine-lsp-progress",
+    },
     config = function()
       require("kraftwerk28.plugins.lualine")
     end,

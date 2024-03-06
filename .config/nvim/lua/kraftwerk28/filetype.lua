@@ -72,6 +72,7 @@ local ftconfig = {
       "typescriptreact",
       "vim",
       "yaml",
+      "vue",
     },
     { expandtab = true, shiftwidth = 2 },
   },

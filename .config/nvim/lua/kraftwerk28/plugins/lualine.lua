@@ -13,11 +13,14 @@ local lsp_status = {
     end
   end,
   color = function()
-    if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-      return { fg = "LightRed" }
+    local hl_name
+    if #vim.lsp.get_clients() > 0 then
+      hl_name = "CmpItemKindSnippet"
     else
-      return { fg = "LightGreen" }
+      hl_name = "Error"
     end
+    local hl = vim.api.nvim_get_hl(0, { name = hl_name, link = false })
+    return { fg = vim.fn.printf("%06x", hl.fg) }
   end,
   on_click = function(nclicks, btn)
     if nclicks == 1 and btn == "l" then
@@ -28,33 +31,90 @@ local lsp_status = {
 
 require("lualine").setup({
   options = {
-    component_separators = { left = "│", right = "│" },
-    section_separators = { left = "▌", right = "▐" },
+    -- component_separators = { left = "│", right = "│" },
+    -- section_separators = { left = "▌", right = "▐" },
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
   },
 
   sections = {
-    lualine_a = {},
+    lualine_a = {
+      -- {
+      --   "branch",
+      --   on_click = function(nclicks, btn)
+      --     if nclicks == 1 and btn == "l" then
+      --       vim.cmd("vertical Git")
+      --     end
+      --   end,
+      -- },
+    },
     lualine_b = {
       {
-        "branch",
-        on_click = function(nclicks, btn)
-          if nclicks == 1 and btn == "l" then
-            vim.cmd("vertical Git")
-          end
-        end,
+        "fileformat",
+        symbols = { dos = " ", mac = " ", unix = " " },
+        separator = "",
       },
-      "diff",
-      "diagnostics",
+      { "encoding", separator = "" },
+      { "filetype", icon_only = true, separator = "" },
     },
     lualine_c = {
-      { "filetype", icon_only = true },
-      "filename",
-      "fileformat",
-      "encoding",
+      {
+        "filename",
+        path = 1, -- Relative
+        symbols = {
+          modified = " ",
+          readonly = " ",
+        },
+      },
     },
 
-    lualine_x = { lsp_status },
+    lualine_x = {
+      "diagnostics",
+      lsp_status,
+      {
+        "lsp_progress",
+        display_components = {
+          "lsp_client_name",
+          "spinner",
+          { "title", "percentage", "message" },
+        },
+      },
+    },
     lualine_y = { char_under_cursor, "progress", "location" },
     lualine_z = {},
   },
+
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {
+      { "filetype", icon_only = true, separator = "" },
+    },
+    lualine_c = {
+      {
+        "filename",
+        path = 1, -- Relative
+        symbols = {
+          modified = " ",
+          readonly = " ",
+        },
+      },
+    },
+
+    lualine_x = { "location" },
+    lualine_y = {},
+    lualine_z = {},
+  },
+
+  -- tabline = {
+  --   lualine_a = {
+  --     {
+  --       "tabs",
+  --       mode = 1,
+  --       symbols = {
+  --         modified = " ",
+  --       },
+  --       separator = "/",
+  --     },
+  --   },
+  -- },
 })

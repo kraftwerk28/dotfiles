@@ -12,6 +12,8 @@ local function find_compile_commands()
   local ccj = fn.glob("compile_commands.json", nil, true)
   if #ccj == 0 then
     ccj = fn.glob("build/compile_commands.json", nil, true)
+  else
+    return
   end
   if #ccj == 0 then
     return
@@ -114,6 +116,15 @@ lspconfig.pyright.setup({
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
   end,
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "openFilesOnly",
+      },
+    },
+  },
 })
 
 lspconfig.rust_analyzer.setup({
@@ -316,6 +327,10 @@ lspconfig.volar.setup({
 })
 
 lspconfig.elmls.setup({})
+
+lspconfig.tailwindcss.setup({
+  filetypes = { "vue", "svelte" },
+})
 
 if fn.has("win64") == 1 then
   local jdt_base = fn.expand(

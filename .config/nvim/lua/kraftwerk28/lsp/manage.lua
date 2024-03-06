@@ -37,29 +37,37 @@ local function stop_server()
   end)
 end
 
-local function restart_server()
-  local clients = vim.lsp.get_active_clients()
+function _G.restart_server()
+  local clients =
+    vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
   vim.ui.select(clients, {
-    prompt = "Restart LSP server",
-    format_item = function(c)
-      return ("%s %s"):format(c.name, c.config.root_dir)
+    prompt = "Select LSP Server to restart",
+    format_item = function(client)
+      return client.name
     end,
   }, function(client)
-    if client == nil then
+    if not client then
       return
     end
-    local configs = require("lspconfig.configs")
-    local client_conf = configs[client.name]
-    if client_conf == nil then
-      print(client.name .. " doesn't support restarting.")
+    local cfg = require("lspconfig.configs")[client.name]
+    if not cfg then
+      vim.notify(
+        ("%s doesn't support restarting"):format(client.name),
+        vim.log.levels.WARN
+      )
       return
     end
     client:stop()
     vim.defer_fn(function()
-      client_conf.launch()
+      cfg.launch()
     end, 500)
   end)
 end
+
+-- vim.api.nvim_create_user_command("LspRestart", function()
+--   print("Restarting server")
+--   restart_server()
+-- end, {})
 
 -- local actions = {
 --   start = start_server,
@@ -78,6 +86,6 @@ end
 --   end,
 -- })
 
-vim.keymap.set("n", "<Leader>lsta", start_server)
-vim.keymap.set("n", "<Leader>lsto", stop_server)
-vim.keymap.set("n", "<Leader>lr", restart_server)
+-- vim.keymap.set("n", "<Leader>lsta", start_server)
+-- vim.keymap.set("n", "<Leader>lsto", stop_server)
+-- vim.keymap.set("n", "<Leader>lr", restart_server)
