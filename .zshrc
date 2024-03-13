@@ -174,9 +174,9 @@ if which zoxide &> /dev/null; then
 	eval "$(zoxide init zsh)"
 fi
 
-if which fnm &> /dev/null; then
-	eval "$(fnm env --use-on-cd)"
-fi
+# if which fnm &> /dev/null; then
+# 	eval "$(fnm env --use-on-cd)"
+# fi
 
 # FIXME: for some reason, this doesn't work
 # (( $+commands[fnm] )) && eval "$(fnm env --use-on-cd)"

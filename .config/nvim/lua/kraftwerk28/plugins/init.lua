@@ -290,6 +290,13 @@ local function load(use)
       require("kraftwerk28.plugins.lualine")
     end,
   })
+
+  use({
+    "mhartington/formatter.nvim",
+    config = function()
+      require("kraftwerk28.plugins.neoformat")
+    end,
+  })
 end
 
 -- Bootstrap

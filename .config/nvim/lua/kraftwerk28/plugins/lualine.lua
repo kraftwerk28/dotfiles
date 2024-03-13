@@ -80,7 +80,7 @@ require("lualine").setup({
         },
       },
     },
-    lualine_y = { char_under_cursor, "progress", "location" },
+    lualine_y = { char_under_cursor, "progress", "%3.l/%-3.L:%2.c" },
     lualine_z = {},
   },
 

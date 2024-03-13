@@ -135,7 +135,16 @@ lspconfig.tsserver.setup({
   capabilities = cmp_capabilities(),
   init_options = {
     hostInfo = "neovim",
-    plugins = {},
+    plugins = {
+      {
+        name = "@vue/typescript-plugin",
+        location = vim.fn.expand(
+          "~/.volta/tools/image/packages/@vue/typescript-plugin/lib/node_modules/@vue/typescript-plugin"
+        ),
+        -- location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
+        languages = { "javascript", "typescript", "vue" },
+      },
+    },
     preferences = {
       importModuleSpecifierPreference = "relative",
     },
@@ -150,6 +159,15 @@ lspconfig.tsserver.setup({
       --  */
       -- logVerbosity = "verbose",
     },
+  },
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+    "vue",
   },
   on_attach = function(client, bufnr)
     -- Formatting is handled by null-ls (prettier)
@@ -317,14 +335,15 @@ lspconfig.rescriptls.setup({
   capabilities = cmp_capabilities(),
 })
 
-lspconfig.volar.setup({
-  capabilities = cmp_capabilities(),
-  on_attach = function(client)
-    -- Formatting is handled by null-ls (prettier)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-  end,
-})
+-- lspconfig.volar.setup({
+--   capabilities = cmp_capabilities(),
+--   filetypes = { "vue", "json", "typescript", "javascript" },
+--   on_attach = function(client)
+--     -- Formatting is handled by null-ls (prettier)
+--     client.server_capabilities.documentFormattingProvider = false
+--     client.server_capabilities.documentRangeFormattingProvider = false
+--   end,
+-- })
 
 lspconfig.elmls.setup({})
 

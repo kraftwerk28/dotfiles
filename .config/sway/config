@@ -520,8 +520,9 @@ output $external_hdmi position 0 0
 # output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 # output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-output * background #000000 solid_color
+# output * background #000000 solid_color
 # output * background /home/kraftwerk28/Pictures/telegram-math.png tile
+output * background /home/kraftwerk28/Pictures/wp7453931.jpg fill
 # }}}
 
 exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"

@@ -31,7 +31,7 @@ vim.o.background = "dark"
 -- vim.cmd.colorscheme("base16-eighties")
 
 require("gruvbox").setup({
-  contrast = "medium", -- can be "hard", "soft" or empty string
+  contrast = "hard", -- can be "hard", "soft" or empty string
   italic = {
     strings = false,
     comments = false,
