@@ -28,7 +28,7 @@ set foldmethod=indent
 set foldlevel=99
 set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set foldignore=
-let &foldtext = 'v:lua.vim.treesitter.foldtext()'
+" let &foldtext = 'v:lua.vim.treesitter.foldtext()'
 set secure
 set splitbelow splitright
 set regexpengine=0

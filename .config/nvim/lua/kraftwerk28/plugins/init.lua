@@ -291,12 +291,12 @@ local function load(use)
     end,
   })
 
-  use({
-    "mhartington/formatter.nvim",
-    config = function()
-      require("kraftwerk28.plugins.neoformat")
-    end,
-  })
+  -- use({
+  --   "mhartington/formatter.nvim",
+  --   config = function()
+  --     require("kraftwerk28.plugins.neoformat")
+  --   end,
+  -- })
 end
 
 -- Bootstrap

@@ -21,6 +21,11 @@ local function find_compile_commands()
   return fn.fnamemodify(ccj[1], ":p:h")
 end
 
+local function disable_formatting(client)
+  client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.documentRangeFormattingProvider = false
+end
+
 -- local configs = require("lspconfig.configs")
 -- if configs.mesonls == nil then
 --   configs.mesonls = {
@@ -113,8 +118,7 @@ lspconfig.pyright.setup({
   capabilities = cmp_capabilities(),
   on_attach = function(client)
     -- Formatting is handled by black
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
+    disable_formatting(client)
   end,
   settings = {
     python = {
@@ -171,8 +175,7 @@ lspconfig.tsserver.setup({
   },
   on_attach = function(client, bufnr)
     -- Formatting is handled by null-ls (prettier)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
+    disable_formatting(client)
     require("twoslash-queries").attach(client, bufnr)
   end,
 })
@@ -271,8 +274,7 @@ lspconfig.svelte.setup({
   },
   on_attach = function(client)
     -- Formatting is handled by null-ls (prettier)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
+    disable_formatting(client)
   end,
 })
 
@@ -288,8 +290,7 @@ lspconfig.jsonls.setup({
   capabilities = cmp_capabilities(),
   on_attach = function(client)
     -- Formatting is handled by null-ls (jq)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
+    disable_formatting(client)
   end,
 })
 
@@ -310,6 +311,10 @@ lspconfig.yamlls.setup({
 
 lspconfig.cssls.setup({
   capabilities = cmp_capabilities(),
+  on_attach = function(client)
+    -- Formatting is handled by null-ls
+    disable_formatting(client)
+  end,
 })
 
 -- lspconfig.html.setup {
@@ -335,20 +340,21 @@ lspconfig.rescriptls.setup({
   capabilities = cmp_capabilities(),
 })
 
--- lspconfig.volar.setup({
---   capabilities = cmp_capabilities(),
---   filetypes = { "vue", "json", "typescript", "javascript" },
---   on_attach = function(client)
---     -- Formatting is handled by null-ls (prettier)
---     client.server_capabilities.documentFormattingProvider = false
---     client.server_capabilities.documentRangeFormattingProvider = false
---   end,
--- })
-
 lspconfig.elmls.setup({})
 
 lspconfig.tailwindcss.setup({
   filetypes = { "vue", "svelte" },
+  on_attach = function(client)
+    -- Formatting is handled by null-ls
+    disable_formatting(client)
+  end,
+})
+
+lspconfig.volar.setup({
+  on_attach = function(client, bufnr)
+    -- Formatting is handled by null-ls (prettier)
+    disable_formatting(client)
+  end,
 })
 
 if fn.has("win64") == 1 then
