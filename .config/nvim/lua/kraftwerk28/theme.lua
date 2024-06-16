@@ -10,7 +10,7 @@ vim.o.background = "dark"
 --     },
 --   },
 -- })
--- vim.cmd.colorscheme("github_dark")
+-- vim.cmd.colorscheme("github_dark_default")
 
 -- require("onedark").setup({
 --   style = "warmer",

@@ -382,6 +382,7 @@ bar {
 # Input configuration {{{
 input type:pointer {
 	accel_profile flat
+	pointer_accel 0.2
 }
 
 # input type:keyboard { # Crashes firefox on sway reload
@@ -419,6 +420,8 @@ input type:touchpad {
 	natural_scroll enabled
 	click_method clickfinger
 	dwt enabled
+	accel_profile adaptive
+	pointer_accel 0.2
 }
 
 # }}}
@@ -493,8 +496,11 @@ set $laptop eDP-1
 set $external_usb DP-1
 set $external_hdmi DP-3
 
+# NOTE: the lid:off binding sometimes won't fire leaving me alone with black screen
+# For now, the screen is always turned on while the lid is being closed
 # bindswitch lid:on  output $laptop disable
 # bindswitch lid:off output $laptop enable
+
 # output $laptop scale 1.2
 # output $laptop scale 1
 # output $laptop   position 0    1700

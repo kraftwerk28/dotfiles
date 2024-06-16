@@ -24,7 +24,7 @@ zstyle ':vcs_info:git+set-message:*:*' hooks check-dirty
 # zstyle ':vcs_info:git:*' stagedstr '%B%F{red}✗'
 # zstyle ':vcs_info:*' patch-format '#%p [%n|%c]'
 
-+vi-check-dirty () {
++vi-check-dirty() {
 	if git diff-index --exit-code --quiet HEAD &>/dev/null; then
 		hook_com[misc]="%B%F{green}✔"
 	else
@@ -32,7 +32,7 @@ zstyle ':vcs_info:git+set-message:*:*' hooks check-dirty
 	fi
 }
 
-vimode_label () {
+vimode_label() {
 	case $ZVM_MODE in
 		$ZVM_MODE_NORMAL) echo " %B%F{green}N";;
 		$ZVM_MODE_INSERT) echo " %B%F{cyan}I";;
@@ -41,7 +41,7 @@ vimode_label () {
 	esac
 }
 
-vimode_rlabel () {
+vimode_rlabel() {
 	w=$(( COLUMNS / 6 ))
 	case $ZVM_MODE in
 		$ZVM_MODE_NORMAL) echo "%F{green}NORMAL";;
@@ -54,7 +54,8 @@ vimode_rlabel () {
 filepath='%(4~|…/%2~|%~)%f'
 exit_status=' %(?:%B%F{green}$:%B%F{red}$)%b%f'
 PROMPT="$filepath"'${vcs_info_msg_0_}'"$exit_status "
-RPROMPT='%F{magenta}${exec_time_prompt}%b%f $(printf %-3d $?)'
+# RPROMPT='%F{magenta}${exec_time_prompt}%b%f $(printf %-3d $?)'
+RPROMPT='%b%f $(printf %-3d $?)'
 
 add-zsh-hook precmd vcs_info
 
@@ -82,5 +83,7 @@ _exec_time_precmd() {
 	unset cmd_exec_time
 }
 
-add-zsh-hook preexec _exec_time_preexec
-add-zsh-hook precmd _exec_time_precmd
+REPORTTIME=2
+
+# add-zsh-hook preexec _exec_time_preexec
+# add-zsh-hook precmd _exec_time_precmd

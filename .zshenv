@@ -62,5 +62,5 @@ export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 
 export MPLBACKEND=GTK3Agg
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# export VOLTA_HOME="$HOME/.volta"
+# export PATH="$VOLTA_HOME/bin:$PATH"

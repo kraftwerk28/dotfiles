@@ -56,29 +56,31 @@ autocmd("LspAttach", {
 
     -- Under-cursor LSP mappings
     if cap.renameProvider then
-      vim.keymap.set("n", "<Leader>cr", vim.lsp.buf.rename, {
+      vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, {
         buffer = true,
-        desc = "[C]ursor [R]ename",
+        desc = "Rename under Cursor",
       })
     end
+
     if cap.codeActionProvider then
       vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, {
         buffer = true,
         desc = "[C]ode [A]ctions",
       })
     end
-    vim.keymap.set("n", "<Leader>cd", function()
+
+    vim.keymap.set("n", "<Leader>dc", function()
       vim.diagnostic.open_float({ border = vim.g.borderchars })
     end, {
       buffer = true,
-      desc = "[C]ursor [D]iagnostics",
+      desc = "[D]iagnostics under [C]ursor",
     })
 
     local tb = require("telescope.builtin")
 
-    vim.keymap.set("n", "<Leader>ad", tb.diagnostics, {
+    vim.keymap.set("n", "<Leader>da", tb.diagnostics, {
       buffer = true,
-      desc = "[A]ll [D]iagnostics",
+      desc = "[D]iagnostics [A]ll",
     })
 
     if cap.referencesProvider then

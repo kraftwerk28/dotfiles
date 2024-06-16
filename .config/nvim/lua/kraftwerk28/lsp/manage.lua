@@ -37,15 +37,8 @@ local function stop_server()
   end)
 end
 
-function _G.restart_server()
-  local clients =
-    vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
-  vim.ui.select(clients, {
-    prompt = "Select LSP Server to restart",
-    format_item = function(client)
-      return client.name
-    end,
-  }, function(client)
+function _G.restart_server(name)
+  local function restart_cb(client)
     if not client then
       return
     end
@@ -61,7 +54,26 @@ function _G.restart_server()
     vim.defer_fn(function()
       cfg.launch()
     end, 500)
-  end)
+  end
+
+  local clients =
+    vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+  if type(name) == "string" then
+    for _, c in ipairs(clients) do
+      if c.name == name then
+        restart_cb(c)
+        return
+      end
+    end
+    vim.notify(("No client with name=%s"):format(name))
+  else
+    vim.ui.select(clients, {
+      prompt = "Select LSP Server to restart",
+      format_item = function(client)
+        return client.name
+      end,
+    }, restart_cb)
+  end
 end
 
 -- vim.api.nvim_create_user_command("LspRestart", function()
