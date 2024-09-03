@@ -28,23 +28,13 @@ local ecma_snippets = {
   ),
 }
 
-local c_cpp_snippets = {
-  ls.snippet(
-    "main",
-    fmt.fmta(
-      [[
-        int main(<args>) {
-        <ind><cursor>
-        <ind>return 0;
-        }
-      ]],
-      {
-        args = c(1, { t("int argc, char *argv[]"), t("void") }),
-        ind = t("\t"),
-        cursor = i(0),
-      }
-    )
-  ),
+ls.add_snippets("javascript", ecma_snippets)
+ls.add_snippets("javascriptreact", ecma_snippets)
+ls.add_snippets("typescript", ecma_snippets)
+ls.add_snippets("typescriptreact", ecma_snippets)
+ls.add_snippets("svelte", ecma_snippets)
+
+local c_snippets = {
   ls.snippet(
     "fori",
     fmt.fmta(
@@ -78,6 +68,9 @@ local c_cpp_snippets = {
   ),
 }
 
+ls.add_snippets("c", c_snippets)
+ls.add_snippets("cpp", c_snippets)
+
 ls.add_snippets("go", {
   ls.snippet("ie", {
     t("if "),
@@ -103,12 +96,6 @@ ls.add_snippets("go", {
   ),
 })
 
-ls.add_snippets("javascript", ecma_snippets)
-ls.add_snippets("javascriptreact", ecma_snippets)
-ls.add_snippets("typescript", ecma_snippets)
-ls.add_snippets("typescriptreact", ecma_snippets)
-ls.add_snippets("svelte", ecma_snippets)
-
 ls.add_snippets("python", {
   ls.snippet("ifmain", {
     t("if __name__ == "),
@@ -127,9 +114,6 @@ ls.add_snippets("python", {
     )
   ),
 })
-
-ls.add_snippets("c", c_cpp_snippets)
-ls.add_snippets("cpp", c_cpp_snippets)
 
 ls.add_snippets("all", {
   ls.snippet({
