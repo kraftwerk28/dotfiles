@@ -70,8 +70,7 @@ local c_cpp_snippets = {
       {
         hdr = f(function()
           local file = vim.fn.expand("%:t:r")
-          local def = file:gsub("%p", "_"):upper() .. "_INCLUDED"
-          return def
+          return file:gsub("%p", "_"):upper() .. "_INCLUDED"
         end),
         i(0),
       }
