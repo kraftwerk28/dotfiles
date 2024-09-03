@@ -1,31 +1,29 @@
-local lsp, fn, api = vim.lsp, vim.fn, vim.api
-
-fn.sign_define({
-  {
-    name = "DiagnosticSignHint",
-    text = vim.g.diagnostic_signs.HINT,
-    texthl = "DiagnosticSignHint",
-  },
-  {
-    name = "DiagnosticSignInfo",
-    text = vim.g.diagnostic_signs.INFO,
-    texthl = "DiagnosticSignInfo",
-  },
-  {
-    name = "DiagnosticSignWarn",
-    text = vim.g.diagnostic_signs.WARN,
-    texthl = "DiagnosticSignWarn",
-  },
-  {
-    name = "DiagnosticSignError",
-    text = vim.g.diagnostic_signs.ERROR,
-    texthl = "DiagnosticSignError",
-  },
-})
+-- fn.sign_define({
+--   {
+--     name = "DiagnosticSignHint",
+--     text = vim.g.diagnostic_signs.HINT,
+--     texthl = "DiagnosticSignHint",
+--   },
+--   {
+--     name = "DiagnosticSignInfo",
+--     text = vim.g.diagnostic_signs.INFO,
+--     texthl = "DiagnosticSignInfo",
+--   },
+--   {
+--     name = "DiagnosticSignWarn",
+--     text = vim.g.diagnostic_signs.WARN,
+--     texthl = "DiagnosticSignWarn",
+--   },
+--   {
+--     name = "DiagnosticSignError",
+--     text = vim.g.diagnostic_signs.ERROR,
+--     texthl = "DiagnosticSignError",
+--   },
+-- })
 
 local function override_hl(name, val)
-  local h = api.nvim_get_hl_by_name(name, true)
-  api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
+  local h = vim.api.nvim_get_hl_by_name(name, true)
+  vim.api.nvim_set_hl(0, name, vim.tbl_extend("force", h, val))
 end
 
 -- override_hl("DiagnosticUnderlineError", { underline = true, undercurl = false })
@@ -130,22 +128,23 @@ autocmd("LspAttach", {
   end,
 })
 
-do
-  local m = "textDocument/signatureHelp"
-  lsp.handlers[m] = lsp.with(lsp.handlers[m], { border = vim.g.borderchars })
+if vim.g.borderchars ~= nil then
+  local h = vim.lsp.handlers
+  h["textDocument/signatureHelp"] = vim.lsp.with(
+    h["textDocument/signatureHelp"],
+    { border = vim.g.borderchars }
+  )
+  h["textDocument/hover"] =
+    vim.lsp.with(h["textDocument/hover"], { border = vim.g.borderchars })
 end
 
-do
-  local m = "textDocument/hover"
-  lsp.handlers[m] = lsp.with(lsp.handlers[m], { border = vim.g.borderchars })
-end
-
--- do
---   local m = "textDocument/publishDiagnostics"
---   lsp.handlers[m] = lsp.with(lsp.diagnostic.on_publish_diagnostics, {
+-- lsp.handlers["textDocument/publishDiagnostics"] =
+--   lsp.with(lsp.diagnostic.on_publish_diagnostics, {
 --     virtual_text = {
 --       spacing = 2,
 --       prefix = "",
 --     },
 --   })
--- end
+
+require("kraftwerk28.lsp.manage")
+require("kraftwerk28.lsp.servers")

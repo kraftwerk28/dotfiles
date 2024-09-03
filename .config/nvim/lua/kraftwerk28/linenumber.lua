@@ -1,9 +1,11 @@
+-- Show relative line number in the current window,
+-- absolute line number in the rest of windows.
+
 local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
 
 local number_augroup = augroup("number")
 
 autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
-  -- callback = set_nu(true),
   callback = function()
     if
       vim.fn.win_gettype() ~= ""
@@ -18,7 +20,6 @@ autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
 })
 
 autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
-  -- callback = set_nu(false),
   callback = function()
     if
       vim.fn.win_gettype() ~= ""

@@ -1,5 +1,3 @@
-local utils = require("kraftwerk28.utils")
-
 local fn, api = vim.fn, vim.api
 local EMPTY_TAB_LABEL = [[ ¯\_(ツ)_/¯ ]]
 local UNSAVED_MARK = "•"
@@ -43,7 +41,7 @@ local function get_tab_info(tabnr)
   }
 end
 
-local function build_tabline()
+function _G.build_tabline()
   local current_tab = api.nvim_get_current_tabpage()
   local str = ""
   for i, tabnr in ipairs(api.nvim_list_tabpages()) do
@@ -64,15 +62,20 @@ local function build_tabline()
   return str
 end
 
--- api.nvim_set_hl(
---   0,
---   "TabLineSel",
---   vim.tbl_extend(
---     "force",
---     api.nvim_get_hl(0, { name = "TabLineSel" }),
---     { reverse = true }
---   )
--- )
+local sel_hl = api.nvim_get_hl(0, { name = "TabLineSel", link = false })
+local fill_hl = api.nvim_get_hl(0, { name = "TabLineFill", link = false })
+
+api.nvim_set_hl(
+  0,
+  "TabLineFill",
+  vim.tbl_extend("force", fill_hl, { fg = sel_hl.fg })
+)
+
+api.nvim_set_hl(
+  0,
+  "TabLineSel",
+  vim.tbl_extend("force", sel_hl, { bold = true, reverse = true })
+)
 
 -- _G.SwitchBuffer = function(_, nclicks, button, modifiers)
 --   vim.print({
@@ -86,4 +89,4 @@ end
 -- tabline_sel.gui = "reverse,bold"
 -- utils.highlight(tabline_sel)
 
-vim.o.tabline = "%!v:lua." .. utils.defglobalfn(build_tabline) .. "()"
+vim.o.tabline = "%!v:lua.build_tabline()"

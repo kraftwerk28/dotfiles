@@ -56,6 +56,27 @@ local c_cpp_snippets = {
       { i(1, "int"), i(2, "i"), rep(2), i(3, "42"), rep(2), t("\t"), i(0) }
     )
   ),
+  ls.snippet(
+    "once",
+    fmt.fmta(
+      [[
+        #ifndef <hdr>
+        #define <hdr>
+
+        <>
+
+        #endif
+      ]],
+      {
+        hdr = f(function()
+          local file = vim.fn.expand("%:t:r")
+          local def = file:gsub("%p", "_"):upper() .. "_INCLUDED"
+          return def
+        end),
+        i(0),
+      }
+    )
+  ),
 }
 
 ls.add_snippets("go", {

@@ -29,7 +29,8 @@ end)
 vim.keymap.set("n", "<Leader>rg", function()
   builtin.live_grep({
     additional_args = {
-      "--sort=path",
+      -- NOTE: --sort slows it down
+      -- "--sort=path",
       "--hidden",
       "--glob=!.git/",
     },
@@ -37,10 +38,12 @@ vim.keymap.set("n", "<Leader>rg", function()
 end)
 
 -- Like live_grep, but no regex
+-- vim.keymap.set("n", "<Leader>rs", builtin.live_grep)
 vim.keymap.set("n", "<Leader>rs", function()
   builtin.live_grep({
     additional_args = {
-      "--sort=path",
+      -- NOTE: --sort slows it down
+      -- "--sort=path",
       "--hidden",
       "--glob=!.git/",
       "--fixed-strings",

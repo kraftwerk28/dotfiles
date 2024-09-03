@@ -334,13 +334,11 @@ set {
 }
 
 # Set colors from theme variables
-client.focused				$focused_title_border	$focused_title_bg	$focused_title_text		$focused_indicator		$focused_border
-# client.focused_inactive		$focused_2_title_border	$focused_2_title_bg	$focused_2_title_text	$focused_2_indicator	$focused_2_border
-# client.focused_inactive		$focused_title_border	$focused_title_bg	$focused_title_text		$focused_indicator		$focused_border
-client.focused_inactive		$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
-client.focused_tab_title	$focused_title_border	$focused_title_bg	$focused_title_text
-client.unfocused			$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
-client.urgent				$urgent_title_border	$urgent_title_bg	$urgent_title_text		$urgent_indicator		$urgent_border
+# client.focused				$focused_title_border	$focused_title_bg	$focused_title_text		$focused_indicator		$focused_border
+# client.focused_inactive		$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
+# client.focused_tab_title	$focused_title_border	$focused_title_bg	$focused_title_text
+# client.unfocused			$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
+# client.urgent				$urgent_title_border	$urgent_title_bg	$urgent_title_text		$urgent_indicator		$urgent_border
 
 # client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
 # client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
@@ -370,12 +368,12 @@ bar {
 	tray_output none
 	wrap_scroll yes
 	workspace_min_width 24
-	colors {
-		separator "#bbbbbb"
-		focused_workspace $focused_title_border $focused_title_bg $focused_title_text
-		inactive_workspace $unfocused_title_border $unfocused_title_bg $unfocused_title_text
-		urgent_workspace $urgent_title_border $urgent_title_bg $urgent_title_text
-	}
+	# colors {
+	# 	separator "#bbbbbb"
+	# 	focused_workspace $focused_title_border $focused_title_bg $focused_title_text
+	# 	inactive_workspace $unfocused_title_border $unfocused_title_bg $unfocused_title_text
+	# 	urgent_workspace $urgent_title_border $urgent_title_bg $urgent_title_text
+	# }
 }
 # }}}
 
@@ -443,8 +441,8 @@ font Monospace Bold 10
 # }}}
 
 # Cursor {{{
-# set $cursor_theme Adwaita
-set $cursor_theme xcursor-breeze
+set $cursor_theme Adwaita
+# set $cursor_theme xcursor-breeze
 # set $cursor_theme xcursor-breeze-snow
 # set $cursor_theme Bibata-Original-Classic
 # set $cursor_theme /usr/share/icons/BreezeX-Black
@@ -453,7 +451,7 @@ seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
 	gsettings set org.gnome.desktop.interface cursor-size $cursor_size
-	sed -i -r 's/^Inherits.*$/Inherits='$cursor_theme'/' ~/.icons/default/index.theme
+	echo '[Icon Theme]\nInherits='$cursor_theme > $HOME/.icons/default/index.theme
 }
 # }}}
 

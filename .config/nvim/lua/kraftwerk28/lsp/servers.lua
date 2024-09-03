@@ -234,6 +234,19 @@ do
     esp32 = "/home/kraftwerk28/.espressif/tools/xtensa-esp32*-elf/*/*/bin/xtensa-esp32*-elf-{gcc,g++,c++,cpp}",
   }
 
+  -- Disable clang's preprocessor highlighting, i.e. `#if 0 ... #endif`
+  vim.api.nvim_set_hl(
+    0,
+    "@lsp.type.comment.c",
+    { fg = "NONE", bg = "NONE", sp = "NONE" }
+  )
+
+  vim.api.nvim_set_hl(
+    0,
+    "@lsp.type.comment.cpp",
+    { fg = "NONE", bg = "NONE", sp = "NONE" }
+  )
+
   lspconfig.clangd.setup({
     cmd = {
       "clangd",

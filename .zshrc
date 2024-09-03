@@ -93,7 +93,7 @@ alias ssh='TERM=xterm-256color ssh'
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles --work-tree=$HOME"
 
-dotfilesupd() (
+dotfilesupd () (
 	dotfiles add -u
 	dotfiles commit "$@"
 	dotfiles push origin HEAD
@@ -103,7 +103,7 @@ source "$dot_config/idle_notifier.zsh"
 source "$dot_config/prompt.zsh"
 
 # Simple plugin management
-plug() {
+plug () {
 	local plug=$1
 	local plugdirs=("${XDG_CONFIG_HOME}/zsh/plugins" "/usr/share/zsh/plugins")
 	local plugsrc="$plugdir/$plug/$plug.plugin.zsh"
@@ -152,7 +152,7 @@ tabs -4
 WORDCHARS='-'
 
 # Dump working directory for using in sway keybindings, i.e. $mod+Shift+Enter
-dump_cwd() {
+dump_cwd () {
 	if [[ $PWD != $HOME ]]; then
 		echo $PWD > /tmp/last_pwd
 	fi
@@ -160,7 +160,7 @@ dump_cwd() {
 add-zsh-hook precmd dump_cwd
 
 # cd into $XDG_CONFIG_HOME/$1 directory
-c() {
+c () {
 	local root=${XDG_CONFIG_HOME:-$HOME/.config}
 	local dname="$root/$1"
 	if [[ -d "$dname" ]]; then
@@ -181,26 +181,26 @@ add-zsh-hook chpwd manage_venv
 manage_venv
 
 # Terminal title
-set_title() {
+set_title () {
 	printf '\e]2;%s\e\\' $1
 }
-set_window_title() {
+set_window_title () {
 	set_title "$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
 }
-reset_window_title() {
+reset_window_title () {
 	set_title "$(basename $SHELL) (${PWD/$HOME/~})"
 }
 add-zsh-hook precmd reset_window_title
 add-zsh-hook preexec set_window_title
 
 # Foot terminal fix
-foot_quirk() {
+foot_quirk () {
 	# Disable reverse wrapping mode in foot terminal
 	echo -n "\e[?45l"
 }
 add-zsh-hook precmd foot_quirk
 
-mkcd() {
+mkcd () {
 	if [[ -z "$1" ]]; then
 		echo "Usage: mkcd <dir>" 1>&2
 		return 1
@@ -209,7 +209,7 @@ mkcd() {
 	cd "$1"
 }
 
-ytd() {
+ytd () {
 	args=("$@")
 	if (( $# == 0 )) && wl-paste -l | grep "text/plain" >/dev/null; then
 		args+=("$(wl-paste)")
@@ -235,7 +235,7 @@ fi
 # 	eval "$(fnm env --use-on-cd)"
 # fi
 
-get_idf() {
+get_idf () {
 	source $HOME//projects/embedded/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
 }
