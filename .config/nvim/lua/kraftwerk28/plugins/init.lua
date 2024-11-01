@@ -22,6 +22,17 @@ local plugins = {
 
   -- Themes
   {
+    "navarasu/onedark.nvim",
+    enabled = false,
+    lazy = false,
+    config = function()
+      require("onedark").setup({
+        style = "dark", -- 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+      })
+      require("onedark").load()
+    end,
+  },
+  {
     "ellisonleao/gruvbox.nvim",
     enabled = false,
     lazy = false,
@@ -41,26 +52,27 @@ local plugins = {
   -- { "RRethy/nvim-base16" },
   {
     "projekt0n/github-nvim-theme",
-    enabled = false,
+    enabled = true,
     lazy = false,
     config = function()
+      local groups = {
+        github_dark_dimmed = {
+          TabLineSel = { link = "ColorColumn" },
+        },
+      }
       require("github-theme").setup({
-        options = {
-          hide_nc_statusline = false,
-        },
-        groups = {
-          all = {
-            StatusLine = { link = "ColorColumn" },
-          },
-        },
+        -- options = {
+        --   hide_nc_statusline = false,
+        -- },
+        groups = groups,
       })
-      vim.cmd.colorscheme("github_dark_default")
+      vim.cmd.colorscheme("github_dark_dimmed")
     end,
   },
   {
     "rebelot/kanagawa.nvim",
     lazy = false,
-    enabled = true,
+    enabled = false,
     config = function()
       vim.o.background = "dark"
       require("kanagawa").setup({
@@ -93,6 +105,14 @@ local plugins = {
   {
     "numToStr/Comment.nvim",
     config = function()
+      require("ts_context_commentstring").setup({
+        languages = {
+          c = {
+            __default = "// %s",
+            __multiline = "/* %s */",
+          },
+        },
+      })
       require("Comment").setup({
         pre_hook = require(
           "ts_context_commentstring.integrations.comment_nvim"

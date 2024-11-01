@@ -54,7 +54,8 @@ set backupcopy=yes " Copy & write to current, instead of renaming
 " highlight! Cursor gui=reverse guifg=NONE guibg=NONE
 " highlight Cursor gui=NONE guifg=bg guibg=fg
 " set guicursor=a:blinkon1-Cursor
-set guicursor=a:blinkon1-Cursor,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
+" set guicursor=a:blinkon1-Cursor,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
+set guicursor=a:block-blinkon500-Cursor
 
 " qwertyuiop[]\asdfghjkl;'zxcvbnm,.
 " йцукенгшщзхїґфівапролджєячсмитьбю

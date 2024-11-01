@@ -42,10 +42,6 @@ end
 --   capabilities = cmp_capabilities(),
 -- })
 
-lspconfig.als.setup({
-  capabilities = cmp_capabilities(),
-})
-
 do
   local cmd = {
     "arduino-language-server",
@@ -135,7 +131,7 @@ lspconfig.rust_analyzer.setup({
   capabilities = cmp_capabilities(),
 })
 
-lspconfig.tsserver.setup({
+lspconfig.ts_ls.setup({
   capabilities = cmp_capabilities(),
   init_options = {
     hostInfo = "neovim",
@@ -235,17 +231,16 @@ do
   }
 
   -- Disable clang's preprocessor highlighting, i.e. `#if 0 ... #endif`
-  vim.api.nvim_set_hl(
-    0,
-    "@lsp.type.comment.c",
-    { fg = "NONE", bg = "NONE", sp = "NONE" }
-  )
-
-  vim.api.nvim_set_hl(
-    0,
-    "@lsp.type.comment.cpp",
-    { fg = "NONE", bg = "NONE", sp = "NONE" }
-  )
+  -- vim.api.nvim_set_hl(
+  --   0,
+  --   "@lsp.type.comment.c",
+  --   { fg = "NONE", bg = "NONE", sp = "NONE" }
+  -- )
+  -- vim.api.nvim_set_hl(
+  --   0,
+  --   "@lsp.type.comment.cpp",
+  --   { fg = "NONE", bg = "NONE", sp = "NONE" }
+  -- )
 
   lspconfig.clangd.setup({
     cmd = {

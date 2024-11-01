@@ -59,7 +59,7 @@ local c_snippets = {
       ]],
       {
         hdr = f(function()
-          local file = vim.fn.expand("%:t:r")
+          local file = vim.fn.expand("%:r")
           return file:gsub("%p", "_"):upper() .. "_INCLUDED"
         end),
         i(0),

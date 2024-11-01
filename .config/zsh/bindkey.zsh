@@ -39,7 +39,7 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey -M viins '^[e' edit-command-line
 
-bindkey -M viins '^R' fzf_history_search
+# bindkey -M viins '^R' fzf_history_search
 bindkey -M viins '^S' history-incremental-search-forward
 
 bindkey -M viins -r '^D'

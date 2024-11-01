@@ -93,7 +93,7 @@ alias ssh='TERM=xterm-256color ssh'
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles --work-tree=$HOME"
 
-dotfilesupd () (
+dotfilesupd() (
 	dotfiles add -u
 	dotfiles commit "$@"
 	dotfiles push origin HEAD
@@ -103,7 +103,7 @@ source "$dot_config/idle_notifier.zsh"
 source "$dot_config/prompt.zsh"
 
 # Simple plugin management
-plug () {
+plug() {
 	local plug=$1
 	local plugdirs=("${XDG_CONFIG_HOME}/zsh/plugins" "/usr/share/zsh/plugins")
 	local plugsrc="$plugdir/$plug/$plug.plugin.zsh"
@@ -121,23 +121,23 @@ ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 plug zsh-autosuggestions
 
-ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS="--reverse --height=10 --cycle"
-plug zsh-fzf-history-search
-
 ZVM_INIT_MODE=sourcing
 ZVM_TERM=xterm-256color # TERM=foot lacks cursor shaping
-ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
-ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 # ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
+# ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+# ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+# ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+ZVM_NORMAL_MODE_CURSOR=bbl
+ZVM_INSERT_MODE_CURSOR=bbl
+ZVM_VISUAL_MODE_CURSOR=bbl
+ZVM_VISUAL_LINE_MODE_CURSOR=bbl
+ZVM_OPPEND_MODE_CURSOR=bbl
+ZVM_LINE_INIT_MODE=i
 plug zsh-vi-mode
+
+ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS="--reverse --height=10 --cycle"
+plug zsh-fzf-history-search
 
 # NOTE: sourced AFTER zsh-vi-mode
 source "$dot_config/bindkey.zsh"
@@ -152,7 +152,7 @@ tabs -4
 WORDCHARS='-'
 
 # Dump working directory for using in sway keybindings, i.e. $mod+Shift+Enter
-dump_cwd () {
+dump_cwd() {
 	if [[ $PWD != $HOME ]]; then
 		echo $PWD > /tmp/last_pwd
 	fi
@@ -160,7 +160,7 @@ dump_cwd () {
 add-zsh-hook precmd dump_cwd
 
 # cd into $XDG_CONFIG_HOME/$1 directory
-c () {
+c() {
 	local root=${XDG_CONFIG_HOME:-$HOME/.config}
 	local dname="$root/$1"
 	if [[ -d "$dname" ]]; then
@@ -169,7 +169,7 @@ c () {
 }
 
 # Python venv
-manage_venv () {
+manage_venv() {
 	local script="$PWD/.venv/bin/activate"
 	if [[ -f $script ]]; then
 		source $script
@@ -181,26 +181,26 @@ add-zsh-hook chpwd manage_venv
 manage_venv
 
 # Terminal title
-set_title () {
+set_title() {
 	printf '\e]2;%s\e\\' $1
 }
-set_window_title () {
+set_window_title() {
 	set_title "$(basename $SHELL) (${PWD/$HOME/"~"}) $1"
 }
-reset_window_title () {
+reset_window_title() {
 	set_title "$(basename $SHELL) (${PWD/$HOME/~})"
 }
 add-zsh-hook precmd reset_window_title
 add-zsh-hook preexec set_window_title
 
 # Foot terminal fix
-foot_quirk () {
+foot_quirk() {
 	# Disable reverse wrapping mode in foot terminal
 	echo -n "\e[?45l"
 }
 add-zsh-hook precmd foot_quirk
 
-mkcd () {
+mkcd() {
 	if [[ -z "$1" ]]; then
 		echo "Usage: mkcd <dir>" 1>&2
 		return 1
@@ -209,7 +209,7 @@ mkcd () {
 	cd "$1"
 }
 
-ytd () {
+ytd() {
 	args=("$@")
 	if (( $# == 0 )) && wl-paste -l | grep "text/plain" >/dev/null; then
 		args+=("$(wl-paste)")
@@ -235,7 +235,7 @@ fi
 # 	eval "$(fnm env --use-on-cd)"
 # fi
 
-get_idf () {
+get_idf() {
 	source $HOME//projects/embedded/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
 }

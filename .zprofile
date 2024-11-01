@@ -29,7 +29,9 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	find "$(dirname $logfile)" -maxdepth 1 -type f -mtime +14 -name '*.log' -execdir rm -v '{}' \;
 	conffile="$XDG_CONFIG_HOME/sway/config"
 
-	exec sway --unsupported-gpu --config=$conffile &> "$logfile"
+	# exec sway --unsupported-gpu --config=$conffile &> "$logfile"
+
+	exec sway --unsupported-gpu --config=$conffile
 
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \

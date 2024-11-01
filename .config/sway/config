@@ -14,15 +14,9 @@ set $cursor_sm_delta 10
 bindsym --to-code {
 	# Terminal launching
 	$mod+Return			exec foot
-	$modr+Return		exec foot
-	$mod+Shift+Return	exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
-	$modr+Shift+Return	exec foot --working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$mod+Shift+Return	exec foot --working-directory=$(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 	# $mod+Return exec alacritty
-	# $mod+Shift+Return exec alacritty \
-	# 	--working-directory $(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
-	# $mod+f2 exec alacritty \
-	# 	--working-directory $HOME/.config/sway \
-	# 	--command $SHELL -ic "nvim config"
+	# $mod+Shift+Return exec alacritty --working-directory=$(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 
 
 	# Application launcher
@@ -475,7 +469,7 @@ for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
 for_window [title="QjackCtl"] floating enable
 for_window [title="xeyes"] floating enable, border normal $border_width, sticky enable
-for_window [floating app_id="^Alacritty$"] border pixel $border_width
+# for_window [floating app_id="^Alacritty$"] border pixel $border_width
 for_window [title="^Blender Preferences$"] floating enable
 for_window [title="^Welcome to IntelliJ IDEA$"] floating enable
 for_window [app_id="^gnome-calculator$"] floating enable
@@ -499,22 +493,16 @@ set $external_hdmi DP-3
 # bindswitch lid:on  output $laptop disable
 # bindswitch lid:off output $laptop enable
 
-# output $laptop scale 1.2
-# output $laptop scale 1
-# output $laptop   position 0    1700
-# output $external position 1600 0
-# output $external transform 90
-# output $laptop position 0 
-
-# If external monitor is on the right
 # output $laptop position 0 360
 # output $external_usb position 1920 0
 # output $external_hdmi position 1920 0
 
-# If external monitor is on the left
-output $laptop position 2560 360
-output $external_usb position 0 0
-output $external_hdmi position 0 0
+# output $laptop position 2560 360
+# output $external_usb position 0 0
+# output $external_hdmi position 0 0
+
+output $laptop position 0 120
+output $external_hdmi position 1920 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color
