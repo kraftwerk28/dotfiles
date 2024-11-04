@@ -7,8 +7,8 @@ MAX_VOL=150
 report () {
 	local v=$(( $1 > 100 ? 100 : $1 ))
 	case $2 in
-		yes) icon="";;
-		no) icon="墳";;
+		yes) icon=" ";;
+		no) icon=" ";;
 	esac
 	notify-send \
 		-e \

@@ -347,29 +347,52 @@ set {
 
 # Bar {{{
 
+# Default
+# bar {
+# 	position top
+#
+# 	# When the status_command prints a new line to stdout, swaybar updates.
+# 	# The default just shows the current date and time.
+# 	status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+#
+# 	colors {
+# 		statusline #ffffff
+# 		background #323232
+# 		inactive_workspace #32323200 #32323200 #5c5c5c
+# 	}
+# }
+
 # bar {
 # 	swaybar_command waybar
 # }
 
-bar {
-	status_command gost
-	font Monospace 11
-	height 0
-	position bottom
-	icon_theme "Papirus"
-	separator_symbol "|"
-	# disable tray until DBus will be implemented
-	tray_output none
-	wrap_scroll yes
-	workspace_min_width 24
-	# colors {
-	# 	separator "#bbbbbb"
-	# 	focused_workspace $focused_title_border $focused_title_bg $focused_title_text
-	# 	inactive_workspace $unfocused_title_border $unfocused_title_bg $unfocused_title_text
-	# 	urgent_workspace $urgent_title_border $urgent_title_bg $urgent_title_text
-	# }
-}
+# bar {
+# 	status_command gost
+# 	font Monospace 11
+# 	height 0
+# 	position bottom
+# 	icon_theme "Papirus"
+# 	separator_symbol "|"
+# 	# disable tray until DBus will be implemented
+# 	tray_output none
+# 	wrap_scroll yes
+# 	workspace_min_width 24
+# 	# colors {
+# 	# 	separator "#bbbbbb"
+# 	# 	focused_workspace $focused_title_border $focused_title_bg $focused_title_text
+# 	# 	inactive_workspace $unfocused_title_border $unfocused_title_bg $unfocused_title_text
+# 	# 	urgent_workspace $urgent_title_border $urgent_title_bg $urgent_title_text
+# 	# }
+# }
 # }}}
+
+bar {
+	status_command i3status-rs
+	font monospace 11
+	position bottom
+	workspace_min_width 24
+	tray_output none
+}
 
 # Input configuration {{{
 input type:pointer {
@@ -523,6 +546,6 @@ exec_always "systemctl --user import-environment; systemctl --user start sway-se
 exec_always dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
 # kraftwerk28's patch only:
-mouse_resizing_mode eight_direction
+# mouse_resizing_mode eight_direction
 
 # vim: noexpandtab shiftwidth=0 tabstop=4 filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0

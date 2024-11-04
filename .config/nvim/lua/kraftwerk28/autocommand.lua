@@ -13,7 +13,7 @@ autocmd("VimEnter", {
 
 autocmd("TextYankPost", {
   callback = function()
-    require("vim.highlight").on_yank({ timeout = 1000 })
+    vim.hl.on_yank({ timeout = 1000 })
   end,
   group = group,
 })

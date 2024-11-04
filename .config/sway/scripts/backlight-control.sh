@@ -42,4 +42,4 @@ notify-send \
 	-h "string:x-canonical-private-synchronous:backlight" \
 	-h "int:value:${cur}" \
 	-t "2000" \
-	" ${cur}%"
+	"󰃞 ${cur}%"

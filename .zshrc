@@ -136,9 +136,6 @@ ZVM_OPPEND_MODE_CURSOR=bbl
 ZVM_LINE_INIT_MODE=i
 plug zsh-vi-mode
 
-ZSH_FZF_HISTORY_SEARCH_FZF_EXTRA_ARGS="--reverse --height=10 --cycle"
-plug zsh-fzf-history-search
-
 # NOTE: sourced AFTER zsh-vi-mode
 source "$dot_config/bindkey.zsh"
 
@@ -228,6 +225,23 @@ fi
 
 if which fnm &> /dev/null; then
 	eval "$(fnm env --use-on-cd)"
+fi
+
+if which pyenv &> /dev/null; then
+	export PYENV_ROOT=$HOME/.pyenv
+	if [[ -d $PYENV_ROOT/bin ]]; then
+		export PATH=$PYENV_ROOT/bin:$PATH
+	fi
+	eval "$(pyenv init -)"
+fi
+
+if which paru &> /dev/null; then
+	alias yay=paru
+fi
+
+if which fzf &> /dev/null; then
+	FZF_CTRL_R_OPTS="--reverse --cycle"
+	source <(fzf --zsh)
 fi
 
 # FIXME: for some reason, this doesn't work
