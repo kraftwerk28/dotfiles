@@ -65,25 +65,17 @@ def get_browser_url(app_id, location=None):
 
 def get_weather_in_loop(token, location):
     while True:
-        print("Damn")
         t_start = time.time()
-        print(get_weather_string(token, location))
-        # if (t := 5 * 60 - (time.time() - t_start)) > 0:
-        #     time.sleep(t)
+        print(get_weather_string(token, location), flush=True)
+        if (t := 5 * 60 - (time.time() - t_start)) > 0:
+            time.sleep(t)
 
 
 if __name__ == "__main__":
-    while True:
-        print(str(time.time()))
-
-    # if (token := os.getenv("OPENWEATHER_APP_ID")) is None:
-    #     print("OPENWEATHER_APP_ID is not defined")
-    #     sys.exit(1)
-    # try:
-    #     location = os.getenv("OPENWEATHER_LOCATION")
-    #     if len(sys.argv) >= 2 and sys.argv[1] == "open":
-    #         os.system(f"xdg-open {get_browser_url(token, location)}")
-    #     else:
-    #         get_weather_in_loop(token, location)
-    # except Exception as e:
-    #     raise e
+    if (token := os.getenv("OPENWEATHER_APP_ID")) is None:
+        raise Exception("OPENWEATHER_APP_ID is not defined")
+    location = os.getenv("OPENWEATHER_LOCATION")
+    if len(sys.argv) >= 2 and sys.argv[1] == "open":
+        os.system(f"xdg-open {get_browser_url(token, location)}")
+    else:
+        get_weather_in_loop(token, location)
