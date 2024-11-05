@@ -253,3 +253,5 @@ get_idf() {
 	source $HOME//projects/embedded/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
 }
+
+export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"

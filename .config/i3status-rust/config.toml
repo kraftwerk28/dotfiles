@@ -8,7 +8,6 @@ theme = "native"
 good_fg = "#00bb00"
 warning_fg = "#ffbb00"
 critical_fg = "#dd0000"
-info_fg = "#00bbff"
 
 [icons]
 icons = "material-nf"
@@ -18,9 +17,9 @@ bat_charging = "󰂄"
 
 [[block]]
 block = "custom"
-command = "$XDG_CONFIG_HOME/sway/bar-scripts/weather.sh"
+command = "/home/kraftwerk28/.config/sway/bar-scripts/weather.py"
 format = "$text"
-interval = 300
+persistent = true
 
 [[block]]
 block = "cpu"
@@ -31,7 +30,13 @@ critical_cpu = 90
 
 [[block]]
 block = "memory"
-format = "$icon$mem_used.eng(prefix:Mi) ($mem_used_percents.eng(w:2))"
+format = " $mem_used.eng(prefix:Mi) ($mem_used_percents.eng(w:2))"
+
+[[block]]
+block = "custom"
+command = "sensors | awk -f $XDG_CONFIG_HOME/sway/bar-scripts/cputemp.awk <(sensors)"
+format = "$text"
+json = true
 
 [[block]]
 block = "battery"

@@ -37,3 +37,5 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	# 	--config ~/projects/wayland/sway/myconfig \
 	# 	&> "${sway_logdir}/sway-debug.log"
 fi
+
+export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"

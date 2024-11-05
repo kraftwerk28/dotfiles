@@ -39,8 +39,7 @@ def on_win_focus(ipc: Connection, ev: WindowEvent):
 
 
 def on_win_close(ipc: Connection, ev: WindowEvent):
-    del layouts[ev.container.id]
-    print(layouts)
+    layouts.pop(ev.container.id, None)
 
 
 def on_binding(ipc: Connection, ev: BindingEvent):
