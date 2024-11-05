@@ -1,0 +1,10 @@
+BasedOnStyle: Google
+# AlignAfterOpenBracket: AlwaysBreak
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Empty
+# BinPackArguments: false
+# BinPackParameters: false
+ColumnLimit: 100
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always

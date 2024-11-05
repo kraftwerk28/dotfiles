@@ -1,0 +1,91 @@
+icons_format = "{icon}"
+
+[theme]
+theme = "native"
+[theme.overrides]
+# idle_bg = "#123456"
+# idle_fg = "#abcdef"
+good_fg = "#00bb00"
+warning_fg = "#ffbb00"
+critical_fg = "#dd0000"
+info_fg = "#00bbff"
+
+[icons]
+icons = "material-nf"
+[icons.overrides]
+bat = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+bat_charging = "󰂄"
+
+[[block]]
+block = "custom"
+command = "$XDG_CONFIG_HOME/sway/bar-scripts/weather.sh"
+format = "$text"
+interval = 300
+
+[[block]]
+block = "cpu"
+format = "$icon $utilization $barchart"
+info_cpu = 20
+warning_cpu = 50
+critical_cpu = 90
+
+[[block]]
+block = "memory"
+format = "$icon$mem_used.eng(prefix:Mi) ($mem_used_percents.eng(w:2))"
+
+[[block]]
+block = "battery"
+driver = "upower"
+format = "$icon $percentage"
+full_format = "$icon $percentage"
+empty_format = "$icon $percentage"
+empty_threshold = 0
+
+[[block]]
+block = "net"
+device = "wlan0"
+format = "$icon{ $ip|}"
+
+[[block]]
+block = "net"
+device = "eth0"
+format = "$icon{ $ip|}"
+
+[[block]]
+block = "bluetooth"
+mac = "00:16:94:38:8F:21"
+format = "$icon $name{ $percentage|}"
+disconnected_format = "$icon{ $name|}"
+[[block.click]]
+button = "left"
+cmd = "blueman-manager"
+
+[[block]]
+block = "sound"
+device_kind = "source"
+format = "$icon {$volume.eng(w:2)| 0%}"
+[[block.click]]
+button = "left"
+cmd = "pavucontrol --tab=4"
+
+[[block]]
+block = "sound"
+device_kind = "sink"
+format = "$icon {$volume.eng(w:2)| 0%}"
+[[block.click]]
+button = "left"
+cmd = "pavucontrol --tab=3"
+
+[[block]]
+block = "keyboard_layout"
+driver = "sway"
+format = "$layout"
+# Flag emojis
+[block.mappings]
+"English (intl., with AltGr dead keys)" = "🇺🇸"
+"Ukrainian (N/A)" = "🇺🇦"
+
+[[block]]
+block = "time"
+interval = 1
+format = "$timestamp.datetime(f:'%a %d.%m %T')"

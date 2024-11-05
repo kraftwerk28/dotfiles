@@ -473,11 +473,11 @@ exec_always {
 # }}}
 
 # Autostart {{{
-exec $scripts/enhance.lua
+exec $scripts/scripting.py
 exec $scripts/autostart.sh
 exec $scripts/swayidle.sh
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec libinput-gestures-setup restart
+# exec libinput-gestures-setup restart
 # exec wl-paste -t text --watch clipman store 
 # }}}
 
