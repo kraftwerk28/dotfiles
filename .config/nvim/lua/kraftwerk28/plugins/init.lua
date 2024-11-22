@@ -37,22 +37,35 @@ local plugins = {
     enabled = false,
     lazy = false,
     config = function()
-      vim.o.background = "light"
+      vim.o.background = "dark"
       require("gruvbox").setup({
-        contrast = "soft", -- can be "hard", "soft" or empty string
+        contrast = "medium", -- can be "hard", "soft" or empty string
         italic = {
           strings = false,
-          comments = false,
+        },
+        overrides = {
+          Search = { underdashed = true },
+          CurSearch = { underdashed = true },
         },
       })
       vim.cmd.colorscheme("gruvbox")
     end,
   },
-  -- { "navarasu/onedark.nvim" },
-  -- { "RRethy/nvim-base16" },
+  {
+    "sainnhe/gruvbox-material",
+    lazy = false,
+    enabled = true,
+    config = function()
+      vim.o.background = "dark"
+      vim.g.gruvbox_material_background = "medium"
+      vim.g.gruvbox_material_foreground = "original"
+      -- vim.g.gruvbox_material_enable_italic = true
+      vim.cmd.colorscheme("gruvbox-material")
+    end,
+  },
   {
     "projekt0n/github-nvim-theme",
-    enabled = true,
+    enabled = false,
     lazy = false,
     config = function()
       local groups = {
@@ -84,7 +97,6 @@ local plugins = {
       vim.cmd.colorscheme("kanagawa")
     end,
   },
-  -- { "Shatur/neovim-ayu" },
 
   { "kyazdani42/nvim-web-devicons" },
   {

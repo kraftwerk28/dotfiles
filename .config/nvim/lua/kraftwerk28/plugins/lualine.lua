@@ -7,9 +7,9 @@ local char_under_cursor = {
 local lsp_status = {
   function()
     if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
-      return " "
+      return "󰌙 "
     else
-      return " "
+      return "󰌘 "
     end
   end,
   color = function()
@@ -31,10 +31,13 @@ local lsp_status = {
 
 require("lualine").setup({
   options = {
-    -- component_separators = { left = "│", right = "│" },
-    -- section_separators = { left = "▌", right = "▐" },
-    component_separators = { left = "", right = "" },
-    section_separators = { left = "", right = "" },
+    -- component_separators = { left = "", right = "" },
+    -- section_separators = { left = "", right = "" },
+    component_separators = { left = "┃", right = "┃" },
+    section_separators = { left = "▌", right = "▐" },
+    -- component_separators = { left = "", right = "" },
+    -- section_separators = { left = "", right = "" },
+    -- theme = "gruvbox",
   },
 
   sections = {
@@ -62,7 +65,7 @@ require("lualine").setup({
         "filename",
         path = 1, -- Relative
         symbols = {
-          modified = " ",
+          modified = "󰆔 ",
           readonly = " ",
         },
       },
@@ -94,7 +97,7 @@ require("lualine").setup({
         "filename",
         path = 1, -- Relative
         symbols = {
-          modified = " ",
+          modified = "󰆔 ",
           readonly = " ",
         },
       },

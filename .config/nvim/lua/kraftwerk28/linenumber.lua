@@ -1,5 +1,5 @@
--- Show relative line number in the current window,
--- absolute line number in the rest of windows.
+-- Show relative line number in the current window.
+-- Show absolute line number for the rest.
 
 local no_line_number_ft = { "help", "man", "list", "TelescopePrompt" }
 

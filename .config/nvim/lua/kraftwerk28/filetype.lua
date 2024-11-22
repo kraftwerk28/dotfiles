@@ -27,7 +27,6 @@ vim.filetype.add({
 
 -- Set options for filetypes
 local ftconfig = {
-
   -- Indentation options
   {
     {
@@ -100,6 +99,8 @@ local ftconfig = {
   },
 
   { { "sml" }, { commentstring = "(* %s *)" } },
+
+  { { "markdown" }, { breakindent = true } },
 }
 
 local filetype_opts = augroup("filetype_opts")

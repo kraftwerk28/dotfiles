@@ -1,25 +1,27 @@
-env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
-if [[ -x "$env_gen" ]]; then
-	while read -r line; do
-		eval "export $line"
-	done < <("$env_gen")
-fi
+# env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
+# if [[ -x "$env_gen" ]]; then
+# 	while read -r line; do
+# 		eval "export $line"
+# 	done < <("$env_gen")
+# fi
 
-if [[ -d ~/.gem/ruby ]]; then
+if [[ -d $HOME/.gem/ruby ]]; then
 	ver=$(find ~/.gem/ruby/* -maxdepth 0 | sort -rV | head -n 1)
 	export PATH="$PATH:${ver}/bin"
 fi
 
-if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
-	# Wayland-specific variables
+if [[ "$(tty)" == "/dev/tty1" ]]; then
+	# sway specific variables, don't put these in .zshenv
 	export TERM="foot"
 	export GTK_USE_PORTAL=1
 	export MOZ_ENABLE_WAYLAND=1
 	export QT_QPA_PLATFORM="wayland;xcb"
-	export QT_QPA_PLATFORMTHEME="qt5ct"
-	export XDG_CURRENT_DESKTOP="sway"
+	export QT_QPA_PLATFORMTHEME="qt5ct:qt6ct"
+
+	# See https://github.com/swaywm/sway/wiki#xdg_current_desktop-environment-variable-is-not-being-set
+	export XDG_CURRENT_DESKTOP="sway:wlroots"
+
 	export _JAVA_AWT_WM_NONREPARENTING=1
-	# export WLR_RENDERER=vulkan
 	export WLR_DRM_NO_ATOMIC=1
 
 	# Setup logging
@@ -27,15 +29,15 @@ if [[ -z $DISPLAY && $TTY = "/dev/tty1" ]]; then
 	mkdir -p "$(dirname $logfile)"
 	# Remove logs older than 14 days
 	find "$(dirname $logfile)" -maxdepth 1 -type f -mtime +14 -name '*.log' -execdir rm -v '{}' \;
-	conffile="$XDG_CONFIG_HOME/sway/config"
+	conf="$XDG_CONFIG_HOME/sway/config"
 
 	# exec sway --unsupported-gpu --config=$conffile &> "$logfile"
 
-	exec sway --unsupported-gpu --config=$conffile
+	exec sway --unsupported-gpu --config=$conf
 
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \
 	# 	&> "${sway_logdir}/sway-debug.log"
 fi
 
-export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"
+# export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"

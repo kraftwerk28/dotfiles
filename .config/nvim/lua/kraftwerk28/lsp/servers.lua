@@ -140,7 +140,8 @@ lspconfig.ts_ls.setup({
         name = "@vue/typescript-plugin",
         location = vim.fn.expand(
           -- "~/.volta/tools/image/packages/@vue/typescript-plugin/lib/node_modules/@vue/typescript-plugin"
-          "~/.local/share/fnm/node-versions/v20.11.1/installation/lib/node_modules/@vue/typescript-plugin/"
+          -- "~/.local/share/fnm/node-versions/v20.11.1/installation/lib/node_modules/@vue/typescript-plugin/"
+          "~/.local/share/fnm/node-versions/v23.1.0/installation/lib/node_modules/@vue/typescript-plugin/"
         ),
         -- location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
         languages = { "javascript", "typescript", "vue" },

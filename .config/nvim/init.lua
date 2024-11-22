@@ -1,7 +1,7 @@
 local min_version = "nvim-0.8"
 if vim.fn.has(min_version) == 0 then
   print("At least " .. min_version .. " is required for this config.")
-  return
+  -- return
 end
 
 -- Define some globals
@@ -27,7 +27,6 @@ vim.g.sql_type_default = "pgsql"
 vim.cmd("runtime opts.vim")
 
 require("kraftwerk28.plugins")
-require("kraftwerk28.theme")
 require("kraftwerk28.map")
 require("kraftwerk28.autocommand")
 require("kraftwerk28.lsp")

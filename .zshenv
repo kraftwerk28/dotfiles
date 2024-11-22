@@ -52,8 +52,6 @@ export NVIM_LISTEN_PORT=6969
 export CMAKE_EXPORT_COMPILE_COMMANDS=1
 export CMAKE_GENERATOR="Ninja"
 
-export QT_QPA_PLATFORMTHEME="qt5ct"
-
 export SUDO_PROMPT=$'\a[sudo] password for %p: '
 
 # Make `null` values bold red instead of dim dark in jq colored output

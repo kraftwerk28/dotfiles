@@ -30,19 +30,6 @@ unsetopt PROMPT_SP
 
 autoload -U add-zsh-hook
 
-# zvm_config() {
-# 	ZVM_TERM=xterm-256color
-# 	ZVM_CURSOR_STYLE_ENABLED=true
-# 	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-# 	ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# 	ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
-# 	ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-# 	# ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# 	# ZVM_INSERT_MODE_CURSOR=$ZVM_NORMAL_MODE_CURSOR
-# 	# ZVM_VISUAL_MODE_CURSOR=$ZVM_NORMAL_MODE_CURSOR
-# }
-# source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
 # Completion
 autoload -U compinit
 compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/.zcompdump"
@@ -121,20 +108,22 @@ ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 plug zsh-autosuggestions
 
-ZVM_INIT_MODE=sourcing
-ZVM_TERM=xterm-256color # TERM=foot lacks cursor shaping
-# ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
-# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
-# ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-# ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-# ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-ZVM_NORMAL_MODE_CURSOR=bbl
-ZVM_INSERT_MODE_CURSOR=bbl
-ZVM_VISUAL_MODE_CURSOR=bbl
-ZVM_VISUAL_LINE_MODE_CURSOR=bbl
-ZVM_OPPEND_MODE_CURSOR=bbl
-ZVM_LINE_INIT_MODE=i
-plug zsh-vi-mode
+# zvm_config() {
+# 	# ZVM_TERM=xterm-256color
+# 	ZVM_CURSOR_STYLE_ENABLED=true
+# 	ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+# 	ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+# 	ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
+# 	ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+# 	ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+# 	ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+# 	# ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+# 	# ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+# 	# ZVM_VISUAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+# 	# ZVM_VISUAL_LINE_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+# 	# ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+# }
+# plug zsh-vi-mode
 
 # NOTE: sourced AFTER zsh-vi-mode
 source "$dot_config/bindkey.zsh"
@@ -224,7 +213,7 @@ fi
 # fi
 
 if which fnm &> /dev/null; then
-	eval "$(fnm env --use-on-cd)"
+	eval "$(fnm env --use-on-cd --shell=zsh --resolve-engines=false)"
 fi
 
 if which pyenv &> /dev/null; then
@@ -250,7 +239,7 @@ fi
 # fi
 
 get_idf() {
-	source $HOME//projects/embedded/esp/esp-idf/export.sh
+	source $HOME/projects/embedded/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
 }
 
