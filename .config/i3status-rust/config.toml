@@ -15,11 +15,11 @@ icons = "material-nf"
 bat = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
 bat_charging = "󰂄"
 
-[[block]]
-block = "custom"
-command = "/home/kraftwerk28/.config/sway/bar-scripts/weather.py"
-format = "$text"
-persistent = true
+# [[block]]
+# block = "custom"
+# command = "/home/kraftwerk28/.config/sway/bar-scripts/weather.py"
+# format = "$text"
+# persistent = true
 
 [[block]]
 block = "cpu"
