@@ -47,9 +47,10 @@ autocmd("LspAttach", {
     end
 
     if cap.documentFormattingProvider then
-      vim.keymap.set("n", "<Leader>f", function()
-        vim.lsp.buf.format({ timeout_ms = 5000, async = false })
-      end, { buffer = true, desc = "[F]ormat" })
+      -- NOTE: conform.nvim manages LSP formatting for us, skip keymap setting
+      -- vim.keymap.set("n", "<Leader>f", function()
+      --   vim.lsp.buf.format({ timeout_ms = 5000, async = false })
+      -- end, { buffer = true, desc = "[F]ormat" })
     end
 
     -- Under-cursor LSP mappings

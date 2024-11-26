@@ -140,3 +140,6 @@ vim.keymap.set("n", "<Leader>/", [[/^\s*\<]], {
 })
 
 vim.keymap.set("i", "<D-Space>", "<Nop>")
+
+local conform = require"conform"
+vim.keymap.set("n", "<Leader>f", conform.format , { desc = "[F]ormat" })

@@ -271,13 +271,58 @@ local plugins = {
       require("kraftwerk28.plugins.dap")
     end,
   },
+
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    "stevearc/conform.nvim",
     config = function()
-      require("kraftwerk28.plugins.null-ls")
+      require("conform").setup({
+        formatters_by_ft = {
+          lua = { "stylua" },
+          python = { "black" },
+          javascript = { "prettierd" },
+          typescript = { "prettierd" },
+          vue = { "prettierd" },
+          svelte = { "prettierd" },
+          markdown = { "prettierd" },
+          html = { "prettierd" },
+        },
+        default_format_opts = {
+          lsp_format = "prefer",
+        },
+      })
     end,
   },
+
+  {
+    "mfussenegger/nvim-lint",
+    config = function()
+      local lint = require("lint")
+      lint.linters_by_ft = {
+        lua = { "luacheck" },
+        bash = { "shellcheck" },
+        sh = { "shellcheck" },
+      }
+      lint.linters.luacheck.args = vim.tbl_flatten({
+        "--formatter",
+        "plain",
+        "--codes",
+        "--ranges",
+        "--globals",
+        { "vim", "autocmd", "augroup" },
+        "--filename",
+        function()
+          return vim.api.nvim_buf_get_name(0)
+        end,
+        "-",
+      })
+      autocmd({ "BufReadPost", "BufWritePost" }, {
+        callback = function()
+          lint.try_lint()
+        end,
+      })
+    end,
+  },
+
   {
     "iamcco/markdown-preview.nvim",
     build = "cd app && npm install && curl -fsS -o ~/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim/app/_static/mermaid.min.js https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js",

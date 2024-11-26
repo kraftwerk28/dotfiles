@@ -5,7 +5,7 @@ set hidden
 set noexpandtab softtabstop=0 tabstop=4 shiftwidth=0
 set autoindent
 set list
-let &listchars = 'tab:» ,trail:·'
+let &listchars = 'tab:⇥ ,trail:·'
 set nocursorline nocursorcolumn
 set mouse=a mousemodel=extend
 set clipboard=unnamedplus

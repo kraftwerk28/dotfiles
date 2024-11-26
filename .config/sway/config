@@ -543,7 +543,7 @@ output * background /home/kraftwerk28/Pictures/wp7453931.jpg fill
 
 # See https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
 exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
-exec dbus-update-activation-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
+# exec dbus-update-activation-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 
 # kraftwerk28's patch only:
 # mouse_resizing_mode eight_direction
