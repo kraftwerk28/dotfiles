@@ -317,7 +317,7 @@ local plugins = {
       })
       autocmd({ "BufReadPost", "BufWritePost" }, {
         callback = function()
-          lint.try_lint()
+          print("lint:", lint.try_lint())
         end,
       })
     end,
