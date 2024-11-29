@@ -34,7 +34,7 @@ local plugins = {
   },
   {
     "ellisonleao/gruvbox.nvim",
-    enabled = false,
+    enabled = true,
     lazy = false,
     config = function()
       vim.o.background = "dark"
@@ -44,8 +44,10 @@ local plugins = {
           strings = false,
         },
         overrides = {
-          Search = { underdashed = true },
-          CurSearch = { underdashed = true },
+          -- Search = { underdashed = true },
+          -- CurSearch = { underdashed = true },
+          StatusLine = { reverse = false },
+          StatusLineNC = { reverse = false },
         },
       })
       vim.cmd.colorscheme("gruvbox")
@@ -54,7 +56,7 @@ local plugins = {
   {
     "sainnhe/gruvbox-material",
     lazy = false,
-    enabled = true,
+    enabled = false,
     config = function()
       vim.o.background = "dark"
       vim.g.gruvbox_material_background = "medium"
@@ -69,8 +71,8 @@ local plugins = {
     lazy = false,
     config = function()
       local groups = {
-        github_dark_dimmed = {
-          TabLineSel = { link = "ColorColumn" },
+        all = {
+          TabLineSel = { link = "TabLine" },
         },
       }
       require("github-theme").setup({
@@ -79,7 +81,7 @@ local plugins = {
         -- },
         groups = groups,
       })
-      vim.cmd.colorscheme("github_dark_dimmed")
+      vim.cmd.colorscheme("github_dark_default")
     end,
   },
   {

@@ -6,7 +6,7 @@ local char_under_cursor = {
 
 local lsp_status = {
   function()
-    if vim.tbl_isempty(vim.lsp.buf_get_clients(0)) then
+    if vim.tbl_isempty(vim.lsp.get_clients()) then
       return "󰌙 "
     else
       return "󰌘 "
