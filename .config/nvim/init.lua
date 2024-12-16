@@ -26,7 +26,7 @@ vim.g.sql_type_default = "pgsql"
 _G.set = vim.opt
 _G.setl = vim.opt_local
 _G.setlocal = vim.opt_local
-_G.setg = vim.opt_globa
+_G.setg = vim.opt_global
 _G.setglobal = vim.opt_global
 
 -- Load options
@@ -37,9 +37,5 @@ require("kraftwerk28.map")
 require("kraftwerk28.autocommand")
 require("kraftwerk28.lsp")
 require("kraftwerk28.tabline")
--- load("kraftwerk28.statusline")
 require("kraftwerk28.filetype")
--- load("kraftwerk28.notify")
 require("kraftwerk28.linenumber")
--- load("kraftwerk28.netrw")
--- require("kraftwerk28.manpage_redraw")

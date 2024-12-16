@@ -1,3 +1,5 @@
+-- Replace internal notify with `notify-send` utility
+
 local levelmap = {
   [vim.log.levels.DEBUG] = "low",
   [vim.log.levels.ERROR] = "critical",
