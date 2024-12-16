@@ -62,7 +62,8 @@ fi
 alias less="less -i"
 
 if which bat &> /dev/null; then
-	alias cat="bat -p --color never --paging never"
+	# alias cat="bat -p --color never --paging never"
+	alias cat="bat"
 fi
 
 if which git &> /dev/null; then

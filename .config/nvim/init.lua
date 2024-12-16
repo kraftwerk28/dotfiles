@@ -23,6 +23,12 @@ vim.g.diagnostic_signs = {
 }
 vim.g.sql_type_default = "pgsql"
 
+_G.set = vim.opt
+_G.setl = vim.opt_local
+_G.setlocal = vim.opt_local
+_G.setg = vim.opt_globa
+_G.setglobal = vim.opt_global
+
 -- Load options
 vim.cmd("runtime opts.vim")
 

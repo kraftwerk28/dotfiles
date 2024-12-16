@@ -53,6 +53,10 @@ end)
 
 vim.keymap.set("n", "<F1>", builtin.help_tags)
 
+vim.keymap.set("n", "<Leader>da", builtin.diagnostics, {
+  desc = "[D]iagnostics [A]ll",
+})
+
 telescope.setup({
   defaults = {
     -- borderchars = (function()

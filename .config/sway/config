@@ -204,8 +204,6 @@ bindsym {
 	Shift+Print			exec grimvshot --notify --swaynag --window
 	Control+Print		exec grimvshot --notify --swaynag --output
 	Control+Shift+Print	exec grimvshot --notify --swaynag --active
-
-	XF86PowerOff exec $scripts/suspend.sh
 }
 
 bindsym --to-code $mod+r mode "resize"
@@ -477,7 +475,7 @@ exec_always {
 exec $scripts/scripting.py
 exec $scripts/autostart.sh
 exec $scripts/swayidle.sh
-exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec $scripts/polkit-agent.sh
 # exec libinput-gestures-setup restart
 # exec wl-paste -t text --watch clipman store 
 # }}}

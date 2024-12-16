@@ -54,12 +54,24 @@ def on_ws_init(ipc: Connection, _: WorkspaceEvent):
     ipc.command(", ".join(cmds))
 
 
-def on_binding(_: Connection, ev: BindingEvent):
-    # NOTE: dumb splitting, w/o shlex
-    words = ev.binding.command.split()
-    if words == ["nop", "focus_prev"] and prev2_con_id is not None:
+def on_binding(ipc: Connection, ev: BindingEvent):
+    cmd = ev.binding.command
+    if cmd == "nop focus_prev" and prev2_con_id is not None:
         cmd = f"[con_id={prev2_con_id}] focus"
         i3.command(cmd)
+    elif cmd.startswith("nop workspace"):
+        wss = ipc.get_workspaces()
+        focused_ws = next((ws for ws in wss if ws.focused), None)
+        if focused_ws is None:
+            return
+        if cmd.endswith("prev"):
+            ws_num = focused_ws.num - 1
+        elif cmd.endswith("next"):
+            ws_num = focused_ws.num + 1
+        else:
+            return
+        if ws_num > 0:
+            ipc.command(f"workspace {ws_num}")
 
 
 i3.on(Event.WINDOW_FOCUS, on_win_focus)

@@ -2,45 +2,9 @@ local lspconfig = require("lspconfig")
 local root_pattern = require("lspconfig.util").root_pattern
 local cmp_lsp = require("cmp_nvim_lsp")
 
-local fn = vim.fn
-
-local function cmp_capabilities()
+local function make_capabilities()
   return cmp_lsp.default_capabilities()
 end
-
-local function find_compile_commands()
-  local ccj = fn.glob("compile_commands.json", nil, true)
-  if #ccj == 0 then
-    ccj = fn.glob("build/compile_commands.json", nil, true)
-  else
-    return
-  end
-  if #ccj == 0 then
-    return
-  end
-  return fn.fnamemodify(ccj[1], ":p:h")
-end
-
-local function disable_formatting(client)
-  client.server_capabilities.documentFormattingProvider = false
-  client.server_capabilities.documentRangeFormattingProvider = false
-end
-
--- local configs = require("lspconfig.configs")
--- if configs.mesonls == nil then
---   configs.mesonls = {
---     default_config = {
---       cmd = { "/home/kraftwerk28/projects/meson/mesonls/__main__.py" },
---       filetypes = { "meson" },
---       root_dir = root_pattern({ "meson.build" }),
---       settings = {},
---     },
---   }
--- end
-
--- lspconfig.mesonls.setup({
---   capabilities = cmp_capabilities(),
--- })
 
 do
   local cmd = {
@@ -53,69 +17,47 @@ do
   if format_cfg then
     table.insert(cmd, "-format-conf-path=" .. format_cfg)
   end
-  lspconfig.arduino_language_server.setup({
+  lspconfig.arduino_language_server.setup {
     cmd = cmd,
     -- NOTE: default capabilities are not empty, do not overwrite them
-    -- capabilities = cmp_capabilities(),
-  })
+    -- capabilities = make_capabilities(),
+  }
 end
 
-lspconfig.awk_ls.setup({
-  capabilities = cmp_capabilities(),
-})
+lspconfig.awk_ls.setup {
+  capabilities = make_capabilities(),
+}
 
-lspconfig.denols.setup({
+lspconfig.denols.setup {
   autostart = false,
   initializationOptions = {
     enable = true,
     lint = true,
     unstable = false,
   },
-  capabilities = cmp_capabilities(),
-})
+  capabilities = make_capabilities(),
+}
 
-lspconfig.gopls.setup({
-  -- handlers = {
-  --   ["textDocument/publishDiagnostics"] = vim.lsp.with(
-  --     vim.lsp.diagnostic.on_publish_diagnostics,
-  --     {
-  --       update_in_insert = true,
-  --       virtual_text = { spacing = 2, prefix = "" },
-  --     }
-  --   ),
-  -- },
-  capabilities = cmp_capabilities(),
-})
+lspconfig.gopls.setup {
+  capabilities = make_capabilities(),
+}
 
-lspconfig.graphql.setup({
-  capabilities = cmp_capabilities(),
-})
+lspconfig.graphql.setup {
+  capabilities = make_capabilities(),
+}
 
-lspconfig.hls.setup({
+lspconfig.hls.setup {
   settings = {
     haskell = {
       -- formattingProvider = "brittany",
       formattingProvider = "ormolu",
     },
   },
-  capabilities = cmp_capabilities(),
-})
+  capabilities = make_capabilities(),
+}
 
--- lspconfig.pylsp.setup({
---   capabilities = cmp_capabilities(),
---   on_attach = function(client)
---     -- Formatting is handled by black
---     client.server_capabilities.documentFormattingProvider = false
---     client.server_capabilities.documentRangeFormattingProvider = false
---   end,
--- })
-
-lspconfig.pyright.setup({
-  capabilities = cmp_capabilities(),
-  on_attach = function(client)
-    -- Formatting is handled by black
-    disable_formatting(client)
-  end,
+lspconfig.pyright.setup {
+  capabilities = make_capabilities(),
   settings = {
     python = {
       analysis = {
@@ -125,14 +67,14 @@ lspconfig.pyright.setup({
       },
     },
   },
-})
+}
 
-lspconfig.rust_analyzer.setup({
-  capabilities = cmp_capabilities(),
-})
+lspconfig.rust_analyzer.setup {
+  capabilities = make_capabilities(),
+}
 
-lspconfig.ts_ls.setup({
-  capabilities = cmp_capabilities(),
+lspconfig.ts_ls.setup {
+  capabilities = make_capabilities(),
   init_options = {
     hostInfo = "neovim",
     plugins = {
@@ -172,11 +114,9 @@ lspconfig.ts_ls.setup({
     "vue",
   },
   on_attach = function(client, bufnr)
-    -- Formatting is handled by null-ls (prettier)
-    disable_formatting(client)
     require("twoslash-queries").attach(client, bufnr)
   end,
-})
+}
 
 -- lspconfig.flow.setup {
 --   cmd = {'flow', 'lsp'},
@@ -208,8 +148,8 @@ lspconfig.ts_ls.setup({
 --       },
 --       workspace = {
 --         library = {
---           [fn.expand("$VIMRUNTIME/lua")] = true,
---           [fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+--           [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+--           [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
 --         },
 --       },
 --     },
@@ -243,7 +183,7 @@ do
   --   { fg = "NONE", bg = "NONE", sp = "NONE" }
   -- )
 
-  lspconfig.clangd.setup({
+  lspconfig.clangd.setup {
     cmd = {
       "clangd",
       "--background-index",
@@ -253,7 +193,7 @@ do
       "--pch-storage=memory",
       -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
     },
-    capabilities = cmp_capabilities(),
+    capabilities = make_capabilities(),
     settings = {
       ["C_Cpp.dimInactiveRegions"] = false,
     },
@@ -268,11 +208,11 @@ do
       ".git",
     }),
     filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-  })
+  }
 end
 
-lspconfig.svelte.setup({
-  capabilities = cmp_capabilities(),
+lspconfig.svelte.setup {
+  capabilities = make_capabilities(),
   settings = {
     svelte = {
       plugin = {
@@ -282,13 +222,9 @@ lspconfig.svelte.setup({
       },
     },
   },
-  on_attach = function(client)
-    -- Formatting is handled by null-ls (prettier)
-    disable_formatting(client)
-  end,
-})
+}
 
-lspconfig.jsonls.setup({
+lspconfig.jsonls.setup {
   settings = {
     json = {
       schemas = require("schemastore").json.schemas(),
@@ -297,14 +233,10 @@ lspconfig.jsonls.setup({
       },
     },
   },
-  capabilities = cmp_capabilities(),
-  on_attach = function(client)
-    -- Formatting is handled by null-ls (jq)
-    disable_formatting(client)
-  end,
-})
+  capabilities = make_capabilities(),
+}
 
-lspconfig.yamlls.setup({
+lspconfig.yamlls.setup {
   settings = {
     yaml = {
       format = {
@@ -316,66 +248,45 @@ lspconfig.yamlls.setup({
       validate = true,
     },
   },
-  capabilities = cmp_capabilities(),
-})
+  capabilities = make_capabilities(),
+}
 
-lspconfig.cssls.setup({
-  capabilities = cmp_capabilities(),
-  on_attach = function(client)
-    -- Formatting is handled by null-ls
-    disable_formatting(client)
-  end,
-})
+lspconfig.cssls.setup {
+  capabilities = make_capabilities(),
+}
 
--- lspconfig.html.setup {
---   cmd = {"vscode-html-languageserver", "--stdio"}
--- }
+lspconfig.metals.setup {}
 
--- lspconfig.bashls.setup {
---   filetypes = {"bash", "sh", "zsh"}
--- }
+lspconfig.solargraph.setup {
+  capabilities = make_capabilities(),
+}
 
-lspconfig.solargraph.setup({
-  capabilities = cmp_capabilities(),
-})
+lspconfig.erlangls.setup {
+  capabilities = make_capabilities(),
+}
 
--- lspconfig.emmet_ls.setup {}
-
-lspconfig.erlangls.setup({
-  capabilities = cmp_capabilities(),
-})
-
-lspconfig.rescriptls.setup({
+lspconfig.rescriptls.setup {
   cmd = { "rescript-ls", "--stdio" },
-  capabilities = cmp_capabilities(),
-})
+  capabilities = make_capabilities(),
+}
 
-lspconfig.elmls.setup({})
+lspconfig.elmls.setup {}
 
-lspconfig.tailwindcss.setup({
+lspconfig.tailwindcss.setup {
   filetypes = { "vue", "svelte" },
-  on_attach = function(client)
-    -- Formatting is handled by null-ls
-    disable_formatting(client)
-  end,
-})
+}
 
-lspconfig.volar.setup({
-  on_attach = function(client, bufnr)
-    -- Formatting is handled by null-ls (prettier)
-    disable_formatting(client)
-  end,
-})
+lspconfig.volar.setup {}
 
-if fn.has("win64") == 1 then
-  local jdt_base = fn.expand(
+if vim.fn.has("win64") == 1 then
+  local jdt_base = vim.fn.expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )
-  local java_home = fn.expand("C:/Program Files/Java/jdk-11.0.11")
+  local java_home = vim.fn.expand("C:/Program Files/Java/jdk-11.0.11")
 
   lspconfig.jdtls.setup({
     cmd = {
-      fn.expand(java_home .. "/bin/java.exe"),
+      vim.fn.expand(java_home .. "/bin/java.exe"),
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
       "-Dosgi.bundles.defaultStartLevel=4",
       "-Declipse.product=org.eclipse.jdt.ls.core.product",
@@ -383,14 +294,14 @@ if fn.has("win64") == 1 then
       "-Dlog.level=ALL",
       "-Xmx1G",
       "-jar",
-      fn.expand(
+      vim.fn.expand(
         jdt_base
           .. "/plugins/org.eclipse.equinox.launcher_1.6.200.v20210416-2027.jar"
       ),
       "-configuration",
-      fn.expand(jdt_base .. "/config_win"),
+      vim.fn.expand(jdt_base .. "/config_win"),
       "-data",
-      fn.expand("~/Projects/jdt-ls-data"),
+      vim.fn.expand("~/Projects/jdt-ls-data"),
       "--add-modules=ALL-SYSTEM",
       "--add-opens",
       "java.base/java.util=ALL-UNNAMED",
@@ -405,37 +316,10 @@ if fn.has("win64") == 1 then
     cmd = {
       "java",
       "-jar",
-      fn.expand(
+      vim.fn.expand(
         "~/Projects/groovy-language-server"
           .. "/build/libs/groovy-language-server-all.jar"
       ),
     },
   })
 end
-
--- do
---   -- OBSOLETTE: kotlin is still much better with Jetbrains Idea...
---   local cmd, cmd_env
---   if fn.has("win64") == 1 then
---     cmd = {
---       fn.expand(
---         "~/Projects/kotlin-language-server/server/build/install"
---           .. "/server/bin/kotlin-language-server.bat"
---       ),
---     }
---   end
---   if fn.has("unix") == 1 then
---     local jdk_home = "/usr/lib/jvm/java-11-openjdk"
---     cmd_env = {
---       PATH = jdk_home .. "/bin:" .. vim.env.PATH,
---       JAVA_HOME = jdk_home,
---     }
---   end
---   lspconfig.kotlin_language_server.setup({
---     cmd = cmd,
---     cmd_env = cmd_env,
---     settings = { kotlin = { compiler = { jvm = { target = "1.8" } } } },
---     root_dir = root_pattern({ "build.gradle", "build.gradle.kts" }),
---     capabilities = cmp_capabilities(),
---   })
--- end

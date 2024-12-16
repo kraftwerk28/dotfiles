@@ -1,4 +1,7 @@
 #!/usr/bin/env luajit
+
+-- NOTE: this script is replaced by scripts/scripting.py
+
 local i3 = require("i3ipc")
 
 -- Used for focus_prev command

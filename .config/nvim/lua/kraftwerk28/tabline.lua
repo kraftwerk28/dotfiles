@@ -89,4 +89,4 @@ api.nvim_set_hl(
 -- tabline_sel.gui = "reverse,bold"
 -- utils.highlight(tabline_sel)
 
-vim.o.tabline = "%!v:lua.build_tabline()"
+set.tabline = "%!v:lua.build_tabline()"

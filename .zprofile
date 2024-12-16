@@ -40,4 +40,9 @@ if [[ "$(tty)" == "/dev/tty1" ]]; then
 	# 	&> "${sway_logdir}/sway-debug.log"
 fi
 
+if [[ "$(tty)" == "/dev/tty2" ]]; then
+	export XDG_CURRENT_DESKTOP="i3"
+	exec startx
+fi
+
 # export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"

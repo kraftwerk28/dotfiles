@@ -1,1 +1,1 @@
-vim.bo.indentexpr = nil
+set.indentexpr = nil

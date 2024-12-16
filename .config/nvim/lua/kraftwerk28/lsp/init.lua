@@ -36,11 +36,11 @@ autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local cap = client.server_capabilities
 
-    if cap.hoverProvider then
+    if client:supports_method("textDocument/hover") then
       vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = true })
     end
 
-    if cap.signatureHelpProvider then
+    if client:supports_method("textDocument/signatureHelp") then
       vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
         buffer = true,
       })
@@ -54,14 +54,14 @@ autocmd("LspAttach", {
     end
 
     -- Under-cursor LSP mappings
-    if cap.renameProvider then
+    if client:supports_method("textDocument/rename") then
       vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, {
         buffer = true,
         desc = "Rename under Cursor",
       })
     end
 
-    if cap.codeActionProvider then
+    if client:supports_method("textDocument/codeAction") then
       vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, {
         buffer = true,
         desc = "[C]ode [A]ctions",
@@ -77,25 +77,20 @@ autocmd("LspAttach", {
 
     local tb = require("telescope.builtin")
 
-    vim.keymap.set("n", "<Leader>da", tb.diagnostics, {
-      buffer = true,
-      desc = "[D]iagnostics [A]ll",
-    })
-
-    if cap.referencesProvider then
+    if client:supports_method("textDocument/references") then
       vim.keymap.set("n", "<Leader>gr", tb.lsp_references, {
         buffer = true,
         desc = "[G]oto [R]eferences",
       })
     end
-    if cap.definitionProvider then
+    if client:supports_method("textDocument/definition") then
       -- <Leader> is not used here as it is often executed mapping
       vim.keymap.set("n", "gd", tb.lsp_definitions, {
         buffer = true,
         desc = "[G]oto [D]efinition",
       })
     end
-    if cap.declarationProvider then
+    if client:supports_method("textDocument/declaration") then
       -- <Leader> is not used here as it is often executed mapping
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
         buffer = true,
@@ -125,6 +120,10 @@ autocmd("LspAttach", {
         buffer = true,
         desc = "[G]oto [W]orkspace [S]ymbols",
       })
+    end
+    if client:supports_method("textDocument/foldingRange") then
+      setlocal.foldmethod = "expr"
+      setlocal.foldexpr = "v:lua.vim.lsp.foldexpr()"
     end
   end,
 })

@@ -11,14 +11,14 @@ if not vim.uv.fs_stat(lazypath) then
   })
 end
 
-vim.opt.runtimepath:prepend(lazypath)
+set.runtimepath:prepend(lazypath)
 
 local plugins = {
-  {
-    dir = "~/projects/neovim/gtranslate.nvim",
-    -- "kraftwerk28/gtranslate.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
+  -- {
+  --   dir = "~/projects/neovim/gtranslate.nvim",
+  --   -- "kraftwerk28/gtranslate.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  -- },
 
   -- Themes
   {
@@ -37,7 +37,7 @@ local plugins = {
     enabled = true,
     lazy = false,
     config = function()
-      vim.o.background = "dark"
+      set.background = "dark"
       require("gruvbox").setup({
         contrast = "medium", -- can be "hard", "soft" or empty string
         italic = {
@@ -58,7 +58,7 @@ local plugins = {
     lazy = false,
     enabled = false,
     config = function()
-      vim.o.background = "dark"
+      set.background = "dark"
       vim.g.gruvbox_material_background = "medium"
       vim.g.gruvbox_material_foreground = "original"
       -- vim.g.gruvbox_material_enable_italic = true
@@ -89,7 +89,7 @@ local plugins = {
     lazy = false,
     enabled = false,
     config = function()
-      vim.o.background = "dark"
+      set.background = "dark"
       require("kanagawa").setup({
         background = {
           dark = "wave",
@@ -289,7 +289,7 @@ local plugins = {
           html = { "prettierd" },
         },
         default_format_opts = {
-          lsp_format = "prefer",
+          lsp_format = "fallback",
         },
       })
     end,
@@ -304,13 +304,14 @@ local plugins = {
         bash = { "shellcheck" },
         sh = { "shellcheck" },
       }
+      local globals = { "vim", "autocmd", "augroup", "set", "setlocal" }
       lint.linters.luacheck.args = vim.tbl_flatten({
         "--formatter",
         "plain",
         "--codes",
         "--ranges",
         "--globals",
-        { "vim", "autocmd", "augroup" },
+        globals,
         "--filename",
         function()
           return vim.api.nvim_buf_get_name(0)
@@ -319,7 +320,7 @@ local plugins = {
       })
       autocmd({ "BufReadPost", "BufWritePost" }, {
         callback = function()
-          print("lint:", lint.try_lint())
+          lint.try_lint()
         end,
       })
     end,

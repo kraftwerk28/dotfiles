@@ -34,14 +34,14 @@ nt.setup({
     icons = {
       glyphs = {
         folder = {
-          arrow_open = "",
-          arrow_closed = "",
+          -- arrow_open = "",
+          -- arrow_closed = "",
           default = "",
           open = "",
           empty = "",
           empty_open = "",
-          symlink = "",
-          symlink_open = "",
+          symlink = "",
+          symlink_open = "",
         },
         -- git = {
         --   unstaged = "✗",

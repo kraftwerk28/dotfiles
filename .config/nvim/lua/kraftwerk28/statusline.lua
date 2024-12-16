@@ -222,4 +222,4 @@ end
 
 -- vim.opt.laststatus = 0
 -- vim.opt.winbar = "%!v:lua."..utils.defglobalfn(stl).."()"
-vim.go.statusline = "%!v:lua." .. utils.defglobalfn(stl) .. "()"
+setglobal.statusline = "%!v:lua." .. utils.defglobalfn(stl) .. "()"

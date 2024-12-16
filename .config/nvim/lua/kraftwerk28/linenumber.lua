@@ -13,8 +13,8 @@ autocmd({ "BufEnter", "WinEnter", "FocusGained" }, {
     then
       return
     end
-    vim.wo.number = true
-    vim.wo.relativenumber = true
+    setlocal.number = true
+    setlocal.relativenumber = true
   end,
   group = number_augroup,
 })
@@ -27,8 +27,8 @@ autocmd({ "BufLeave", "WinLeave", "FocusLost" }, {
     then
       return
     end
-    vim.wo.number = true
-    vim.wo.relativenumber = false
+    setlocal.number = true
+    setlocal.relativenumber = false
   end,
   group = number_augroup,
 })
