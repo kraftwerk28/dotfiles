@@ -10,6 +10,7 @@ if [[ -d $HOME/.gem/ruby ]]; then
 	export PATH="$PATH:${ver}/bin"
 fi
 
+# Run wayland compositor on tty1
 if [[ "$(tty)" == "/dev/tty1" ]]; then
 	# sway specific variables, don't put these in .zshenv
 	export TERM="foot"
@@ -29,20 +30,18 @@ if [[ "$(tty)" == "/dev/tty1" ]]; then
 	mkdir -p "$(dirname $logfile)"
 	# Remove logs older than 14 days
 	find "$(dirname $logfile)" -maxdepth 1 -type f -mtime +14 -name '*.log' -execdir rm -v '{}' \;
-	conf="$XDG_CONFIG_HOME/sway/config"
+
+	exec sway --unsupported-gpu
 
 	# exec sway --unsupported-gpu --config=$conffile &> "$logfile"
-
-	exec sway --unsupported-gpu --config=$conf
 
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \
 	# 	&> "${sway_logdir}/sway-debug.log"
 fi
 
+# Run xorg DE / WM on tty2
 if [[ "$(tty)" == "/dev/tty2" ]]; then
 	export XDG_CURRENT_DESKTOP="i3"
 	exec startx
 fi
-
-# export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"

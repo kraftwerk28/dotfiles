@@ -64,3 +64,5 @@ export MPLBACKEND=GTK3Agg
 
 # export VOLTA_HOME="$HOME/.volta"
 # export PATH="$VOLTA_HOME/bin:$PATH"
+
+export QSYS_ROOTDIR="$XDG_CACHE_HOME/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"
