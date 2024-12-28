@@ -38,7 +38,7 @@ local function stop_server()
 end
 
 function _G.restart_server(name)
-  local function restart_cb(client)
+  local function do_restart(client)
     if not client then
       return
     end
@@ -46,33 +46,33 @@ function _G.restart_server(name)
     if not cfg then
       vim.notify(
         ("%s doesn't support restarting"):format(client.name),
-        vim.log.levels.WARN
+        vim.log.levels.ERROR
       )
       return
     end
     client:stop()
-    vim.defer_fn(function()
-      cfg.launch()
-    end, 500)
+    vim.wait(10000, function()
+      return client:is_stopped()
+    end, 100)
+    cfg.launch()
   end
 
-  local clients =
-    vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+  local clients = vim.lsp.get_clients()
   if type(name) == "string" then
     for _, c in ipairs(clients) do
       if c.name == name then
-        restart_cb(c)
+        do_restart(c)
         return
       end
     end
-    vim.notify(("No client with name=%s"):format(name))
+    vim.notify(("No such client: '%s'"):format(name), vim.log.levels.ERROR)
   else
     vim.ui.select(clients, {
       prompt = "Select LSP Server to restart",
       format_item = function(client)
         return client.name
       end,
-    }, restart_cb)
+    }, do_restart)
   end
 end
 

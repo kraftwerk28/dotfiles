@@ -37,9 +37,9 @@ local plugins = {
     enabled = true,
     lazy = false,
     config = function()
-      set.background = "dark"
+      set.background = "light"
       require("gruvbox").setup({
-        contrast = "medium", -- can be "hard", "soft" or empty string
+        contrast = "soft", -- can be "hard", "soft" or empty string
         italic = {
           strings = false,
         },
@@ -300,24 +300,27 @@ local plugins = {
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
-        lua = { "luacheck" },
+        -- NOTE: replaced by lua_ls
+        -- lua = { "luacheck" },
         bash = { "shellcheck" },
         sh = { "shellcheck" },
       }
       local globals = { "vim", "autocmd", "augroup", "set", "setlocal" }
-      lint.linters.luacheck.args = vim.tbl_flatten({
-        "--formatter",
-        "plain",
-        "--codes",
-        "--ranges",
-        "--globals",
-        globals,
-        "--filename",
-        function()
-          return vim.api.nvim_buf_get_name(0)
-        end,
-        "-",
-      })
+      lint.linters.luacheck.args = vim
+        .iter({
+          "--formatter",
+          "plain",
+          "--codes",
+          "--ranges",
+          "--globals",
+          globals,
+          "--filename",
+          function()
+            return vim.api.nvim_buf_get_name(0)
+          end,
+          "-",
+        })
+        :flatten()
       autocmd({ "BufReadPost", "BufWritePost" }, {
         callback = function()
           lint.try_lint()

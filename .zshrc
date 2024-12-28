@@ -198,10 +198,10 @@ mkcd() {
 
 ytd() {
 	args=("$@")
-	if (( $# == 0 )) && wl-paste -l | grep "text/plain" >/dev/null; then
+	if [[ $# -eq 0 ]] && wl-paste -l | grep "text/plain" >/dev/null; then
 		args+=("$(wl-paste)")
 	fi
-	/usr/bin/yt-dlp "${args[@]}"
+	yt-dlp "${args[@]}"
 }
 
 if which zoxide &> /dev/null; then
@@ -242,6 +242,14 @@ fi
 get_idf() {
 	source $HOME/projects/embedded/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
+}
+
+imv_dir() {
+	if (( $# > 1 )); then
+		exit 1
+	fi
+	dir=$(dirname $1)
+	imv -n "$1" $dir/*.{jpg,jpeg,png}
 }
 
 export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"

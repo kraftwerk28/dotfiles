@@ -32,12 +32,12 @@ _G.setg = vim.opt_global
 _G.setglobal = vim.opt_global
 
 -- Load options
-vim.cmd.runtime("opts.vim")
+vim.cmd.runtime "opts.vim"
 
-require("kraftwerk28.plugins")
-require("kraftwerk28.map")
-require("kraftwerk28.autocommand")
-require("kraftwerk28.lsp")
-require("kraftwerk28.tabline")
-require("kraftwerk28.filetype")
-require("kraftwerk28.linenumber")
+require "kraftwerk28.plugins"
+require "kraftwerk28.map"
+require "kraftwerk28.autocommand"
+require "kraftwerk28.lsp"
+require "kraftwerk28.tabline"
+require "kraftwerk28.filetype"
+require "kraftwerk28.linenumber"

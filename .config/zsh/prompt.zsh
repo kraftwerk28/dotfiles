@@ -1,6 +1,6 @@
 # The function is not used anymore
 
-git_info () {
+git_info() {
 	if [[ ! -d ".git" ]] || ! git rev-parse --git-dir &>/dev/null; then
 		return
 	fi
@@ -51,11 +51,12 @@ vimode_rlabel() {
 	esac
 }
 
-filepath='%(4~|…/%2~|%~)%f'
-exit_status=' %(?:%B%F{green}$:%B%F{red}$)%b%f'
-PROMPT="$filepath"'${vcs_info_msg_0_}'"$exit_status "
+filepath='%(4~|…/%2~|%~)%b%f'
+git_info='${vcs_info_msg_0_}%b%f'
+exit_status='%(?:%B%F{green}:%B%F{red})$?%b%f'
+PROMPT="$filepath$git_info $exit_status $ "
 # RPROMPT='%F{magenta}${exec_time_prompt}%b%f $(printf %-3d $?)'
-RPROMPT='%b%f $(printf %-3d $?)'
+# RPROMPT='%b%f $(printf %-3d $?)'
 
 add-zsh-hook precmd vcs_info
 
