@@ -1,0 +1,13 @@
+configuration {
+	modi: "drun";
+	kb-row-down: "Control+j,Control+n,Down";
+	kb-row-up: "Control+k,Control+p,Up";
+	kb-accept-entry: "Return";
+	kb-remove-word-back: "Control+w,Control+BackSpace";
+	kb-remove-to-eol: "";
+	kb-clear-line: "";
+	show-icons: true;
+	icon-theme: "Papirus";
+	drun-show-actions: true;
+}
+@theme "mytheme"

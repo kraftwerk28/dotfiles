@@ -1,0 +1,7 @@
+@theme "gruvbox-light"
+element-text {
+	vertical-align: 0.5;
+}
+element-icon {
+	size: 1.5em;
+}
