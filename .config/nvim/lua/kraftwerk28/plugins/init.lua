@@ -331,21 +331,29 @@ local plugins = {
 
   {
     "iamcco/markdown-preview.nvim",
-    build = "cd app && npm install && curl -fsS -o ~/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim/app/_static/mermaid.min.js https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.3.0/mermaid.min.js",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
     config = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-      vim.api.nvim_exec(
-        [[
-          function! MkdpOpenInNewWindow(url) abort
-            execute printf('silent! !firefox -P markdown-preview --new-window=%s &', a:url)
-          endfunction
-        ]],
-        false
-      )
-      vim.g.mkdp_browserfunc = "MkdpOpenInNewWindow"
+      vim.cmd [[
+        function MkdpOpenFirefox(url)
+          silent! execute('!firefox -P markdown-preview --new-window=' . a:url . ' &')
+        endfunction
+      ]]
+      vim.g.mkdp_browserfunc = "MkdpOpenFirefox"
+
+      -- TODO: find why v:lua doesn't work here
+      -- _G.mkdp_open_firefox = function(url)
+      --   vim.cmd(
+      --     ("silent! !firefox -P markdown-preview --new-window=%s &"):format(url)
+      --   )
+      -- end
+      -- vim.g.mkdp_browserfunc = "v:lua.mkdp_open_firefox"
     end,
   },
+
   {
     "Shatur/neovim-session-manager",
     dependencies = { "nvim-lua/plenary.nvim" },

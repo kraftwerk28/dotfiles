@@ -1,0 +1,30 @@
+[[keyboard.bindings]]
+action = "ReceiveChar"
+key = "S"
+mods = "Control"
+
+[colors.cursor]
+cursor = "#dddddd"
+text = "#000000"
+
+[env]
+WINIT_X11_SCALE_FACTOR = "1.0"
+
+[font]
+size = 10.5
+
+# [font.normal]
+# family = "monospace"
+
+[[hints.enabled]]
+command = "xdg-open"
+regex = "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Control"
+
+[window]
+decorations = "none"
+
+[keyboard]

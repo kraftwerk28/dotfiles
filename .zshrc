@@ -161,7 +161,7 @@ manage_venv() {
 	if [[ -f $script ]]; then
 		source $script
 	elif which deactivate &> /dev/null; then
-		deactivate &> /dev/null
+		deactivate
 	fi
 }
 add-zsh-hook chpwd manage_venv
@@ -240,7 +240,7 @@ fi
 # fi
 
 get_idf() {
-	source $HOME/projects/embedded/esp/esp-idf/export.sh
+	source $HOME/projects/esp/esp-idf/export.sh
 	# sudo sysctl -w dev.tty.legacy_tiocsti=1
 }
 

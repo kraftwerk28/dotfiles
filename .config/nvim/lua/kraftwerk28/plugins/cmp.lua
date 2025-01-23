@@ -25,13 +25,13 @@ cmp.setup({
     {
       name = "buffer",
       option = {
-        -- use only buffers from current tabpage, but omit help/manpages as
-        -- they usually contain too much words
+        -- Omit man/help buffers as they are usually too large and slow down
+        -- the whole thing
         get_bufnrs = function()
           local ret = {}
           for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
             local bufnr = vim.api.nvim_win_get_buf(winid)
-            local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+            local ft = vim.bo[bufnr].filetype
             if ft ~= "man" and ft ~= "help" then
               table.insert(ret, bufnr)
             end
