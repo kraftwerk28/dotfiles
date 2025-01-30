@@ -24,18 +24,21 @@ class OutputMatch:
         return f"output {output.name} position {self.left} {self.top}"
 
 
-DEFAULT_LAYOUT_ID = 0
-
-
 OUTPUT_LAYOUTS = [
     [
         OutputMatch(match={"model": "0x149A"}, top=360, left=2560),
         OutputMatch(match={"model": "DELL P2720DC"}, top=0, left=0),
     ],
+    [
+        OutputMatch(match={"model": "0x149A"}, top=120, left=1920),
+        OutputMatch(match={"model": "LF24T450G"}, top=0, left=0),
+    ],
 ]
 
 
 class Scripting:
+    DEFAULT_LAYOUT_ID = 0
+
     def __init__(self):
         self.prev_con_id: int | None = None
         self.prev2_con_id: int | None = None  # Used for back-and-forth switching
@@ -70,7 +73,7 @@ class Scripting:
         else:
             # Otherwise set the default layout
             cmds = [
-                f"input {inp.identifier} xkb_switch_layout {DEFAULT_LAYOUT_ID}"
+                f"input {inp.identifier} xkb_switch_layout {self.DEFAULT_LAYOUT_ID}"
                 for inp in ipc.get_inputs()
                 if inp.type == "keyboard"
             ]
@@ -82,7 +85,7 @@ class Scripting:
     def on_ws_init(self, ipc: Connection, _: WorkspaceEvent):
         self.prev2_con_id = self.prev_con_id
         cmds = [
-            f"input {inp.identifier} xkb_switch_layout {DEFAULT_LAYOUT_ID}"
+            f"input {inp.identifier} xkb_switch_layout {self.DEFAULT_LAYOUT_ID}"
             for inp in ipc.get_inputs()
             if inp.type == "keyboard"
         ]
@@ -92,7 +95,7 @@ class Scripting:
         cmd = ev.binding.command
         if cmd == "nop focus_prev" and self.prev2_con_id is not None:
             cmd = f"[con_id={self.prev2_con_id}] focus"
-            i3.command(cmd)
+            ipc.command(cmd)
         elif cmd.startswith("nop workspace"):
             wss = ipc.get_workspaces()
             focused_ws = next((ws for ws in wss if ws.focused), None)
