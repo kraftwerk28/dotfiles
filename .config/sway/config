@@ -528,19 +528,13 @@ output $external_hdmi position 1920 0
 
 # output $laptop   background "#000000" solid_color
 # output $external background "#000000" solid_color
-# }}}
 
-# Wallpapers {{{
-# output $laptop   background      /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-# output $external_hdmi background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-# output $external_usb  background /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-# output * background #000000 solid_color
-# output * background /home/kraftwerk28/Pictures/telegram-math.png tile
 output * background /home/kraftwerk28/Pictures/wp7453931.jpg fill
 # }}}
 
 # See https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
-exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
+# exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
+exec systemctl --user import-environment
 # exec dbus-update-activation-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 
 # kraftwerk28's patch only:

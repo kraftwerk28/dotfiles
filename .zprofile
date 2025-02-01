@@ -16,8 +16,8 @@ if [[ "$(tty)" == "/dev/tty1" ]]; then
 	export TERM="foot"
 	export GTK_USE_PORTAL=1
 	export MOZ_ENABLE_WAYLAND=1
-	export QT_QPA_PLATFORM="wayland;xcb"
-	export QT_QPA_PLATFORMTHEME="qt5ct:qt6ct"
+	# export QT_QPA_PLATFORM="wayland;xcb"
+	export QT_QPA_PLATFORMTHEME="qt5ct"
 
 	# See https://github.com/swaywm/sway/wiki#xdg_current_desktop-environment-variable-is-not-being-set
 	export XDG_CURRENT_DESKTOP="sway:wlroots"
