@@ -15,15 +15,14 @@ if [[ "$(tty)" == "/dev/tty1" ]]; then
 	# sway specific variables, don't put these in .zshenv
 	export TERM="foot"
 	export GTK_USE_PORTAL=1
-	export MOZ_ENABLE_WAYLAND=1
 	# export QT_QPA_PLATFORM="wayland;xcb"
-	export QT_QPA_PLATFORMTHEME="qt5ct"
+	export QT_QPA_PLATFORMTHEME="qt6ct"
 
 	# See https://github.com/swaywm/sway/wiki#xdg_current_desktop-environment-variable-is-not-being-set
 	export XDG_CURRENT_DESKTOP="sway:wlroots"
 
 	export _JAVA_AWT_WM_NONREPARENTING=1
-	export WLR_DRM_NO_ATOMIC=1
+	# export WLR_DRM_NO_ATOMIC=1
 
 	# Setup logging
 	logfile="$XDG_STATE_HOME/sway/$(date -Is).log"
