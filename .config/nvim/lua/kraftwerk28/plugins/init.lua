@@ -26,9 +26,9 @@ local plugins = {
     enabled = false,
     lazy = false,
     config = function()
-      require("onedark").setup({
+      require("onedark").setup {
         style = "dark", -- 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-      })
+      }
       require("onedark").load()
     end,
   },
@@ -239,7 +239,7 @@ local plugins = {
       "saadparwaiz1/cmp_luasnip",
     },
     config = function()
-      require("kraftwerk28.plugins.cmp")
+      require "kraftwerk28.plugins.cmp"
     end,
   },
   {
@@ -254,11 +254,11 @@ local plugins = {
     "ray-x/lsp_signature.nvim",
     enabled = false,
     config = function()
-      require("lsp_signature").setup({
+      require("lsp_signature").setup {
         floating_window = true,
         floating_window_above_cur_line = false,
         hint_enable = false,
-      })
+      }
     end,
   },
   {
@@ -270,7 +270,7 @@ local plugins = {
   {
     "mfussenegger/nvim-dap",
     config = function()
-      require("kraftwerk28.plugins.dap")
+      require "kraftwerk28.plugins.dap"
     end,
   },
 

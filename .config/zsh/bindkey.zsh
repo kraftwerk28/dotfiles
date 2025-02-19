@@ -1,7 +1,7 @@
 bindkey -v
 
 # set_cursor_style() {
-# 	echo "$KEYMAP $ZLE_STATE"
+# 	# echo "$KEYMAP $ZLE_STATE"
 # 	case $KEYMAP in
 # 		vicmd)
 # 			echo -ne '\e[1 q';;
@@ -14,8 +14,12 @@ bindkey -v
 # 	esac
 # }
 
-# zle -N zle-line-init set_cursor_style
-# zle -N zle-keymap-select set_cursor_style
+set_cursor_style() {
+	echo -ne '\e[1 q'
+}
+
+zle -N zle-line-init set_cursor_style
+zle -N zle-keymap-select set_cursor_style
 
 KEYTIMEOUT=5 # 50ms, same as default 'ttimeoutlen' in neovim
 

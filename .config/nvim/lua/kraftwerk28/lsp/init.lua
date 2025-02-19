@@ -34,7 +34,13 @@ end
 autocmd("LspAttach", {
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then
+      return
+    end
     local cap = client.server_capabilities
+    if not cap then
+      return
+    end
 
     if client:supports_method("textDocument/hover") then
       vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = true })
@@ -67,13 +73,6 @@ autocmd("LspAttach", {
         desc = "[C]ode [A]ctions",
       })
     end
-
-    vim.keymap.set("n", "<Leader>dc", function()
-      vim.diagnostic.open_float({ border = vim.g.borderchars })
-    end, {
-      buffer = true,
-      desc = "[D]iagnostics under [C]ursor",
-    })
 
     local tb = require("telescope.builtin")
 
@@ -128,15 +127,15 @@ autocmd("LspAttach", {
   end,
 })
 
-if vim.g.borderchars ~= nil then
-  local h = vim.lsp.handlers
-  h["textDocument/signatureHelp"] = vim.lsp.with(
-    h["textDocument/signatureHelp"],
-    { border = vim.g.borderchars }
-  )
-  h["textDocument/hover"] =
-    vim.lsp.with(h["textDocument/hover"], { border = vim.g.borderchars })
-end
+-- if vim.g.borderchars ~= nil then
+--   local h = vim.lsp.handlers
+--   h["textDocument/signatureHelp"] = vim.lsp.with(
+--     h["textDocument/signatureHelp"],
+--     { border = vim.g.borderchars }
+--   )
+--   h["textDocument/hover"] =
+--     vim.lsp.with(h["textDocument/hover"], { border = vim.g.borderchars })
+-- end
 
 -- lsp.handlers["textDocument/publishDiagnostics"] =
 --   lsp.with(lsp.diagnostic.on_publish_diagnostics, {

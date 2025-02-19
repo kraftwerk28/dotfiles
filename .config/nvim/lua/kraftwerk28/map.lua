@@ -62,7 +62,7 @@ for i = 1, 9 do
 end
 
 vim.keymap.set("n", "<Leader>hs", function()
-  set.hlsearch = not set.hlsearch:get()
+  vim.cmd.set "hlsearch!"
 end)
 
 vim.keymap.set("n", "<Leader>w", "<Cmd>silent! wall<CR>", silent)
@@ -140,6 +140,10 @@ vim.keymap.set("n", "<Leader>/", [[/^\s*\<]], {
 })
 
 vim.keymap.set("i", "<D-Space>", "<Nop>")
+
+vim.keymap.set("n", "<Leader>dc", function()
+  vim.diagnostic.open_float({ border = vim.g.borderchars })
+end, { desc = "[D]iagnostics under [C]ursor" })
 
 local conform = require("conform")
 vim.keymap.set("n", "<Leader>f", conform.format, { desc = "[F]ormat" })

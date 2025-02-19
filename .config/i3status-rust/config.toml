@@ -14,6 +14,7 @@ icons = "material-nf"
 [icons.overrides]
 bat = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
 bat_charging = "󰂄"
+net_tethering = "󱇰"
 
 # [[block]]
 # block = "custom"
@@ -61,13 +62,22 @@ cmd = "blueman-manager"
 [[block]]
 block = "net"
 device = "wlan0"
-format = "$icon{ $ip|}"
+format = "^icon_net_wireless{ $ip|}"
+inactive_format = ""
 missing_format = ""
 
 [[block]]
 block = "net"
 device = "eth0"
-format = "$icon{ $ip|}"
+format = "^icon_net_wired{ $ip|}"
+inactive_format = ""
+missing_format = ""
+
+[[block]]
+block = "net"
+device = "eth1"
+format = "^icon_net_tethering{ $ip|}"
+inactive_format = ""
 missing_format = ""
 
 [[block]]

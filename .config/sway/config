@@ -483,9 +483,27 @@ exec $scripts/polkit-agent.sh
 # Window rules {{{
 for_window [app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^firefox$" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
-for_window [app_id="^firefox$" title="Sharing Indicator$"] floating enable, resize set 0 0, sticky enable
+for_window [app_id="^firefox$" title="Sharing Indicator$"] floating enable, resize shrink, sticky enable
 for_window [app_id="^firefox$" title="^Developer Tools"] floating enable
-# Extension: (Bitwarden - Free Password Manager) - Bitwarden — Mozilla Firefox
+for_window [app_id="^firefox$" title="Bitwarden"] floating enable
+
+# NOTE: internal only
+#   criteria_matches_container
+#   criteria_matches_view
+#   criteria_get_containers_iterator
+
+# criteria_for_view
+#   view_execute_criteria
+#     handle_set_title
+#     handle_set_app_id
+#     view_map
+#     cmd_mark
+#   select_workspace
+#     view_map
+#   should_focus
+#     view_map
+# criteria_get_containers
+#   execute_command
 
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="blueman-manager"] floating enable
@@ -536,6 +554,9 @@ output * background /home/kraftwerk28/Pictures/wp7453931.jpg fill
 # exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 exec systemctl --user import-environment
 # exec dbus-update-activation-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
+
+# See https://wiki.archlinux.org/title/Sway#Manage_Sway-specific_daemons_with_systemd
+exec_always systemctl --user start sway-session.target
 
 # kraftwerk28's patch only:
 # mouse_resizing_mode eight_direction

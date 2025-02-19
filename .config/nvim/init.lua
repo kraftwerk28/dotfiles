@@ -10,12 +10,6 @@ vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- vim.g.borderchars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 -- vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
-vim.g.diagnostic_signs = {
-  ERROR = " ",
-  WARN = " ",
-  INFO = " ",
-  HINT = " ",
-}
 vim.g.sql_type_default = "pgsql"
 
 -- Define some globals
@@ -30,6 +24,19 @@ _G.setl = vim.opt_local
 _G.setlocal = vim.opt_local
 _G.setg = vim.opt_global
 _G.setglobal = vim.opt_global
+
+local sev = vim.diagnostic.severity
+vim.diagnostic.config {
+  virtual_text = true,
+  signs = {
+    text = {
+      [sev.ERROR] = "",
+      [sev.WARN] = "",
+      [sev.INFO] = "",
+      [sev.HINT] = "",
+    },
+  },
+}
 
 -- Load options
 vim.cmd.runtime "opts.vim"
