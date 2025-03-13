@@ -6,6 +6,8 @@ local function make_capabilities()
   return cmp_lsp.default_capabilities()
 end
 
+local configs = require "lspconfig.configs"
+
 do
   local cmd = {
     "arduino-language-server",
@@ -117,6 +119,34 @@ lspconfig.ts_ls.setup {
     require("twoslash-queries").attach(client, bufnr)
   end,
 }
+
+configs.typescript_go = {
+  default_config = {
+    cmd = { "tsgo", "lsp", "--stdio" },
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "javascript.jsx",
+      "typescript",
+      "typescriptreact",
+      "typescript.tsx",
+      "vue",
+    },
+    root_dir = root_pattern(
+      "tsconfig.json",
+      "jsconfig.json",
+      "package.json",
+      ".git"
+    ),
+  },
+}
+
+-- lspconfig.typescript_go.setup {
+--   capabilities = make_capabilities(),
+--   on_attach = function(client, bufnr)
+--     require("twoslash-queries").attach(client, bufnr)
+--   end,
+-- }
 
 -- lspconfig.flow.setup {
 --   cmd = {'flow', 'lsp'},

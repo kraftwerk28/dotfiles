@@ -60,12 +60,9 @@ export JQ_COLORS='0;31:0;39:0;39:0;39:0;32:1;39:1;39'
 
 # export BAT_THEME="ansi"
 
-export MPLBACKEND=GTK3Agg
-
-# export VOLTA_HOME="$HOME/.volta"
-# export PATH="$VOLTA_HOME/bin:$PATH"
-
 export QSYS_ROOTDIR="$XDG_CACHE_HOME/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/23.1/quartus/sopc_builder/bin"
 
 # esp-idf: idf.py menuconfig tui setting
 export MENUCONFIG_STYLE="monochrome"
+
+export MPLBACKEND=GTK4Agg
