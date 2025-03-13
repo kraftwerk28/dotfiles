@@ -75,50 +75,50 @@ lspconfig.rust_analyzer.setup {
   capabilities = make_capabilities(),
 }
 
-lspconfig.ts_ls.setup {
-  capabilities = make_capabilities(),
-  init_options = {
-    hostInfo = "neovim",
-    plugins = {
-      {
-        name = "@vue/typescript-plugin",
-        location = vim.fn.expand(
-          -- "~/.volta/tools/image/packages/@vue/typescript-plugin/lib/node_modules/@vue/typescript-plugin"
-          -- "~/.local/share/fnm/node-versions/v20.11.1/installation/lib/node_modules/@vue/typescript-plugin/"
-          "~/.local/share/fnm/node-versions/v23.1.0/installation/lib/node_modules/@vue/typescript-plugin/"
-        ),
-        -- location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
-        languages = { "javascript", "typescript", "vue" },
-      },
-    },
-    preferences = {
-      importModuleSpecifierPreference = "relative",
-    },
-    tsserver = {
-      -- /**
-      --  * Verbosity of the information logged into the `tsserver` log files.
-      --  *
-      --  * Log levels from least to most amount of details: `'terse'`, `'normal'`, `'requestTime`', `'verbose'`.
-      --  * Enabling particular level also enables all lower levels.
-      --  *
-      --  * @default 'off'
-      --  */
-      -- logVerbosity = "verbose",
-    },
-  },
-  filetypes = {
-    "javascript",
-    "javascriptreact",
-    "javascript.jsx",
-    "typescript",
-    "typescriptreact",
-    "typescript.tsx",
-    "vue",
-  },
-  on_attach = function(client, bufnr)
-    require("twoslash-queries").attach(client, bufnr)
-  end,
-}
+-- lspconfig.ts_ls.setup {
+--   capabilities = make_capabilities(),
+--   init_options = {
+--     hostInfo = "neovim",
+--     plugins = {
+--       {
+--         name = "@vue/typescript-plugin",
+--         location = vim.fn.expand(
+--           -- "~/.volta/tools/image/packages/@vue/typescript-plugin/lib/node_modules/@vue/typescript-plugin"
+--           -- "~/.local/share/fnm/node-versions/v20.11.1/installation/lib/node_modules/@vue/typescript-plugin/"
+--           "~/.local/share/fnm/node-versions/v23.1.0/installation/lib/node_modules/@vue/typescript-plugin/"
+--         ),
+--         -- location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
+--         languages = { "javascript", "typescript", "vue" },
+--       },
+--     },
+--     preferences = {
+--       importModuleSpecifierPreference = "relative",
+--     },
+--     tsserver = {
+--       -- /**
+--       --  * Verbosity of the information logged into the `tsserver` log files.
+--       --  *
+--       --  * Log levels from least to most amount of details: `'terse'`, `'normal'`, `'requestTime`', `'verbose'`.
+--       --  * Enabling particular level also enables all lower levels.
+--       --  *
+--       --  * @default 'off'
+--       --  */
+--       -- logVerbosity = "verbose",
+--     },
+--   },
+--   filetypes = {
+--     "javascript",
+--     "javascriptreact",
+--     "javascript.jsx",
+--     "typescript",
+--     "typescriptreact",
+--     "typescript.tsx",
+--     "vue",
+--   },
+--   on_attach = function(client, bufnr)
+--     require("twoslash-queries").attach(client, bufnr)
+--   end,
+-- }
 
 configs.typescript_go = {
   default_config = {
@@ -141,12 +141,12 @@ configs.typescript_go = {
   },
 }
 
--- lspconfig.typescript_go.setup {
---   capabilities = make_capabilities(),
---   on_attach = function(client, bufnr)
---     require("twoslash-queries").attach(client, bufnr)
---   end,
--- }
+lspconfig.typescript_go.setup {
+  capabilities = make_capabilities(),
+  on_attach = function(client, bufnr)
+    require("twoslash-queries").attach(client, bufnr)
+  end,
+}
 
 -- lspconfig.flow.setup {
 --   cmd = {'flow', 'lsp'},
