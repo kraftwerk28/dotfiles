@@ -75,50 +75,44 @@ lspconfig.rust_analyzer.setup {
   capabilities = make_capabilities(),
 }
 
--- lspconfig.ts_ls.setup {
---   capabilities = make_capabilities(),
---   init_options = {
---     hostInfo = "neovim",
---     plugins = {
---       {
---         name = "@vue/typescript-plugin",
---         location = vim.fn.expand(
---           -- "~/.volta/tools/image/packages/@vue/typescript-plugin/lib/node_modules/@vue/typescript-plugin"
---           -- "~/.local/share/fnm/node-versions/v20.11.1/installation/lib/node_modules/@vue/typescript-plugin/"
---           "~/.local/share/fnm/node-versions/v23.1.0/installation/lib/node_modules/@vue/typescript-plugin/"
---         ),
---         -- location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
---         languages = { "javascript", "typescript", "vue" },
---       },
---     },
---     preferences = {
---       importModuleSpecifierPreference = "relative",
---     },
---     tsserver = {
---       -- /**
---       --  * Verbosity of the information logged into the `tsserver` log files.
---       --  *
---       --  * Log levels from least to most amount of details: `'terse'`, `'normal'`, `'requestTime`', `'verbose'`.
---       --  * Enabling particular level also enables all lower levels.
---       --  *
---       --  * @default 'off'
---       --  */
---       -- logVerbosity = "verbose",
---     },
---   },
---   filetypes = {
---     "javascript",
---     "javascriptreact",
---     "javascript.jsx",
---     "typescript",
---     "typescriptreact",
---     "typescript.tsx",
---     "vue",
---   },
---   on_attach = function(client, bufnr)
---     require("twoslash-queries").attach(client, bufnr)
---   end,
--- }
+lspconfig.ts_ls.setup {
+  capabilities = make_capabilities(),
+  init_options = {
+    hostInfo = "neovim",
+    preferences = {
+      importModuleSpecifierPreference = "relative",
+    },
+  },
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+    "vue",
+  },
+  on_attach = function(client, bufnr)
+    require("twoslash-queries").attach(client, bufnr)
+  end,
+  on_new_config = function(new_config)
+    local npm_cmd = vim
+      .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
+      :wait()
+    local location = vim.fn.split(npm_cmd.stdout)[1]
+    if npm_cmd.code == 0 and location then
+      new_config.init_options.plugins = {
+        {
+          name = "@vue/typescript-plugin",
+          location = location,
+          languages = { "javascript", "typescript", "vue" },
+        },
+      }
+    end
+  end,
+}
+
+lspconfig.volar.setup {}
 
 configs.typescript_go = {
   default_config = {
@@ -141,12 +135,12 @@ configs.typescript_go = {
   },
 }
 
-lspconfig.typescript_go.setup {
-  capabilities = make_capabilities(),
-  on_attach = function(client, bufnr)
-    require("twoslash-queries").attach(client, bufnr)
-  end,
-}
+-- lspconfig.typescript_go.setup {
+--   capabilities = make_capabilities(),
+--   on_attach = function(client, bufnr)
+--     require("twoslash-queries").attach(client, bufnr)
+--   end,
+-- }
 
 -- lspconfig.flow.setup {
 --   cmd = {'flow', 'lsp'},
@@ -154,64 +148,12 @@ lspconfig.typescript_go.setup {
 --   root_dir = root_pattern('.flowconfig'),
 -- }
 
--- lspconfig.pyre.setup {
---   root_dir = root_pattern {
---     ".git",
---   },
--- }
-
--- lspconfig.sumneko_lua.setup {
---   cmd = {
---     "lua-language-server",
---     "-E", "/usr/share/lua-language-server/main.lua",
---     "--logpath",
---     vim.lsp.get_log_path():match("(.*[/\\])"),
---   },
---   settings = {
---     Lua = {
---       runtime = {
---         version = "LuaJIT",
---         path = vim.split(package.path, ";"),
---       },
---       diagnostics = {
---         globals = {"vim", "love"},
---       },
---       workspace = {
---         library = {
---           [vim.fn.expand("$VIMRUNTIME/lua")] = true,
---           [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
---         },
---       },
---     },
---   },
--- }
-
--- do
---   local cmd = { "clangd", "--background-index" }
---   local ccj = find_compile_commands()
---   if ccj then
---     table.insert(cmd, "--compile-commands-dir=" .. ccj)
---   end
--- end
-
 do
   local query_drivers = {
     host = "/usr/bin/{gcc,g++,c++,cpp}",
     stm32 = "/usr/bin/arm-none-eabi-{gcc,g++,c++,cpp}",
     esp32 = "/home/kraftwerk28/.espressif/tools/xtensa-esp32*-elf/*/*/bin/xtensa-esp32*-elf-{gcc,g++,c++,cpp}",
   }
-
-  -- Disable clang's preprocessor highlighting, i.e. `#if 0 ... #endif`
-  -- vim.api.nvim_set_hl(
-  --   0,
-  --   "@lsp.type.comment.c",
-  --   { fg = "NONE", bg = "NONE", sp = "NONE" }
-  -- )
-  -- vim.api.nvim_set_hl(
-  --   0,
-  --   "@lsp.type.comment.cpp",
-  --   { fg = "NONE", bg = "NONE", sp = "NONE" }
-  -- )
 
   lspconfig.clangd.setup {
     cmd = {
@@ -306,8 +248,6 @@ lspconfig.tailwindcss.setup {
   filetypes = { "vue", "svelte" },
 }
 
-lspconfig.volar.setup {}
-
 lspconfig.lua_ls.setup {
   on_init = function(client)
     if client.workspace_folders then
@@ -345,6 +285,8 @@ lspconfig.lua_ls.setup {
     Lua = {},
   },
 }
+
+lspconfig.serve_d.setup {}
 
 if vim.fn.has("win64") == 1 then
   local jdt_base = vim.fn.expand(

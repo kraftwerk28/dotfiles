@@ -304,6 +304,10 @@ local plugins = {
         -- lua = { "luacheck" },
         bash = { "shellcheck" },
         sh = { "shellcheck" },
+        javascript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        typescript = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
       }
       local globals = { "vim", "autocmd", "augroup", "set", "setlocal" }
       lint.linters.luacheck.args = vim
