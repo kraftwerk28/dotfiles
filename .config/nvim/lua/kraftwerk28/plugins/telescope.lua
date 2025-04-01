@@ -57,6 +57,10 @@ vim.keymap.set("n", "<Leader>da", builtin.diagnostics, {
   desc = "[D]iagnostics [A]ll",
 })
 
+vim.keymap.set("n", "<F4>", function()
+  require "telescope.builtin".symbols { sources = { "math" } }
+end)
+
 telescope.setup({
   defaults = {
     -- borderchars = (function()

@@ -457,12 +457,10 @@ font Monospace Bold 10
 # }}}
 
 # Cursor {{{
-set $cursor_theme Adwaita
-# set $cursor_theme xcursor-breeze
-# set $cursor_theme xcursor-breeze-snow
-# set $cursor_theme Bibata-Original-Classic
-# set $cursor_theme /usr/share/icons/BreezeX-Black
-set $cursor_size 28
+# set $cursor_theme Adwaita
+# set $cursor_theme Breeze_Light
+set $cursor_theme breeze_cursors
+set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
 	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
@@ -551,9 +549,7 @@ output * background /home/kraftwerk28/Pictures/wp7453931.jpg fill
 # }}}
 
 # See https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
-# exec systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 exec systemctl --user import-environment
-# exec dbus-update-activation-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK I3SOCK XCURSOR_SIZE XCURSOR_THEME
 
 # See https://wiki.archlinux.org/title/Sway#Manage_Sway-specific_daemons_with_systemd
 exec_always systemctl --user start sway-session.target

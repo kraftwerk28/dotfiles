@@ -141,11 +141,15 @@ local plugins = {
   {
     "nvim-telescope/telescope.nvim",
     -- "~/projects/neovim/telescope.nvim",
-    dependencies = { "kyazdani42/nvim-web-devicons", "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "kyazdani42/nvim-web-devicons",
+      "nvim-lua/plenary.nvim",
+    },
     config = function()
-      require("kraftwerk28.plugins.telescope")
+      require "kraftwerk28.plugins.telescope"
     end,
   },
+  { "nvim-telescope/telescope-symbols.nvim" },
   {
     "stevearc/dressing.nvim",
     enabled = false,
