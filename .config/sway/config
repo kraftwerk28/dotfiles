@@ -386,7 +386,8 @@ set {
 
 bar {
 	status_command i3status-rs
-	font monospace 11
+	# NOTE: must define nerd-monospace in fontconfig
+	font nerd-monospace 11
 	position bottom
 	workspace_min_width 24
 	tray_output none
