@@ -1,10 +1,3 @@
-# env_gen="/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator"
-# if [[ -x "$env_gen" ]]; then
-# 	while read -r line; do
-# 		eval "export $line"
-# 	done < <("$env_gen")
-# fi
-
 if [[ -d $HOME/.gem/ruby ]]; then
 	ver=$(find ~/.gem/ruby/* -maxdepth 0 | sort -rV | head -n 1)
 	export PATH="$PATH:${ver}/bin"
@@ -44,5 +37,3 @@ if [[ "$(tty)" == "/dev/tty2" ]]; then
 	export XDG_CURRENT_DESKTOP="i3"
 	exec startx
 fi
-
-export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/24.1/quartus/sopc_builder/bin"

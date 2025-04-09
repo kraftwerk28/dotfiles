@@ -281,7 +281,7 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     config = function()
-      require("conform").setup({
+      require "conform".setup {
         formatters_by_ft = {
           lua = { "stylua" },
           python = { "black" },
@@ -295,14 +295,14 @@ local plugins = {
         default_format_opts = {
           lsp_format = "fallback",
         },
-      })
+      }
     end,
   },
 
   {
     "mfussenegger/nvim-lint",
     config = function()
-      local lint = require("lint")
+      local lint = require "lint"
       lint.linters_by_ft = {
         -- NOTE: replaced by lua_ls
         -- lua = { "luacheck" },
@@ -315,7 +315,7 @@ local plugins = {
       }
       local globals = { "vim", "autocmd", "augroup", "set", "setlocal" }
       lint.linters.luacheck.args = vim
-        .iter({
+        .iter {
           "--formatter",
           "plain",
           "--codes",
@@ -327,7 +327,7 @@ local plugins = {
             return vim.api.nvim_buf_get_name(0)
           end,
           "-",
-        })
+        }
         :flatten()
       autocmd({ "BufReadPost", "BufWritePost" }, {
         callback = function()
