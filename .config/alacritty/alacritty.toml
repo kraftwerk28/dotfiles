@@ -11,7 +11,7 @@ text = "#000000"
 WINIT_X11_SCALE_FACTOR = "1.0"
 
 [font]
-size = 10.5
+size = 11
 
 # [font.normal]
 # family = "monospace"

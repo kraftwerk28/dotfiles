@@ -6,8 +6,6 @@ local function make_capabilities()
   return cmp_lsp.default_capabilities()
 end
 
-local configs = require "lspconfig.configs"
-
 do
   local cmd = {
     "arduino-language-server",
@@ -26,40 +24,40 @@ do
   }
 end
 
-lspconfig.awk_ls.setup {
+vim.lsp.config("*", {
   capabilities = make_capabilities(),
-}
+  -- on_attach = function(client, bufnr)
+  --   vim.print("config for *")
+  -- end,
+})
 
-lspconfig.denols.setup {
+vim.lsp.enable "awk_ls"
+
+vim.lsp.config.denols = {
   autostart = false,
   initializationOptions = {
     enable = true,
     lint = true,
     unstable = false,
   },
-  capabilities = make_capabilities(),
 }
+vim.lsp.enable "denols"
 
-lspconfig.gopls.setup {
-  capabilities = make_capabilities(),
-}
+vim.lsp.enable "gopls"
 
-lspconfig.graphql.setup {
-  capabilities = make_capabilities(),
-}
+vim.lsp.enable "graphql"
 
-lspconfig.hls.setup {
+vim.lsp.config.hls = {
   settings = {
     haskell = {
       -- formattingProvider = "brittany",
       formattingProvider = "ormolu",
     },
   },
-  capabilities = make_capabilities(),
 }
+vim.lsp.enable "hls"
 
-lspconfig.pyright.setup {
-  capabilities = make_capabilities(),
+vim.lsp.config.pyright = {
   settings = {
     python = {
       analysis = {
@@ -70,13 +68,11 @@ lspconfig.pyright.setup {
     },
   },
 }
+vim.lsp.enable "pyright"
 
-lspconfig.rust_analyzer.setup {
-  capabilities = make_capabilities(),
-}
+vim.lsp.enable "rust_analyzer"
 
-lspconfig.ts_ls.setup {
-  capabilities = make_capabilities(),
+vim.lsp.config.ts_ls = {
   init_options = {
     hostInfo = "neovim",
     preferences = {
@@ -96,11 +92,17 @@ lspconfig.ts_ls.setup {
     require("twoslash-queries").attach(client, bufnr)
   end,
   on_new_config = function(new_config)
-    local npm_cmd = vim
-      .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
-      :wait()
-    local location = vim.fn.split(npm_cmd.stdout)[1]
-    if npm_cmd.code == 0 and location then
+    local location = _G.vue_ts_plugin_location
+    if location == nil then
+      local npm_cmd = vim
+        .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
+        :wait()
+      if npm_cmd.code == 0 then
+        location = vim.fn.split(npm_cmd.stdout)[1]
+        _G.vue_ts_plugin_location = location
+      end
+    end
+    if location ~= nil then
       new_config.init_options.plugins = {
         {
           name = "@vue/typescript-plugin",
@@ -111,10 +113,11 @@ lspconfig.ts_ls.setup {
     end
   end,
 }
+vim.lsp.enable "ts_ls"
 
-lspconfig.volar.setup {}
+vim.lsp.enable "volar"
 
-configs.typescript_go = {
+vim.lsp.config.typescript_go = {
   default_config = {
     cmd = { "tsgo", "lsp", "--stdio" },
     filetypes = {
@@ -135,19 +138,6 @@ configs.typescript_go = {
   },
 }
 
--- lspconfig.typescript_go.setup {
---   capabilities = make_capabilities(),
---   on_attach = function(client, bufnr)
---     require("twoslash-queries").attach(client, bufnr)
---   end,
--- }
-
--- lspconfig.flow.setup {
---   cmd = {'flow', 'lsp'},
---   filetypes = {'javascript', 'javascriptreact'},
---   root_dir = root_pattern('.flowconfig'),
--- }
-
 do
   local query_drivers = {
     host = "/usr/bin/{gcc,g++,c++,cpp}",
@@ -165,7 +155,6 @@ do
       "--pch-storage=memory",
       -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
     },
-    capabilities = make_capabilities(),
     settings = {
       ["C_Cpp.dimInactiveRegions"] = false,
     },
@@ -183,8 +172,7 @@ do
   }
 end
 
-lspconfig.svelte.setup {
-  capabilities = make_capabilities(),
+vim.lsp.config.svelte = {
   settings = {
     svelte = {
       plugin = {
@@ -195,8 +183,9 @@ lspconfig.svelte.setup {
     },
   },
 }
+vim.lsp.enable "svelte"
 
-lspconfig.jsonls.setup {
+vim.lsp.config.jsonls = {
   settings = {
     json = {
       schemas = require("schemastore").json.schemas(),
@@ -205,10 +194,10 @@ lspconfig.jsonls.setup {
       },
     },
   },
-  capabilities = make_capabilities(),
 }
+vim.lsp.enable "jsonls"
 
-lspconfig.yamlls.setup {
+vim.lsp.config.yamlls = {
   settings = {
     yaml = {
       format = {
@@ -220,35 +209,30 @@ lspconfig.yamlls.setup {
       validate = true,
     },
   },
-  capabilities = make_capabilities(),
 }
+vim.lsp.enable "yamlls"
 
-lspconfig.cssls.setup {
-  capabilities = make_capabilities(),
-}
+vim.lsp.enable "cssls"
 
-lspconfig.metals.setup {}
+vim.lsp.enable "metals"
 
-lspconfig.solargraph.setup {
-  capabilities = make_capabilities(),
-}
+vim.lsp.enable "solargraph"
 
-lspconfig.erlangls.setup {
-  capabilities = make_capabilities(),
-}
+vim.lsp.enable "erlangls"
 
-lspconfig.rescriptls.setup {
+vim.lsp.config.rescriptls = {
   cmd = { "rescript-ls", "--stdio" },
-  capabilities = make_capabilities(),
 }
+vim.lsp.enable "rescriptls"
 
-lspconfig.elmls.setup {}
+vim.lsp.enable "elmls"
 
-lspconfig.tailwindcss.setup {
+vim.lsp.config.tailwindcss = {
   filetypes = { "vue", "svelte" },
 }
+vim.lsp.enable "tailwindcss"
 
-lspconfig.lua_ls.setup {
+vim.lsp.config.lua_ls = {
   on_init = function(client)
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
@@ -285,10 +269,11 @@ lspconfig.lua_ls.setup {
     Lua = {},
   },
 }
+vim.lsp.enable "lua_ls"
 
-lspconfig.serve_d.setup {}
+vim.lsp.enable "serve_d"
 
-if vim.fn.has("win64") == 1 then
+if vim.fn.has "win64" == 1 then
   local jdt_base = vim.fn.expand(
     "~/Projects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
   )

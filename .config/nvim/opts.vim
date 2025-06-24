@@ -31,9 +31,10 @@ set jumpoptions+=view
 set timeout timeoutlen=250
 set writebackup nobackup backupcopy=yes
 set wrap
+" set winborder=single
 
-" set guicursor=a:blinkon500-Cursor,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20
-set guicursor=a:block-blinkon200-blinkoff200-Cursor
+set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkon500-blinkoff500-TermCursor
+" set guicursor=a:block-blinkon200-blinkoff200-Cursor
 
 " qwertyuiop[]\asdfghjkl;'zxcvbnm,.
 " йцукенгшщзхїґфівапролджєячсмитьбю

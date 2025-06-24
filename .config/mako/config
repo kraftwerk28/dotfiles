@@ -1,4 +1,4 @@
-font=monospace 11
+font=sans serif 11
 default-timeout=5000
 layer=overlay
 anchor=top-right

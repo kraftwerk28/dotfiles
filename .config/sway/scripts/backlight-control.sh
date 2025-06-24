@@ -1,15 +1,16 @@
 #!/bin/bash
 source "$(dirname "$0")/lib.sh"
-BCTL_OUTPUT=(eDP-1)
-DDC_OUTPUT=(DP-1 DP-3)
+
 output=$(swaymsg -t get_outputs | jq -r '.[]|select(.focused).name')
-if grep -w "$output" <<< "${BCTL_OUTPUT[*]}"; then
-	method=bctl # brightnessctl
-elif grep -w "$output" <<< "${DDC_OUTPUT[*]}"; then
-	method=ddc # I2C interface
-else
-	exit
-fi
+
+case "$output" in
+	DP-1 | DP-3)
+		method=ddc
+		;;
+	*)
+		method=bctl
+		;;
+esac
 
 case $method in
 	bctl) cur=$(brightnessctl info | grep -oP "\d+(?=%)");;

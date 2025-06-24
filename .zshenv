@@ -22,7 +22,9 @@ if which alacritty &> /dev/null && [[ -z $TERM ]]; then
 fi
 
 export PATH="$HOME/.cargo/bin:$PATH"
-export RUSTC_WRAPPER="sccache"
+if which sccache &> /dev/null; then
+	export RUSTC_WRAPPER=$(which sccache)
+fi
 
 # Android
 export ANDROID_HOME="$HOME/Android/Sdk"

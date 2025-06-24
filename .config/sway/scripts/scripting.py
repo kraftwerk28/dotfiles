@@ -37,7 +37,7 @@ OUTPUT_LAYOUTS = [
 
 
 class Scripting:
-    DEFAULT_LAYOUT_ID = 0
+    DEFAULT_KBD_LAYOUT_ID = 0
 
     def __init__(self):
         self.prev_con_id: int | None = None
@@ -53,6 +53,14 @@ class Scripting:
         i3.on(Event.OUTPUT, self.on_output)
         self.i3 = i3
 
+    def switch_to_default_kbd_layout(self):
+        cmd = ", ".join(
+            f"input {inp.identifier} xkb_switch_layout {self.DEFAULT_KBD_LAYOUT_ID}"
+            for inp in self.i3.get_inputs()
+            if inp.type == "keyboard"
+        )
+        self.i3.command(cmd)
+
     def on_win_focus(self, ipc: Connection, ev: WindowEvent):
         # Remember layouts for previous Con
         if self.prev_con_id != ev.container.id:
@@ -65,19 +73,14 @@ class Scripting:
         self.prev_con_id = ev.container.id
         if layouts := self.layout_cache.get(ev.container.id):
             # Set layout if current Con is in cache
-            cmds = [
+            cmd = ", ".join(
                 f"input {input_id} xkb_switch_layout {layout_id}"
                 for input_id, layout_id in layouts.items()
-            ]
-            ipc.command(", ".join(cmds))
+            )
+            ipc.command(cmd)
         else:
             # Otherwise set the default layout
-            cmds = [
-                f"input {inp.identifier} xkb_switch_layout {self.DEFAULT_LAYOUT_ID}"
-                for inp in ipc.get_inputs()
-                if inp.type == "keyboard"
-            ]
-            ipc.command(", ".join(cmds))
+            self.switch_to_default_kbd_layout()
 
     def on_win_close(self, _: Connection, ev: WindowEvent):
         self.layout_cache.pop(ev.container.id, None)
@@ -85,7 +88,7 @@ class Scripting:
     def on_ws_init(self, ipc: Connection, _: WorkspaceEvent):
         self.prev2_con_id = self.prev_con_id
         cmds = [
-            f"input {inp.identifier} xkb_switch_layout {self.DEFAULT_LAYOUT_ID}"
+            f"input {inp.identifier} xkb_switch_layout {self.DEFAULT_KBD_LAYOUT_ID}"
             for inp in ipc.get_inputs()
             if inp.type == "keyboard"
         ]
@@ -94,9 +97,11 @@ class Scripting:
     def on_binding(self, ipc: Connection, ev: BindingEvent):
         cmd = ev.binding.command
         if cmd == "nop focus_prev" and self.prev2_con_id is not None:
+            # Focus previous container
             cmd = f"[con_id={self.prev2_con_id}] focus"
             ipc.command(cmd)
         elif cmd.startswith("nop workspace"):
+            # Switch to Nth workspace
             wss = ipc.get_workspaces()
             focused_ws = next((ws for ws in wss if ws.focused), None)
             if focused_ws is None:
@@ -109,6 +114,8 @@ class Scripting:
                 return
             if ws_num > 0:
                 ipc.command(f"workspace {ws_num}")
+        elif "rofi" in cmd:
+            self.switch_to_default_kbd_layout()
 
     def on_output(self, ipc, ev):
         self.adjust_outputs()

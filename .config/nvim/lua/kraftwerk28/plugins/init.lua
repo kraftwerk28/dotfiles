@@ -1,35 +1,22 @@
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-
-set.runtimepath:prepend(lazypath)
-
-local plugins = {
-  -- {
-  --   dir = "~/projects/neovim/gtranslate.nvim",
-  --   -- "kraftwerk28/gtranslate.nvim",
-  --   dependencies = { "nvim-lua/plenary.nvim" },
-  -- },
-
-  -- Themes
+local themes = {
+  {
+    "marko-cerovac/material.nvim",
+    enabled = false,
+    lazy = false,
+    config = function()
+      vim.g.material_style = "lighter"
+      vim.print { set.background:get() }
+    end,
+  },
   {
     "navarasu/onedark.nvim",
     enabled = false,
     lazy = false,
     config = function()
-      require("onedark").setup {
+      require "onedark".setup {
         style = "dark", -- 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
       }
-      require("onedark").load()
+      require "onedark".load()
     end,
   },
   {
@@ -50,7 +37,7 @@ local plugins = {
           StatusLineNC = { reverse = false },
         },
       })
-      vim.cmd.colorscheme("gruvbox")
+      vim.cmd.colorscheme "gruvbox"
     end,
   },
   {
@@ -99,6 +86,14 @@ local plugins = {
       vim.cmd.colorscheme("kanagawa")
     end,
   },
+}
+
+local plugins = {
+  -- {
+  --   dir = "~/projects/neovim/gtranslate.nvim",
+  --   -- "kraftwerk28/gtranslate.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  -- },
 
   { "kyazdani42/nvim-web-devicons" },
   {
@@ -281,12 +276,21 @@ local plugins = {
   {
     "stevearc/conform.nvim",
     config = function()
-      require "conform".setup {
+      local conform = require "conform"
+      conform.setup {
         formatters_by_ft = {
           lua = { "stylua" },
           python = { "black" },
-          javascript = { "prettierd" },
-          typescript = { "prettierd" },
+          javascript = {
+            "eslint_d",
+            "prettierd",
+            stop_after_first = true,
+          },
+          typescript = {
+            -- "eslint_d",
+            "prettierd",
+            stop_after_first = true,
+          },
           vue = { "prettierd" },
           svelte = { "prettierd" },
           markdown = { "prettierd" },
@@ -296,6 +300,9 @@ local plugins = {
           lsp_format = "fallback",
         },
       }
+      vim.keymap.set("n", "<Leader>f", function()
+        conform.format()
+      end, { desc = "[F]ormat" })
     end,
   },
 
@@ -428,4 +435,20 @@ local plugins = {
   -- })
 }
 
-require("lazy").setup(plugins, {})
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+if not vim.uv.fs_stat(lazypath) then
+  vim.fn.system {
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "--branch=stable", -- latest stable release
+    lazyrepo,
+    lazypath,
+  }
+end
+set.runtimepath:prepend(lazypath)
+
+require "lazy".setup {
+  spec = vim.iter { themes, plugins }:flatten():totable(),
+}

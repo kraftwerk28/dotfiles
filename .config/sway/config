@@ -400,8 +400,6 @@ input type:pointer {
 	pointer_accel 0.2
 }
 
-# input type:keyboard { # Crashes firefox on sway reload
-
 input type:keyboard {
 	xkb_layout "us(altgr-intl),ua"
 	xkb_options "grp:win_space_toggle,caps:escape_shifted_capslock"
@@ -444,7 +442,7 @@ input type:touchpad {
 # Various options {{{
 set $border_width 2
 smart_gaps on
-gaps inner 0
+gaps inner 8
 gaps outer 0
 floating_modifier $mod
 smart_borders no_gaps
@@ -459,8 +457,8 @@ font Monospace Bold 10
 
 # Cursor {{{
 set $cursor_theme Adwaita
-# set $cursor_theme Breeze_Light
 # set $cursor_theme breeze_cursors
+# set $cursor_theme Breeze_Light
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
 exec_always {
@@ -520,6 +518,8 @@ for_window [class="jetbrains-studio" title="win[0-9]+"] floating enable
 # Prevent accidental closing of terminal windows (only through ^D)
 # for_window [app_id="^foot$"] unbindsym --to-code $mod+Shift+q
 for_window [app_id="^foot_floating$"] floating enable
+
+for_window [app_id=".*"] idle_inhibit fullscreen
 # }}}
 
 # Output configuration {{{
@@ -543,10 +543,7 @@ set $external_hdmi DP-3
 output $laptop position 0 120
 output $external_hdmi position 1920 0
 
-# output $laptop   background "#000000" solid_color
-# output $external background "#000000" solid_color
-
-output * background /home/kraftwerk28/Pictures/wp7453931.jpg fill
+output * background "#000000" solid_color
 # }}}
 
 # See https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments

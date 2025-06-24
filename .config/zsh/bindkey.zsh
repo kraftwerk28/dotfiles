@@ -1,21 +1,22 @@
+# bindkey -e
 bindkey -v
 
-# set_cursor_style() {
-# 	# echo "$KEYMAP $ZLE_STATE"
-# 	case $KEYMAP in
-# 		vicmd)
-# 			echo -ne '\e[1 q';;
-# 		viins|main)
-# 			echo -ne '\e[5 q';;
-# 		viopp|visual)
-# 			echo -ne '\e[3 q';;
-# 		*)
-# 			echo -ne '\e[0 q';;
-# 	esac
-# }
-
 set_cursor_style() {
-	echo -ne '\e[1 q'
+	# For emacs keymap
+	# echo -ne '\e[1 q';;
+
+	case $KEYMAP in
+		vicmd)
+			# Blinking block
+			echo -ne '\e[1 q';;
+		main|viins)
+			# Blinking beam
+			echo -ne '\e[5 q';;
+		viopp|visual)
+			echo -ne '\e[3 q';;
+		*)
+			echo -ne '\e[1 q';;
+	esac
 }
 
 zle -N zle-line-init set_cursor_style

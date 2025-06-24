@@ -1,6 +1,6 @@
-local telescope = require("telescope")
-local actions = require("telescope.actions")
-local builtin = require("telescope.builtin")
+local telescope = require "telescope"
+local actions = require "telescope.actions"
+local builtin = require "telescope.builtin"
 
 -- Erase word with <C-W> in floating window, like before
 autocmd("FileType", {
@@ -58,7 +58,11 @@ vim.keymap.set("n", "<Leader>da", builtin.diagnostics, {
 })
 
 vim.keymap.set("n", "<F4>", function()
-  require "telescope.builtin".symbols { sources = { "math" } }
+  builtin.symbols { sources = { "math" } }
+end)
+
+vim.keymap.set("n", "<Leader>ma", function()
+  builtin.man_pages { sections = { "ALL" } }
 end)
 
 telescope.setup({

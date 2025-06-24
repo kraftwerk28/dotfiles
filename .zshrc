@@ -252,4 +252,9 @@ imv_dir() {
 	imv -n "$1" $dir/*.{jpg,jpeg,png}
 }
 
+reboot-win10() {
+	systemctl reboot --boot-loader-entry=windows10.conf
+}
+
 export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/24.1/quartus/sopc_builder/bin"
+export LS_COLORS="$(vivid generate gruvbox-light)"
