@@ -98,18 +98,20 @@ local sources = {
   b.diagnostics.eslint_d.with({ filetypes = eslint_filetypes }),
   b.code_actions.eslint_d.with({ filetypes = eslint_filetypes }),
   b.diagnostics.luacheck.with({
-    args = vim.tbl_flatten({
-      "--formatter",
-      "plain",
-      "--codes",
-      "--ranges",
-      "--globals",
-      -- See lua/kraftwerk28/globals.lua
-      { "vim", "m", "autocmd", "augroup" },
-      "--filename",
-      "$FILENAME",
-      "-",
-    }),
+    args = vim
+      .iter {
+        "--formatter",
+        "plain",
+        "--codes",
+        "--ranges",
+        "--globals",
+        -- See lua/kraftwerk28/globals.lua
+        { "vim", "m", "autocmd", "augroup" },
+        "--filename",
+        "$FILENAME",
+        "-",
+      }
+      :flatten(),
   }),
   b.formatting.stylua,
   b.diagnostics.shellcheck.with({

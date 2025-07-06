@@ -1,5 +1,5 @@
 [Timer]
-OnActiveSec=0
+OnActiveSec=5s
 OnUnitActiveSec=5m
 
 [Install]

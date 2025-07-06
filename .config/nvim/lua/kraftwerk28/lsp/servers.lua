@@ -72,47 +72,64 @@ vim.lsp.enable "pyright"
 
 vim.lsp.enable "rust_analyzer"
 
-vim.lsp.config.ts_ls = {
-  init_options = {
-    hostInfo = "neovim",
-    preferences = {
-      importModuleSpecifierPreference = "relative",
+do
+  local plugins = {}
+
+  local npm_cmd = vim
+    .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
+    :wait()
+  if npm_cmd.code == 0 then
+    local location = vim.fn.split(npm_cmd.stdout)[1]
+    table.insert(plugins, {
+      name = "@vue/typescript-plugin",
+      location = location,
+      languages = { "javascript", "typescript", "vue" },
+    })
+  end
+
+  vim.lsp.config.ts_ls = {
+    init_options = {
+      hostInfo = "neovim",
+      preferences = {
+        importModuleSpecifierPreference = "relative",
+      },
+      plugins = plugins,
     },
-  },
-  filetypes = {
-    "javascript",
-    "javascriptreact",
-    "javascript.jsx",
-    "typescript",
-    "typescriptreact",
-    "typescript.tsx",
-    "vue",
-  },
-  on_attach = function(client, bufnr)
-    require("twoslash-queries").attach(client, bufnr)
-  end,
-  on_new_config = function(new_config)
-    local location = _G.vue_ts_plugin_location
-    if location == nil then
-      local npm_cmd = vim
-        .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
-        :wait()
-      if npm_cmd.code == 0 then
-        location = vim.fn.split(npm_cmd.stdout)[1]
-        _G.vue_ts_plugin_location = location
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "javascript.jsx",
+      "typescript",
+      "typescriptreact",
+      "typescript.tsx",
+      "vue",
+    },
+    on_attach = function(client, bufnr)
+      require("twoslash-queries").attach(client, bufnr)
+    end,
+    on_new_config = function(new_config)
+      local location = _G.vue_ts_plugin_location
+      if location == nil then
+        local npm_cmd = vim
+          .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
+          :wait()
+        if npm_cmd.code == 0 then
+          location = vim.fn.split(npm_cmd.stdout)[1]
+          _G.vue_ts_plugin_location = location
+        end
       end
-    end
-    if location ~= nil then
-      new_config.init_options.plugins = {
-        {
-          name = "@vue/typescript-plugin",
-          location = location,
-          languages = { "javascript", "typescript", "vue" },
-        },
-      }
-    end
-  end,
-}
+      if location ~= nil then
+        new_config.init_options.plugins = {
+          {
+            name = "@vue/typescript-plugin",
+            location = location,
+            languages = { "javascript", "typescript", "vue" },
+          },
+        }
+      end
+    end,
+  }
+end
 vim.lsp.enable "ts_ls"
 
 vim.lsp.enable "volar"

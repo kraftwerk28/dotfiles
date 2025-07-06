@@ -456,16 +456,12 @@ font Monospace Bold 10
 # }}}
 
 # Cursor {{{
-set $cursor_theme Adwaita
+# set $cursor_theme Adwaita
 # set $cursor_theme breeze_cursors
-# set $cursor_theme Breeze_Light
+set $cursor_theme Breeze_Light
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
-exec_always {
-	gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
-	gsettings set org.gnome.desktop.interface cursor-size $cursor_size
-	echo '[Icon Theme]\nInherits='$cursor_theme > $HOME/.icons/default/index.theme
-}
+exec_always $scripts/set-cursor.sh $cursor_theme $cursor_size
 # }}}
 
 # Autostart {{{
@@ -481,8 +477,6 @@ exec $scripts/polkit-agent.sh
 for_window [app_id="^firefox$"] border pixel $border_width
 for_window [app_id="^firefox$" title="^Picture-in-Picture$"] floating enable, sticky enable, border pixel
 for_window [app_id="^firefox$" title="Sharing Indicator$"] floating enable, resize shrink, sticky enable
-for_window [app_id="^firefox$" title="^Developer Tools"] floating enable
-for_window [app_id="^firefox$" title="Bitwarden"] floating enable
 
 # NOTE: internal only
 #   criteria_matches_container
