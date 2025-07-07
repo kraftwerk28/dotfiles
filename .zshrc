@@ -143,7 +143,7 @@ WORDCHARS='-'
 # Dump working directory for using in sway keybindings, i.e. $mod+Shift+Enter
 dump_cwd() {
 	if [[ $PWD != $HOME ]]; then
-		echo $PWD > /tmp/last_pwd
+		echo "$PWD" > /tmp/last-cwd
 	fi
 }
 add-zsh-hook precmd dump_cwd

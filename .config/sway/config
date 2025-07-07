@@ -14,7 +14,7 @@ set $cursor_sm_delta 10
 bindsym --to-code {
 	# Terminal launching
 	$mod+Return			exec foot
-	$mod+Shift+Return	exec foot --working-directory=$(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
+	$mod+Shift+Return	exec $scripts/cwd-term.sh
 	# $mod+Return exec alacritty
 	# $mod+Shift+Return exec alacritty --working-directory=$(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 

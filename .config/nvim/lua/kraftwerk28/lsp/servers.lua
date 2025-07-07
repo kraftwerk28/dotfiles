@@ -73,16 +73,14 @@ vim.lsp.enable "pyright"
 vim.lsp.enable "rust_analyzer"
 
 do
-  local plugins = {}
-
-  local npm_cmd = vim
-    .system { "npm", "list", "--global", "--parseable", "@vue/typescript-plugin" }
-    :wait()
-  if npm_cmd.code == 0 then
-    local location = vim.fn.split(npm_cmd.stdout)[1]
-    table.insert(plugins, {
+  local ts_plugins = {}
+  local vue_plugin_dir = vim.env.XDG_DATA_HOME
+    .. "/fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin"
+  if vim.fn.isdirectory(vue_plugin_dir) ~= 0 then
+    table.insert(ts_plugins, {
       name = "@vue/typescript-plugin",
-      location = location,
+      -- NOTE: update the path every time global node version is changed
+      location = vue_plugin_dir,
       languages = { "javascript", "typescript", "vue" },
     })
   end
@@ -93,7 +91,7 @@ do
       preferences = {
         importModuleSpecifierPreference = "relative",
       },
-      plugins = plugins,
+      plugins = ts_plugins,
     },
     filetypes = {
       "javascript",
@@ -107,7 +105,10 @@ do
     on_attach = function(client, bufnr)
       require("twoslash-queries").attach(client, bufnr)
     end,
-    on_new_config = function(new_config)
+
+    -- NOTE: this callback is removed in builtin lsp engine :(
+    -- See https://github.com/neovim/neovim/issues/32287
+    _on_new_config = function(new_config)
       local location = _G.vue_ts_plugin_location
       if location == nil then
         local npm_cmd = vim
@@ -132,7 +133,7 @@ do
 end
 vim.lsp.enable "ts_ls"
 
-vim.lsp.enable "volar"
+vim.lsp.enable "vue_ls"
 
 vim.lsp.config.typescript_go = {
   default_config = {
