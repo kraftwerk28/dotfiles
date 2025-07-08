@@ -49,7 +49,7 @@ autocmd("FocusLost", {
 
 autocmd("FocusGained", {
   callback = function()
-    vim.fn.writefile({ vim.fn.getcwd() }, "/tmp/last_pwd")
+    vim.fn.writefile({ vim.fn.getcwd() }, "/tmp/last-cwd")
   end,
   group = group,
 })
