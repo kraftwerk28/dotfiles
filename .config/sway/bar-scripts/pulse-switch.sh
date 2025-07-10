@@ -7,9 +7,10 @@ if [[ $kind != "sink" && $kind != "source" ]]; then
 	exit 1
 fi
 
+current=$(pactl "get-default-${kind}")
 next="$(pactl -f json list short "${kind}s" \
-	| jq -e -r '
-		last(to_entries[] | select(.value.state == "RUNNING")).key as $active_idx
+	| jq -r --arg current "$current" '
+		last(to_entries[] | select(.value.name == $current)).key as $active_idx
 		| ($active_idx + 1) % length as $next_idx
 		| .[$next_idx].name
 	')"
