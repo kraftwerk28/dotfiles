@@ -1,7 +1,7 @@
 local min_version = "nvim-0.8"
 if vim.fn.has(min_version) == 0 then
   vim.notify(
-    ("This config supports at least %s."):format(min_version),
+    string.format("This config supports at least %s.", min_version),
     vim.log.levels.WARN
   )
 end
@@ -12,7 +12,7 @@ vim.g.neovide_refresh_rate = 60
 -- vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
 vim.g.sql_type_default = "pgsql"
 
--- Define some globals
+-- Useful Lua globals used in rest of configuration
 _G.autocmd = function(event, opts)
   return vim.api.nvim_create_autocmd(event, opts or {})
 end
@@ -28,6 +28,7 @@ _G.setglobal = vim.opt_global
 local sev = vim.diagnostic.severity
 vim.diagnostic.config {
   virtual_text = true,
+  -- virtual_lines = true,
   signs = {
     text = {
       [sev.ERROR] = "",

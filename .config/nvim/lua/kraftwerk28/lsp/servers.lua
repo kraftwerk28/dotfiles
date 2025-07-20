@@ -62,8 +62,14 @@ vim.lsp.config.pyright = {
     python = {
       analysis = {
         autoSearchPaths = true,
-        useLibraryCodeForTypes = true,
         diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true,
+        -- diagnosticSeverityOverrides = {
+        --   reportGeneralTypeIssues = "none",
+        --   reportOptionalMemberAccess = "none",
+        --   reportOptionalSubscript = "none",
+        --   reportPrivateImportUsage = "none",
+        -- },
       },
     },
   },
@@ -286,6 +292,10 @@ vim.lsp.config.lua_ls = {
   settings = {
     Lua = {},
   },
+  root_markers = vim
+    .iter { "lazy-lock.json", vim.lsp.config.lua_ls.root_markers }
+    :flatten()
+    :totable(),
 }
 vim.lsp.enable "lua_ls"
 

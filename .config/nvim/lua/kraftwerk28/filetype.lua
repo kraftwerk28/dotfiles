@@ -1,6 +1,6 @@
 vim.g.do_filetype_lua = 1
 
-vim.filetype.add({
+vim.filetype.add {
   extension = {
     vert = "glsl",
     frag = "glsl",
@@ -21,9 +21,10 @@ vim.filetype.add({
     ["exs?$"] = "elixir",
     ["^%.env%."] = "sh",
     ["%.webmanifest$"] = "json",
-    ["*/sway/config"] = "swayconfig",
+    [".*/sway/config"] = "swayconfig",
+    [".*%.PKGBUILD"] = "bash",
   },
-})
+}
 
 -- Set options for filetypes
 local ftconfig = {

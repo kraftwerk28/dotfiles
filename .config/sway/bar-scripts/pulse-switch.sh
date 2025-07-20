@@ -14,4 +14,5 @@ next="$(pactl -f json list short "${kind}s" \
 		| ($active_idx + 1) % length as $next_idx
 		| .[$next_idx].name
 	')"
+echo "$current -> $next"
 pactl "set-default-${kind}" "$next"

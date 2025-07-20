@@ -1,4 +1,5 @@
-" NOTE: keep this file in vimL, not Lua, because it may be used in IdeaVim
+" NOTE: since I might use these options in IdeaVim, which only understands
+" .vim files, I won't rewrite it in Lua
 
 set termguicolors
 set hidden

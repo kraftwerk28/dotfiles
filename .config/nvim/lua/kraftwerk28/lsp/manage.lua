@@ -37,44 +37,43 @@ local function stop_server()
   end)
 end
 
-function _G.restart_server(name)
-  local function do_restart(client)
-    if not client then
-      return
-    end
-    local cfg = require("lspconfig.configs")[client.name]
-    if not cfg then
-      vim.notify(
-        ("%s doesn't support restarting"):format(client.name),
-        vim.log.levels.ERROR
-      )
-      return
-    end
-    client:stop()
-    vim.wait(10000, function()
-      return client:is_stopped()
-    end, 100)
-    cfg.launch()
-  end
-
-  local clients = vim.lsp.get_clients()
-  if type(name) == "string" then
-    for _, c in ipairs(clients) do
-      if c.name == name then
-        do_restart(c)
-        return
-      end
-    end
-    vim.notify(("No such client: '%s'"):format(name), vim.log.levels.ERROR)
-  else
-    vim.ui.select(clients, {
-      prompt = "Select LSP Server to restart",
-      format_item = function(client)
-        return client.name
-      end,
-    }, do_restart)
-  end
-end
+-- function _G.restart_server(name)
+--   local function do_restart(client)
+--     if not client then
+--       return
+--     end
+--     if vim.lsp.config[client.name] == nil then
+--       vim.notify(
+--         string.format("Invalid name %s", client.name),
+--         vim.log.levels.ERROR
+--       )
+--       return
+--     end
+--     client:stop()
+--     vim.wait(10000, function()
+--       return client:is_stopped()
+--     end, 100)
+--     vim.lsp.config[client.name].launch()
+--   end
+--
+--   local clients = vim.lsp.get_clients()
+--   if type(name) == "string" then
+--     for _, c in ipairs(clients) do
+--       if c.name == name then
+--         do_restart(c)
+--         return
+--       end
+--     end
+--     vim.notify(("No such client: '%s'"):format(name), vim.log.levels.ERROR)
+--   else
+--     vim.ui.select(clients, {
+--       prompt = "Select LSP Server to restart",
+--       format_item = function(client)
+--         return client.name
+--       end,
+--     }, do_restart)
+--   end
+-- end
 
 -- vim.api.nvim_create_user_command("LspRestart", function()
 --   print("Restarting server")

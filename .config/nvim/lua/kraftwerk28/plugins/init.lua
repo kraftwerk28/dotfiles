@@ -282,16 +282,8 @@ local plugins = {
         formatters_by_ft = {
           lua = { "stylua" },
           python = { "black" },
-          javascript = {
-            "eslint_d",
-            "prettierd",
-            stop_after_first = true,
-          },
-          typescript = {
-            -- "eslint_d",
-            "prettierd",
-            stop_after_first = true,
-          },
+          javascript = { "prettierd" },
+          typescript = { "prettierd" },
           vue = { "prettierd" },
           svelte = { "prettierd" },
           markdown = { "prettierd" },
@@ -439,17 +431,23 @@ local plugins = {
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system {
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "--branch=stable", -- latest stable release
-    lazyrepo,
-    lazypath,
-  }
+  local clone_result = vim
+    .system {
+      "git",
+      "clone",
+      "--filter=blob:none",
+      "--branch=stable", -- latest stable release
+      lazyrepo,
+      lazypath,
+    }
+    :wait()
+  if clone_result.code ~= 0 then
+    vim.notify("Failed to clone Lazy repo", vim.log.levels.ERROR)
+  end
 end
 set.runtimepath:prepend(lazypath)
 
-require "lazy".setup {
+require("lazy").setup {
   spec = vim.iter { themes, plugins }:flatten():totable(),
+  checker = { enabled = true },
 }
