@@ -435,6 +435,7 @@ input type:touchpad {
 	dwt enabled
 	accel_profile adaptive
 	pointer_accel 0.2
+	drag_lock disabled
 }
 
 # }}}
@@ -456,8 +457,8 @@ font Monospace Bold 10
 # }}}
 
 # Cursor {{{
-# set $cursor_theme Adwaita
-set $cursor_theme breeze_cursors
+set $cursor_theme Adwaita
+# set $cursor_theme breeze_cursors
 # set $cursor_theme Breeze_Light
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size

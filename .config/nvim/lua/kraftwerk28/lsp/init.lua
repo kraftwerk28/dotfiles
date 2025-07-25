@@ -121,8 +121,8 @@ autocmd("LspAttach", {
       })
     end
     if client:supports_method("textDocument/foldingRange") then
-      setlocal.foldmethod = "expr"
-      setlocal.foldexpr = "v:lua.vim.lsp.foldexpr()"
+      vim.o.foldmethod = "expr"
+      vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
     end
   end,
 })

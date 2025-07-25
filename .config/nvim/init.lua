@@ -19,11 +19,6 @@ end
 _G.augroup = function(name, opts)
   return vim.api.nvim_create_augroup(name, opts or {})
 end
-_G.set = vim.opt
-_G.setl = vim.opt_local
-_G.setlocal = vim.opt_local
-_G.setg = vim.opt_global
-_G.setglobal = vim.opt_global
 
 local sev = vim.diagnostic.severity
 vim.diagnostic.config {
@@ -41,6 +36,36 @@ vim.diagnostic.config {
 
 -- Load options
 vim.cmd.runtime "opts.vim"
+
+local function lmap_esc(s)
+  return vim.fn.escape(s, [[;,"|]])
+end
+
+local langmap_config = {
+  {
+    [[йцукенгшщзфівапролдячсмить]],
+    [[qwertyuiopasdfghjklzxcvbnm]],
+  },
+  {
+    [[ЙЦУКЕНГШЩЗФІВАПРОЛДЯЧСМИТЬ]],
+    [[QWERTYUIOPASDFGHJKLZXCVBNM]],
+  },
+  {
+    [[хїґжєбю.]],
+    [[[]\;',./]],
+  },
+  {
+    [[ХЇҐЖЄБЮ,]],
+    [[{}|:"<>?]],
+  },
+}
+
+vim.go.langmap = vim
+  .iter(langmap_config)
+  :map(function(pair)
+    return lmap_esc(pair[1]) .. ";" .. lmap_esc(pair[2])
+  end)
+  :join(",")
 
 require "kraftwerk28.plugins"
 require "kraftwerk28.map"

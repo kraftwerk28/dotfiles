@@ -3,9 +3,9 @@ local group = augroup("autocommand.lua")
 autocmd("VimEnter", {
   callback = function()
     if vim.fn.glob("meson.build") ~= "" then
-      setlocal.makeprg = "meson compile -C build"
+      vim.o.makeprg = "meson compile -C build"
     elseif vim.fn.glob("go.mod") ~= "" then
-      setlocal.makeprg = "go build"
+      vim.o.makeprg = "go build"
     end
   end,
   desc = "set 'makeprg' for some projects",
@@ -31,7 +31,7 @@ autocmd("BufReadPost", {
 
 autocmd("BufWinEnter", {
   callback = function()
-    if setlocal.filetype:get() == "help" then
+    if vim.o.filetype == "help" then
       vim.cmd("wincmd L | 82wincmd |")
     end
   end,
@@ -82,8 +82,8 @@ autocmd("FileType", {
 --   pattern = { "c", "cpp" },
 --   callback = function()
 --     -- Enable nvim-treesitter's folding
---     setlocal.foldmethod = "expr"
---     setlocal.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+--     vim.o.foldmethod = "expr"
+--     vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 --   end,
 --   group = group,
 -- })

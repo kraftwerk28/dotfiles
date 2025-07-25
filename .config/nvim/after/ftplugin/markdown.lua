@@ -1,1 +1,1 @@
-setlocal.conceallevel = 0
+vim.o.conceallevel = 0

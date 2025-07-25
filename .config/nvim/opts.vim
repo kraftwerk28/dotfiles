@@ -1,6 +1,8 @@
 " NOTE: since I might use these options in IdeaVim, which only understands
 " .vim files, I won't rewrite it in Lua
 
+set background=light
+
 set termguicolors
 set hidden
 set noexpandtab softtabstop=0 tabstop=4 shiftwidth=0
@@ -41,4 +43,3 @@ set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkon500-blinkoff500
 " йцукенгшщзхїґфівапролджєячсмитьбю
 " ЙЦУКЕНГШЩЗХЇҐФІВАПРОЛДЖЄЯЧСМИТЬБЮ
 " QWERTYUIOP{}|ASDFGHJKL:"ZXCVBNM<>
-let &langmap = 'йцукенгшщзхїґфівапролджєячсмитьбю;qwertyuiop[]\\asdfghjkl\;''zxcvbnm\,.,ЙЦУКЕНГШЩЗХЇҐФІВАПРОЛДЖЄЯЧСМИТЬБЮ;QWERTYUIOP{}\|ASDFGHJKL:\"ZXCVBNM<>'

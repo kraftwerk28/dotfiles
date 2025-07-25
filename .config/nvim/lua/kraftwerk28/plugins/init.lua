@@ -3,10 +3,7 @@ local themes = {
     "marko-cerovac/material.nvim",
     enabled = false,
     lazy = false,
-    config = function()
-      vim.g.material_style = "lighter"
-      vim.print { set.background:get() }
-    end,
+    config = function() end,
   },
   {
     "navarasu/onedark.nvim",
@@ -24,7 +21,6 @@ local themes = {
     enabled = true,
     lazy = false,
     config = function()
-      set.background = "light"
       require("gruvbox").setup({
         contrast = "soft", -- can be "hard", "soft" or empty string
         italic = {
@@ -45,11 +41,10 @@ local themes = {
     lazy = false,
     enabled = false,
     config = function()
-      set.background = "dark"
       vim.g.gruvbox_material_background = "medium"
       vim.g.gruvbox_material_foreground = "original"
       -- vim.g.gruvbox_material_enable_italic = true
-      vim.cmd.colorscheme("gruvbox-material")
+      vim.cmd.colorscheme "gruvbox-material"
     end,
   },
   {
@@ -76,14 +71,13 @@ local themes = {
     lazy = false,
     enabled = false,
     config = function()
-      set.background = "dark"
-      require("kanagawa").setup({
+      require("kanagawa").setup {
         background = {
           dark = "wave",
           light = "lotus",
         },
-      })
-      vim.cmd.colorscheme("kanagawa")
+      }
+      vim.cmd.colorscheme "kanagawa"
     end,
   },
 }
@@ -249,7 +243,10 @@ local plugins = {
       require("kraftwerk28.plugins.nvim-tree")
     end,
   },
-  { "equalsraf/neovim-gui-shim", opt = true },
+  {
+    "equalsraf/neovim-gui-shim",
+    opt = true,
+  },
   {
     "ray-x/lsp_signature.nvim",
     enabled = false,
@@ -302,38 +299,7 @@ local plugins = {
   {
     "mfussenegger/nvim-lint",
     config = function()
-      local lint = require "lint"
-      lint.linters_by_ft = {
-        -- NOTE: replaced by lua_ls
-        -- lua = { "luacheck" },
-        bash = { "shellcheck" },
-        sh = { "shellcheck" },
-        javascript = { "eslint_d" },
-        javascriptreact = { "eslint_d" },
-        typescript = { "eslint_d" },
-        typescriptreact = { "eslint_d" },
-      }
-      local globals = { "vim", "autocmd", "augroup", "set", "setlocal" }
-      lint.linters.luacheck.args = vim
-        .iter {
-          "--formatter",
-          "plain",
-          "--codes",
-          "--ranges",
-          "--globals",
-          globals,
-          "--filename",
-          function()
-            return vim.api.nvim_buf_get_name(0)
-          end,
-          "-",
-        }
-        :flatten()
-      autocmd({ "BufReadPost", "BufWritePost" }, {
-        callback = function()
-          lint.try_lint()
-        end,
-      })
+      require "kraftwerk28.plugins.nvim_lint"
     end,
   },
 
@@ -366,10 +332,10 @@ local plugins = {
     "Shatur/neovim-session-manager",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      local c = require("session_manager.config")
-      require("session_manager").setup({
+      local c = require "session_manager.config"
+      require("session_manager").setup {
         autoload_mode = c.AutoloadMode.Disabled,
-      })
+      }
     end,
   },
   {
@@ -445,7 +411,7 @@ if not vim.uv.fs_stat(lazypath) then
     vim.notify("Failed to clone Lazy repo", vim.log.levels.ERROR)
   end
 end
-set.runtimepath:prepend(lazypath)
+vim.opt.runtimepath:prepend(lazypath)
 
 require("lazy").setup {
   spec = vim.iter { themes, plugins }:flatten():totable(),

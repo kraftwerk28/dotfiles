@@ -1,3 +1,3 @@
-setlocal.et = true
-setlocal.ts = 3
-setlocal.commentstring = "; %s"
+vim.o.et = true
+vim.o.ts = 3
+vim.o.commentstring = "; %s"

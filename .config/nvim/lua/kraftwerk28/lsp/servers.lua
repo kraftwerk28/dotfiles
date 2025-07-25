@@ -17,11 +17,12 @@ do
   if format_cfg then
     table.insert(cmd, "-format-conf-path=" .. format_cfg)
   end
-  lspconfig.arduino_language_server.setup {
+  vim.lsp.config.arduino_language_server = {
     cmd = cmd,
     -- NOTE: default capabilities are not empty, do not overwrite them
     -- capabilities = make_capabilities(),
   }
+  vim.lsp.enable "arduino_language_server"
 end
 
 vim.lsp.config("*", {
@@ -80,15 +81,22 @@ vim.lsp.enable "rust_analyzer"
 
 do
   local ts_plugins = {}
+  local vue_ts_plugin = "@vue/typescript-plugin"
   local vue_plugin_dir = vim.env.XDG_DATA_HOME
-    .. "/fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin"
+    .. "/fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/"
+    .. vue_ts_plugin
   if vim.fn.isdirectory(vue_plugin_dir) ~= 0 then
     table.insert(ts_plugins, {
-      name = "@vue/typescript-plugin",
-      -- NOTE: update the path every time global node version is changed
+      name = vue_ts_plugin,
       location = vue_plugin_dir,
-      languages = { "javascript", "typescript", "vue" },
+      languages = { "vue" },
+      configNamespace = "typescript",
     })
+  else
+    vim.notify_once(
+      "For typescript to work inside .vue, install the @vue/typescript-plugin. I assume you're using fnm.",
+      vim.log.levels.WARN
+    )
   end
 
   vim.lsp.config.ts_ls = {
@@ -111,7 +119,6 @@ do
     on_attach = function(client, bufnr)
       require("twoslash-queries").attach(client, bufnr)
     end,
-
     -- NOTE: this callback is removed in builtin lsp engine :(
     -- See https://github.com/neovim/neovim/issues/32287
     _on_new_config = function(new_config)
@@ -136,64 +143,85 @@ do
       end
     end,
   }
-end
-vim.lsp.enable "ts_ls"
 
-vim.lsp.enable "vue_ls"
-
-vim.lsp.config.typescript_go = {
-  default_config = {
-    cmd = { "tsgo", "lsp", "--stdio" },
-    filetypes = {
-      "javascript",
-      "javascriptreact",
-      "javascript.jsx",
-      "typescript",
-      "typescriptreact",
-      "typescript.tsx",
-      "vue",
+  vim.lsp.config.typescript_go = {
+    default_config = {
+      cmd = { "tsgo", "lsp", "--stdio" },
+      filetypes = {
+        "javascript",
+        "javascriptreact",
+        "javascript.jsx",
+        "typescript",
+        "typescriptreact",
+        "typescript.tsx",
+        "vue",
+      },
+      root_markers = {
+        "tsconfig.json",
+        "jsconfig.json",
+        "package.json",
+        ".git",
+      },
     },
-    root_dir = root_pattern(
-      "tsconfig.json",
-      "jsconfig.json",
-      "package.json",
-      ".git"
-    ),
-  },
-}
-
-do
-  local query_drivers = {
-    host = "/usr/bin/{gcc,g++,c++,cpp}",
-    stm32 = "/usr/bin/arm-none-eabi-{gcc,g++,c++,cpp}",
-    esp32 = "/home/kraftwerk28/.espressif/tools/xtensa-esp32*-elf/*/*/bin/xtensa-esp32*-elf-{gcc,g++,c++,cpp}",
   }
 
-  lspconfig.clangd.setup {
-    cmd = {
-      "clangd",
-      "--background-index",
-      "--header-insertion=never",
-      "-j",
-      "8",
-      "--pch-storage=memory",
-      -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
-    },
+  vim.lsp.config.vtsls = {
     settings = {
-      ["C_Cpp.dimInactiveRegions"] = false,
+      vtsls = {
+        tsserver = {
+          globalPlugins = ts_plugins,
+        },
+      },
     },
-    root_dir = root_pattern({
-      "compile_commands.json",
-      "build/compile_commands.json",
-      "compile_flags.txt",
+    filetypes = {
+      "typescript",
+      "javascript",
+      "javascriptreact",
+      "typescriptreact",
+      "vue",
+    },
+  }
+
+  vim.lsp.enable { "vtsls", "vue_ls" }
+end
+
+do
+  vim.lsp.config.clangd = {
+    -- cmd = {
+    --   "clangd",
+    --   "--background-index",
+    --   "--header-insertion=never",
+    --   "-j",
+    --   "8",
+    --   "--pch-storage=memory",
+    --   -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
+    -- },
+    -- settings = {
+    --   ["C_Cpp.dimInactiveRegions"] = false,
+    -- },
+    root_markers = {
       ".clangd",
       ".clang-tidy",
       ".clang-format",
+      { "compile_commands.json", "build/compile_commands.json" },
+      "compile_flags.txt",
       "configure.ac",
       ".git",
-    }),
-    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+    },
+    filetypes = {
+      "c",
+      "cpp",
+      "objc",
+      "objcpp",
+      "cuda",
+      "proto",
+    },
   }
+
+  -- Disable semantic highlight of ifdefs
+  vim.api.nvim_set_hl(0, "@lsp.type.comment.c", {})
+
+  vim.lsp.enable "clangd"
 end
 
 vim.lsp.config.svelte = {
@@ -307,7 +335,7 @@ if vim.fn.has "win64" == 1 then
   )
   local java_home = vim.fn.expand("C:/Program Files/Java/jdk-11.0.11")
 
-  lspconfig.jdtls.setup({
+  vim.lsp.config.jdtls = {
     cmd = {
       vim.fn.expand(java_home .. "/bin/java.exe"),
       "-Declipse.application=org.eclipse.jdt.ls.core.id1",
@@ -332,10 +360,15 @@ if vim.fn.has "win64" == 1 then
       "java.base/java.lang=ALL-UNNAMED",
     },
     filetypes = { "java" },
-    root_dir = root_pattern({ ".git", "build.gradle", "build.gradle.kts" }),
-  })
+    root_markers = {
+      ".git",
+      "build.gradle",
+      "build.gradle.kts",
+    },
+  }
+  vim.lsp.enable "jdtls"
 
-  lspconfig.groovyls.setup({
+  vim.lsp.config.groovyls = {
     cmd = {
       "java",
       "-jar",
@@ -344,5 +377,6 @@ if vim.fn.has "win64" == 1 then
           .. "/build/libs/groovy-language-server-all.jar"
       ),
     },
-  })
+  }
+  vim.lsp.enable "groovyls"
 end

@@ -11,6 +11,8 @@ vim.filetype.add {
     mts = "typescript",
     mtsx = "typescriptreact",
     strace = "strace",
+    porth = "porth",
+    webmanifest = "json",
   },
   filename = {
     ["tsconfig.json"] = "jsonc",
@@ -18,11 +20,8 @@ vim.filetype.add {
     ["go.mod"] = "gomod",
   },
   pattern = {
-    ["exs?$"] = "elixir",
-    ["^%.env%."] = "sh",
-    ["%.webmanifest$"] = "json",
-    [".*/sway/config"] = "swayconfig",
-    [".*%.PKGBUILD"] = "bash",
+    ["%.env%..*"] = "sh",
+    [".*%.PKGBUILD"] = "sh",
   },
 }
 
@@ -111,7 +110,7 @@ for _, cfg in ipairs(ftconfig) do
     pattern = filetypes,
     callback = function()
       for name, value in pairs(opts) do
-        setlocal[name] = value
+        vim.o[name] = value
       end
     end,
     group = filetype_opts,
