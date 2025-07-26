@@ -41,6 +41,14 @@ local function lmap_esc(s)
   return vim.fn.escape(s, [[;,"|]])
 end
 
+local function lmap_control(lhs, rhs)
+  for i = 1, vim.fn.strcharlen(lhs) do
+    local map_cyr = vim.fn.strcharpart(lhs, i - 1, 1)
+    local map_lat = vim.fn.strcharpart(rhs, i - 1, 1)
+    vim.keymap.set("n", "<C-" .. map_cyr .. ">", "<C-" .. map_lat .. ">")
+  end
+end
+
 local langmap_config = {
   {
     [[йцукенгшщзфівапролдячсмить]],
@@ -51,12 +59,12 @@ local langmap_config = {
     [[QWERTYUIOPASDFGHJKLZXCVBNM]],
   },
   {
-    [[хїґжєбю.]],
-    [[[]\;',./]],
+    [[хїґжєбю]],
+    [[[]\;',.]],
   },
   {
-    [[ХЇҐЖЄБЮ,]],
-    [[{}|:"<>?]],
+    [[ХЇҐЖЄБЮ]],
+    [[{}|:"<>]],
   },
 }
 
@@ -66,6 +74,9 @@ vim.go.langmap = vim
     return lmap_esc(pair[1]) .. ";" .. lmap_esc(pair[2])
   end)
   :join(",")
+
+lmap_control(unpack(langmap_config[1]))
+lmap_control(unpack(langmap_config[3]))
 
 require "kraftwerk28.plugins"
 require "kraftwerk28.map"
