@@ -1,95 +1,98 @@
-local themes = {
-  {
-    "marko-cerovac/material.nvim",
-    enabled = false,
-    lazy = false,
-    config = function() end,
-  },
-  {
-    "navarasu/onedark.nvim",
-    enabled = false,
-    lazy = false,
-    config = function()
-      require "onedark".setup {
-        style = "dark", -- 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-      }
-      require "onedark".load()
-    end,
-  },
+return {
+  { import = "kraftwerk28.plugins.specs" },
+
+  -- {
+  --   "marko-cerovac/material.nvim",
+  --   enabled = false,
+  --   lazy = false,
+  --   config = function() end,
+  -- },
+
+  -- {
+  --   "navarasu/onedark.nvim",
+  --   enabled = false,
+  --   lazy = false,
+  --   config = function()
+  --     require "onedark".setup {
+  --       style = "dark", -- 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+  --     }
+  --     require "onedark".load()
+  --   end,
+  -- },
+
   {
     "ellisonleao/gruvbox.nvim",
     enabled = true,
-    lazy = false,
-    config = function()
-      require("gruvbox").setup({
-        contrast = "soft", -- can be "hard", "soft" or empty string
-        italic = {
-          strings = false,
-        },
-        overrides = {
-          -- Search = { underdashed = true },
-          -- CurSearch = { underdashed = true },
-          StatusLine = { reverse = false },
-          StatusLineNC = { reverse = false },
-        },
-      })
+    opts = {
+      contrast = "soft", -- can be "hard", "soft" or empty string
+      italic = {
+        strings = false,
+      },
+      overrides = {
+        -- Search = { underdashed = true },
+        -- CurSearch = { underdashed = true },
+        StatusLine = { reverse = false },
+        StatusLineNC = { reverse = false },
+      },
+    },
+    init = function()
       vim.cmd.colorscheme "gruvbox"
     end,
   },
-  {
-    "sainnhe/gruvbox-material",
-    lazy = false,
-    enabled = false,
-    config = function()
-      vim.g.gruvbox_material_background = "medium"
-      vim.g.gruvbox_material_foreground = "original"
-      -- vim.g.gruvbox_material_enable_italic = true
-      vim.cmd.colorscheme "gruvbox-material"
-    end,
-  },
-  {
-    "projekt0n/github-nvim-theme",
-    enabled = false,
-    lazy = false,
-    config = function()
-      local groups = {
-        all = {
-          TabLineSel = { link = "TabLine" },
-        },
-      }
-      require("github-theme").setup({
-        -- options = {
-        --   hide_nc_statusline = false,
-        -- },
-        groups = groups,
-      })
-      vim.cmd.colorscheme("github_dark_default")
-    end,
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    lazy = false,
-    enabled = false,
-    config = function()
-      require("kanagawa").setup {
-        background = {
-          dark = "wave",
-          light = "lotus",
-        },
-      }
-      vim.cmd.colorscheme "kanagawa"
-    end,
-  },
-}
 
-local plugins = {
+  -- {
+  --   "sainnhe/gruvbox-material",
+  --   lazy = false,
+  --   enabled = false,
+  --   config = function()
+  --     vim.g.gruvbox_material_background = "medium"
+  --     vim.g.gruvbox_material_foreground = "original"
+  --     -- vim.g.gruvbox_material_enable_italic = true
+  --     vim.cmd.colorscheme "gruvbox-material"
+  --   end,
+  -- },
+
+  -- {
+  --   "projekt0n/github-nvim-theme",
+  --   enabled = false,
+  --   lazy = false,
+  --   config = function()
+  --     local groups = {
+  --       all = {
+  --         TabLineSel = { link = "TabLine" },
+  --       },
+  --     }
+  --     require("github-theme").setup({
+  --       -- options = {
+  --       --   hide_nc_statusline = false,
+  --       -- },
+  --       groups = groups,
+  --     })
+  --     vim.cmd.colorscheme("github_dark_default")
+  --   end,
+  -- },
+
+  -- {
+  --   "rebelot/kanagawa.nvim",
+  --   lazy = false,
+  --   enabled = false,
+  --   config = function()
+  --     require("kanagawa").setup {
+  --       background = {
+  --         dark = "wave",
+  --         light = "lotus",
+  --       },
+  --     }
+  --     vim.cmd.colorscheme "kanagawa"
+  --   end,
+  -- },
+
   -- {
   --   dir = "~/projects/neovim/gtranslate.nvim",
   --   -- "kraftwerk28/gtranslate.nvim",
   --   dependencies = { "nvim-lua/plenary.nvim" },
   -- },
 
-  { "kyazdani42/nvim-web-devicons" },
   {
     "tpope/vim-surround",
     config = function()
@@ -105,74 +108,45 @@ local plugins = {
       surr["i"] = "\1before: \1\r\2after: \2"
     end,
   },
+
   {
     "numToStr/Comment.nvim",
     config = function()
-      require("ts_context_commentstring").setup({
+      require("ts_context_commentstring").setup {
         languages = {
           c = {
             __default = "// %s",
             __multiline = "/* %s */",
           },
         },
-      })
-      require("Comment").setup({
+      }
+      require("Comment").setup {
         pre_hook = require(
           "ts_context_commentstring.integrations.comment_nvim"
         ).create_pre_hook(),
-      })
+      }
       local mopt = { silent = true, remap = true }
       vim.keymap.set("n", "<C-/>", "gccj", mopt)
       vim.keymap.set("i", "<C-/>", "<Cmd>:normal gcc<CR>", mopt)
       vim.keymap.set("x", "<C-/>", "gcgv", mopt)
     end,
   },
-  {
-    "nvim-telescope/telescope.nvim",
-    -- "~/projects/neovim/telescope.nvim",
-    dependencies = {
-      "kyazdani42/nvim-web-devicons",
-      "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require "kraftwerk28.plugins.telescope"
-    end,
-  },
+
   { "nvim-telescope/telescope-symbols.nvim" },
+
   {
     "stevearc/dressing.nvim",
     enabled = false,
-    config = function()
-      require("dressing").setup({
-        input = {
-          border = vim.g.borderchars,
-        },
-      })
-    end,
-  },
-  {
-    "tpope/vim-fugitive",
-    dependencies = {
-      "tpope/vim-rhubarb",
-      "tommcdo/vim-fubitive",
-    },
-    config = function()
-      require("kraftwerk28.plugins.fugitive")
-    end,
   },
   {
     "lewis6991/gitsigns.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("gitsigns").setup()
-    end,
+    config = true,
   },
   {
     "norcalli/nvim-colorizer.lua",
     enabled = false,
-    config = function()
-      require("colorizer").setup({ "!*" })
-    end,
+    opts = { "!*" },
   },
   { "mattn/emmet-vim" },
   { "neovimhaskell/haskell-vim", enabled = false },
@@ -184,23 +158,6 @@ local plugins = {
   { "lifepillar/pgsql.vim" },
   { "GEverding/vim-hocon", enabled = false },
   {
-    -- "~/projects/neovim/nvim-treesitter",
-    "nvim-treesitter/nvim-treesitter",
-    -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      "JoosepAlviste/nvim-ts-context-commentstring",
-      "windwp/nvim-ts-autotag",
-      "nvim-treesitter/nvim-treesitter-context",
-    },
-    build = function()
-      vim.cmd("TSUpdate")
-    end,
-    config = function()
-      require("kraftwerk28.plugins.treesitter")
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     dependencies = {
       "b0o/schemastore.nvim",
@@ -211,36 +168,8 @@ local plugins = {
     "RRethy/vim-illuminate",
     enabled = false,
     config = function()
-      local utils = require("kraftwerk28.config.utils")
+      local utils = require("kraftwerk28.utils")
       utils.highlight({ "illuminatedWord", guibg = "#303030" })
-    end,
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    config = function()
-      require("kraftwerk28.plugins.luasnip")
-    end,
-  },
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "onsails/lspkind-nvim",
-      "hrsh7th/cmp-calc",
-      "honza/vim-snippets",
-      "saadparwaiz1/cmp_luasnip",
-    },
-    config = function()
-      require "kraftwerk28.plugins.cmp"
-    end,
-  },
-  {
-    "kyazdani42/nvim-tree.lua",
-    dependencies = { "kyazdani42/nvim-web-devicons", opt = true },
-    config = function()
-      require("kraftwerk28.plugins.nvim-tree")
     end,
   },
   {
@@ -250,13 +179,11 @@ local plugins = {
   {
     "ray-x/lsp_signature.nvim",
     enabled = false,
-    config = function()
-      require("lsp_signature").setup {
-        floating_window = true,
-        floating_window_above_cur_line = false,
-        hint_enable = false,
-      }
-    end,
+    opts = {
+      floating_window = true,
+      floating_window_above_cur_line = false,
+      hint_enable = false,
+    },
   },
   {
     "junegunn/vim-easy-align",
@@ -264,43 +191,34 @@ local plugins = {
       vim.keymap.set({ "v", "n" }, "<Leader>ea", "<Plug>(EasyAlign)")
     end,
   },
-  {
-    "mfussenegger/nvim-dap",
-    config = function()
-      require "kraftwerk28.plugins.dap"
-    end,
-  },
 
   {
     "stevearc/conform.nvim",
-    config = function()
-      local conform = require "conform"
-      conform.setup {
-        formatters_by_ft = {
-          lua = { "stylua" },
-          python = { "black" },
-          javascript = { "prettierd" },
-          typescript = { "prettierd" },
-          vue = { "prettierd" },
-          svelte = { "prettierd" },
-          markdown = { "prettierd" },
-          html = { "prettierd" },
-        },
-        default_format_opts = {
-          lsp_format = "fallback",
-        },
-      }
-      vim.keymap.set("n", "<Leader>f", function()
-        conform.format()
-      end, { desc = "[F]ormat" })
-    end,
-  },
-
-  {
-    "mfussenegger/nvim-lint",
-    config = function()
-      require "kraftwerk28.plugins.nvim_lint"
-    end,
+    opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+        python = { "black" },
+        javascript = { "prettierd" },
+        typescript = { "prettierd" },
+        vue = { "prettierd" },
+        svelte = { "prettierd" },
+        markdown = { "prettierd" },
+        html = { "prettierd" },
+      },
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
+    },
+    keys = {
+      {
+        "<Leader>f",
+        function()
+          require "conform".format()
+        end,
+        mode = "n",
+        desc = "[F]ormat",
+      },
+    },
   },
 
   {
@@ -341,9 +259,7 @@ local plugins = {
   {
     "p00f/clangd_extensions.nvim",
     enabled = false,
-    config = function()
-      require("clangd_extensions").setup()
-    end,
+    config = true,
   },
   {
     -- "github/copilot.vim",
@@ -359,31 +275,13 @@ local plugins = {
   },
   {
     "folke/twilight.nvim",
-    config = function()
-      require("twilight").setup()
-    end,
+    config = true,
   },
   { "marilari88/twoslash-queries.nvim" },
   {
     "folke/which-key.nvim",
     enabled = false,
-    config = function()
-      require("which-key").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
-    end,
-  },
-  {
-    "nvim-lualine/lualine.nvim",
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-      "arkav/lualine-lsp-progress",
-    },
-    config = function()
-      require("kraftwerk28.plugins.lualine")
-    end,
+    config = true,
   },
 
   -- ({
@@ -392,28 +290,4 @@ local plugins = {
   --     require("kraftwerk28.plugins.neoformat")
   --   end,
   -- })
-}
-
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-if not vim.uv.fs_stat(lazypath) then
-  local clone_result = vim
-    .system {
-      "git",
-      "clone",
-      "--filter=blob:none",
-      "--branch=stable", -- latest stable release
-      lazyrepo,
-      lazypath,
-    }
-    :wait()
-  if clone_result.code ~= 0 then
-    vim.notify("Failed to clone Lazy repo", vim.log.levels.ERROR)
-  end
-end
-vim.opt.runtimepath:prepend(lazypath)
-
-require("lazy").setup {
-  spec = vim.iter { themes, plugins }:flatten():totable(),
-  checker = { enabled = true },
 }

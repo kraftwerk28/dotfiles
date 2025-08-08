@@ -37,48 +37,24 @@ vim.diagnostic.config {
 -- Load options
 vim.cmd.runtime "opts.vim"
 
-local function lmap_esc(s)
-  return vim.fn.escape(s, [[;,"|]])
-end
-
-local function lmap_control(lhs, rhs)
-  for i = 1, vim.fn.strcharlen(lhs) do
-    local map_cyr = vim.fn.strcharpart(lhs, i - 1, 1)
-    local map_lat = vim.fn.strcharpart(rhs, i - 1, 1)
-    vim.keymap.set("n", "<C-" .. map_cyr .. ">", "<C-" .. map_lat .. ">")
+-- Infer dark/light background from dconf
+do
+  local result = vim
+    .system { "gsettings", "get", "org.gnome.desktop.interface", "color-scheme" }
+    :wait()
+  if result.stdout then
+    local theme = string.match(result.stdout, [['(%w)']])
+    if theme == "prefer-dark" then
+      vim.go.background = "dark"
+    elseif theme == "prefer-light" then
+      vim.go.background = "light"
+    end
   end
 end
 
-local langmap_config = {
-  {
-    [[йцукенгшщзфівапролдячсмить]],
-    [[qwertyuiopasdfghjklzxcvbnm]],
-  },
-  {
-    [[ЙЦУКЕНГШЩЗФІВАПРОЛДЯЧСМИТЬ]],
-    [[QWERTYUIOPASDFGHJKLZXCVBNM]],
-  },
-  {
-    [[хїґжєбю]],
-    [[[]\;',.]],
-  },
-  {
-    [[ХЇҐЖЄБЮ]],
-    [[{}|:"<>]],
-  },
-}
+vim.go.background = "dark"
 
-vim.go.langmap = vim
-  .iter(langmap_config)
-  :map(function(pair)
-    return lmap_esc(pair[1]) .. ";" .. lmap_esc(pair[2])
-  end)
-  :join(",")
-
-lmap_control(unpack(langmap_config[1]))
-lmap_control(unpack(langmap_config[3]))
-
-require "kraftwerk28.plugins"
+require "kraftwerk28.lazy"
 require "kraftwerk28.map"
 require "kraftwerk28.autocommand"
 require "kraftwerk28.lsp"

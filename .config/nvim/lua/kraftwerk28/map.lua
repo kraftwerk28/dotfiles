@@ -12,23 +12,19 @@ vim.keymap.set("x", "P", function()
   vim.fn.setreg("+", vim.fn.getreg("a"))
 end, { desc = "Paste, but don't pollute `+` register" })
 
-vim.keymap.set("n", "j", function()
-  if vim.v.count1 > 1 then
-    return "j"
-  end
-  return "gj"
-end, { expr = true })
+-- For long enough lines thats span multiple editor lines, j/k jumps to the
+-- next *editor* line instead of *text* line
+for _, ch in ipairs { "j", "k" } do
+  vim.keymap.set("n", ch, function()
+    if vim.v.count1 > 1 then
+      return ch
+    end
+    return "g" .. ch
+  end, { expr = true })
+  vim.keymap.set("n", "g" .. ch, ch)
+end
 
-vim.keymap.set("n", "k", function()
-  if vim.v.count1 > 1 then
-    return "k"
-  end
-  return "gk"
-end, { expr = true })
-
-vim.keymap.set("n", "gj", "j")
-vim.keymap.set("n", "gk", "k")
-
+-- Arrow mappings (why?)
 vim.keymap.set("n", "<Down>", "<C-E>")
 vim.keymap.set("n", "<Up>", "<C-Y>")
 vim.keymap.set("n", "<S-Up>", "<C-U>M")
@@ -36,45 +32,47 @@ vim.keymap.set("n", "<S-Down>", "<C-D>M")
 vim.keymap.set("n", "<C-Up>", "<C-B>M")
 vim.keymap.set("n", "<C-Down>", "<C-F>M")
 
+-- Do not reset selection after shifting
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 
-local silent = { silent = true }
-
 -- Buffer navigation
-vim.keymap.set("n", "<M-]>", "<Cmd>bnext<CR>", silent)
-vim.keymap.set("n", "<M-[>", "<Cmd>bprevious<CR>", silent)
+vim.keymap.set("n", "<M-]>", "<Cmd>bnext<CR>", { silent = true })
+vim.keymap.set("n", "<M-[>", "<Cmd>bprevious<CR>", { silent = true })
 
 -- Tab navigation
-vim.keymap.set("n", "th", "<Cmd>tabprevious<CR>", silent)
-vim.keymap.set("n", "tj", "<Cmd>tablast<CR>", silent)
-vim.keymap.set("n", "tk", "<Cmd>tabfirst<CR>", silent)
-vim.keymap.set("n", "tl", "<Cmd>tabnext<CR>", silent)
-vim.keymap.set("n", "tt", "<Cmd>tabnew<CR>", silent)
-vim.keymap.set("n", "td", "<Cmd>tabclose<CR>", silent)
-vim.keymap.set("n", "tH", "<Cmd>-tabmove<CR>", silent)
-vim.keymap.set("n", "tL", "<Cmd>+tabmove<CR>", silent)
-
+vim.keymap.set("n", "th", "<Cmd>tabprevious<CR>", { silent = true })
+vim.keymap.set("n", "tj", "<Cmd>tablast<CR>", { silent = true })
+vim.keymap.set("n", "tk", "<Cmd>tabfirst<CR>", { silent = true })
+vim.keymap.set("n", "tl", "<Cmd>tabnext<CR>", { silent = true })
+vim.keymap.set("n", "tt", "<Cmd>tabnew<CR>", { silent = true })
+vim.keymap.set("n", "td", "<Cmd>tabclose<CR>", { silent = true })
+vim.keymap.set("n", "tH", "<Cmd>-tabmove<CR>", { silent = true })
+vim.keymap.set("n", "tL", "<Cmd>+tabmove<CR>", { silent = true })
 for i = 1, 9 do
-  local lhs = "<M-" .. i .. ">"
-  local rhs = "<Cmd>silent! " .. i .. "tabnext<CR>"
-  vim.keymap.set("n", lhs, rhs, silent)
+  vim.keymap.set(
+    "n",
+    "<M-" .. i .. ">",
+    "<Cmd>silent! " .. i .. "tabnext<CR>",
+    { silent = true }
+  )
 end
 
+-- Toggle search highlight
 vim.keymap.set("n", "<Leader>hs", function()
   vim.cmd.set "hlsearch!"
 end)
 
-vim.keymap.set("n", "<Leader>w", "<Cmd>silent! wall<CR>", silent)
+vim.keymap.set("n", "<Leader>w", "<Cmd>wall<CR>", { silent = true })
 
-vim.keymap.set("n", "<M-k>", "<Cmd>m-2<CR>", silent)
-vim.keymap.set("n", "<M-j>", "<Cmd>m+1<CR>", silent)
-vim.keymap.set("v", "<M-k>", ":m'<-2<CR>gv", silent)
-vim.keymap.set("v", "<M-j>", ":m'>+1<CR>gv", silent)
+-- Move line/block across the buffer
+vim.keymap.set("n", "<M-k>", "<Cmd>m-2<CR>", { silent = true })
+vim.keymap.set("n", "<M-j>", "<Cmd>m+1<CR>", { silent = true })
+vim.keymap.set("v", "<M-k>", ":m'<-2<CR>gv", { silent = true })
+vim.keymap.set("v", "<M-j>", ":m'>+1<CR>gv", { silent = true })
 
 vim.keymap.set("i", "<C-BS>", "<C-W>")
 vim.keymap.set("v", "/", [["vy/<C-R>v<CR>]])
--- vim.keymap.set("n", "<Leader>ma", ":<C-U>vertical Man ")
 vim.keymap.set("n", "H", "<Nop>")
 vim.keymap.set("n", "dbo", "<Cmd>%bd<CR><C-O>")
 vim.keymap.set("n", "dba", "<Cmd>%bd<CR>")
@@ -136,11 +134,58 @@ vim.keymap.set("n", "<Leader>qj", "<Cmd>cnext<CR>")
 vim.keymap.set("n", "<Leader>qk", "<Cmd>cprev<CR>")
 
 vim.keymap.set("n", "<Leader>/", [[/^\s*\<]], {
-  desc = "Useful mapping for searching for commands (i.e. bash builtings) in manpages",
+  desc = "Search from line start. Useful for searching for flags in manpages.",
 })
 
+-- Disable Mod-Space
 vim.keymap.set("i", "<D-Space>", "<Nop>")
 
 vim.keymap.set("n", "<Leader>dc", function()
-  vim.diagnostic.open_float({ border = vim.g.borderchars })
+  vim.diagnostic.open_float { border = vim.g.borderchars }
 end, { desc = "[D]iagnostics under [C]ursor" })
+
+-- Layout-agnostic mappings, i.e. for cyrrillic
+local function lmap_esc(s)
+  return vim.fn.escape(s, [[;,"|]])
+end
+
+local function map_ctrl_keys(lhs, rhs)
+  for i = 1, vim.fn.strcharlen(lhs) do
+    local map_cyr = vim.fn.strcharpart(lhs, i - 1, 1)
+    local map_lat = vim.fn.strcharpart(rhs, i - 1, 1)
+    vim.keymap.set(
+      { "n", "i" },
+      "<C-" .. map_cyr .. ">",
+      "<C-" .. map_lat .. ">"
+    )
+  end
+end
+
+local langmap_config = {
+  {
+    [[йцукенгшщзфівапролдячсмить]],
+    [[qwertyuiopasdfghjklzxcvbnm]],
+  },
+  {
+    [[ЙЦУКЕНГШЩЗФІВАПРОЛДЯЧСМИТЬ]],
+    [[QWERTYUIOPASDFGHJKLZXCVBNM]],
+  },
+  {
+    [[хїґжєбю]],
+    [[[]\;',.]],
+  },
+  {
+    [[ХЇҐЖЄБЮ]],
+    [[{}|:"<>]],
+  },
+}
+
+vim.go.langmap = vim
+  .iter(langmap_config)
+  :map(function(pair)
+    return lmap_esc(pair[1]) .. ";" .. lmap_esc(pair[2])
+  end)
+  :join(",")
+
+map_ctrl_keys(unpack(langmap_config[1]))
+map_ctrl_keys(unpack(langmap_config[3]))
