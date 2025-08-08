@@ -46,11 +46,12 @@ autocmd("LspAttach", {
       vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = true })
     end
 
-    if client:supports_method("textDocument/signatureHelp") then
-      vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
-        buffer = true,
-      })
-    end
+    -- NOTE: handled by blink.cmp
+    -- if client:supports_method("textDocument/signatureHelp") then
+    --   vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
+    --     buffer = true,
+    --   })
+    -- end
 
     if cap.documentFormattingProvider then
       -- NOTE: conform.nvim manages LSP formatting for us, skip keymap setting

@@ -1,18 +1,11 @@
 return {
   "saghen/blink.cmp",
-  enabled = false,
-  -- optional: provides snippets for the snippet source
-  -- dependencies = { "rafamadriz/friendly-snippets" },
-
-  -- use a release tag to download pre-built binaries
+  enabled = true,
+  dependencies = {
+    -- "rafamadriz/friendly-snippets",
+    "L3MON4D3/LuaSnip",
+  },
   version = "1.*",
-  -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-  -- build = 'cargo build --release',
-  -- If you use nix, you can build from source using latest nightly rust with:
-  -- build = 'nix run .#build-plugin',
-
-  ---@module 'blink.cmp'
-  ---@type blink.cmp.Config
   opts = {
     -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
     -- 'super-tab' for mappings similar to vscode (tab to accept)
@@ -26,29 +19,49 @@ return {
     -- C-k: Toggle signature help (if signature.enabled = true)
     --
     -- See :h blink-cmp-config-keymap for defining your own keymap
-    keymap = { preset = "default" },
+    keymap = {
+      preset = "default",
+      ["<CR>"] = { "accept", "fallback" },
+      ["<Tab>"] = { "select_next", "fallback_to_mappings" },
+      ["<S-Tab>"] = { "select_prev", "fallback_to_mappings" },
+    },
 
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
       -- Adjusts spacing to ensure icons are aligned
       nerd_font_variant = "mono",
     },
-
     -- (Default) Only show the documentation popup when manually triggered
-    completion = { documentation = { auto_show = false } },
-
-    -- Default list of enabled providers defined so that you can extend it
-    -- elsewhere in your config, without redefining it, due to `opts_extend`
-    sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+    completion = {
+      accept = {
+        auto_brackets = { enabled = false },
+      },
+      documentation = {
+        auto_show = true,
+      },
+      list = {
+        selection = { preselect = false, auto_insert = true },
+      },
+      -- menu = {
+      --   draw = {
+      --     columns = {
+      --       { "kind_icon" },
+      --       { "label", "label_description", gap = 1 },
+      --     },
+      --   },
+      -- },
     },
-
-    -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-    -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-    -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
-    --
-    -- See the fuzzy documentation for more information
+    sources = {
+      default = {
+        "lsp",
+        "snippets",
+        "path",
+        "buffer",
+      },
+    },
     fuzzy = { implementation = "prefer_rust_with_warning" },
+    snippets = { preset = "luasnip" },
+    signature = { enabled = true },
+    cmdline = { enabled = false },
   },
-  opts_extend = { "sources.default" },
 }

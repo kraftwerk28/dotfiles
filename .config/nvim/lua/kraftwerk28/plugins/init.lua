@@ -148,7 +148,7 @@ return {
     enabled = false,
     opts = { "!*" },
   },
-  { "mattn/emmet-vim" },
+  { "mattn/emmet-vim", enabled = false },
   { "neovimhaskell/haskell-vim", enabled = false },
   { "elixir-editors/vim-elixir", enabled = false },
   -- use {"tpope/vim-markdown"}

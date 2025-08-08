@@ -1,11 +1,3 @@
-local lspconfig = require("lspconfig")
-local root_pattern = require("lspconfig.util").root_pattern
-local cmp_lsp = require("cmp_nvim_lsp")
-
-local function make_capabilities()
-  return cmp_lsp.default_capabilities()
-end
-
 do
   local cmd = {
     "arduino-language-server",
@@ -25,12 +17,14 @@ do
   vim.lsp.enable "arduino_language_server"
 end
 
-vim.lsp.config("*", {
-  capabilities = make_capabilities(),
-  -- on_attach = function(client, bufnr)
-  --   vim.print("config for *")
-  -- end,
-})
+do
+  local ok, blink = pcall(require, "blink.cmp")
+  if ok then
+    vim.lsp.config("*", {
+      capabilities = blink.get_lsp_capabilities(),
+    })
+  end
+end
 
 vim.lsp.enable "awk_ls"
 

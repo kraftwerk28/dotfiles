@@ -19,4 +19,5 @@ vim.opt.runtimepath:prepend(lazypath)
 
 require("lazy").setup {
   spec = { import = "kraftwerk28.plugins.init" },
+  change_detection = { enabled = false },
 }

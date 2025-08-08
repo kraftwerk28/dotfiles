@@ -143,7 +143,13 @@ return {
     -- require("luasnip.loaders.from_snipmate").lazy_load()
     -- ls.filetype_extend("all", { "_" })
 
-    local opt = { silent = true, expr = true }
+    vim.keymap.set({ "s", "i" }, "<C-H>", function()
+      if ls.jumpable(-1) then
+        return "<Plug>luasnip-jump-prev"
+      else
+        return "<C-H>"
+      end
+    end, { silent = true, expr = true })
 
     vim.keymap.set({ "s", "i" }, "<C-L>", function()
       if ls.expand_or_jumpable() then
@@ -151,15 +157,7 @@ return {
       else
         return "<C-L>"
       end
-    end, opt)
-
-    vim.keymap.set({ "s", "i" }, "<C-H>", function()
-      if ls.jumpable(-1) then
-        return "<Plug>luasnip-jump-prev"
-      else
-        return "<C-H>"
-      end
-    end, opt)
+    end, { silent = true, expr = true })
 
     vim.keymap.set({ "s", "i" }, "<C-;>", function()
       if ls.choice_active() then
@@ -167,6 +165,6 @@ return {
       else
         return "<C-;>"
       end
-    end, opt)
+    end, { silent = true, expr = true })
   end,
 }
