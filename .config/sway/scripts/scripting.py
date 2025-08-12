@@ -48,10 +48,6 @@ class PulseControl:
     def _pactl(self, *args):
         return subprocess.run(["pactl", *args], text=True, stdout=subprocess.PIPE)
 
-    def _get_default_sink(self):
-        raw = self._pactl("get-default-sink")
-        return raw.stdout.strip()
-
     def _get_sinks(self):
         raw = self._pactl("-f", "json", "list", "sinks")
         return json.loads(raw.stdout)
@@ -59,9 +55,9 @@ class PulseControl:
     def _get_default_sink(self):
         return self._pactl("get-default-sink").stdout.strip()
 
-    def get_volume(self, sink: str) -> tuple[int, bool]:
+    def get_volume(self, sink_name: str) -> tuple[int, bool]:
         try:
-            sink = next(s for s in self._get_sinks() if s["name"] == sink)
+            sink = next(s for s in self._get_sinks() if s["name"] == sink_name)
             volumes = [int(p["value_percent"][:-1]) for p in sink["volume"].values()]
             volume = sum(volumes) // len(volumes)
             muted = sink["mute"]
@@ -194,7 +190,7 @@ class Scripting:
                 ipc.command(f"workspace {ws_num}")
         elif cmd.startswith("nop volume"):
             parts = cmd.split()
-            if len(parts) > 3:
+            if len(parts) > 2:
                 self.volume.handle_cmd(*parts[2:])
         elif "rofi" in cmd:
             self.switch_to_default_kbd_layout()
