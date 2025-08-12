@@ -24,6 +24,7 @@ return {
       ["<CR>"] = { "accept", "fallback" },
       ["<Tab>"] = { "select_next", "fallback_to_mappings" },
       ["<S-Tab>"] = { "select_prev", "fallback_to_mappings" },
+      ["<C-K>"] = false,
     },
 
     appearance = {

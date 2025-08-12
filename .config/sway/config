@@ -185,16 +185,16 @@ bindsym {
 
 # Multimedia keys
 bindsym {
-	XF86AudioRaiseVolume	exec $scripts/volume-control.sh up
-	XF86AudioLowerVolume	exec $scripts/volume-control.sh down
-	XF86AudioMute			exec $scripts/volume-control.sh toggle
-	Control+XF86AudioMute	exec $scripts/volume-control.sh toggle-mic
+	# NOTE: controlled through aux scripting
+	XF86AudioRaiseVolume  nop volume up
+	XF86AudioLowerVolume  nop volume down
+	XF86AudioMute         nop volume speaker-toggle
+	Control+XF86AudioMute nop volume mic-toggle
+	--to-code --no-repeat $mod+m nop volume mic-unmute
+	--to-code --release   $mod+m nop volume mic-mute
 
-	--to-code --no-repeat $mod+m	exec $scripts/volume-control.sh unmute-down
-	--to-code --release $mod+m		exec $scripts/volume-control.sh unmute-up
-
-	XF86MonBrightnessDown	exec $scripts/backlight-control.sh down
-	XF86MonBrightnessUp		exec $scripts/backlight-control.sh up
+	XF86MonBrightnessDown exec $scripts/backlight-control.sh down
+	XF86MonBrightnessUp   exec $scripts/backlight-control.sh up
 
 	XF86AudioPlay exec playerctl play-pause
 	XF86AudioNext exec playerctl next
@@ -392,6 +392,9 @@ bar {
 	workspace_min_width 24
 	tray_output none
 	wrap_scroll yes
+	colors {
+		separator "#dddddd"
+	}
 }
 
 # Input configuration {{{

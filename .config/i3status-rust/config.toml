@@ -8,6 +8,9 @@ theme = "native"
 good_fg = "#00bb00"
 warning_fg = "#ffbb00"
 critical_fg = "#dd0000"
+# separator = "|"
+# separator = "│"
+separator = "native"
 
 [icons]
 icons = "material-nf"
@@ -15,6 +18,9 @@ icons = "material-nf"
 bat = ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
 bat_charging = "󰂄"
 net_tethering = "󱇰"
+
+[[block]]
+block = "music"
 
 # [[block]]
 # block = "custom"

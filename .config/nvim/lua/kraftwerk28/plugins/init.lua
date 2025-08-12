@@ -135,13 +135,9 @@ return {
   { "nvim-telescope/telescope-symbols.nvim" },
 
   {
-    "stevearc/dressing.nvim",
-    enabled = false,
-  },
-  {
     "lewis6991/gitsigns.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = true,
+    opts = {},
   },
   {
     "norcalli/nvim-colorizer.lua",
@@ -149,47 +145,23 @@ return {
     opts = { "!*" },
   },
   { "mattn/emmet-vim", enabled = false },
-  { "neovimhaskell/haskell-vim", enabled = false },
-  { "elixir-editors/vim-elixir", enabled = false },
-  -- use {"tpope/vim-markdown"}
   { "adimit/prolog.vim" },
-  { "digitaltoad/vim-pug", enabled = false },
-  { "bfrg/vim-jq" },
   { "lifepillar/pgsql.vim" },
-  { "GEverding/vim-hocon", enabled = false },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       "b0o/schemastore.nvim",
     },
-    -- "~/projects/neovim/nvim-lspconfig",
-  },
-  {
-    "RRethy/vim-illuminate",
-    enabled = false,
-    config = function()
-      local utils = require("kraftwerk28.utils")
-      utils.highlight({ "illuminatedWord", guibg = "#303030" })
-    end,
   },
   {
     "equalsraf/neovim-gui-shim",
     opt = true,
   },
   {
-    "ray-x/lsp_signature.nvim",
-    enabled = false,
-    opts = {
-      floating_window = true,
-      floating_window_above_cur_line = false,
-      hint_enable = false,
-    },
-  },
-  {
     "junegunn/vim-easy-align",
-    config = function()
-      vim.keymap.set({ "v", "n" }, "<Leader>ea", "<Plug>(EasyAlign)")
-    end,
+    keys = {
+      { "<Leader>ea", "<Plug>(EasyAlign)", mode = { "v", "n" } },
+    },
   },
 
   {
@@ -249,22 +221,30 @@ return {
   {
     "Shatur/neovim-session-manager",
     dependencies = { "nvim-lua/plenary.nvim" },
+    enabled = false,
     config = function()
       local c = require "session_manager.config"
-      require("session_manager").setup {
+      return {
         autoload_mode = c.AutoloadMode.Disabled,
       }
     end,
   },
+
+  {
+    "rmagatti/auto-session",
+    opts = {
+      suppressed_dirs = { "~/" },
+    },
+    init = function()
+      vim.o.sessionoptions =
+        "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+    end,
+  },
+
   {
     "p00f/clangd_extensions.nvim",
     enabled = false,
     config = true,
-  },
-  {
-    -- "github/copilot.vim",
-    "~/projects/neovim/copilot.vim",
-    enabled = false,
   },
   {
     "johmsalas/text-case.nvim",
@@ -278,16 +258,4 @@ return {
     config = true,
   },
   { "marilari88/twoslash-queries.nvim" },
-  {
-    "folke/which-key.nvim",
-    enabled = false,
-    config = true,
-  },
-
-  -- ({
-  --   "mhartington/formatter.nvim",
-  --   config = function()
-  --     require("kraftwerk28.plugins.neoformat")
-  --   end,
-  -- })
 }
