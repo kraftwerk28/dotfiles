@@ -22,7 +22,7 @@ autocmd("BufReadPost", {
   callback = function()
     local pos = vim.fn.line([['"]])
     if pos > 0 and pos <= vim.fn.line("$") then
-      vim.cmd([[normal! g`"]])
+      vim.cmd [[normal! g`"]]
     end
   end,
   group = group,

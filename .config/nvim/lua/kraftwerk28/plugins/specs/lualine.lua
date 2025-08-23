@@ -24,7 +24,7 @@ local lsp_status = {
   end,
   on_click = function(nclicks, btn)
     if nclicks == 1 and btn == "l" then
-      vim.cmd("LspInfo")
+      vim.cmd "LspInfo"
     end
   end,
 }
@@ -60,7 +60,7 @@ return {
       lualine_b = {
         {
           "fileformat",
-          symbols = { dos = " ", mac = " ", unix = " " },
+          symbols = { dos = " ", mac = " ", unix = "󰣇 " },
           separator = "",
         },
         { "encoding", separator = "" },

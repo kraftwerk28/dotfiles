@@ -43,7 +43,9 @@ autocmd("LspAttach", {
     end
 
     if client:supports_method("textDocument/hover") then
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = true })
+      vim.keymap.set("n", "K", function()
+        vim.lsp.buf.hover()
+      end, { buffer = true })
     end
 
     -- NOTE: handled by blink.cmp
@@ -62,9 +64,9 @@ autocmd("LspAttach", {
 
     -- Under-cursor LSP mappings
     if client:supports_method("textDocument/rename") then
-      vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, {
+      vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, {
         buffer = true,
-        desc = "Rename under Cursor",
+        desc = "[C]ursor [R]ename",
       })
     end
 
@@ -75,52 +77,59 @@ autocmd("LspAttach", {
       })
     end
 
-    local tb = require("telescope.builtin")
+    local tb = require "telescope.builtin"
 
     if client:supports_method("textDocument/references") then
-      vim.keymap.set("n", "<Leader>gr", tb.lsp_references, {
+      vim.keymap.set("n", "gr", tb.lsp_references, {
         buffer = true,
-        desc = "[G]oto [R]eferences",
+        desc = "Goto References",
       })
     end
+
     if client:supports_method("textDocument/definition") then
       -- <Leader> is not used here as it is often executed mapping
       vim.keymap.set("n", "gd", tb.lsp_definitions, {
         buffer = true,
-        desc = "[G]oto [D]efinition",
+        desc = "Goto Definition",
       })
     end
+
     if client:supports_method("textDocument/declaration") then
       -- <Leader> is not used here as it is often executed mapping
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
         buffer = true,
-        desc = "[G]oto [D]eclaration",
+        desc = "Goto Declaration",
       })
     end
+
     if cap.typeDefinitionProvider then
-      vim.keymap.set("n", "<Leader>gt", tb.lsp_type_definitions, {
+      vim.keymap.set("n", "gt", tb.lsp_type_definitions, {
         buffer = true,
-        desc = "[G]oto [T]ypedef",
+        desc = "Goto Type Definition",
       })
     end
+
     if cap.implementationProvider then
-      vim.keymap.set("n", "<Leader>gi", tb.lsp_implementations, {
+      vim.keymap.set("n", "gI", tb.lsp_implementations, {
         buffer = true,
-        desc = "[G]oto [I]mplementation",
+        desc = "Goto Implementation",
       })
     end
+
     if cap.documentSymbolProvider then
-      vim.keymap.set("n", "<Leader>gds", tb.lsp_document_symbols, {
+      vim.keymap.set("n", "gsd", tb.lsp_document_symbols, {
         buffer = true,
-        desc = "[G]oto [D]ocument [S]ymbols",
+        desc = "Goto Document Symbols",
       })
     end
+
     if cap.workspaceSymbolProvider then
-      vim.keymap.set("n", "<Leader>gws", tb.lsp_workspace_symbols, {
+      vim.keymap.set("n", "gsw", tb.lsp_workspace_symbols, {
         buffer = true,
-        desc = "[G]oto [W]orkspace [S]ymbols",
+        desc = "Goto Workspace Symbols",
       })
     end
+
     if client:supports_method("textDocument/foldingRange") then
       vim.o.foldmethod = "expr"
       vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"

@@ -13,8 +13,8 @@ set $cursor_sm_delta 10
 
 bindsym --to-code {
 	# Terminal launching
-	$mod+Return			exec foot
-	$mod+Shift+Return	exec $scripts/cwd-term.sh
+	$mod+Return			exec $scripts/terminal.sh
+	$mod+Shift+Return	exec $scripts/terminal.sh --cwd
 	# $mod+Return exec alacritty
 	# $mod+Shift+Return exec alacritty --working-directory=$(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
 
@@ -251,151 +251,111 @@ mode $mode_manage_output {
 
 # Theme and colors {{{
 
-# Default colors from sway(5)
-# class              border      background  text        indicator   child_border
-# focused            #4c7899     #285577     #ffffff     #2e9ef4     #285577
-# focused_inactive   #333333     #5f676a     #ffffff     #484e50     #5f676a
-# focused_tab_title  #333333     #5f676a     #ffffff     n/a         n/a    
-# unfocused          #333333     #222222     #888888     #292d2e     #222222
-# urgent             #2f343a     #900000     #ffffff     #900000     #900000
-# placeholder        #000000     #0c0c0c     #ffffff     #000000     #0c0c0c
+# Gruvbox Light
 
-# Same as above, but via variables
-# set {
-# 	$focused_title_border #4c7899
-# 	$focused_title_bg #285577
-# 	$focused_title_text #ffffff
-# 	$focused_indicator #2e9ef4
-# 	$focused_border #285577
+# # Gruvbox Light palette
+# set $background "#fbf1c7"
+# set $foreground "#3c3836"
+# set   $regular0 "#fbf1c7"
+# set   $regular1 "#cc241d"
+# set   $regular2 "#98971a"
+# set   $regular3 "#d79921"
+# set   $regular4 "#458588"
+# set   $regular5 "#b16286"
+# set   $regular6 "#689d6a"
+# set   $regular7 "#7c6f64"
+# set    $bright0 "#928374"
+# set    $bright1 "#9d0006"
+# set    $bright2 "#79740e"
+# set    $bright3 "#b57614"
+# set    $bright4 "#076678"
+# set    $bright5 "#8f3f71"
+# set    $bright6 "#427b58"
+# set    $bright7 "#3c3836"
 
-# 	$unfocused_title_border #333333
-# 	$unfocused_title_bg #222222
-# 	$unfocused_title_text #888888
-# 	$unfocused_indicator #292d2e
-# 	$unfocused_border #222222
+# https://github.com/morhetz/gruvbox {{{
+set $gb.dark0_hard "#1d2021"
+set $gb.dark0      "#282828"
+set $gb.dark0_soft "#32302f"
+set $gb.dark1      "#3c3836"
+set $gb.dark2      "#504945"
+set $gb.dark3      "#665c54"
+set $gb.dark4      "#7c6f64"
+set $gb.dark4_256  "#7c6f64"
 
-# 	$urgent_title_border #2f343a
-# 	$urgent_title_bg #900000
-# 	$urgent_title_text #ffffff
-# 	$urgent_indicator #900000
-# 	$urgent_border #900000
-# }
+set $gb.gray_245 "#928374"
+set $gb.gray_244 "#928374"
 
-# Same as above, but via variables
-# set {
-# 	$focused_title_border #4c7899
-# 	$focused_title_bg #285577
-# 	$focused_title_text #ffffff
-# 	$focused_indicator #2e9ef4
-# 	$focused_border #285577
+set $gb.light0_hard "#f9f5d7"
+set $gb.light0      "#fbf1c7"
+set $gb.light0_soft "#f2e5bc"
+set $gb.light1      "#ebdbb2"
+set $gb.light2      "#d5c4a1"
+set $gb.light3      "#bdae93"
+set $gb.light4      "#a89984"
+set $gb.light4_256  "#a89984"
 
-# 	$unfocused_title_border #444444
-# 	$unfocused_title_bg #222222
-# 	$unfocused_title_text #888888
-# 	$unfocused_indicator #666666
-# 	$unfocused_border #444444
+set $gb.bright_red    "#fb4934"
+set $gb.bright_green  "#b8bb26"
+set $gb.bright_yellow "#fabd2f"
+set $gb.bright_blue   "#83a598"
+set $gb.bright_purple "#d3869b"
+set $gb.bright_aqua   "#8ec07c"
+set $gb.bright_orange "#fe8019"
 
-# 	$urgent_title_border #2f343a
-# 	$urgent_title_bg #900000
-# 	$urgent_title_text #ffffff
-# 	$urgent_indicator #900000
-# 	$urgent_border #900000
-# }
+set $gb.neutral_red    "#cc241d"
+set $gb.neutral_green  "#98971a"
+set $gb.neutral_yellow "#d79921"
+set $gb.neutral_blue   "#458588"
+set $gb.neutral_purple "#b16286"
+set $gb.neutral_aqua   "#689d6a"
+set $gb.neutral_orange "#d65d0e"
 
-set {
-	$focused_title_border	"#ee6600"
-	$focused_title_bg		"#884400"
-	$focused_title_text		"#ffffff"
-	$focused_indicator		"#ff0044"
-	$focused_border			$focused_title_border
-	$focused_2_title_border	"#448800"
-	$focused_2_title_bg		"#224400"
-	$focused_2_title_text	"#ffffff"
-	$focused_2_indicator	"#0088aa"
-	$focused_2_border		$focused_2_title_border
-	$unfocused_title_border	"#555555"
-	$unfocused_title_bg		"#222222"
-	$unfocused_title_text	"#bbbbbb"
-	$unfocused_indicator	"#882200"
-	$unfocused_border		$unfocused_title_border
-	$urgent_title_border	"#bb0000"
-	$urgent_title_bg		"#880000"
-	$urgent_title_text		"#ffffff"
-	$urgent_indicator		"#dd0000"
-	$urgent_border			$urgent_title_border
-}
+set $gb.faded_red    "#9d0006"
+set $gb.faded_green  "#79740e"
+set $gb.faded_yellow "#b57614"
+set $gb.faded_blue   "#076678"
+set $gb.faded_purple "#8f3f71"
+set $gb.faded_aqua   "#427b58"
+set $gb.faded_orange "#af3a03"
+# }}}
 
-# Set colors from theme variables
-# client.focused				$focused_title_border	$focused_title_bg	$focused_title_text		$focused_indicator		$focused_border
-# client.focused_inactive		$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
-# client.focused_tab_title	$focused_title_border	$focused_title_bg	$focused_title_text
-# client.unfocused			$unfocused_title_border	$unfocused_title_bg	$unfocused_title_text	$unfocused_indicator	$unfocused_border
-# client.urgent				$urgent_title_border	$urgent_title_bg	$urgent_title_text		$urgent_indicator		$urgent_border
+# Theme variables. These assume that title background and borders have same color
+set $unfocused_border    $gb.dark0
+set $unfocused_text      $gb.light0
+set $unfocused_indicator $gb.faded_purple
+set $focused_border      $gb.neutral_orange
+set $focused_text        $gb.light0
+set $focused_indicator   $gb.neutral_purple
+set $urgent_border       $gb.neutral_red
+set $urgent_text         $gb.light0
 
-# client.focused_inactive  "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-# client.focused           "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-# client.focused_inactive  "#666666" "#222222" "#ffffff" "#444444" "#666666"
-# client.unfocused         "#666666" "#222222" "#ffffff" "#444444" "#666666"
-# client.focused_tab_title "#ff8800" "#884400" "#ffffff" "#ff4400" "#ff8800"
-
-# client.unfocused         "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
-# client.focused_inactive  "#444444" "#222222" "#aaaaaa" "#292d2e" "#444444"
-# client.focused_tab_title "#4c7899" "#285577" "#ffffff"
+# <class>               <title_border> <title_background> <title_text> <next_window_indicator> <window_border>
+client.unfocused        $unfocused_border $unfocused_border $unfocused_text $unfocused_indicator $unfocused_border
+client.focused_inactive $unfocused_border $unfocused_border $unfocused_text $unfocused_indicator $unfocused_border
+client.focused          $focused_border   $focused_border   $focused_text   $focused_indicator $focused_border
+client.urgent           $urgent_border    $urgent_border    $urgent_text    $focused_indicator $urgent_border
 # }}}
 
 # Bar {{{
-
-# Default
-# bar {
-# 	position top
-#
-# 	# When the status_command prints a new line to stdout, swaybar updates.
-# 	# The default just shows the current date and time.
-# 	status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-#
-# 	colors {
-# 		statusline #ffffff
-# 		background #323232
-# 		inactive_workspace #32323200 #32323200 #5c5c5c
-# 	}
-# }
-
-# bar {
-# 	swaybar_command waybar
-# }
-
-# bar {
-# 	status_command gost
-# 	font Monospace 11
-# 	height 0
-# 	position bottom
-# 	icon_theme "Papirus"
-# 	separator_symbol "|"
-# 	# disable tray until DBus will be implemented
-# 	tray_output none
-# 	wrap_scroll yes
-# 	workspace_min_width 24
-# 	# colors {
-# 	# 	separator "#bbbbbb"
-# 	# 	focused_workspace $focused_title_border $focused_title_bg $focused_title_text
-# 	# 	inactive_workspace $unfocused_title_border $unfocused_title_bg $unfocused_title_text
-# 	# 	urgent_workspace $urgent_title_border $urgent_title_bg $urgent_title_text
-# 	# }
-# }
-# }}}
-
 bar {
 	status_command i3status-rs
 	# NOTE: must define nerd-monospace in fontconfig
 	font nerd-monospace 11
 	position bottom
 	workspace_min_width 24
-	tray_output none
+	# tray_output none
 	wrap_scroll yes
 	colors {
-		separator "#dddddd"
+		background         $unfocused_border
+		statusline         $unfocused_text
+		separator          $gb.light2
+		focused_workspace  $focused_border   $focused_border   $focused_text
+		active_workspace   $focused_border   $unfocused_border $focused_text
+		inactive_workspace $unfocused_border $unfocused_border $unfocused_text
 	}
 }
+# }}}
 
 # Input configuration {{{
 input type:pointer {
@@ -444,9 +404,9 @@ input type:touchpad {
 # }}}
 
 # Various options {{{
-set $border_width 2
+set $border_width 4
 smart_gaps on
-gaps inner 8
+gaps inner 0
 gaps outer 0
 floating_modifier $mod
 smart_borders no_gaps
@@ -512,6 +472,7 @@ for_window [app_id="^org.gnome.Calculator$"] floating enable
 for_window [title="^FX: Track"] floating enable
 for_window [app_id="xdg-desktop-portal-gtk"] floating enable
 for_window [class="jetbrains-studio" title="win[0-9]+"] floating enable
+for_window [class="^com\.st\.app\.Main$" title="^(Error|Warning|Message)$"] floating enable
 
 # Prevent accidental closing of terminal windows (only through ^D)
 # for_window [app_id="^foot$"] unbindsym --to-code $mod+Shift+q
@@ -548,7 +509,7 @@ output * background "#000000" solid_color
 exec systemctl --user import-environment
 
 # See https://wiki.archlinux.org/title/Sway#Manage_Sway-specific_daemons_with_systemd
-exec_always systemctl --user start sway-session.target
+exec_always systemctl --user start sway-session.target sway-wallpaper.service
 
 # kraftwerk28's patch only:
 # mouse_resizing_mode eight_direction

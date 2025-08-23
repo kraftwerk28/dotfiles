@@ -4,6 +4,7 @@ return {
   dependencies = {
     "kyazdani42/nvim-web-devicons",
     "nvim-lua/plenary.nvim",
+    "nvim-telescope/telescope-symbols.nvim",
   },
   init = function() end,
   keys = function()

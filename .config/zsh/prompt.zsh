@@ -85,6 +85,3 @@ _exec_time_precmd() {
 }
 
 REPORTTIME=2
-
-# add-zsh-hook preexec _exec_time_preexec
-# add-zsh-hook precmd _exec_time_precmd

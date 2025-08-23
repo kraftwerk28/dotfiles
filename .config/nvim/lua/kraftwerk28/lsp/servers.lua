@@ -181,6 +181,7 @@ end
 
 do
   vim.lsp.config.clangd = {
+    cmd = { "clangd", "--header-insertion=never" },
     -- cmd = {
     --   "clangd",
     --   "--background-index",
@@ -273,9 +274,9 @@ vim.lsp.enable "rescriptls"
 
 vim.lsp.enable "elmls"
 
-vim.lsp.config.tailwindcss = {
-  filetypes = { "vue", "svelte" },
-}
+-- vim.lsp.config.tailwindcss = {
+--   filetypes = { "vue", "svelte" },
+-- }
 vim.lsp.enable "tailwindcss"
 
 vim.lsp.config.lua_ls = {
@@ -322,6 +323,8 @@ vim.lsp.config.lua_ls = {
 vim.lsp.enable "lua_ls"
 
 vim.lsp.enable "serve_d"
+
+vim.lsp.enable "taplo"
 
 if vim.fn.has "win64" == 1 then
   local jdt_base = vim.fn.expand(

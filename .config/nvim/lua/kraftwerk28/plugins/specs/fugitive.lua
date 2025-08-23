@@ -16,4 +16,5 @@ return {
     { "<Leader>gh", "<Cmd>diffget //2<CR>" },
     { "<Leader>gl", "<Cmd>diffget //3<CR>" },
   },
+  cmd = { "G", "Git" },
 }

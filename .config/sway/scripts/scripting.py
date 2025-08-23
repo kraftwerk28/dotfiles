@@ -66,7 +66,7 @@ class PulseControl:
             return 0, False
 
     def _notify(self, volume: int, muted: bool):
-        icon = " " if (muted or volume <= 0) else " "
+        icon = " " if muted else " "
         percent = min(volume, 100)
         cmd = [
             "notify-send",
@@ -86,13 +86,13 @@ class PulseControl:
 
     def handle_cmd(self, command: str, *args: str):
         if command == "mic-mute":
-            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", 1)
+            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "1")
         elif command == "mic-unmute":
-            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", 0)
+            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "0")
         elif command == "mic-toggle":
             self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "toggle")
         elif command == "speaker-toggle":
-            self._pactl("set-sink-mute", "@DEFAULT_SOURCE@", "toggle")
+            self._pactl("set-sink-mute", "@DEFAULT_SINK@", "toggle")
             volume, muted = self.get_volume(self._get_default_sink())
             self._notify(volume, muted)
         elif command in ("up", "down"):

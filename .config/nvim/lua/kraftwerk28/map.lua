@@ -1,14 +1,14 @@
 -- Do not replace `+` register's contents when cutting text
 vim.keymap.set("x", "p", function()
   vim.fn.setreg("a", vim.fn.getreg("+"))
-  vim.cmd("normal! " .. vim.v.count1 .. "p")
+  vim.cmd.normal { vim.v.count1 .. "p", bang = true }
   vim.fn.setreg("+", vim.fn.getreg("a"))
 end, { desc = "Paste, but don't pollute `+` register" })
 
 -- Do not replace `+` register's contents when cutting text
 vim.keymap.set("x", "P", function()
   vim.fn.setreg("a", vim.fn.getreg("+"))
-  vim.cmd("normal! " .. vim.v.count1 .. "p")
+  vim.cmd.normal { vim.v.count1 .. "p", bang = true }
   vim.fn.setreg("+", vim.fn.getreg("a"))
 end, { desc = "Paste, but don't pollute `+` register" })
 
@@ -60,7 +60,7 @@ end
 
 -- Toggle search highlight
 vim.keymap.set("n", "<Leader>hs", function()
-  vim.cmd.set "hlsearch!"
+  vim.o.hlsearch = not vim.o.hlsearch
 end)
 
 vim.keymap.set("n", "<Leader>w", "<Cmd>wall<CR>", { silent = true })
@@ -101,10 +101,10 @@ vim.keymap.set("n", "<Leader>t", function()
   for _, pair in ipairs(boolean_map) do
     local lhs, rhs = pair[1], pair[2]
     if cword == lhs then
-      vim.cmd("normal! ciw" .. rhs)
+      vim.cmd.normal { "ciw" .. rhs, bang = true }
       return
     elseif cword == rhs then
-      vim.cmd("normal! ciw" .. lhs)
+      vim.cmd.normal { "ciw" .. lhs, bang = true }
       return
     end
   end

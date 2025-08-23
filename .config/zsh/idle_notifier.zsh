@@ -2,10 +2,7 @@ if ! which jq swaymsg notify-send &> /dev/null; then
 	return 1
 fi
 
-NOTIFY_COMMAND_COMPLETED_TRESHOLD=2
-
-# Send a notification, if command is executing more than
-# NOTIFY_COMMAND_COMPLETED_TRESHOLD seconds and the shell isn't focused
+NOTIFY_THRESHOLD_SECONDS=2
 
 walk_parent_pids() {
 	local pids=()
@@ -41,7 +38,7 @@ notify_on_exit() {
 	if [[ -z $SWAYSOCK ]]; then
 		return
 	fi
-	if (( elapsed >= NOTIFY_COMMAND_COMPLETED_TRESHOLD )) && ! sway_is_shell_focused; then
+	if (( elapsed >= NOTIFY_THRESHOLD_SECONDS )) && ! sway_is_shell_focused; then
 		if (( exit_code == 0 )); then
 			local title="Command succeeded"
 		else

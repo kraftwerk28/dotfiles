@@ -36,8 +36,11 @@ set writebackup nobackup backupcopy=yes
 set wrap
 " set winborder=single
 
-set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkon500-blinkoff500-TermCursor
-" set guicursor=a:block-blinkon200-blinkoff200-Cursor
+" " Dynamic cursor
+" set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkon500-blinkoff500-TermCursor
+
+" Block cursor for all modes
+set guicursor=a:block-blinkon200-blinkoff200-Cursor
 
 " qwertyuiop[]\asdfghjkl;'zxcvbnm,.
 " йцукенгшщзхїґфівапролджєячсмитьбю
