@@ -66,10 +66,10 @@ end)
 vim.keymap.set("n", "<Leader>w", "<Cmd>wall<CR>", { silent = true })
 
 -- Move line/block across the buffer
-vim.keymap.set("n", "<M-k>", "<Cmd>m-2<CR>", { silent = true })
-vim.keymap.set("n", "<M-j>", "<Cmd>m+1<CR>", { silent = true })
-vim.keymap.set("v", "<M-k>", ":m'<-2<CR>gv", { silent = true })
-vim.keymap.set("v", "<M-j>", ":m'>+1<CR>gv", { silent = true })
+vim.keymap.set("n", "<M-k>", ":m-2<CR>==", { silent = true })
+vim.keymap.set("n", "<M-j>", ":m+1<CR>==", { silent = true })
+vim.keymap.set("v", "<M-k>", ":m '<-2<CR>gv=gv", { silent = true })
+vim.keymap.set("v", "<M-j>", ":m '>+1<CR>gv=gv", { silent = true })
 
 vim.keymap.set("i", "<C-BS>", "<C-W>")
 vim.keymap.set("v", "/", [["vy/<C-R>v<CR>]])

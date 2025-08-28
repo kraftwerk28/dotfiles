@@ -35,7 +35,7 @@ vim.diagnostic.config {
 }
 
 -- Load options
-vim.cmd.runtime ("opts.vim")
+vim.cmd.runtime("opts.vim")
 
 -- Infer dark/light background from dconf
 do

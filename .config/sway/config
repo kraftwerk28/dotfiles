@@ -251,28 +251,6 @@ mode $mode_manage_output {
 
 # Theme and colors {{{
 
-# Gruvbox Light
-
-# # Gruvbox Light palette
-# set $background "#fbf1c7"
-# set $foreground "#3c3836"
-# set   $regular0 "#fbf1c7"
-# set   $regular1 "#cc241d"
-# set   $regular2 "#98971a"
-# set   $regular3 "#d79921"
-# set   $regular4 "#458588"
-# set   $regular5 "#b16286"
-# set   $regular6 "#689d6a"
-# set   $regular7 "#7c6f64"
-# set    $bright0 "#928374"
-# set    $bright1 "#9d0006"
-# set    $bright2 "#79740e"
-# set    $bright3 "#b57614"
-# set    $bright4 "#076678"
-# set    $bright5 "#8f3f71"
-# set    $bright6 "#427b58"
-# set    $bright7 "#3c3836"
-
 # https://github.com/morhetz/gruvbox {{{
 set $gb.dark0_hard "#1d2021"
 set $gb.dark0      "#282828"
@@ -320,7 +298,7 @@ set $gb.faded_aqua   "#427b58"
 set $gb.faded_orange "#af3a03"
 # }}}
 
-# Theme variables. These assume that title background and borders have same color
+# Theme variables. These assume that title background and borders have same color {{{
 set $unfocused_border    $gb.dark0
 set $unfocused_text      $gb.light0
 set $unfocused_indicator $gb.faded_purple
@@ -329,6 +307,7 @@ set $focused_text        $gb.light0
 set $focused_indicator   $gb.neutral_purple
 set $urgent_border       $gb.neutral_red
 set $urgent_text         $gb.light0
+# }}}
 
 # <class>               <title_border> <title_background> <title_text> <next_window_indicator> <window_border>
 client.unfocused        $unfocused_border $unfocused_border $unfocused_text $unfocused_indicator $unfocused_border
@@ -344,6 +323,7 @@ bar {
 	font nerd-monospace 11
 	position bottom
 	workspace_min_width 24
+	# NOTE: Uncomment to disable tray
 	# tray_output none
 	wrap_scroll yes
 	colors {
@@ -429,7 +409,7 @@ exec_always $scripts/set-cursor.sh $cursor_theme $cursor_size
 # }}}
 
 # Autostart {{{
-exec $scripts/scripting.py
+exec $scripts/i3ipc-py.sh
 exec $scripts/autostart.sh
 exec $scripts/swayidle.sh
 exec $scripts/polkit-agent.sh

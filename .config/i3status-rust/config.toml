@@ -113,6 +113,10 @@ empty_format = "$icon $percentage"
 empty_threshold = 0
 
 [[block]]
+block = "kdeconnect"
+device_id = "d7c895d2_a2d9_4cc3_83bf_dada2393f971"
+
+[[block]]
 block = "keyboard_layout"
 driver = "sway"
 format = "$layout"

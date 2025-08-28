@@ -1,4 +1,7 @@
-bindkey -e
+# bindkey -e
+bindkey -v
+
+KEYTIMEOUT=5 # 50ms, same as default 'ttimeoutlen' in neovim
 
 bindkey '^P' up-history
 bindkey '^N' down-history
@@ -23,18 +26,28 @@ set_cursor_style() {
 	# # For emacs keymap
 	# echo -ne '\e[1 q';;
 
-	case $KEYMAP in
+	case "$KEYMAP" in
 		vicmd)
-			# Blinking block
-			echo -ne '\e[1 q';;
-		main|viins)
-			# Blinking beam
-			echo -ne '\e[5 q';;
+			case "$REGION_ACTIVE" in
+				1|2)
+					# Blinking underline
+					echo -ne '\e[3 q';;
+				*)
+					# Blinking block
+					echo -ne '\e[1 q';;
+			esac
+			;;
 		viopp|visual)
+			# Blinking underline
 			echo -ne '\e[3 q';;
+		main|viins)
+			# Blinking I-beam
+			echo -ne '\e[5 q';;
 		*)
 			echo -ne '\e[1 q';;
 	esac
 }
 
-KEYTIMEOUT=5 # 50ms, same as default 'ttimeoutlen' in neovim
+zle -N zle-line-init set_cursor_style
+zle -N zle-line-pre-redraw set_cursor_style
+zle -N zle-keymap-select set_cursor_style

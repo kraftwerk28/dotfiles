@@ -42,10 +42,10 @@ return {
         "fori",
         fmt.fmta(
           [[
-        for (<> <> = 0; <> << <>; <>++) {
-        <><>
-        }
-      ]],
+            for (<> <> = 0; <> << <>; <>++) {
+            <><>
+            }
+          ]],
           { i(1, "int"), i(2, "i"), rep(2), i(3, "42"), rep(2), t("\t"), i(0) }
         )
       ),
@@ -53,20 +53,14 @@ return {
         "once",
         fmt.fmta(
           [[
-        #ifndef <hdr>
-        #define <hdr>
+            #ifndef <>_INCLUDED
+            #define <>_INCLUDED
 
-        <>
+            <>
 
-        #endif
-      ]],
-          {
-            hdr = f(function()
-              local file = vim.fn.expand("%:r")
-              return file:gsub("%p", "_"):upper() .. "_INCLUDED"
-            end),
-            i(0),
-          }
+            #endif
+          ]],
+          { i(1), rep(1), i(0) }
         )
       ),
     }
