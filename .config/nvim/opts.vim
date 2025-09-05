@@ -44,3 +44,7 @@ set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkon500-blinkoff500
 
 " " Block cursor for all modes
 " set guicursor=a:block-blinkon200-blinkoff200-Cursor
+
+set foldmethod=expr
+let &foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+

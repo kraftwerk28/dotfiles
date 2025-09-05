@@ -48,20 +48,6 @@ autocmd("LspAttach", {
       end, { buffer = true })
     end
 
-    -- NOTE: handled by blink.cmp
-    -- if client:supports_method("textDocument/signatureHelp") then
-    --   vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, {
-    --     buffer = true,
-    --   })
-    -- end
-
-    if cap.documentFormattingProvider then
-      -- NOTE: conform.nvim manages LSP formatting for us, skip keymap setting
-      -- vim.keymap.set("n", "<Leader>f", function()
-      --   vim.lsp.buf.format({ timeout_ms = 5000, async = false })
-      -- end, { buffer = true, desc = "[F]ormat" })
-    end
-
     -- Under-cursor LSP mappings
     if client:supports_method("textDocument/rename") then
       vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, {
@@ -130,10 +116,11 @@ autocmd("LspAttach", {
       })
     end
 
-    if client:supports_method("textDocument/foldingRange") then
-      vim.o.foldmethod = "expr"
-      vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
-    end
+    -- if client:supports_method("textDocument/foldingRange") then
+    --   local winid = vim.api.nvim_get_current_win()
+    --   vim.wo[winid][0].foldmethod = "expr"
+    --   vim.wo[winid][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+    -- end
   end,
 })
 

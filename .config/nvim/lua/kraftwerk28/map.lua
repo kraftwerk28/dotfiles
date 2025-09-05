@@ -141,7 +141,7 @@ vim.keymap.set("n", "<Leader>/", [[/^\s*\<]], {
 vim.keymap.set("i", "<D-Space>", "<Nop>")
 
 vim.keymap.set("n", "<Leader>dc", function()
-  vim.diagnostic.open_float { border = vim.g.borderchars }
+  vim.diagnostic.open_float()
 end, { desc = "[D]iagnostics under [C]ursor" })
 
 -- Layout-agnostic mappings, i.e. for cyrrillic

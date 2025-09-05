@@ -1,6 +1,5 @@
 return {
   "nvim-tree/nvim-tree.lua",
-  enabled = true,
   dependencies = { "kyazdani42/nvim-web-devicons", opt = true },
   opts = {
     -- disable_netrw = false,

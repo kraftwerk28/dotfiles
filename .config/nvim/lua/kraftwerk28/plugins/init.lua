@@ -24,29 +24,6 @@ return {
   },
 
   {
-    "numToStr/Comment.nvim",
-    config = function()
-      require("ts_context_commentstring").setup {
-        languages = {
-          c = {
-            __default = "// %s",
-            __multiline = "/* %s */",
-          },
-        },
-      }
-      require("Comment").setup {
-        pre_hook = require(
-          "ts_context_commentstring.integrations.comment_nvim"
-        ).create_pre_hook(),
-      }
-      local mopt = { silent = true, remap = true }
-      vim.keymap.set("n", "<C-/>", "gccj", mopt)
-      vim.keymap.set("i", "<C-/>", "<Cmd>:normal gcc<CR>", mopt)
-      vim.keymap.set("x", "<C-/>", "gcgv", mopt)
-    end,
-  },
-
-  {
     "lewis6991/gitsigns.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {},

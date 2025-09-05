@@ -302,18 +302,24 @@ set $gb.faded_orange "#af3a03"
 set $unfocused_border    $gb.dark0
 set $unfocused_text      $gb.light0
 set $unfocused_indicator $gb.faded_purple
+
+set $inactive_border     $gb.dark4
+set $inactive_text       $gb.light0
+set $inactive_indicator  $gb.faded_purple
+
 set $focused_border      $gb.neutral_orange
 set $focused_text        $gb.light0
 set $focused_indicator   $gb.neutral_purple
+
 set $urgent_border       $gb.neutral_red
 set $urgent_text         $gb.light0
 # }}}
 
 # <class>               <title_border> <title_background> <title_text> <next_window_indicator> <window_border>
 client.unfocused        $unfocused_border $unfocused_border $unfocused_text $unfocused_indicator $unfocused_border
-client.focused_inactive $unfocused_border $unfocused_border $unfocused_text $unfocused_indicator $unfocused_border
-client.focused          $focused_border   $focused_border   $focused_text   $focused_indicator $focused_border
-client.urgent           $urgent_border    $urgent_border    $urgent_text    $focused_indicator $urgent_border
+client.focused_inactive $inactive_border  $inactive_border  $inactive_text  $inactive_indicator  $inactive_border
+client.focused          $focused_border   $focused_border   $focused_text   $focused_indicator   $focused_border
+client.urgent           $urgent_border    $urgent_border    $urgent_text    $focused_indicator   $urgent_border
 # }}}
 
 # Bar {{{
@@ -400,8 +406,8 @@ font Monospace Bold 10
 # }}}
 
 # Cursor {{{
-set $cursor_theme Adwaita
-# set $cursor_theme breeze_cursors
+# set $cursor_theme Adwaita
+set $cursor_theme breeze_cursors
 # set $cursor_theme Breeze_Light
 set $cursor_size 24
 seat * xcursor_theme $cursor_theme $cursor_size
