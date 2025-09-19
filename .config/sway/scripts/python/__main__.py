@@ -96,31 +96,45 @@ class Scripting:
         ]
         ipc.command(", ".join(cmds))
 
+    def _handle_nop_cmd(self, words: list[str]):
+        match words:
+            case "focus_prev",:
+                if self.prev2_con_id is not None:
+                    # Focus previous container
+                    self.i3.command(f"[con_id={self.prev2_con_id}] focus")
+            case "workspace", action:
+                # Switch to Nth workspace
+                wss = self.i3.get_workspaces()
+                focused_ws = next((ws for ws in wss if ws.focused), None)
+                if focused_ws is None:
+                    return
+                if action == "prev":
+                    ws_num = focused_ws.num - 1
+                elif action == "next":
+                    ws_num = focused_ws.num + 1
+                else:
+                    return
+                if ws_num > 0:
+                    self.i3.command(f"workspace {ws_num}")
+            case "volume", "mic-mute":
+                self.volume.set_mic_mute(True)
+            case "volume", "mic-unmute":
+                self.volume.set_mic_mute(False)
+            case "volume", "mic-toggle":
+                self.volume.toggle_mic()
+            case "volume", "speaker-toggle":
+                self.volume.toggle_speaker()
+            case "volume", "up":
+                self.volume.volume_up()
+            case "volume", "down":
+                self.volume.volume_down()
+
     def on_binding(self, ipc: Connection, ev: BindingEvent):
-        cmd = ev.binding.command
-        if cmd == "nop focus_prev" and self.prev2_con_id is not None:
-            # Focus previous container
-            cmd = f"[con_id={self.prev2_con_id}] focus"
-            ipc.command(cmd)
-        elif cmd.startswith("nop workspace"):
-            # Switch to Nth workspace
-            wss = ipc.get_workspaces()
-            focused_ws = next((ws for ws in wss if ws.focused), None)
-            if focused_ws is None:
-                return
-            if cmd.endswith("prev"):
-                ws_num = focused_ws.num - 1
-            elif cmd.endswith("next"):
-                ws_num = focused_ws.num + 1
-            else:
-                return
-            if ws_num > 0:
-                ipc.command(f"workspace {ws_num}")
-        elif cmd.startswith("nop volume"):
-            parts = cmd.split()
-            if len(parts) > 2:
-                self.volume.handle_cmd(*parts[2:])
-        elif "rofi" in cmd:
+        cmd_raw = ev.binding.command
+        if cmd_raw.startswith("nop "):
+            parts = cmd_raw.split()[1:]
+            self._handle_nop_cmd(parts)
+        elif "rofi" in cmd_raw:
             self.switch_to_default_kbd_layout()
 
     def on_output(self, ipc, ev):

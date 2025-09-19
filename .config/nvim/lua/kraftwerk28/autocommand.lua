@@ -78,6 +78,19 @@ autocmd("FileType", {
   group = group,
 })
 
+autocmd("FileType", {
+  pattern = { "help", "qf", "fugitive", "git", "fugitiveblame" },
+  callback = function()
+    vim.keymap.set(
+      "n",
+      "q",
+      "<Cmd>bdelete<CR>",
+      { buffer = true, silent = true }
+    )
+  end,
+  group = augroup("aux_win_close"),
+})
+
 -- autocmd("FileType", {
 --   pattern = { "c", "cpp" },
 --   callback = function()

@@ -27,9 +27,8 @@ vim.filetype.add {
 
 -- Set options for filetypes
 local ftconfig = {
-  -- Indentation options
   {
-    {
+    ft = {
       "go",
       "make",
       "c",
@@ -40,10 +39,10 @@ local ftconfig = {
       "sh",
       "hocon",
     },
-    { expandtab = false, shiftwidth = 0 },
+    opts = { expandtab = false, shiftwidth = 0 },
   },
   {
-    {
+    ft = {
       "cabal",
       "csharp",
       "dockerfile",
@@ -54,10 +53,10 @@ local ftconfig = {
       "erlang",
       "elixir",
     },
-    { expandtab = true, shiftwidth = 4 },
+    opts = { expandtab = true, shiftwidth = 4 },
   },
   {
-    {
+    ft = {
       "graphql",
       "haskell",
       "javascript",
@@ -73,57 +72,45 @@ local ftconfig = {
       "yaml",
       "vue",
     },
-    { expandtab = true, shiftwidth = 2 },
+    opts = { expandtab = true, shiftwidth = 2 },
   },
-  { "asm", { expandtab = false, tabstop = 8, shiftwidth = 0 } },
+  { ft = "asm", opts = { expandtab = false, tabstop = 8, shiftwidth = 0 } },
 
   -- Misc options
   {
-    { "json", "jsonc", "cjson" },
-    { commentstring = "// %s" },
+    fs = { "json", "jsonc", "cjson" },
+    opts = { commentstring = "// %s" },
   },
-  { "help", { conceallevel = 0 } },
-  { "graphql", { commentstring = "# %s" } },
+  { ft = "help", opts = { conceallevel = 0 } },
+  { ft = "graphql", opts = { commentstring = "# %s" } },
   {
-    { "dosini", "confini", "jess" },
-    { commentstring = "; %s" },
+    ft = { "dosini", "confini", "jess" },
+    opts = { commentstring = "; %s" },
   },
   {
-    "hocon",
-    { commentstring = "# %s", cindent = true, cinoptions = "+0" },
+    ft = "hocon",
+    opts = { commentstring = "# %s", cindent = true, cinoptions = "+0" },
   },
 
   {
-    { "c", "sh", "bash" },
-    { keywordprg = ":Man" },
+    ft = { "c", "sh", "bash" },
+    opts = { keywordprg = ":Man" },
   },
 
-  { { "sml" }, { commentstring = "(* %s *)" } },
+  { ft = { "sml" }, opts = { commentstring = "(* %s *)" } },
 
-  { { "markdown" }, { breakindent = true } },
+  { ft = { "markdown" }, opts = { breakindent = true } },
 }
 
 local filetype_opts = augroup("filetype_opts")
 for _, cfg in ipairs(ftconfig) do
-  local filetypes, opts = cfg[1], cfg[2]
   autocmd("FileType", {
-    pattern = filetypes,
+    pattern = cfg.ft,
     callback = function()
-      for name, value in pairs(opts) do
+      for name, value in pairs(cfg.opts) do
         vim.o[name] = value
       end
     end,
     group = filetype_opts,
   })
 end
-
-autocmd("FileType", {
-  pattern = { "help", "qf", "fugitive", "git", "fugitiveblame" },
-  callback = function()
-    vim.keymap.set("n", "q", "<Cmd>bdelete<CR>", {
-      buffer = true,
-      silent = true,
-    })
-  end,
-  group = augroup("aux_win_close"),
-})

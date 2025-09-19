@@ -33,6 +33,8 @@ end
 
 autocmd("LspAttach", {
   callback = function(args)
+    -- NOTE: checking for client:supports_method("...") before setting each mapping doesn't always work
+
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     if not client then
       return
@@ -42,76 +44,64 @@ autocmd("LspAttach", {
       return
     end
 
-    if client:supports_method("textDocument/hover") then
-      vim.keymap.set("n", "K", function()
-        vim.lsp.buf.hover()
-      end, { buffer = true })
-    end
-
-    -- Under-cursor LSP mappings
-    if client:supports_method("textDocument/rename") then
-      vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, {
-        buffer = true,
-        desc = "[C]ursor [R]ename",
-      })
-    end
-
-    if client:supports_method("textDocument/codeAction") then
-      vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, {
-        buffer = true,
-        desc = "[C]ode [A]ctions",
-      })
-    end
-
     local tb = require "telescope.builtin"
 
-    if client:supports_method("textDocument/references") then
-      vim.keymap.set("n", "gr", tb.lsp_references, {
-        buffer = true,
-        desc = "Goto References",
-      })
-    end
+    vim.keymap.set("n", "K", function()
+      vim.lsp.buf.hover()
+    end, { buffer = args.buf })
 
-    if client:supports_method("textDocument/definition") then
-      -- <Leader> is not used here as it is often executed mapping
-      vim.keymap.set("n", "gd", tb.lsp_definitions, {
-        buffer = true,
-        desc = "Goto Definition",
-      })
-    end
+    -- Under-cursor LSP mappings
+    vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, {
+      buffer = args.buf,
+      desc = "[C]ursor [R]ename",
+    })
 
-    if client:supports_method("textDocument/declaration") then
-      -- <Leader> is not used here as it is often executed mapping
-      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
-        buffer = true,
-        desc = "Goto Declaration",
-      })
-    end
+    vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, {
+      buffer = args.buf,
+      desc = "[C]ode [A]ctions",
+    })
+
+    vim.keymap.set("n", "gr", tb.lsp_references, {
+      buffer = args.buf,
+      desc = "Goto References",
+    })
+
+    -- <Leader> is not used here as it is often executed mapping
+    vim.keymap.set("n", "gd", tb.lsp_definitions, {
+      buffer = args.buf,
+      desc = "Goto Definition",
+    })
+
+    -- <Leader> is not used here as it is often executed mapping
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
+      buffer = args.buf,
+      desc = "Goto Declaration",
+    })
 
     if cap.typeDefinitionProvider then
       vim.keymap.set("n", "gt", tb.lsp_type_definitions, {
-        buffer = true,
+        buffer = args.buf,
         desc = "Goto Type Definition",
       })
     end
 
     if cap.implementationProvider then
       vim.keymap.set("n", "gI", tb.lsp_implementations, {
-        buffer = true,
+        buffer = args.buf,
         desc = "Goto Implementation",
       })
     end
 
     if cap.documentSymbolProvider then
       vim.keymap.set("n", "gsd", tb.lsp_document_symbols, {
-        buffer = true,
+        buffer = args.buf,
         desc = "Goto Document Symbols",
       })
     end
 
     if cap.workspaceSymbolProvider then
       vim.keymap.set("n", "gsw", tb.lsp_workspace_symbols, {
-        buffer = true,
+        buffer = args.buf,
         desc = "Goto Workspace Symbols",
       })
     end

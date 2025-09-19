@@ -200,10 +200,12 @@ bindsym {
 	XF86AudioNext exec playerctl next
 	XF86AudioPrev exec playerctl previous
 
-	Print				exec grimvshot --notify --swaynag --area
-	Shift+Print			exec grimvshot --notify --swaynag --window
-	Control+Print		exec grimvshot --notify --swaynag --output
-	Control+Shift+Print	exec grimvshot --notify --swaynag --active
+	Print         exec flameshot gui
+	Control+Print exec flameshot screen --clipboard
+	# Print				exec grimvshot --notify --swaynag --area
+	# Shift+Print			exec grimvshot --notify --swaynag --window
+	# Control+Print		exec grimvshot --notify --swaynag --output
+	# Control+Shift+Print	exec grimvshot --notify --swaynag --active
 }
 
 bindsym --to-code $mod+r mode "resize"

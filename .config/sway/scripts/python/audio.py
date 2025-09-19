@@ -47,26 +47,34 @@ class PulseControl:
         ret = round(ret / diff) * diff
         return min(max(ret, 0), self._max_volume)
 
-    def handle_cmd(self, command: str, *args: str):
-        if command == "mic-mute":
-            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "1")
-        elif command == "mic-unmute":
-            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "0")
-        elif command == "mic-toggle":
-            self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "toggle")
-        elif command == "speaker-toggle":
-            self._pactl("set-sink-mute", "@DEFAULT_SINK@", "toggle")
-            volume, muted = self.get_volume(self._get_default_sink())
+    def set_mic_mute(self, mute: bool):
+        self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "1" if mute else "0")
+
+    def toggle_mic(self):
+        self._pactl("set-source-mute", "@DEFAULT_SOURCE@", "toggle")
+
+    def toggle_speaker(self):
+        self._pactl("set-sink-mute", "@DEFAULT_SINK@", "toggle")
+        volume, muted = self.get_volume(self._get_default_sink())
+        self._notify(volume, muted)
+
+    def _change_volume(self, dir: int):
+        sink = self._get_default_sink()
+        volume, muted = self.get_volume(sink)
+        if "Focusrite" in sink:
             self._notify(volume, muted)
-        elif command in ("up", "down"):
-            sink = self._get_default_sink()
-            volume, muted = self.get_volume(sink)
-            if "Focusrite" in sink:
-                self._notify(volume, muted)
-                return
-            if command == "up":
-                volume = self._calc_volume(volume, diff=1 if volume < 5 else 5)
-            elif command == "down":
-                volume = self._calc_volume(volume, diff=-1 if volume <= 5 else -5)
-            self._pactl("set-sink-volume", "@DEFAULT_SINK@", f"{volume}%")
-            self._notify(volume, muted)
+            return
+        if dir > 0:
+            volume = self._calc_volume(volume, diff=1 if volume < 5 else 5)
+        elif dir < 0:
+            volume = self._calc_volume(volume, diff=-1 if volume <= 5 else -5)
+        else:
+            return
+        self._pactl("set-sink-volume", "@DEFAULT_SINK@", f"{volume}%")
+        self._notify(volume, muted)
+
+    def volume_up(self):
+        return self._change_volume(1)
+
+    def volume_down(self):
+        return self._change_volume(-1)

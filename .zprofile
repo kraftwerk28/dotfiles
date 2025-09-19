@@ -25,8 +25,8 @@ if [[ "$(tty)" == "/dev/tty1" ]]; then
 	# Remove logs older than 14 days
 	find "$(dirname $logfile)" -maxdepth 1 -type f -mtime +14 -name '*.log' -execdir rm -v '{}' \;
 
-	# exec sway --unsupported-gpu
-	exec sway --unsupported-gpu &> "$logfile"
+	exec sway --unsupported-gpu
+	# exec sway --unsupported-gpu &> "$logfile"
 	# exec sway --verbose --debug --unsupported-gpu \
 	# 	--config ~/projects/wayland/sway/myconfig \
 	# 	&> "${sway_logdir}/sway-debug.log"
