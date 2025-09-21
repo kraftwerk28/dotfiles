@@ -49,6 +49,10 @@ show_volume_when_muted = true
 [[block.click]]
 button = "left"
 cmd = "pavucontrol --tab=4"
+[[block.click]]
+button = "wheel_up"
+[[block.click]]
+button = "wheel_down"
 
 [[block]]
 block = "sound"
@@ -62,6 +66,10 @@ cmd = "pavucontrol --tab=3"
 [[block.click]]
 button = "right"
 cmd = "$XDG_CONFIG_HOME/sway/bar-scripts/pulse-switch.sh sink"
+[[block.click]]
+button = "wheel_up"
+[[block.click]]
+button = "wheel_down"
 [block.mappings]
 ".*pci-0000_00_1f\\.3\\.analog-stereo.*" = "Builtin"
 ".*usb-Focusrite_Scarlett_Solo_USB_Y7RH6Z51604365-00.*" = "Focusrite"
