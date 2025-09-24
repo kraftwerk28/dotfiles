@@ -14,17 +14,14 @@ TARGET_FPS=30
 TARGET_SIZE=2020
 
 usage() {
-	echo "Usage: $0 <input> <output> [ffmpeg options]..." >&2
+	echo "Usage: $0 <input> [ffmpeg options]..." >&2
 	exit 1
 }
 
-if (( $# < 2 )); then
-	usage
-fi
-
-in_file="${1}"
-out_file="${2%.webm}.webm"
-shift 2
+[[ $# -lt 1 ]] && usage
+in_file="$1"
+out_file="${1%.*}.webm"
+shift
 
 # Export variables for jq commands
 export TARGET_SIZE TARGET_DURATION_S
