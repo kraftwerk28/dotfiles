@@ -14,14 +14,19 @@ TARGET_FPS=30
 TARGET_SIZE=2020
 
 usage() {
-	echo "Usage: $0 <input> [ffmpeg options]..." >&2
+	echo "Usage: $0 <input> [output]" >&2
 	exit 1
 }
 
-[[ $# -lt 1 ]] && usage
-in_file="$1"
-out_file="${1%.*}.webm"
-shift
+if [[ $# -le 1 ]]; then
+	in_file="$1"
+	out_file="${1%.*}.webm"
+elif [[ $# -le 2 ]]; then
+	in_file="$1"
+	out_file="$2"
+else
+	usage
+fi
 
 # Export variables for jq commands
 export TARGET_SIZE TARGET_DURATION_S
@@ -36,6 +41,6 @@ vfilter="setpts=${duration_mul}*PTS,fps=${TARGET_FPS},scale=${scale}"
 
 set -x
 ffmpeg -hide_banner -y -i "$in_file" -c:v libvpx-vp9 -pix_fmt yuva420p -vf "$vfilter" \
-	-b:v "$target_bitrate" -an -pass 1 -f null "$@" /dev/null
+	-b:v "$target_bitrate" -an -pass 1 -f null /dev/null
 ffmpeg -hide_banner -i "$in_file" -c:v libvpx-vp9 -pix_fmt yuva420p -vf "$vfilter" \
-	-b:v "$target_bitrate" -an -pass 2 "$@" "${out_file}"
+	-b:v "$target_bitrate" -an -pass 2 "${out_file}"
