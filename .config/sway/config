@@ -327,8 +327,7 @@ client.urgent           $urgent_border    $urgent_border    $urgent_text    $foc
 # Bar {{{
 bar {
 	status_command i3status-rs
-	# NOTE: must define nerd-monospace in fontconfig
-	font nerd-monospace 11
+	font monospace 11
 	position bottom
 	workspace_min_width 24
 	# NOTE: Uncomment to disable tray

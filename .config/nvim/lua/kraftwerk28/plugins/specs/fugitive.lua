@@ -4,6 +4,7 @@ return {
     "tpope/vim-rhubarb",
     "tommcdo/vim-fubitive",
   },
+  lazy = false,
   keys = {
     { "<Leader>gp", "<Cmd>Git push origin HEAD<CR>", ft = "fugitive" },
 
@@ -16,5 +17,4 @@ return {
     { "<Leader>gh", "<Cmd>diffget //2<CR>" },
     { "<Leader>gl", "<Cmd>diffget //3<CR>" },
   },
-  cmd = { "G", "Git" },
 }

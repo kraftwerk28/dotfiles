@@ -1,8 +1,17 @@
 manage_venv() {
-	local script="$PWD/.venv/bin/activate"
-	if [[ -f $script ]]; then
-		source $script
-	elif which deactivate &> /dev/null; then
+	local dir="$PWD"
+	while [[ $dir != "/" ]]; do
+		local ascript="$dir/.venv/bin/activate"
+		if [[ -f "$ascript" ]]; then
+			if [[ -z "$VIRTUAL_ENV" ]]; then
+				source "$ascript"
+			fi
+			return
+		fi
+		dir="$(dirname "$dir")"
+	done
+
+	if which deactivate &>/dev/null; then
 		deactivate
 	fi
 }

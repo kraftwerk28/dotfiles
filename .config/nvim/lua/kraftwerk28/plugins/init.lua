@@ -75,7 +75,7 @@ return {
     },
     init = function()
       vim.go.sessionoptions =
-        "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+        "blank,buffers,curdir,folds,help,tabpages,winsize,terminal"
     end,
   },
 

@@ -165,7 +165,7 @@ return {
     -- require "ts_context_commentstring".setup()
     require "treesitter-context".setup {
       enable = true,
-      mode = "topline",
+      mode = "cursor",
     }
     -- require("kraftwerk28.plugins.treesitter_blockmark")
   end,

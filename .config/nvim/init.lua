@@ -52,8 +52,6 @@ do
   end
 end
 
--- vim.go.background = "dark"
-
 require "kraftwerk28.lazy"
 require "kraftwerk28.map"
 require "kraftwerk28.autocommand"

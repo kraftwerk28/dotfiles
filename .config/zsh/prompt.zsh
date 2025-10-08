@@ -14,7 +14,7 @@ git_info() {
 	echo $result
 }
 
-autoload -Uz vcs_info 
+autoload -Uz vcs_info
 
 zstyle ':vcs_info:git:*' formats ' %B%F{blue}%%F{magenta}%b%f%m%Q%%b'
 zstyle ':vcs_info:git:*' check-for-changes true
@@ -51,10 +51,17 @@ vimode_rlabel() {
 	esac
 }
 
+get_venv_info() {
+	if [[ -n "$VIRTUAL_ENV" ]]; then
+		echo " 🐍${$(python -V)#* }"
+	fi
+}
+
 filepath='%(4~|…/%2~|%~)%b%f'
 git_info='${vcs_info_msg_0_}%b%f'
 exit_status='%(?:%B%F{green}:%B%F{red})$?%b%f'
-PROMPT="$filepath$git_info $exit_status $ "
+venv_info='%F{yellow}$(get_venv_info)%f'
+PROMPT="${filepath}${git_info}${venv_info} ${exit_status} $ "
 # RPROMPT='%F{magenta}${exec_time_prompt}%b%f $(printf %-3d $?)'
 # RPROMPT='%b%f $(printf %-3d $?)'
 

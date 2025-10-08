@@ -35,7 +35,7 @@ alias ssh='TERM=xterm-256color ssh'
 
 alias dotfiles="git --git-dir=$HOME/projects/dotfiles --work-tree=$HOME"
 
-alias pino-pretty="pino-pretty -t SYS:isoDateTime -i hostname,pid"
+alias pino-pretty="pino-pretty -t 'SYS:dd.mm.yy HH:MM:ss' -i hostname,pid"
 
 dotfilesupd() (
 	dotfiles add -u
