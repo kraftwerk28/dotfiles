@@ -51,21 +51,25 @@ vimode_rlabel() {
 	esac
 }
 
-get_venv_info() {
+virtualenv_info() {
 	if [[ -n "$VIRTUAL_ENV" ]]; then
-		echo " 🐍${$(python -V)#* }"
+		local ver="${$(python -V)#* }"
+		venv_info_msg=" %B%F{yellow}🐍%f%b${ver}"
+	else
+		venv_info_msg=""
 	fi
 }
 
 filepath='%(4~|…/%2~|%~)%b%f'
 git_info='${vcs_info_msg_0_}%b%f'
-exit_status='%(?:%B%F{green}:%B%F{red})$?%b%f'
-venv_info='%F{yellow}$(get_venv_info)%f'
-PROMPT="${filepath}${git_info}${venv_info} ${exit_status} $ "
+exit_status=' %B%(?.%F{green}.%F{red})$?%b%f'
+venv_info='${venv_info_msg}'
+PROMPT="${filepath}${git_info}${venv_info}${exit_status} $ "
 # RPROMPT='%F{magenta}${exec_time_prompt}%b%f $(printf %-3d $?)'
 # RPROMPT='%b%f $(printf %-3d $?)'
 
 add-zsh-hook precmd vcs_info
+add-zsh-hook precmd virtualenv_info
 
 _exec_time_preexec() {
 	cmd_exec_time=$SECONDS
