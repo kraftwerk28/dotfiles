@@ -1,43 +1,6 @@
-local config = {
-  highlight = {
-    enable = true,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<Leader>)",
-      node_incremental = ")",
-      node_decremental = "(",
-    },
-  },
-  blockmark = {
-    enable = true,
-  },
-  -- textobjects = {
-  --   select = {
-  --     enable = true,
-  --     lookahead = true,
-  --     lookbehind = true,
-  --     keymaps = {
-  --       ["aa"] = "@parameter.outer",
-  --       ["ia"] = "@parameter.inner",
-  --       ["ib"] = "@block.inner",
-  --       ["ab"] = "@block.outer",
-  --     },
-  --   },
-  --   move = {
-  --     enable = true,
-  --   },
-  -- },
-}
-
-if vim.fn.has("unix") == 1 then
-  config.ensure_installed = {
+local languages = {}
+if vim.fn.has "unix" == 1 then
+  languages = {
     "angular",
     "arduino",
     "awk",
@@ -108,6 +71,7 @@ if vim.fn.has("unix") == 1 then
     "pem",
     "perl",
     "php",
+    "php_only",
     "phpdoc",
     "promql",
     "properties",
@@ -139,8 +103,8 @@ if vim.fn.has("unix") == 1 then
     "yaml",
     "zig",
   }
-elseif vim.fn.has("win64") == 1 then
-  config.ensure_installed = {
+elseif vim.fn.has "win64" == 1 then
+  languages = {
     "java",
     "kotlin",
     "javascript",
@@ -148,6 +112,46 @@ elseif vim.fn.has("win64") == 1 then
     "python",
   }
 end
+
+local config = {
+  ensure_installed = languages,
+
+  highlight = {
+    enable = true,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<Leader>)",
+      node_incremental = ")",
+      node_decremental = "(",
+    },
+  },
+  blockmark = {
+    enable = true,
+  },
+  -- textobjects = {
+  --   select = {
+  --     enable = true,
+  --     lookahead = true,
+  --     lookbehind = true,
+  --     keymaps = {
+  --       ["aa"] = "@parameter.outer",
+  --       ["ia"] = "@parameter.inner",
+  --       ["ib"] = "@block.inner",
+  --       ["ab"] = "@block.outer",
+  --     },
+  --   },
+  --   move = {
+  --     enable = true,
+  --   },
+  -- },
+}
 
 return {
   -- "~/projects/neovim/nvim-treesitter",
@@ -158,6 +162,8 @@ return {
     "windwp/nvim-ts-autotag",
     "nvim-treesitter/nvim-treesitter-context",
   },
+  branch = "master",
+  lazy = false,
   build = ":TSUpdate",
   config = function()
     require "nvim-treesitter.configs".setup(config)

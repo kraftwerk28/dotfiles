@@ -8,7 +8,14 @@ return {
   -- },
 
   {
+    "kylechui/nvim-surround",
+    version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    opts = {},
+  },
+  {
     "tpope/vim-surround",
+    enabled = false,
     config = function()
       local surr = setmetatable({}, {
         __newindex = function(_, k, v)
