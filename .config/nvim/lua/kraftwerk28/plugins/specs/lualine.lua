@@ -44,10 +44,12 @@ return {
       -- component_separators = { left = "", right = "" },
       -- section_separators = { left = "", right = "" },
       -- theme = "gruvbox",
+      always_show_tabline = false,
     },
 
     sections = {
       lualine_a = {
+        "mode",
         -- {
         --   "branch",
         --   on_click = function(nclicks, btn)
@@ -69,7 +71,12 @@ return {
       lualine_c = {
         {
           "filename",
-          path = 1, -- Relative
+          -- 0: Just the filename
+          -- 1: Relative path
+          -- 2: Absolute path
+          -- 3: Absolute path, with tilde as the home directory
+          -- 4: Filename and parent dir, with tilde as the home directory
+          path = 1,
           symbols = {
             modified = "󰆔 ",
             readonly = " ",
@@ -87,10 +94,20 @@ return {
             "spinner",
             { "title", "percentage", "message" },
           },
+          spinner_symbols = vim.g.spinner.frames,
         },
       },
-      lualine_y = { char_under_cursor, "progress", "%3.l/%-3.L:%2.c" },
-      lualine_z = {},
+      lualine_y = { char_under_cursor },
+      lualine_z = {
+        function()
+          return string.format(
+            "%3d/%-3d:%-3d",
+            vim.fn.line("."),
+            vim.fn.line("$"),
+            vim.fn.col(".")
+          )
+        end,
+      },
     },
 
     inactive_sections = {
@@ -114,17 +131,21 @@ return {
       lualine_z = {},
     },
 
-    -- tabline = {
-    --   lualine_a = {
-    --     {
-    --       "tabs",
-    --       mode = 1,
-    --       symbols = {
-    --         modified = " ",
-    --       },
-    --       separator = "/",
-    --     },
-    --   },
-    -- },
+    tabline = {
+      lualine_a = {
+        {
+          "tabs",
+          max_length = function()
+            return vim.o.columns
+          end,
+          mode = 1,
+          path = 1,
+          use_mode_colors = true,
+          symbols = {
+            modified = "•",
+          },
+        },
+      },
+    },
   },
 }

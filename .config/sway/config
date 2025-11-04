@@ -26,26 +26,26 @@ bindsym --to-code {
 
 
 	# Window control
-	--no-repeat $mod+$left	focus left
-	--no-repeat $mod+$down	focus down
-	--no-repeat $mod+$up	focus up
-	--no-repeat $mod+$right	focus right
+	--no-repeat $mod+$left  focus left
+	--no-repeat $mod+$down  focus down
+	--no-repeat $mod+$up    focus up
+	--no-repeat $mod+$right focus right
 
-	--no-repeat $mod+Shift+$left	move left
-	--no-repeat $mod+Shift+$down	move down
-	--no-repeat $mod+Shift+$up		move up
-	--no-repeat $mod+Shift+$right	move right
+	--no-repeat $mod+Shift+$left  move left
+	--no-repeat $mod+Shift+$down  move down
+	--no-repeat $mod+Shift+$up    move up
+	--no-repeat $mod+Shift+$right move right
 
-	--no-repeat $mod+Bracketleft	workspace prev
-	--no-repeat $mod+Bracketright	workspace next
-	--no-repeat $modr+Bracketleft	workspace prev
-	--no-repeat $modr+Bracketright	workspace next
+	--no-repeat $mod+Bracketleft   workspace prev
+	--no-repeat $mod+Bracketright  workspace next
+	--no-repeat $modr+Bracketleft  workspace prev
+	--no-repeat $modr+Bracketright workspace next
 
 	# TODO: rewrite using lua framework
-	$mod+Control+Up		exec $scripts/push-window.sh top
-	$mod+Control+Right	exec $scripts/push-window.sh right
-	$mod+Control+Down	exec $scripts/push-window.sh bottom
-	$mod+Control+Left	exec $scripts/push-window.sh left
+	$mod+Control+Up    exec $scripts/push-window.sh top
+	$mod+Control+Right exec $scripts/push-window.sh right
+	$mod+Control+Down  exec $scripts/push-window.sh bottom
+	$mod+Control+Left  exec $scripts/push-window.sh left
 
 	$mod+s layout stacking
 	$mod+w layout tabbed
@@ -64,22 +64,22 @@ bindsym --to-code {
 
 
 	# Mouse movement keyboard control:
-	$mod+Control+Alt+Up		seat * cursor move 0 -$cursor_lg_delta
-	$mod+Control+Alt+Right	seat * cursor move $cursor_lg_delta  0
-	$mod+Control+Alt+Down	seat * cursor move 0  $cursor_lg_delta
-	$mod+Control+Alt+Left	seat * cursor move -$cursor_lg_delta 0
+	$mod+Control+Alt+Up    seat * cursor move 0                 -$cursor_lg_delta
+	$mod+Control+Alt+Right seat * cursor move $cursor_lg_delta  0
+	$mod+Control+Alt+Down  seat * cursor move 0                 $cursor_lg_delta
+	$mod+Control+Alt+Left  seat * cursor move -$cursor_lg_delta 0
 
-	$mod+Alt+Up		seat * cursor move 0 -$cursor_sm_delta
-	$mod+Alt+Right	seat * cursor move $cursor_sm_delta  0
-	$mod+Alt+Down	seat * cursor move 0  $cursor_sm_delta
-	$mod+Alt+Left	seat * cursor move -$cursor_sm_delta 0
+	$mod+Alt+Up    seat * cursor move 0                 -$cursor_sm_delta
+	$mod+Alt+Right seat * cursor move $cursor_sm_delta  0
+	$mod+Alt+Down  seat * cursor move 0                 $cursor_sm_delta
+	$mod+Alt+Left  seat * cursor move -$cursor_sm_delta 0
 
 
 	# Mouse button control (doesn't work well though):
-	--no-repeat	$mod+Alt+Period	seat * cursor press		button1
-	--release	$mod+Alt+Period	seat * cursor release	button1
-	--no-repeat	$mod+Alt+Slash	seat * cursor press		button3
-	--release	$mod+Alt+Slash	seat * cursor release	button3
+	--no-repeat $mod+Alt+Period seat * cursor press   button1
+	--release   $mod+Alt+Period seat * cursor release button1
+	--no-repeat $mod+Alt+Slash  seat * cursor press   button3
+	--release   $mod+Alt+Slash  seat * cursor release button3
 
 
 	# Workspace control
@@ -139,8 +139,8 @@ bindsym --to-code {
 	# i3ipc control via binding subscription
 	$mod+Tab nop focus_prev
 
-	$mod+Shift+Bracketleft	nop workspace prev
-	$mod+Shift+Bracketright	nop workspace next
+	$mod+Shift+Bracketleft  nop workspace prev
+	$mod+Shift+Bracketright nop workspace next
 
 	$mod+Control+h nop tab prev
 	$mod+Control+l nop tab next
@@ -152,6 +152,7 @@ bindsym --to-code {
 	$mod+Control+6 nop tab 6
 	$mod+Control+7 nop tab 7
 	$mod+Control+8 nop tab 8
+
 	$modr+Control+h nop tab prev
 	$modr+Control+l nop tab next
 	$modr+Control+1 nop tab 1
@@ -164,16 +165,16 @@ bindsym --to-code {
 	$modr+Control+8 nop tab 8
 
 	# Marking
-	$mod+Shift+F7	mark --replace --toggle	F7
-	$mod+Shift+F8	mark --replace --toggle	F8
-	$mod+Shift+F9	mark --replace --toggle	F9
-	$mod+Shift+F10	mark --replace --toggle	F10
-	$mod+Shift+F11	mark --replace --toggle	F11
-	$mod+F7			[con_mark="F7"]		focus
-	$mod+F8			[con_mark="F8"]		focus
-	$mod+F9			[con_mark="F9"]		focus
-	$mod+F10		[con_mark="F10"]	focus
-	$mod+F11		[con_mark="F11"]	focus
+	 $mod+Shift+F7  mark             --replace --toggle F7
+	 $mod+Shift+F8  mark             --replace --toggle F8
+	 $mod+Shift+F9  mark             --replace --toggle F9
+	 $mod+Shift+F10 mark             --replace --toggle F10
+	 $mod+Shift+F11 mark             --replace --toggle F11
+	 $mod+F7        [con_mark="F7"]  focus
+	 $mod+F8        [con_mark="F8"]  focus
+	 $mod+F9        [con_mark="F9"]  focus
+	 $mod+F10       [con_mark="F10"] focus
+	 $mod+F11       [con_mark="F11"] focus
 
 	--no-repeat $mod+Shift+backslash exec $scripts/pipecam.sh
 }
@@ -190,6 +191,7 @@ bindsym {
 	XF86AudioLowerVolume  nop volume down
 	XF86AudioMute         nop volume speaker-toggle
 	Control+XF86AudioMute nop volume mic-toggle
+
 	--to-code --no-repeat $mod+m nop volume mic-unmute
 	--to-code --release   $mod+m nop volume mic-mute
 
@@ -200,22 +202,23 @@ bindsym {
 	XF86AudioNext exec playerctl next
 	XF86AudioPrev exec playerctl previous
 
-	Print         exec flameshot gui
-	Control+Print exec flameshot screen --clipboard
-	# Print				exec grimvshot --notify --swaynag --area
-	# Shift+Print			exec grimvshot --notify --swaynag --window
-	# Control+Print		exec grimvshot --notify --swaynag --output
-	# Control+Shift+Print	exec grimvshot --notify --swaynag --active
+	# Print         exec flameshot gui
+	# Control+Print exec flameshot screen --clipboard
+	Print               exec grimvshot --notify --swaynag --area
+	Shift+Print         exec grimvshot --notify --swaynag --window
+	Control+Print       exec grimvshot --notify --swaynag --output
+	Control+Shift+Print exec grimvshot --notify --swaynag --active
 }
 
 bindsym --to-code $mod+r mode "resize"
 mode "resize" {
-	bindsym $left	resize shrink width  20px
-	bindsym $down	resize grow   height 20px
-	bindsym $up		resize shrink height 20px
-	bindsym $right	resize grow   width  20px
-	bindsym Return	mode default
-	bindsym Escape	mode default
+	bindsym $left  resize shrink width  20px
+	bindsym $down  resize grow   height 20px
+	bindsym $up    resize shrink height 20px
+	bindsym $right resize grow   width  20px
+
+	bindsym Return mode default
+	bindsym Escape mode default
 }
 
 bindsym --to-code $mod+f12 mode "nested sway"
@@ -225,18 +228,19 @@ mode "nested sway" {
 
 bindsym --to-code $mod+Shift+w mode "move workspace"
 mode "move workspace" {
-	bindsym --to-code $left		move workspace to output left,	mode default
-	bindsym --to-code $right	move workspace to output right,	mode default
+	bindsym --to-code $left  move workspace to output left,	mode   default
+	bindsym --to-code $right move workspace to output right,	mode default
 	bindsym Escape mode default
 }
 
 set $mode_window_border "set window border ([n]one, n[o]rmal, [c]sd, [p]ixel)"
 bindsym --to-code $mod+Shift+b mode $mode_window_border
 mode $mode_window_border {
-	bindsym n	border none,	mode default
-	bindsym o	border normal,	mode default
-	bindsym c	border csd,		mode default
-	bindsym p	border pixel,	mode default
+	bindsym n border none,   mode default
+	bindsym o border normal, mode default
+	bindsym c border csd,    mode default
+	bindsym p border pixel,  mode default
+
 	bindsym Escape mode default
 }
 

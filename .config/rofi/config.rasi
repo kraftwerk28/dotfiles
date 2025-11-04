@@ -1,3 +1,5 @@
+@theme "mytheme"
+
 configuration {
 	modi: "drun";
 	kb-row-down: "Control+j,Control+n,Down";
@@ -10,4 +12,3 @@ configuration {
 	icon-theme: "Papirus";
 	drun-show-actions: true;
 }
-@theme "mytheme"

@@ -1,4 +1,4 @@
-local languages = {}
+local languages
 if vim.fn.has "unix" == 1 then
   languages = {
     "angular",
@@ -8,7 +8,7 @@ if vim.fn.has "unix" == 1 then
     "c",
     "c_sharp",
     "cmake",
-    "comment",
+    -- "comment",
     "commonlisp",
     "cpp",
     "css",
@@ -103,6 +103,7 @@ if vim.fn.has "unix" == 1 then
     "yaml",
     "zig",
   }
+  languages = nil
 elseif vim.fn.has "win64" == 1 then
   languages = {
     "java",
@@ -113,66 +114,65 @@ elseif vim.fn.has "win64" == 1 then
   }
 end
 
-local config = {
-  ensure_installed = languages,
-
-  highlight = {
-    enable = true,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<Leader>)",
-      node_incremental = ")",
-      node_decremental = "(",
-    },
-  },
-  blockmark = {
-    enable = true,
-  },
-  -- textobjects = {
-  --   select = {
-  --     enable = true,
-  --     lookahead = true,
-  --     lookbehind = true,
-  --     keymaps = {
-  --       ["aa"] = "@parameter.outer",
-  --       ["ia"] = "@parameter.inner",
-  --       ["ib"] = "@block.inner",
-  --       ["ab"] = "@block.outer",
-  --     },
-  --   },
-  --   move = {
-  --     enable = true,
-  --   },
-  -- },
-}
-
 return {
-  -- "~/projects/neovim/nvim-treesitter",
-  "nvim-treesitter/nvim-treesitter",
-  -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    "windwp/nvim-ts-autotag",
+  {
     "nvim-treesitter/nvim-treesitter-context",
-  },
-  branch = "master",
-  lazy = false,
-  build = ":TSUpdate",
-  config = function()
-    require "nvim-treesitter.configs".setup(config)
-    vim.g.skip_ts_context_commentstring_module = true
-    -- require "ts_context_commentstring".setup()
-    require "treesitter-context".setup {
+    opts = {
       enable = true,
       mode = "cursor",
-    }
-    -- require("kraftwerk28.plugins.treesitter_blockmark")
-  end,
+    },
+  },
+  {
+    -- "~/projects/neovim/nvim-treesitter",
+    "nvim-treesitter/nvim-treesitter",
+    -- commit = "668de0951a36ef17016074f1120b6aacbe6c4515",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      "windwp/nvim-ts-autotag",
+      "nvim-treesitter/nvim-treesitter-context",
+    },
+    branch = "master",
+    lazy = false,
+    build = ":TSUpdate",
+    config = function()
+      require "nvim-treesitter.configs".setup {
+        ensure_installed = languages,
+
+        highlight = {
+          enable = true,
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<Leader>)",
+            node_incremental = ")",
+            node_decremental = "(",
+          },
+        },
+        blockmark = {
+          enable = true,
+        },
+        -- textobjects = {
+        --   select = {
+        --     enable = true,
+        --     lookahead = true,
+        --     lookbehind = true,
+        --     keymaps = {
+        --       ["aa"] = "@parameter.outer",
+        --       ["ia"] = "@parameter.inner",
+        --       ["ib"] = "@block.inner",
+        --       ["ab"] = "@block.outer",
+        --     },
+        --   },
+        --   move = {
+        --     enable = true,
+        --   },
+        -- },
+      }
+    end,
+    init = function()
+      -- Disable semantic highlight of `#if`, `#ifdef` etc
+      vim.api.nvim_set_hl(0, "@lsp.type.comment", {})
+    end,
+  },
 }

@@ -1,4 +1,3 @@
-local fn, api = vim.fn, vim.api
 local EMPTY_TAB_LABEL = [[ ¯\_(ツ)_/¯ ]]
 local UNSAVED_MARK = "•"
 
@@ -23,28 +22,27 @@ local function tab_label(tabnr)
 end
 
 local function get_tab_info(tabnr)
-  local focused_winnr = api.nvim_tabpage_get_win(tabnr)
-  local focused_bufnr = api.nvim_win_get_buf(focused_winnr)
-  local focused_bufname = api.nvim_buf_get_name(focused_bufnr)
-  local unsaved = false
-  for _, winnr in ipairs(api.nvim_tabpage_list_wins(tabnr)) do
-    local bufnr = api.nvim_win_get_buf(winnr)
-    if api.nvim_buf_get_option(bufnr, "modified") then
-      unsaved = true
-      break
-    end
-  end
+  local focused_winnr = vim.api.nvim_tabpage_get_win(tabnr)
+  local focused_bufnr = vim.api.nvim_win_get_buf(focused_winnr)
+  local focused_bufname = vim.api.nvim_buf_get_name(focused_bufnr)
+  local unsaved = vim
+    .iter(vim.api.nvim_tabpage_list_wins(tabnr))
+    :any(function(winnr)
+      local bufnr = vim.api.nvim_win_get_buf(winnr)
+      return vim.bo[bufnr].modified
+    end)
+  local path = vim.fn.fnamemodify(focused_bufname, ":."):gsub("([^/])[^/]+/", "%1/")
   return {
-    path = vim.fn.fnamemodify(focused_bufname, ":."),
+    path = path,
     empty = focused_bufname == "",
     unsaved = unsaved,
   }
 end
 
 function _G.build_tabline()
-  local current_tab = api.nvim_get_current_tabpage()
+  local current_tab = vim.api.nvim_get_current_tabpage()
   local str = ""
-  for i, tabnr in ipairs(api.nvim_list_tabpages()) do
+  for i, tabnr in ipairs(vim.api.nvim_list_tabpages()) do
     local hl_group = tabnr == current_tab and "TabLineSel" or "TabLine"
     local info = get_tab_info(tabnr)
     local text
@@ -62,16 +60,15 @@ function _G.build_tabline()
   return str
 end
 
-local sel_hl = api.nvim_get_hl(0, { name = "TabLineSel", link = false })
-local fill_hl = api.nvim_get_hl(0, { name = "TabLineFill", link = false })
+local sel_hl = vim.api.nvim_get_hl(0, { name = "TabLineSel", link = false })
+local fill_hl = vim.api.nvim_get_hl(0, { name = "TabLineFill", link = false })
 
-api.nvim_set_hl(
+vim.api.nvim_set_hl(
   0,
   "TabLineFill",
   vim.tbl_extend("force", fill_hl, { fg = sel_hl.fg })
 )
-
-api.nvim_set_hl(
+vim.api.nvim_set_hl(
   0,
   "TabLineSel",
   vim.tbl_extend("force", sel_hl, { bold = true, reverse = true })

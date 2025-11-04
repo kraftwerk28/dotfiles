@@ -7,13 +7,16 @@ if not vim.uv.fs_stat(lazypath) then
       "git",
       "clone",
       "--filter=blob:none",
-      "--branch=stable", -- latest stable release
+      "--branch=stable",
       lazyrepo,
       lazypath,
     }
     :wait()
   if clone_result.code ~= 0 then
-    vim.notify("Failed to clone Lazy repo", vim.log.levels.ERROR)
+    vim.notify(
+      "Failed to clone Lazy repo:\n" .. clone_result.stderr,
+      vim.log.levels.ERROR
+    )
   end
 end
 
@@ -22,4 +25,7 @@ vim.opt.runtimepath:prepend(lazypath)
 require("lazy").setup {
   spec = { import = "kraftwerk28.plugins.init" },
   change_detection = { enabled = false },
+  readme = {
+    enabled = false,
+  },
 }

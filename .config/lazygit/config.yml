@@ -1,0 +1,9 @@
+gui:
+  theme:
+    inactiveBorderColor:
+      - default
+      - bold
+  border: single
+  spinner:
+    frames: ["", "", "", "", "", ""]
+  nerdFontsVersion: "3"

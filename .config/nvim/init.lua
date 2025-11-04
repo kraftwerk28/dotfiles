@@ -10,12 +10,23 @@ vim.g.mapleader = " "
 vim.g.neovide_refresh_rate = 60
 -- vim.g.borderchars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 -- vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
+vim.g.spinner = {
+  frames = { "", "", "", "", "", "" },
+}
 vim.g.sql_type_default = "pgsql"
 
--- Useful Lua globals used in rest of configuration
+---Autocommand shortcut
+---@param event vim.api.keyset.events
+---@param opts? vim.api.keyset.create_autocmd
+---@return integer
 _G.autocmd = function(event, opts)
   return vim.api.nvim_create_autocmd(event, opts or {})
 end
+
+---Autgroup shortcut
+---@param name string
+---@param opts? vim.api.keyset.create_augroup
+---@return integer
 _G.augroup = function(name, opts)
   return vim.api.nvim_create_augroup(name, opts or {})
 end
@@ -35,14 +46,14 @@ vim.diagnostic.config {
 }
 
 -- Load options
-vim.cmd.runtime("opts.vim")
+vim.cmd.runtime "opts.vim"
 
 -- Infer dark/light background from dconf
 do
   local result = vim
-    .system { "gsettings", "get", "org.gnome.desktop.interface", "color-scheme" }
+    .system({ "gsettings", "get", "org.gnome.desktop.interface", "color-scheme" })
     :wait()
-  if result.stdout then
+  if result.code == 0 then
     local theme = string.match(result.stdout, [['(%w)']])
     if theme == "prefer-dark" then
       vim.go.background = "dark"
@@ -56,6 +67,5 @@ require "kraftwerk28.lazy"
 require "kraftwerk28.map"
 require "kraftwerk28.autocommand"
 require "kraftwerk28.lsp"
-require "kraftwerk28.tabline"
 require "kraftwerk28.filetype"
 require "kraftwerk28.linenumber"

@@ -214,6 +214,9 @@ do
       "typescriptreact",
       "vue",
     },
+    on_attach = function(client, bufnr)
+      require "twoslash-queries".attach(client, bufnr)
+    end,
   }
 
   vim.lsp.enable { "vtsls", "vue_ls" }
@@ -252,9 +255,6 @@ do
       "proto",
     },
   }
-
-  -- Disable semantic highlight of ifdefs
-  vim.api.nvim_set_hl(0, "@lsp.type.comment.c", {})
 
   vim.lsp.enable "clangd"
 end
@@ -355,10 +355,10 @@ vim.lsp.config.lua_ls = {
   settings = {
     Lua = {},
   },
-  root_markers = vim
-    .iter { "lazy-lock.json", vim.lsp.config.lua_ls.root_markers }
-    :flatten()
-    :totable(),
+  root_markers = vim.list_extend(
+    vim.deepcopy(vim.lsp.config.lua_ls.root_markers or {}),
+    { "lazy-lock.json" }
+  ),
 }
 vim.lsp.enable "lua_ls"
 

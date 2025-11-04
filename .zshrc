@@ -57,12 +57,13 @@ tabs -4
 # WORDCHARS='-'
 
 # Dump working directory for using in sway keybindings, i.e. $mod+Shift+Enter
-dump_cwd() {
-	if [[ $PWD != $HOME ]]; then
-		echo "$PWD" > /tmp/last-cwd
+dump_pwd() {
+	local dir="$(pwd)"
+	if [[ $dir != $HOME ]]; then
+		echo $dir > /tmp/last-pwd
 	fi
 }
-add-zsh-hook precmd dump_cwd
+add-zsh-hook chpwd dump_pwd
 
 # Foot terminal fix
 foot_quirk() {
@@ -136,4 +137,4 @@ reboot-win10() {
 }
 
 export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/24.1/quartus/sopc_builder/bin"
-export LS_COLORS="$(vivid generate gruvbox-light)"
+# export LS_COLORS="$(vivid generate gruvbox-light)"

@@ -12,17 +12,24 @@ return {
       typescriptreact = { "eslint_d" },
     }
 
+    ---@param filename string
+    local function enabled(filename)
+      if filename == "PKGBUILD" or filename:match("%.PKGBUILD$") then
+        -- Skip shellcheck for AUR PKGBUILDs
+        return false
+      end
+      if filename == ".env" or filename:match("^%.env%.") then
+        return false
+      end
+      return true
+    end
+
     autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
       callback = function(arg)
         local name = vim.fn.fnamemodify(arg.match, ":t")
-        if name == "PKGBUILD" or name:match("%.PKGBUILD$") then
-          -- Skip shellcheck for AUR PKGBUILDs
-          return
+        if enabled(name) then
+          lint.try_lint()
         end
-        if name == ".env" or name:match("^%.env%.") then
-          return
-        end
-        lint.try_lint()
       end,
     })
   end,

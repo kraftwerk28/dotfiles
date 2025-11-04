@@ -13,6 +13,7 @@ vim.filetype.add {
     strace = "strace",
     porth = "porth",
     webmanifest = "json",
+    qpwgraph = "xml",
   },
   filename = {
     ["tsconfig.json"] = "jsonc",
@@ -78,18 +79,25 @@ local ftconfig = {
 
   -- Misc options
   {
-    fs = { "json", "jsonc", "cjson" },
+    ft = { "json", "jsonc", "cjson" },
     opts = { commentstring = "// %s" },
   },
   { ft = "help", opts = { conceallevel = 0 } },
-  { ft = "graphql", opts = { commentstring = "# %s" } },
+  {
+    ft = { "graphql", "zsh" },
+    opts = { commentstring = "# %s" },
+  },
   {
     ft = { "dosini", "confini", "jess" },
     opts = { commentstring = "; %s" },
   },
   {
     ft = "hocon",
-    opts = { commentstring = "# %s", cindent = true, cinoptions = "+0" },
+    opts = {
+      commentstring = "# %s",
+      cindent = true,
+      cinoptions = "+0",
+    },
   },
 
   {
@@ -97,13 +105,19 @@ local ftconfig = {
     opts = { keywordprg = ":Man" },
   },
 
-  { ft = { "sml" }, opts = { commentstring = "(* %s *)" } },
+  { ft = { "sml" }, opts = {
+    commentstring = "(* %s *)",
+  } },
 
   { ft = { "markdown" }, opts = { breakindent = true } },
 }
 
 local filetype_opts = augroup("filetype_opts")
 for _, cfg in ipairs(ftconfig) do
+  vim.validate {
+    ft = { cfg.ft, { "table", "string" } },
+    opts = { cfg.opts, "table" },
+  }
   autocmd("FileType", {
     pattern = cfg.ft,
     callback = function()
