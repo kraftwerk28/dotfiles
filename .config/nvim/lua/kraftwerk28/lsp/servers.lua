@@ -116,7 +116,9 @@ vim.lsp.enable "rust_analyzer"
 do
   local ts_plugins = {}
   local vue_ts_plugin = "@vue/typescript-plugin"
-  local vue_plugin_dir = vim.env.XDG_DATA_HOME
+  local vue_plugin_dir = (
+    vim.env.XDG_DATA_HOME or vim.fn.expand "~/.local/share"
+  )
     .. "/fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/"
     .. vue_ts_plugin
   if vim.fn.isdirectory(vue_plugin_dir) ~= 0 then
