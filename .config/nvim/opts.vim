@@ -1,7 +1,7 @@
 " NOTE: this file is kept in VimL (instead of rewriting to Lua), since it may
 " be used with IdeaVim plugin which (afaik) can only parse a subset of VimL
 
-set background=light
+" set background=dark
 set tabstop=4 shiftwidth=0
 set cursorline nocursorcolumn
 set mouse=a mousemodel=extend

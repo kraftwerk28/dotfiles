@@ -38,8 +38,8 @@ bindsym --to-code {
 
 	--no-repeat $mod+Bracketleft   workspace prev
 	--no-repeat $mod+Bracketright  workspace next
-	--no-repeat $modr+Bracketleft  workspace prev
-	--no-repeat $modr+Bracketright workspace next
+	# --no-repeat $modr+Bracketleft  workspace prev
+	# --no-repeat $modr+Bracketright workspace next
 
 	# TODO: rewrite using lua framework
 	$mod+Control+Up    exec $scripts/push-window.sh top
@@ -473,9 +473,9 @@ for_window [app_id=".*"] idle_inhibit fullscreen
 # }}}
 
 # Output configuration {{{
-set $laptop eDP-1
-set $external_usb DP-1
-set $external_hdmi DP-3
+# set $laptop eDP-1
+# set $external_usb DP-1
+# set $external_hdmi DP-3
 
 # NOTE: the lid:off binding sometimes won't fire leaving me alone with black screen
 # For now, the screen is always turned on while the lid is being closed
@@ -490,8 +490,10 @@ set $external_hdmi DP-3
 # output $external_usb position 0 0
 # output $external_hdmi position 0 0
 
-output $laptop position 0 120
-output $external_hdmi position 1920 0
+# output $laptop position 0 120
+# output $external_hdmi position 1920 0
+
+# output DP-3 scale 1.6
 
 output * background "#000000" solid_color
 # }}}

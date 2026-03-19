@@ -6,7 +6,8 @@ if vim.fn.has(min_version) == 0 then
   )
 end
 
-vim.g.mapleader = " "
+vim.g.mapleader = [[ ]]
+vim.g.maplocalleader = [[\]]
 vim.g.neovide_refresh_rate = 60
 -- vim.g.borderchars = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 -- vim.g.borderchars = { "┌", "─", "┐", "│", "┘", "─", "└", "│" }
@@ -49,7 +50,7 @@ vim.diagnostic.config {
 vim.cmd.runtime "opts.vim"
 
 -- Infer dark/light background from dconf
-do
+if vim.fn.executable "gsettings" == 1 then
   local result = vim
     .system({ "gsettings", "get", "org.gnome.desktop.interface", "color-scheme" })
     :wait()

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-
+import time
+import logging
 from i3ipc import (
     Connection,
     Event,
@@ -8,31 +9,84 @@ from i3ipc import (
     WorkspaceEvent,
     OutputReply,
 )
-
 from .audio import PulseControl
+
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger()
 
 
 @dataclass
-class OutputMatch:
-    top: int
-    left: int
+class OutputConfig:
     match: dict[str, str | int]
+    pos: tuple[int, int] | None = None
+    scale: float | None = None
+    enabled: bool | None = None
+    size: tuple[int, int] | Noe = None
+    fps: int | None = None
 
     def suits(self, output: OutputReply):
-        return all(getattr(output, k) == v for k, v in self.match.items())
+        return all(
+            (
+                output["rect"]["width"] == value
+                if key == "width"
+                else (
+                    output["rect"]["height"] == value
+                    if key == "height"
+                    else getattr(output, key) == value
+                )
+            )
+            for key, value in self.match.items()
+        )
 
-    def command(self, output: OutputReply):
-        return f"output {output.name} position {self.left} {self.top}"
+    def get_commands_for(self, output: OutputReply) -> str | None:
+        cmds = []
+        if self.pos is not None:
+            x, y = self.pos
+            cmds.append(f"position {x} {y}")
+        if self.scale is not None:
+            cmds.append(f"scale {self.scale}")
+        if self.enabled is not None:
+            cmds.append("enable" if self.enabled else "disable")
+        if self.size is not None:
+            w, h = self.size
+            rate_hz = "" if self.fps is None else f"@{self.fps}"
+            cmds.append(f"mode {w}x{h}{rate_hz}")
+        if cmds:
+            return f"output {output.name} " + " ".join(cmds)
 
 
-OUTPUT_LAYOUTS = [
+OUTPUT_LAYOUTS: list[list[OutputConfig]] = [
     [
-        OutputMatch(match={"model": "0x149A"}, top=360, left=2560),
-        OutputMatch(match={"model": "DELL P2720DC"}, top=0, left=0),
+        OutputConfig(match={"model": "0x149A"}, pos=(2560, 360)),
+        OutputConfig(match={"model": "DELL P2720DC"}, pos=(0, 0)),
     ],
     [
-        OutputMatch(match={"model": "0x149A"}, top=120, left=1920),
-        OutputMatch(match={"model": "LF24T450G"}, top=0, left=0),
+        OutputConfig(match={"model": "0x149A"}, pos=(1920, 120)),
+        OutputConfig(match={"model": "LF24T450G"}, pos=(0, 0)),
+    ],
+    [
+        OutputConfig(match={"model": "DELL U2718Q"}, scale=1.6, pos=(0, 0)),
+        OutputConfig(match={"model": "0x149A"}, enabled=False),
+    ],
+    [
+        OutputConfig(
+            match={
+                "model": "StudioDisplay",
+                "serial": "0x13311782",
+                "name": "DP-1",
+            },
+            pos=(0, 0),
+            scale=1.4,
+        ),
+        OutputConfig(
+            match={
+                "model": "StudioDisplay",
+                "serial": "0x13311782",
+                "name": "DP-2",
+            },
+            enabled=False,
+        ),
+        OutputConfig(match={"model": "0x149A"}, enabled=False),
     ],
 ]
 
@@ -46,6 +100,7 @@ class Scripting:
         self.layout_cache: dict[int, dict[int, int]] = {}
         self.ignore_next_output_event = False
         self.volume = PulseControl()
+        self.last_outp_ev_time: float | None = None
 
         i3 = Connection()
         i3.on(Event.WINDOW_FOCUS, self.on_win_focus)
@@ -53,6 +108,7 @@ class Scripting:
         i3.on(Event.WORKSPACE_INIT, self.on_ws_init)
         i3.on(Event.BINDING, self.on_binding)
         i3.on(Event.OUTPUT, self.on_output)
+        # i3.on(Event.SHUTDOWN, self.on_shutdown)
         self.i3 = i3
 
     def switch_to_default_kbd_layout(self):
@@ -138,24 +194,41 @@ class Scripting:
             self.switch_to_default_kbd_layout()
 
     def on_output(self, ipc, ev):
-        self.adjust_outputs()
+        now = time.time()
+        if (self.last_outp_ev_time is None) or (now - self.last_outp_ev_time >= 1):
+            self.adjust_outputs()
+        self.last_outp_ev_time = now
+
+    def on_shutdown(self, ipc: Connection, ev: BindingEvent):
+        self.i3.main_quit()
 
     def adjust_outputs(self):
-        if self.ignore_next_output_event:
-            self.ignore_next_output_event = False
-            return
+        log.info("Adjusting outputs")
         outputs = self.i3.get_outputs()
-        for layout in OUTPUT_LAYOUTS:
-            try:
-                commands = []
-                for match in layout:
-                    output = next(o for o in outputs if match.suits(o))
-                    commands.append(match.command(output))
-                self.i3.command(", ".join(commands))
-                self.ignore_next_output_event = True
-                break
-            except:
-                pass
+        untouched_outputs = set(outputs)
+        try:
+            # Find the layout, where all Matches match at least one output
+            layout = next(
+                layout
+                for layout in OUTPUT_LAYOUTS
+                if all(any(m.suits(o) for o in outputs) for m in layout)
+            )
+            log.info("Matched output layout: %s", layout)
+            for match in layout:
+                output = next(o for o in outputs if match.suits(o))
+                untouched_outputs.remove(output)
+                if cmd := match.get_commands_for(output):
+                    log.info("Running output cmd: '%s'", cmd)
+                    self.i3.command(cmd)
+        except StopIteration:
+            pass
+
+        # Enable any outputs that may be left disabled by the script in
+        # previous adjustments
+        for output in untouched_outputs:
+            cmd = f"output {output.name} enable"
+            log.info("Running output cmd: '%s'", cmd)
+            self.i3.command(cmd)
 
     def main(self):
         self.adjust_outputs()
@@ -163,4 +236,5 @@ class Scripting:
 
 
 if __name__ == "__main__":
-    Scripting().main()
+    s = Scripting()
+    s.main()

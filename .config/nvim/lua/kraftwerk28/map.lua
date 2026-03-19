@@ -98,17 +98,24 @@ local boolean_map = {
 }
 
 map("n", "<Leader>t", function()
-  -- Try to toggle word from above `boolean_map`
+  local wininfo = vim.fn.winsaveview()
+
+  -- Try find word from `boolean_map`
   local cword = vim.fn.expand("<cword>")
+  local changeword
   for _, pair in ipairs(boolean_map) do
-    local lhs, rhs = pair[1], pair[2]
-    if cword == lhs then
-      vim.cmd.normal { "ciw" .. rhs, bang = true }
-      return
-    elseif cword == rhs then
-      vim.cmd.normal { "ciw" .. lhs, bang = true }
-      return
+    if cword == pair[1] then
+      changeword = pair[2]
+      break
+    elseif cword == pair[2] then
+      changeword = pair[1]
+      break
     end
+  end
+  if changeword then
+    vim.cmd.normal { "ciw" .. changeword, bang = true }
+    vim.fn.winrestview(wininfo)
+    return
   end
 
   -- Try to toggle markdown checkmark
@@ -119,6 +126,7 @@ map("n", "<Leader>t", function()
       .. "[x]"
       .. line:sub(md_check_end + 1)
     vim.api.nvim_set_current_line(new_line)
+    vim.fn.winrestview(wininfo)
     return
   end
   md_check_start, md_check_end = line:find("%[x%]")
@@ -127,6 +135,7 @@ map("n", "<Leader>t", function()
       .. "[ ]"
       .. line:sub(md_check_end + 1)
     vim.api.nvim_set_current_line(new_line)
+    vim.fn.winrestview(wininfo)
     return
   end
 end, { desc = "Toggle common boolean literals" })

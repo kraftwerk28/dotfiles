@@ -1,3 +1,5 @@
+fpath=("$XDG_DATA_HOME/zsh/site-functions" $fpath)
+
 dot_config="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 local_plugin_dir="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/plugins"
 
@@ -136,5 +138,5 @@ reboot-win10() {
 	systemctl reboot --boot-loader-entry=windows10.conf
 }
 
-export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/24.1/quartus/sopc_builder/bin"
-# export LS_COLORS="$(vivid generate gruvbox-light)"
+export QSYS_ROOTDIR="/home/kraftwerk28/.cache/paru/clone/quartus-free/pkg/quartus-free-quartus/opt/intelFPGA/25.1/quartus/sopc_builder/bin"
+export LS_COLORS="$(vivid generate gruvbox-light)"

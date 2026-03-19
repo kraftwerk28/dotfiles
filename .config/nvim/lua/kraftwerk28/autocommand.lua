@@ -41,15 +41,16 @@ autocmd("BufWinEnter", {
 
 -- Save buffer on unfocus
 autocmd("FocusLost", {
+  pattern = "*",
   callback = function()
-    vim.cmd("silent! wall")
+    vim.cmd("silent! update")
   end,
   group = group,
 })
 
 autocmd("FocusGained", {
   callback = function()
-    vim.fn.writefile({ vim.fn.getcwd() }, "/tmp/last-cwd")
+    vim.fn.writefile({ vim.fn.getcwd() }, "/tmp/last-pwd")
   end,
   group = group,
 })

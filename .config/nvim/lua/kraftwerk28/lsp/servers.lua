@@ -222,42 +222,43 @@ do
   vim.lsp.enable { "vtsls", "vue_ls" }
 end
 
-do
-  vim.lsp.config.clangd = {
-    cmd = { "clangd", "--header-insertion=never" },
-    -- cmd = {
-    --   "clangd",
-    --   "--background-index",
-    --   "--header-insertion=never",
-    --   "-j",
-    --   "8",
-    --   "--pch-storage=memory",
-    --   -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
-    -- },
-    -- settings = {
-    --   ["C_Cpp.dimInactiveRegions"] = false,
-    -- },
-    root_markers = {
-      ".clangd",
-      ".clang-tidy",
-      ".clang-format",
-      { "compile_commands.json", "build/compile_commands.json" },
-      "compile_flags.txt",
-      "configure.ac",
-      ".git",
-    },
-    filetypes = {
-      "c",
-      "cpp",
-      "objc",
-      "objcpp",
-      "cuda",
-      "proto",
-    },
-  }
+vim.lsp.config.clangd = {
+  cmd = {
+    "clangd",
+    "--header-insertion=never",
+  },
+  -- cmd = {
+  --   "clangd",
+  --   "--background-index",
+  --   "--header-insertion=never",
+  --   "-j",
+  --   "8",
+  --   "--pch-storage=memory",
+  --   -- "--query-driver=" .. table.concat(vim.tbl_values(query_drivers), ","),
+  -- },
+  -- settings = {
+  --   ["C_Cpp.dimInactiveRegions"] = false,
+  -- },
+  root_markers = {
+    ".clangd",
+    ".clang-tidy",
+    ".clang-format",
+    { "compile_commands.json", "build/compile_commands.json" },
+    "compile_flags.txt",
+    "configure.ac",
+    ".git",
+  },
+  filetypes = {
+    "c",
+    "cpp",
+    "objc",
+    "objcpp",
+    "cuda",
+    -- "proto",
+  },
+}
 
-  vim.lsp.enable "clangd"
-end
+vim.lsp.enable "clangd"
 
 vim.lsp.config.svelte = {
   settings = {
@@ -355,16 +356,18 @@ vim.lsp.config.lua_ls = {
   settings = {
     Lua = {},
   },
-  root_markers = vim.list_extend(
-    vim.deepcopy(vim.lsp.config.lua_ls.root_markers or {}),
-    { "lazy-lock.json" }
-  ),
+  root_markers = vim
+    .iter { vim.lsp.config.lua_ls.root_markers, "lazy-lock.json" }
+    :flatten()
+    :totable(),
 }
 vim.lsp.enable "lua_ls"
 
 vim.lsp.enable "serve_d"
 
 vim.lsp.enable "taplo"
+
+vim.lsp.enable "buf_ls"
 
 if vim.fn.has "win64" == 1 then
   local jdt_base = vim.fn.expand(
