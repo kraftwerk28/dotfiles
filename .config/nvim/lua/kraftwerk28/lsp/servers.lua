@@ -116,11 +116,11 @@ vim.lsp.enable "rust_analyzer"
 do
   local ts_plugins = {}
   local vue_ts_plugin = "@vue/typescript-plugin"
-  local vue_plugin_dir = (
-    vim.env.XDG_DATA_HOME or vim.fn.expand "~/.local/share"
+  local vue_plugin_dir = vim.fs.joinpath(
+    vim.env.XDG_DATA_HOME,
+    "fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/",
+    vue_ts_plugin
   )
-    .. "/fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/"
-    .. vue_ts_plugin
   if vim.fn.isdirectory(vue_plugin_dir) ~= 0 then
     table.insert(ts_plugins, {
       name = vue_ts_plugin,
@@ -128,11 +128,6 @@ do
       languages = { "vue" },
       configNamespace = "typescript",
     })
-  else
-    vim.notify_once(
-      "For typescript to work inside .vue, install the @vue/typescript-plugin. I assume you're using fnm.",
-      vim.log.levels.WARN
-    )
   end
 
   vim.lsp.config.ts_ls = {
