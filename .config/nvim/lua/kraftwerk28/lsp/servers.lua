@@ -117,7 +117,7 @@ do
   local ts_plugins = {}
   local vue_ts_plugin = "@vue/typescript-plugin"
   local vue_plugin_dir = vim.fs.joinpath(
-    vim.env.XDG_DATA_HOME,
+    vim.env.XDG_DATA_HOME or "",
     "fnm/aliases/default/lib/node_modules/@vue/language-server/node_modules/",
     vue_ts_plugin
   )
