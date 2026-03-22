@@ -1,5 +1,8 @@
+[Unit]
+After=sway-session.target
+
 [Timer]
-OnActiveSec=5m
+OnActiveSec=0m
 OnUnitActiveSec=5m
 
 [Install]

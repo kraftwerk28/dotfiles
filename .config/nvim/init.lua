@@ -20,7 +20,7 @@ vim.g.sql_type_default = "pgsql"
 ---@param event vim.api.keyset.events
 ---@param opts? vim.api.keyset.create_autocmd
 ---@return integer
-_G.autocmd = function(event, opts)
+function _G.autocmd(event, opts)
   return vim.api.nvim_create_autocmd(event, opts or {})
 end
 
@@ -28,7 +28,7 @@ end
 ---@param name string
 ---@param opts? vim.api.keyset.create_augroup
 ---@return integer
-_G.augroup = function(name, opts)
+function _G.augroup(name, opts)
   return vim.api.nvim_create_augroup(name, opts or {})
 end
 

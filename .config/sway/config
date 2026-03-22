@@ -1,29 +1,22 @@
 set $scripts "$HOME/.config/sway/scripts"
 
 # Key bindings {{{
-set $mod	Mod4
-set $modr	Mod5
-set	$left	h
-set	$down	j
-set	$up		k
-set	$right	l
+set $mod   Mod4
+set $left  h
+set $down  j
+set $up    k
+set $right l
 
 set $cursor_lg_delta 50
-set $cursor_sm_delta 10
+set $cursor_sm_delta 8
 
 bindsym --to-code {
-	# Terminal launching
-	$mod+Return			exec $scripts/terminal.sh
-	$mod+Shift+Return	exec $scripts/terminal.sh --cwd
-	# $mod+Return exec alacritty
-	# $mod+Shift+Return exec alacritty --working-directory=$(cat /tmp/last_pwd 2>/dev/null || echo $HOME)
-
-
-	# Application launcher
-	# Unsetting XDG_CURRENT_DESKTOP, because `rofi` hides some entries,
-	# based on this variable
-	$mod+p exec env -u XDG_CURRENT_DESKTOP rofi -i -show drun -run-command 'swaymsg exec "{cmd}"'
-
+	--no-repeat $mod+Return       exec $scripts/terminal.sh
+	--no-repeat $mod+Shift+Return exec $scripts/terminal.sh --cwd
+	--no-repeat $mod+p            exec $scripts/launcher.sh
+	--no-repeat $mod+i            exec $scripts/rofi-window-switch.sh
+	--no-repeat $mod+o            exec $scripts/rename-workspace.sh
+	--no-repeat $mod+F4           exec firefox
 
 	# Window control
 	--no-repeat $mod+$left  focus left
@@ -36,51 +29,39 @@ bindsym --to-code {
 	--no-repeat $mod+Shift+$up    move up
 	--no-repeat $mod+Shift+$right move right
 
-	--no-repeat $mod+Bracketleft   workspace prev
-	--no-repeat $mod+Bracketright  workspace next
-	# --no-repeat $modr+Bracketleft  workspace prev
-	# --no-repeat $modr+Bracketright workspace next
-
-	# TODO: rewrite using lua framework
-	$mod+Control+Up    exec $scripts/push-window.sh top
-	$mod+Control+Right exec $scripts/push-window.sh right
-	$mod+Control+Down  exec $scripts/push-window.sh bottom
-	$mod+Control+Left  exec $scripts/push-window.sh left
+	--no-repeat $mod+Bracketleft  workspace prev
+	--no-repeat $mod+Bracketright workspace next
 
 	$mod+s layout stacking
 	$mod+w layout tabbed
 	$mod+e layout toggle split
-
-	--no-repeat $mod+Shift+q kill
-	--no-repeat $mod+Shift+c reload
-	$mod+c move position center
 	$mod+b splith
 	$mod+v splitv
-	--no-repeat $mod+f fullscreen
-	--no-repeat $mod+Shift+f floating toggle
-	--no-repeat $mod+Control+Shift+p focus parent
-	--no-repeat $mod+Control+Shift+c focus child
 	$mod+Shift+a focus mode_toggle
+	$mod+c move position center
 
+	--no-repeat $mod+Shift+q         kill
+	--no-repeat $mod+Shift+c         reload
+	--no-repeat $mod+f               fullscreen
+	--no-repeat $mod+Shift+f         floating toggle
+	--no-repeat $mod+Control+Shift+p focus    parent
+	--no-repeat $mod+Control+Shift+c focus    child
 
 	# Mouse movement keyboard control:
 	$mod+Control+Alt+Up    seat * cursor move 0                 -$cursor_lg_delta
 	$mod+Control+Alt+Right seat * cursor move $cursor_lg_delta  0
 	$mod+Control+Alt+Down  seat * cursor move 0                 $cursor_lg_delta
 	$mod+Control+Alt+Left  seat * cursor move -$cursor_lg_delta 0
-
-	$mod+Alt+Up    seat * cursor move 0                 -$cursor_sm_delta
-	$mod+Alt+Right seat * cursor move $cursor_sm_delta  0
-	$mod+Alt+Down  seat * cursor move 0                 $cursor_sm_delta
-	$mod+Alt+Left  seat * cursor move -$cursor_sm_delta 0
-
+	$mod+Alt+Up            seat * cursor move 0                 -$cursor_sm_delta
+	$mod+Alt+Right         seat * cursor move $cursor_sm_delta  0
+	$mod+Alt+Down          seat * cursor move 0                 $cursor_sm_delta
+	$mod+Alt+Left          seat * cursor move -$cursor_sm_delta 0
 
 	# Mouse button control (doesn't work well though):
 	--no-repeat $mod+Alt+Period seat * cursor press   button1
 	--release   $mod+Alt+Period seat * cursor release button1
 	--no-repeat $mod+Alt+Slash  seat * cursor press   button3
 	--release   $mod+Alt+Slash  seat * cursor release button3
-
 
 	# Workspace control
 	$mod+1 workspace number 1
@@ -94,17 +75,6 @@ bindsym --to-code {
 	$mod+9 workspace number 9
 	$mod+0 workspace number 10
 
-	$modr+1 workspace number 1
-	$modr+2 workspace number 2
-	$modr+3 workspace number 3
-	$modr+4 workspace number 4
-	$modr+5 workspace number 5
-	$modr+6 workspace number 6
-	$modr+7 workspace number 7
-	$modr+8 workspace number 8
-	$modr+9 workspace number 9
-	$modr+0 workspace number 10
-
 	$mod+Shift+1 move container to workspace number 1
 	$mod+Shift+2 move container to workspace number 2
 	$mod+Shift+3 move container to workspace number 3
@@ -116,25 +86,8 @@ bindsym --to-code {
 	$mod+Shift+9 move container to workspace number 9
 	$mod+Shift+0 move container to workspace number 10
 
-	$modr+Shift+1 move container to workspace number 1
-	$modr+Shift+2 move container to workspace number 2
-	$modr+Shift+3 move container to workspace number 3
-	$modr+Shift+4 move container to workspace number 4
-	$modr+Shift+5 move container to workspace number 5
-	$modr+Shift+6 move container to workspace number 6
-	$modr+Shift+7 move container to workspace number 7
-	$modr+Shift+8 move container to workspace number 8
-	$modr+Shift+9 move container to workspace number 9
-	$modr+Shift+0 move container to workspace number 10
-
 	$mod+Shift+minus move scratchpad
 	$mod+minus scratchpad show
-
-
-	# Programs
-	--no-repeat $mod+F2 exec nautilus --new-window
-	--no-repeat $mod+F4 exec firefox
-
 
 	# i3ipc control via binding subscription
 	$mod+Tab nop focus_prev
@@ -153,35 +106,17 @@ bindsym --to-code {
 	$mod+Control+7 nop tab 7
 	$mod+Control+8 nop tab 8
 
-	$modr+Control+h nop tab prev
-	$modr+Control+l nop tab next
-	$modr+Control+1 nop tab 1
-	$modr+Control+2 nop tab 2
-	$modr+Control+3 nop tab 3
-	$modr+Control+4 nop tab 4
-	$modr+Control+5 nop tab 5
-	$modr+Control+6 nop tab 6
-	$modr+Control+7 nop tab 7
-	$modr+Control+8 nop tab 8
-
 	# Marking
-	 $mod+Shift+F7  mark             --replace --toggle F7
-	 $mod+Shift+F8  mark             --replace --toggle F8
-	 $mod+Shift+F9  mark             --replace --toggle F9
-	 $mod+Shift+F10 mark             --replace --toggle F10
-	 $mod+Shift+F11 mark             --replace --toggle F11
-	 $mod+F7        [con_mark="F7"]  focus
-	 $mod+F8        [con_mark="F8"]  focus
-	 $mod+F9        [con_mark="F9"]  focus
-	 $mod+F10       [con_mark="F10"] focus
-	 $mod+F11       [con_mark="F11"] focus
-
-	--no-repeat $mod+Shift+backslash exec $scripts/pipecam.sh
-}
-
-bindsym {
-	$mod+i exec $scripts/rofi-window-switch.sh
-	$mod+o exec $scripts/rename-workspace.sh
+	$mod+Shift+F7  mark --replace --toggle F7
+	$mod+Shift+F8  mark --replace --toggle F8
+	$mod+Shift+F9  mark --replace --toggle F9
+	$mod+Shift+F10 mark --replace --toggle F10
+	$mod+Shift+F11 mark --replace --toggle F11
+	$mod+F7  [con_mark="F7"]  focus
+	$mod+F8  [con_mark="F8"]  focus
+	$mod+F9  [con_mark="F9"]  focus
+	$mod+F10 [con_mark="F10"] focus
+	$mod+F11 [con_mark="F11"] focus
 }
 
 # Multimedia keys
@@ -210,6 +145,7 @@ bindsym {
 	Control+Shift+Print exec grimvshot --notify --swaynag --active
 }
 
+# Modes
 bindsym --to-code $mod+r mode "resize"
 mode "resize" {
 	bindsym $left  resize shrink width  20px
@@ -252,7 +188,6 @@ mode $mode_manage_output {
 	bindsym --no-repeat --to-code d output * disable, mode default
 	bindsym Escape mode default
 }
-
 # }}}
 
 # Theme and colors {{{
@@ -499,12 +434,16 @@ output * background "#000000" solid_color
 # }}}
 
 # See https://github.com/swaywm/sway/wiki#systemd-and-dbus-activation-environments
-exec systemctl --user import-environment
-
+#
 # See https://wiki.archlinux.org/title/Sway#Manage_Sway-specific_daemons_with_systemd
-exec_always systemctl --user start sway-session.target sway-wallpaper.service
+#
+# NOTE: the `&&` is important here; two separate exec commands won't run it
+# sequentially, since sway forks the processes, this way the `start
+# sway-session.target` won't wait for `import-environment` to finish
+#
+exec_always systemctl --user import-environment && systemctl --user start sway-session.target
 
 # kraftwerk28's patch only:
 # mouse_resizing_mode eight_direction
 
-# vim: noexpandtab shiftwidth=0 tabstop=4 filetype=swayconfig commentstring=#\ %s foldmethod=marker foldlevel=0
+# vim: noexpandtab shiftwidth=0 tabstop=4 commentstring=#\ %s foldmethod=marker foldlevel=0

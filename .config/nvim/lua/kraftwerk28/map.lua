@@ -196,3 +196,6 @@ vim.go.langmap = vim
 
 map_ctrl_keys(unpack(langmap_config[1]))
 map_ctrl_keys(unpack(langmap_config[3]))
+
+map("n", "<C-/>", "gccj", { remap = true })
+map("x", "<C-/>", "gcgv", { remap = true })

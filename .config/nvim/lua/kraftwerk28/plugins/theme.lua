@@ -34,7 +34,6 @@ local themes = {
       -- },
     },
     init = function()
-      vim.go.background = "dark"
       vim.cmd.colorscheme "gruvbox"
     end,
   },
